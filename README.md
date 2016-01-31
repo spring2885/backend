@@ -7,7 +7,45 @@ Make sure you have the most recent version of the source code in your repository
 
 This application is using Apache Maven and the Spring Boot libraries to bootstrap itself.  Note the maven will pull down (and cache locally) *lots* of dependencies, so the first time you run each of these commands I'd recommend being on a network with fast internet *(i.e. not the university)*.
 
-## Instructions
+## Eclipse IDE Instructions
+
+Make sure you have the latest Eclipse installed, such as the Mars release (4.5.1).  Also you must install m2e plugins.  See [M2Eclipse: Setting up Eclipse IDE](http://www.eclipse.org/m2e/documentation/m2e-extension-development.html) for instructions.
+
+### Creating a workspace
+
+The projects are shared in the Git repository, however Eclipse workspaces are not a sharable artifact.  Create a new workspace at the same level as the ```backend``` repository.
+
+Example:
+
+![Select workspace](./docs/select-workspace.png)
+
+### Import a Project
+
+The first time after you create a workspace, you must import the existing Maven project (pom.xml) into the workspace as an Eclipse Project.
+
+Follow along with how I imported the ```server``` (and only) project into the ````backend```` workspace.
+
+![Import Dialog](./docs/import-dialog.png)
+
+![Select root directory](./docs/root-directory.png)
+
+![Import Project](./docs/import-projects.png)
+
+	⁃	### Setting up Eclipse Web Server 
+
+You can use any web server that the WTP supports, however I'm using *Tomcat 8.0* since it's the latest Tomcat supported by Eclipse 4.5.1.
+
+Download tomcat from http://tomcat.apache.org and unzip it somewhere.  I put mine in the home directory, i.e. ````/Users/rob/````
+
+You will now need to add a J2EE server into Eclipse, and also make sure your backend project is installed on it.
+
+
+### Compile, Run, Debug
+
+You should be able to Compile, Run and Debug on the Server now just like any other web application in Eclipse.
+
+
+## Command Line Instructions
 
 All of these instructions assume you are in the ````backend/server```` directory (where backend is the directory created by ````git clone```` for your local source).
 

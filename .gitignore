@@ -22,3 +22,10 @@ release.properties
 dependency-reduced-pom.xml
 buildNumber.properties
 .mvn/timing.properties
+
+# Eclipse artifacts we don't need since we are
+# maven only.
+.classpath
+.project
+.settings/
+.metadata/
