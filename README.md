@@ -31,7 +31,8 @@ Follow along with how I imported the ```server``` (and only) project into the ``
 
 ![Import Project](./docs/import-projects.png)
 
-	⁃	### Setting up Eclipse Web Server 
+
+### Setting up Eclipse Web Server 
 
 You can use any web server that the WTP supports, however I'm using *Tomcat 8.0* since it's the latest Tomcat supported by Eclipse 4.5.1.
 
