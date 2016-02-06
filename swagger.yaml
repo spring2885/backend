@@ -1,0 +1,180 @@
+# Example YAML to get you started quickly.
+# Be aware that YAML has indentation based scoping.
+# Code completion support is available so start typing for available options.
+swagger: '2.0'
+
+# This is your document metadata
+info:
+  version: "0.0.1"
+  title: <NDNU Community Access API>
+
+# Describe your paths here
+paths:
+  # This is a path endpoint. Change it.
+  /persons:
+    # This is a HTTP operation
+    get:
+      # Describe this verb here. Note: you can use markdown
+      description: |
+        Gets `person` objects.
+        Optional query param of **size** determines
+        size of returned array
+      # This is array of GET operation parameters:
+      parameters:
+        # An example parameter that is in query and is required
+        -
+          name: size
+          in: query
+          description: Size of array
+          required: true
+          type: number
+          format: double
+      # Expected responses for this operation:
+      responses:
+        # Response code
+        200:
+          description: Successful response
+          # A schema describing your response object.
+          # Use JSON Schema format
+          schema:
+            title: ArrayOfpersons
+            type: array
+            items:
+              title: person
+              type: object
+              properties:
+                name:
+                  type: string
+                single:
+                  type: boolean
+    post:
+      parameters:
+        - name: person
+          in: body
+          description: The person you want to post
+          schema:
+            $ref: '#/definitions/person'
+          required: true
+      responses:
+        200:
+          description: Make a new person
+    put:
+      parameters:
+        - name: person
+          in: body
+          description: The person you want to update
+          schema:
+            $ref: '#/definitions/person'
+          required: true
+      responses:
+        200:
+          description: Updates the person
+  /jobs:
+    get:
+      # Describe this verb here. Note: you can use markdown
+      description: |
+        Gets `Job` objects.
+        Optional query param of **size** determines
+        size of returned array
+      # This is array of GET operation parameters:
+      parameters:
+        # An example parameter that is in query and is required
+        -
+          name: size
+          in: query
+          description: Size of array
+          required: true
+          type: number
+          format: double
+      # Expected responses for this operation:
+      responses:
+        # Response code
+        200:
+          description: Successful response
+          # A schema describing your response object.
+          # Use JSON Schema format
+          schema:
+            title: ArrayOfJobs
+            type: array
+            items:
+              title: Job
+              type: object
+              properties:
+                title:
+                  type: string
+                single:
+                  type: boolean
+    post:
+      parameters:
+        - name: Job
+          in: body
+          description: The Job you want to post
+          schema:
+            $ref: '#/definitions/Job'
+          required: true
+      responses:
+        200:
+          description: Make a new Job
+    put:
+      parameters:
+        - name: job
+          in: body
+          description: The Job you want to update
+          schema:
+            $ref: '#/definitions/Job'
+          required: true
+      responses:
+        200:
+          description: Updates the Job
+definitions:
+  person:
+    type: object
+    properties:
+      id: 
+        type: integer
+        format: int64
+      username:
+        type: string
+      profile picture:
+        type: object
+      firstname:
+        type: string
+      lastname:
+        type: string
+      email: 
+        type: string
+      password_sha:
+        type: string
+      password_salt:
+        type: string
+      phone:
+        type: string
+      birthdate:
+        type: object
+      occupation:
+        type: string
+      last login date:
+        type: object
+      variety:
+        type: string #as in alum, faculty, student
+  Job:
+    type: object
+    properties:
+      id: 
+        type: integer
+        format: int64
+      description:
+        type: string
+      job_type:
+        type: string
+  News:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+      description:
+        type: string
+      news title:
+        type: string
+      
