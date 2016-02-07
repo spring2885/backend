@@ -20,3 +20,14 @@ scripts to make their use trivial.
 ./download.sh
 ./codegen.sh help
 ````
+
+### Command to generate swagger.json
+````
+# From the tools directory, execute the following:
+
+./codegen.sh generate \
+  -l swagger \
+  -i ../swagger.yaml \
+  -o ../server/src/main/webapp/
+  
+````

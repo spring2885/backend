@@ -1,0 +1,221 @@
+{
+  "swagger" : "2.0",
+  "info" : {
+    "version" : "0.0.1",
+    "title" : "<NDNU Community Access API>"
+  },
+  "paths" : {
+    "/jobs" : {
+      "get" : {
+        "description" : "Gets `Job` objects.\nOptional query param of **size** determines\nsize of returned array\n",
+        "parameters" : [ {
+          "name" : "size",
+          "in" : "query",
+          "description" : "Size of array",
+          "required" : true,
+          "type" : "number",
+          "format" : "double"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful response",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/inline_response_200"
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "Job",
+          "description" : "The Job you want to post",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/Job"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Make a new Job"
+          }
+        }
+      },
+      "put" : {
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "job",
+          "description" : "The Job you want to update",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/Job"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Updates the Job"
+          }
+        }
+      }
+    },
+    "/persons" : {
+      "get" : {
+        "description" : "Gets `person` objects.\nOptional query param of **size** determines\nsize of returned array\n",
+        "parameters" : [ {
+          "name" : "size",
+          "in" : "query",
+          "description" : "Size of array",
+          "required" : true,
+          "type" : "number",
+          "format" : "double"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful response",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/inline_response_200_1"
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "person",
+          "description" : "The person you want to post",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/person"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Make a new person"
+          }
+        }
+      },
+      "put" : {
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "person",
+          "description" : "The person you want to update",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/person"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Updates the person"
+          }
+        }
+      }
+    }
+  },
+  "definitions" : {
+    "person" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "username" : {
+          "type" : "string"
+        },
+        "profile picture" : {
+          "type" : "object",
+          "properties" : { }
+        },
+        "firstname" : {
+          "type" : "string"
+        },
+        "lastname" : {
+          "type" : "string"
+        },
+        "email" : {
+          "type" : "string"
+        },
+        "password_sha" : {
+          "type" : "string"
+        },
+        "password_salt" : {
+          "type" : "string"
+        },
+        "phone" : {
+          "type" : "string"
+        },
+        "birthdate" : {
+          "type" : "object",
+          "properties" : { }
+        },
+        "occupation" : {
+          "type" : "string"
+        },
+        "last login date" : {
+          "type" : "object",
+          "properties" : { }
+        },
+        "variety" : {
+          "type" : "string"
+        }
+      }
+    },
+    "Job" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "description" : {
+          "type" : "string"
+        },
+        "job_type" : {
+          "type" : "string"
+        }
+      }
+    },
+    "News" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "description" : {
+          "type" : "string"
+        },
+        "news title" : {
+          "type" : "string"
+        }
+      }
+    },
+    "inline_response_200" : {
+      "properties" : {
+        "single" : {
+          "type" : "boolean"
+        },
+        "title" : {
+          "type" : "string"
+        }
+      }
+    },
+    "inline_response_200_1" : {
+      "properties" : {
+        "single" : {
+          "type" : "boolean"
+        },
+        "name" : {
+          "type" : "string"
+        }
+      }
+    }
+  }
+}
