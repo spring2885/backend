@@ -11,6 +11,13 @@ public class StaticController {
     @RequestMapping("/")
     @ResponseBody
     String home() {
-        return "Hello World!";
+    	return "<html><head><title>Spring2885 API Server</title></head>"
+    	+ "<body>"
+        + "<div style=\"text-align: center ;\">"
+        + "<img src=\"/img/face.png\">"
+    	+ "<h1>Spring2885 API Server</h1>"
+    	+ "<a href=\"/api-docs/index.html\">API Documentation</a><br/>"
+    	+ "</div>"
+    	+ "</body></html>";
     }
 }
