@@ -40,20 +40,22 @@ html_codegen() {
 }
 
 default_codegen() {
-    ${CODEGEN} "$@"
+    ${CODEGEN} $command \
+	-i ../swagger.yaml \
+	"$@"
 }
 
 case $command in
     "json")
-	json_codegen
+	json_codegen "$@"
 	exit 0
 	;;
     "html")
-	html_codegen
+	html_codegen "$@"
 	exit 0
 	;;
     *)
-	default_codegen
+	default_codegen "$@"
 	exit 0
 	;;
 esac
