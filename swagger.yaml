@@ -6,7 +6,13 @@ swagger: '2.0'
 # This is your document metadata
 info:
   version: "0.0.1"
-  title: <NDNU Community Access API>
+  title: NDNU Community Access API
+  description: An API for the Spring2885 FrontEnd.
+  contact: 
+    name: Spring2885 Backend Development Team
+    email: api@spring-2885.org
+    url: https://github.com/rob2885/backend
+  
 
 # Describe your paths here
 paths:
@@ -37,16 +43,9 @@ paths:
           # A schema describing your response object.
           # Use JSON Schema format
           schema:
-            title: ArrayOfpersons
             type: array
             items:
-              title: person
-              type: object
-              properties:
-                name:
-                  type: string
-                single:
-                  type: boolean
+              $ref: '#/definitions/person'
     post:
       parameters:
         - name: person
