@@ -21,6 +21,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>1.8</java.version>
+		<springfox-version>2.3.1</springfox-version>
 	</properties>
 
 	<dependencies>
@@ -49,6 +50,18 @@
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 
+		<!--SpringFox dependencies-->
+		<dependency>
+		  <groupId>io.springfox</groupId>
+		  <artifactId>springfox-swagger2</artifactId>
+		  <version>${springfox-version}</version>
+		</dependency>
+		<dependency>
+		  <groupId>io.springfox</groupId>
+		  <artifactId>springfox-swagger-ui</artifactId>
+		  <version>${springfox-version}</version>
+		</dependency>
+		<!--Swgger dependencies-->
 		<dependency>
 			<groupId>io.swagger</groupId>
 			<artifactId>swagger-core</artifactId>
@@ -82,5 +95,4 @@
 		</plugins>
 	</build>
 	
-
 </project>
