@@ -1,6 +1,4 @@
-# Example YAML to get you started quickly.
-# Be aware that YAML has indentation based scoping.
-# Code completion support is available so start typing for available options.
+# Spring2885 API Description.
 swagger: '2.0'
 
 # This is your document metadata
@@ -93,16 +91,9 @@ paths:
           # A schema describing your response object.
           # Use JSON Schema format
           schema:
-            title: ArrayOfJobs
             type: array
             items:
-              title: Job
-              type: object
-              properties:
-                title:
-                  type: string
-                single:
-                  type: boolean
+              $ref: '#/definitions/Job'
     post:
       parameters:
         - name: Job
