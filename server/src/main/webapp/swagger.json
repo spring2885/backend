@@ -1,8 +1,14 @@
 {
   "swagger" : "2.0",
   "info" : {
+    "description" : "An API for the Spring2885 FrontEnd.",
     "version" : "0.0.1",
-    "title" : "<NDNU Community Access API>"
+    "title" : "NDNU Community Access API",
+    "contact" : {
+      "name" : "Spring2885 Backend Development Team",
+      "url" : "https://github.com/rob2885/backend",
+      "email" : "api@spring-2885.org"
+    }
   },
   "paths" : {
     "/jobs" : {
@@ -22,7 +28,7 @@
             "schema" : {
               "type" : "array",
               "items" : {
-                "$ref" : "#/definitions/inline_response_200"
+                "$ref" : "#/definitions/Job"
               }
             }
           }
@@ -78,7 +84,7 @@
             "schema" : {
               "type" : "array",
               "items" : {
-                "$ref" : "#/definitions/inline_response_200_1"
+                "$ref" : "#/definitions/person"
               }
             }
           }
@@ -193,26 +199,6 @@
           "type" : "string"
         },
         "news title" : {
-          "type" : "string"
-        }
-      }
-    },
-    "inline_response_200" : {
-      "properties" : {
-        "single" : {
-          "type" : "boolean"
-        },
-        "title" : {
-          "type" : "string"
-        }
-      }
-    },
-    "inline_response_200_1" : {
-      "properties" : {
-        "single" : {
-          "type" : "boolean"
-        },
-        "name" : {
           "type" : "string"
         }
       }
