@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.spring2885.model.Job;
+import org.spring2885.server.api.exceptions.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
-@RequestMapping(value = "/jobs", produces = { APPLICATION_JSON_VALUE })
+@RequestMapping(value = "/api/jobs", produces = { APPLICATION_JSON_VALUE })
 public class JobsApi {
 	@RequestMapping(value = "", method = RequestMethod.GET)
 	public ResponseEntity<List<Job>> jobsGet(@RequestParam(value = "size", required = true) Double size)
