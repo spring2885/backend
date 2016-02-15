@@ -24,94 +24,51 @@
 		<springfox-version>2.3.1</springfox-version>
 	</properties>
 
-	<dependencies>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-jpa</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-jdbc</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-jersey</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-mail</artifactId>
-		</dependency>
-		<!--  Spring Security  -->
-		<dependency>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-web</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-config</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
+
+        <dependencies>
+                <dependency>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-starter-actuator</artifactId>
+                </dependency>
+                <dependency>
+                        <groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
 		<dependency>
-		  <groupId>org.springframework.security.oauth</groupId>
-		  <artifactId>spring-security-oauth2</artifactId>
-		</dependency>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-starter-thymeleaf</artifactId>
+                </dependency>
+                <dependency>
+                        <groupId>org.apache.httpcomponents</groupId>
+                        <artifactId>httpclient</artifactId>
+                        <scope>test</scope>
+                </dependency>
+                <dependency>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-starter-test</artifactId>
+                        <scope>test</scope>
+                </dependency>
+				<dependency>
+					<groupId>io.swagger</groupId>
+					<artifactId>swagger-core</artifactId>
+					<version>1.5.7</version>
+				</dependency> 
+								<!--SpringFox dependencies
+				<dependency>
+				  <groupId>io.springfox</groupId>
+				  <artifactId>springfox-swagger2</artifactId>
+				  <version>${springfox-version}</version>
+				</dependency>
+				<dependency>
+				  <groupId>io.springfox</groupId>
+				  <artifactId>springfox-swagger-ui</artifactId>
+				  <version>${springfox-version}</version>
+				</dependency>
+-->
 
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency>
+        </dependencies>
 
-		<!--SpringFox dependencies-->
-		<dependency>
-		  <groupId>io.springfox</groupId>
-		  <artifactId>springfox-swagger2</artifactId>
-		  <version>${springfox-version}</version>
-		</dependency>
-		<dependency>
-		  <groupId>io.springfox</groupId>
-		  <artifactId>springfox-swagger-ui</artifactId>
-		  <version>${springfox-version}</version>
-		</dependency>
-		<!--Swgger dependencies-->
-		<dependency>
-			<groupId>io.swagger</groupId>
-			<artifactId>swagger-core</artifactId>
-			<version>1.5.7</version>
-		</dependency>
 
-		<!--  JSTL: we use this for c:out in the JSP pages. -->		
-		<dependency>
-		    <groupId>javax.servlet</groupId>
-		    <artifactId>jstl</artifactId>
-		</dependency>
-
-		<!-- JDBC -->     
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-jdbc</artifactId>
-        </dependency>
-
-        <!--  MySQL -->
-		<dependency>
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
-			<scope>runtime</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-tomcat</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
-		</dependency>
-
-	</dependencies>
 	
 	<build>
 		<plugins>
