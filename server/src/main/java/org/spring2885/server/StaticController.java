@@ -10,10 +10,10 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class StaticController {
-    @RequestMapping("/")
-    ModelAndView index() {
-    	Map<String, String> data = new HashMap<>();
-    	data.put("name", "Spring2885 API Server");
-    	return new ModelAndView("index", data);
-    }
+//    @RequestMapping("/")
+//    ModelAndView index() {
+//    	Map<String, String> data = new HashMap<>();
+//    	data.put("name", "Spring2885 API Server");
+//    	return new ModelAndView("index", data);
+//    }
 }
