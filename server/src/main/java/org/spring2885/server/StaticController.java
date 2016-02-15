@@ -1,19 +1,27 @@
 package org.spring2885.server;
 
-import java.util.HashMap;
+import java.util.Date;
 import java.util.Map;
 
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class StaticController {
-//    @RequestMapping("/")
-//    ModelAndView index() {
-//    	Map<String, String> data = new HashMap<>();
-//    	data.put("name", "Spring2885 API Server");
-//    	return new ModelAndView("index", data);
-//    }
+    @RequestMapping("/")
+    public String home(Map<String, Object> model) {
+		model.put("message",
+			"This server is only for service APIs.\n"
+            + "It is not intended to be accessed from a browser... \n"
+            + "These are not the driods you are looking for... yada yada..");
+		model.put("title", "Spring 2885 Server");
+		model.put("date", new Date());
+		return "home";
+    }
+
+	@RequestMapping("/foo")
+	public String foo() {
+		throw new RuntimeException("Expected exception in controller");
+	}
+
 }

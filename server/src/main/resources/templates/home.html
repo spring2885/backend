@@ -2,27 +2,45 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <title th:text="${title}">Title</title>
-<link rel="stylesheet" th:href="@{/css/bootstrap.min.css}"
-	href="../../css/bootstrap.min.css" />
+<meta charset="UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+      rel="stylesheet" 
+      integrity="sha256-7s5uDGW3AHqw6xtJmNNtr+OBRJUlgkNJEo78P4b0yRw= sha512-nNo+yCHEyn0smMxSswnf/OnX6/KwJuZTlNZBjauKhTK0c+zT+q5JOCx0UFhXQ6rJR9jg6Es8gPuD2uZcYDLqSw==" 
+      crossorigin="anonymous"/>
+<style>
+/* Must do this so the navbar isn't over our content.
+  See http://getbootstrap.com/components/#navbar-fixed-top/
+  */
+body { padding-top: 70px; }
+</style>
 </head>
 <body>
-	<div class="container">
-		<div class="navbar">
-			<div class="navbar-inner">
-				<a class="brand" href="http://www.thymeleaf.org"> Thymeleaf -
-					Plain </a>
-				<ul class="nav">
-					<li><a th:href="@{/}" href="home.html"> Home </a></li>
-				</ul>
-			</div>
-		</div>
+
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#">Spring2885 API Server</a>
+        </div>
+      </div>
+    </nav>
+    
+    <div class="container">
+	    <div class="starter-template">
 		<h1 th:text="${title}">Title</h1>
-		<div th:text="${message}">Fake content</div>
-		<div id="created" th:text="${#dates.format(date)}">July 11,
-			2012 2:17:16 PM CDT</div>
-        <form th:action="@{/logout}" method="post">
-            <input type="submit" value="Sign Out"/>
-        </form>
+		<div class="lead" th:text="${message}">Fake content</div>
+		</div>
+   		<p class="lead">Since you are here check out our 
+   		<a href="/api-docs/index.html">API Documentation</a>
+   		</p>
+		<img src="/img/face.png" /><br/>
 	</div>
+    <footer class="footer">
+      <div class="container">
+        <p class="text-muted">Why are you still here? Go away already!</p>
+      </div>
+    </footer>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha256-KXn5puMvxCw+dAYznun+drMdG1IFl3agK0p/pqT9KAo= sha512-2e8qq0ETcfWRI4HJBzQiA3UoyFk6tbNyG+qSaIBZLyW9Xf3sWZHN/lxe9fTh1U45DpPf07yj94KsUHHWe4Yk1A==" crossorigin="anonymous"></script>
 </body>
 </html>
