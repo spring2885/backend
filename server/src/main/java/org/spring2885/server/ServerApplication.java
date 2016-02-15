@@ -33,19 +33,19 @@ public class ServerApplication extends WebMvcConfigurerAdapter {
 	protected static class ApplicationSecurity extends WebSecurityConfigurerAdapter {
 
 		@Override
-	    public void configure(WebSecurity webSecurity) throws Exception
-	    {
-	        webSecurity.ignoring().antMatchers("/");
-	    }
-
-		@Override
 		protected void configure(HttpSecurity http) throws Exception {
-			http.authorizeRequests().anyRequest().fullyAuthenticated()
+			http.authorizeRequests().antMatchers("/api/**").fullyAuthenticated()
+					// Enable form login at /login.  POST with "username" and "password"
+					// as the form parameters needed.
 					.and()
 					.formLogin()
 					.loginPage("/login").failureUrl("/login?error").permitAll()
 					.and()
-					.logout().logoutUrl("/logout").deleteCookies().permitAll();
+					.logout().logoutUrl("/logout").deleteCookies().invalidateHttpSession(true).logoutSuccessUrl("/")
+					.and()
+					// This makes the /logout URL work.
+					// See https://github.com/spring-projects/spring-webflow-samples/issues/28
+					.csrf().disable();
 		}
 
 		@Override
