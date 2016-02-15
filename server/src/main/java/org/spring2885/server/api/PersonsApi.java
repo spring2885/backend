@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class PersonsApi {
 
 	@RequestMapping(value = "", method = RequestMethod.GET)
-	public ResponseEntity<List<Person>> personsGet(@RequestParam(value = "size", required = true) Double size)
+	public ResponseEntity<List<Person>> personsGet(@RequestParam(value = "size", required = false) Double size)
 			throws NotFoundException {
 		List<Person> persons = new ArrayList<>();
 		Person p = new Person();

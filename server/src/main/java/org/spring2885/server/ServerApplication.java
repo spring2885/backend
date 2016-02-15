@@ -1,8 +1,5 @@
 package org.spring2885.server;
 
-import java.util.Date;
-import java.util.Map;
-
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -11,9 +8,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
@@ -36,10 +33,19 @@ public class ServerApplication extends WebMvcConfigurerAdapter {
 	protected static class ApplicationSecurity extends WebSecurityConfigurerAdapter {
 
 		@Override
+	    public void configure(WebSecurity webSecurity) throws Exception
+	    {
+	        webSecurity.ignoring().antMatchers("/");
+	    }
+
+		@Override
 		protected void configure(HttpSecurity http) throws Exception {
-			http.authorizeRequests().anyRequest().fullyAuthenticated().and().formLogin()
-					.loginPage("/login").failureUrl("/login?error").permitAll().and()
-					.logout().permitAll();
+			http.authorizeRequests().anyRequest().fullyAuthenticated()
+					.and()
+					.formLogin()
+					.loginPage("/login").failureUrl("/login?error").permitAll()
+					.and()
+					.logout().logoutUrl("/logout").deleteCookies().permitAll();
 		}
 
 		@Override

@@ -1,4 +1,4 @@
-package org.spring2885.server;
+package org.spring2885.server.web;
 
 import java.util.Date;
 import java.util.Map;

@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping(value = "/api/jobs", produces = { APPLICATION_JSON_VALUE })
 public class JobsApi {
 	@RequestMapping(value = "", method = RequestMethod.GET)
-	public ResponseEntity<List<Job>> jobsGet(@RequestParam(value = "size", required = true) Double size)
+	public ResponseEntity<List<Job>> jobsGet(@RequestParam(value = "size", required = false) Double size)
 			throws NotFoundException {
 		// do some magic!
 		List<Job> jobs = new ArrayList<Job>();
