@@ -12,6 +12,20 @@
          <generator class="native"/>
       </id>
       <property name="personName" column="person_name" type="string"/>
-
+      <property name="studentId" column="person_id" type="int"/>
+      <property name="title" column="title" type="string"/>
+      <property name="aboutMe" column="person_me" type="string"/>
+      <property name="resumeURL" column="person_url" type="string"/>
+      <property name="personImageUrl" column="person_image_url" type="string"/>
+      <property name="personEmail" column="person_email" type="string"/>
+      <property name="personPhone" column="person_phone" type="string"/>
+      <property name="personOccupation" column="person_occupation" type="string"/>
+      <property name="companyName" column="company_name" type="string"/>
+      <property name="personBirthdate" column="person_birthdate" type="date"/>
+      <property name="personType" column="person_type" type="int"/>
+      <property name="lastLogon" column="last_logon" type="date"/>
+      <property name="passwordSha" column="password_sha" type="string"/>
+      <property name="passwordSalt" column="password_salt" type="string"/>
+      
    </class>
 </hibernate-mapping>

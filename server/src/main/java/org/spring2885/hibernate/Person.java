@@ -11,8 +11,8 @@ import java.sql.*;
 @Entity
 @Table(name = "Person")
 public class Person implements Serializable {
-	@Id @GeneratedValue
-	
+	@Id 
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private int id;
 	
