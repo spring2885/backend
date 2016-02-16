@@ -22,6 +22,7 @@ body { padding-top: 70px; }
       <div class="container">
         <div class="navbar-header">
           <a class="navbar-brand" href="#">Spring2885 API Server</a>
+  		  <a class="navbar-brand" href="/logout">Logout</a>
         </div>
       </div>
     </nav>
@@ -31,8 +32,18 @@ body { padding-top: 70px; }
 		<h1 th:text="${title}">Title</h1>
 		<div class="lead" th:text="${message}">Fake content</div>
 		</div>
-   		<p class="lead">Since you are here check out our 
-   		<a href="/api-docs/index.html">API Documentation</a>
+
+		<div class="lead" sec:authorize="hasRole('ROLE_USER')">
+		You are logged in as '<span sec:authentication="name">Bob</span>'
+		</div>
+		
+   		<p class="lead">Since you are here, you may:
+   		<ul>
+   		<li><a href="/api-docs/index.html">View API Documentation</a></li>
+   		<li><a href="/newuser">Create a New Account.</a></li>
+   		<li><a href="/login">Log in to the API Server.</a></li>
+   		<li><a href="/logout">Log out of the API Server.</a></li>
+   		</ul>
    		</p>
 		<img src="/img/face.png" /><br/>
 	</div>
