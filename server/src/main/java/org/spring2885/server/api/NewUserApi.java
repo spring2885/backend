@@ -32,11 +32,21 @@ public class NewUserApi {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 	
+	/**
+	 * Mapping for /newuser webpage. This is where a stub page
+	 * for generating a new user lives.  It's implemented in
+	 * {@code newuser.html}
+	 */
 	@RequestMapping(method=RequestMethod.GET)
 	public String newuser() {
 		return "newuser";
 	}
 
+	/**
+	 * Mapping for /newuser (POST) API Handler.
+	 * <p>
+	 * This creates a new user in the system.
+	 */
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<Void> personsPost(
 			@RequestParam("email") String email,
