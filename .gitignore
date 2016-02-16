@@ -23,6 +23,9 @@ dependency-reduced-pom.xml
 buildNumber.properties
 .mvn/timing.properties
 
+# Specific DO's
+server/src/main/webapp/README.md
+
 # Eclipse artifacts we don't need since we are
 # maven only.
 .classpath
