@@ -133,17 +133,13 @@ definitions:
         type: string
       email: 
         type: string
-      password_sha:
-        type: string
-      password_salt:
-        type: string
       phone:
         type: string
       birthdate:
         type: object
       occupation:
         type: string
-      last login date:
+      last_login_date:
         type: object
       variety:
         type: string #as in alum, faculty, student
