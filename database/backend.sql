@@ -15,24 +15,23 @@ PRIMARY KEY (id)
 DROP TABLE IF EXISTS Person;
 CREATE TABLE Person
 (
-id int,
-person_name varchar(200),
+id int NOT NULL AUTO_INCREMENT,
+name varchar(200),
 student_id int,
 title varchar(200),
 about_me TEXT(65535),
 resume_url varchar(200),
-person_image_url varchar(200),
-person_email varchar(200),
-person_phone varchar(200),
-person_occupation varchar(200),
+image_url varchar(200),
+email varchar(200),
+phone varchar(200),
+occupation varchar(200),
 company_name varchar(200),
-person_birthdate DATE,
-person_type int,
+birthdate DATE,
+type int,
 last_logon DATE,
-password_sha varchar(64),
-password_salt varchar(64),
+password varchar(255),
 PRIMARY KEY (id),
-FOREIGN KEY (person_type) REFERENCES Person_Type(id)
+FOREIGN KEY (type) REFERENCES Person_Type(id)
 );
 
 DROP TABLE IF EXISTS Faculty;

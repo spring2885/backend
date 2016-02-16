@@ -48,27 +48,21 @@
                         <artifactId>spring-boot-starter-test</artifactId>
                         <scope>test</scope>
                 </dependency>
+			      <dependency>
+			        <groupId>org.springframework.boot</groupId>
+			        <artifactId>spring-boot-starter-data-jpa</artifactId>
+			      </dependency>
 				<dependency>
 					<groupId>io.swagger</groupId>
 					<artifactId>swagger-core</artifactId>
 					<version>1.5.7</version>
 				</dependency> 
-								<!--SpringFox dependencies
-				<dependency>
-				  <groupId>io.springfox</groupId>
-				  <artifactId>springfox-swagger2</artifactId>
-				  <version>${springfox-version}</version>
-				</dependency>
-				<dependency>
-				  <groupId>io.springfox</groupId>
-				  <artifactId>springfox-swagger-ui</artifactId>
-				  <version>${springfox-version}</version>
-				</dependency>
--->
-
+			      <dependency>
+			        <groupId>mysql</groupId>
+			        <artifactId>mysql-connector-java</artifactId>
+			      </dependency>
+			
         </dependencies>
-
-
 	
 	<build>
 		<plugins>
@@ -79,4 +73,15 @@
 		</plugins>
 	</build>
 	
+	<organization>
+		<name>Spring 2885</name>
+		<url>http://www.spring-2885.org</url>
+	</organization>
+	<scm>
+		<url>https://github.com/spring2885/backend</url>
+	</scm>
+	<issueManagement>
+		<system>GitHub</system>
+		<url>https://github.com/spring2885/backend/issues</url>
+	</issueManagement>
 </project>
