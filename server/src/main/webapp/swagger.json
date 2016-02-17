@@ -148,12 +148,6 @@
         "email" : {
           "type" : "string"
         },
-        "password_sha" : {
-          "type" : "string"
-        },
-        "password_salt" : {
-          "type" : "string"
-        },
         "phone" : {
           "type" : "string"
         },
@@ -164,7 +158,7 @@
         "occupation" : {
           "type" : "string"
         },
-        "last login date" : {
+        "last_login_date" : {
           "type" : "object",
           "properties" : { }
         },
