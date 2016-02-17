@@ -43,6 +43,13 @@ public class PersonsApi {
 		return new ResponseEntity<Person>(toJsonPerson(o), HttpStatus.OK);
 	}
 
+	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+	public ResponseEntity<Void> delete(@PathVariable("id") int id)
+			throws NotFoundException {
+		personService.delete(id);
+		return new ResponseEntity<Void>(HttpStatus.OK);
+	}
+
 	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<List<Person>> list(@RequestParam(value = "size", required = false) Double size)
 			throws NotFoundException {
@@ -54,13 +61,9 @@ public class PersonsApi {
 		return new ResponseEntity<List<Person>>(persons, HttpStatus.OK);
 	}
 
+	// TODO(rcleveng): Implement this one.
 	@RequestMapping(method = RequestMethod.PUT)
 	public ResponseEntity<Void> put(@RequestBody Person person) throws NotFoundException {
-		return new ResponseEntity<Void>(HttpStatus.OK);
-	}
-
-	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<Void> post(@RequestBody Person person) throws NotFoundException {
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 

@@ -32,4 +32,19 @@ public class PersonServiceImpl implements PersonService {
 		return repository.findByEmail(email);
 	}
 
+	@Override
+	public boolean delete(int id) {
+		DbPerson p = findById(id);
+		if (p != null) {
+			repository.delete(id);
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public boolean existsByEmail(String email) {
+		return findByEmail(email).size() != 0;
+	}
+
 }
