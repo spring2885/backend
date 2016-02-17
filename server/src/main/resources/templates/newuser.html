@@ -27,8 +27,6 @@ body { padding-top: 70px; }
     </nav>
     
 		<div class="content">
-			<p th:if="${param.logout}" class="alert">You have been logged out</p>
-			<p th:if="${param.error}" class="alert alert-error">There was an error, please try again</p>
 			<h3>Create a new account.</h3>
 			<form name="form" th:action="@{/newuser}" action="/newuser" method="POST">
 				<fieldset>
