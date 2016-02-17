@@ -12,7 +12,7 @@ import java.util.Objects;
 
 
 @ApiModel(description = "")
-@javax.annotation.Generated(value = "class io.swagger.codegen.languages.SpringMVCServerCodegen", date = "2016-02-10T23:10:13.712-08:00")
+@javax.annotation.Generated(value = "class io.swagger.codegen.languages.SpringMVCServerCodegen", date = "2016-02-16T21:30:05.288-08:00")
 public class Person  {
   
   private Long id = null;
@@ -21,8 +21,6 @@ public class Person  {
   private String firstname = null;
   private String lastname = null;
   private String email = null;
-  private String passwordSha = null;
-  private String passwordSalt = null;
   private String phone = null;
   private Object birthdate = null;
   private String occupation = null;
@@ -105,30 +103,6 @@ public class Person  {
   /**
    **/
   @ApiModelProperty(value = "")
-  @JsonProperty("password_sha")
-  public String getPasswordSha() {
-    return passwordSha;
-  }
-  public void setPasswordSha(String passwordSha) {
-    this.passwordSha = passwordSha;
-  }
-
-  
-  /**
-   **/
-  @ApiModelProperty(value = "")
-  @JsonProperty("password_salt")
-  public String getPasswordSalt() {
-    return passwordSalt;
-  }
-  public void setPasswordSalt(String passwordSalt) {
-    this.passwordSalt = passwordSalt;
-  }
-
-  
-  /**
-   **/
-  @ApiModelProperty(value = "")
   @JsonProperty("phone")
   public String getPhone() {
     return phone;
@@ -165,7 +139,7 @@ public class Person  {
   /**
    **/
   @ApiModelProperty(value = "")
-  @JsonProperty("last login date")
+  @JsonProperty("last_login_date")
   public Object getLastLoginDate() {
     return lastLoginDate;
   }
@@ -202,8 +176,6 @@ public class Person  {
         Objects.equals(firstname, person.firstname) &&
         Objects.equals(lastname, person.lastname) &&
         Objects.equals(email, person.email) &&
-        Objects.equals(passwordSha, person.passwordSha) &&
-        Objects.equals(passwordSalt, person.passwordSalt) &&
         Objects.equals(phone, person.phone) &&
         Objects.equals(birthdate, person.birthdate) &&
         Objects.equals(occupation, person.occupation) &&
@@ -213,7 +185,7 @@ public class Person  {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, username, profilePicture, firstname, lastname, email, passwordSha, passwordSalt, phone, birthdate, occupation, lastLoginDate, variety);
+    return Objects.hash(id, username, profilePicture, firstname, lastname, email, phone, birthdate, occupation, lastLoginDate, variety);
   }
 
   @Override
@@ -227,8 +199,6 @@ public class Person  {
     sb.append("  firstname: ").append(firstname).append("\n");
     sb.append("  lastname: ").append(lastname).append("\n");
     sb.append("  email: ").append(email).append("\n");
-    sb.append("  passwordSha: ").append(passwordSha).append("\n");
-    sb.append("  passwordSalt: ").append(passwordSalt).append("\n");
     sb.append("  phone: ").append(phone).append("\n");
     sb.append("  birthdate: ").append(birthdate).append("\n");
     sb.append("  occupation: ").append(occupation).append("\n");

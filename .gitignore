@@ -25,6 +25,7 @@ buildNumber.properties
 
 # Specific DO's
 server/src/main/webapp/README.md
+.recommenders/
 
 # Eclipse artifacts we don't need since we are
 # maven only.
@@ -32,3 +33,4 @@ server/src/main/webapp/README.md
 .project
 .settings/
 .metadata/
+Servers/

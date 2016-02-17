@@ -4,11 +4,12 @@
 ##############################################################################
 
 declare -r CODEGEN="java -jar swagger-codegen-cli.jar"
+declare -r CODEGEN_MODELS="java -Dmodels -jar swagger-codegen-cli.jar"
 
 show_usage() {
     echo "$0"
     echo "Usage: $0 command <options>"
-    echo "Commands: json, html, generate"
+    echo "Commands: json, html, models, generate"
     echo "json: regenerates the swagger.json file"
     echo "html: regenerates static HTML documentation"
     echo "generate: invokes the swagger codegen tool. "
@@ -45,9 +46,22 @@ default_codegen() {
 	"$@"
 }
 
+model_codegen() {
+  ${CODEGEN_MODELS} \
+	generate \
+	-l spring-mvc \
+	-i ../swagger.yaml \
+	-o ../server \
+	-c codegen-config.json
+}
+
 case $command in
     "json")
 	json_codegen "$@"
+	exit 0
+	;;
+    "models")
+	model_codegen "$@"
 	exit 0
 	;;
     "html")
