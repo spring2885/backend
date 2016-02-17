@@ -42,18 +42,20 @@ public class ServerApplication extends WebMvcConfigurerAdapter {
 
 		@Override
 		protected void configure(HttpSecurity http) throws Exception {
-			http.authorizeRequests().antMatchers("/api/**").fullyAuthenticated()
-					// Enable form login at /login.  POST with "username" and "password"
-					// as the form parameters needed.
-					.and()
-					.formLogin()
-					.loginPage("/login").failureUrl("/login?error").permitAll()
-					.and()
-					.logout().logoutUrl("/logout").deleteCookies().invalidateHttpSession(true).logoutSuccessUrl("/")
-					.and()
-					// This makes the /logout URL work.
-					// See https://github.com/spring-projects/spring-webflow-samples/issues/28
-					.csrf().disable();
+			http.authorizeRequests()
+					.antMatchers("/api/**").fullyAuthenticated()
+					.antMatchers("/").permitAll()
+				// Enable form login at /login.  POST with "username" and "password"
+				// as the form parameters needed.
+				.and()
+				.formLogin()
+				.loginPage("/login").failureUrl("/login?error").permitAll()
+				.and()
+				.logout().logoutUrl("/logout").deleteCookies().invalidateHttpSession(true).logoutSuccessUrl("/")
+				.and()
+				// This makes the /logout URL work.
+				// See https://github.com/spring-projects/spring-webflow-samples/issues/28
+				.csrf().disable();
 		}
 
 		@Override
