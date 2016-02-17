@@ -2,10 +2,10 @@ package org.spring2885.server.db.service;
 
 import java.util.List;
 
-import org.spring2885.server.db.model.Person;
+import org.spring2885.server.db.model.DbPerson;
 
 public interface PersonService {
-	Person findById(int id); 
-	Iterable<Person> findAll();
-	List<Person> findByEmail(String email);
+	DbPerson findById(int id); 
+	Iterable<DbPerson> findAll();
+	List<DbPerson> findByEmail(String email);
 }
