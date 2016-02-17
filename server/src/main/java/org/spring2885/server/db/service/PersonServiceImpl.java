@@ -47,4 +47,9 @@ public class PersonServiceImpl implements PersonService {
 		return findByEmail(email).size() != 0;
 	}
 
+	@Override
+	public DbPerson save(DbPerson person) {
+		return repository.save(person);
+	}
+
 }

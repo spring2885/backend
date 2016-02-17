@@ -30,4 +30,7 @@ public interface PersonService {
 	
 	/** Returns {@code true} if a user exists for this email address. */
 	boolean existsByEmail(String email);
+
+	/** Saves (Inserts) the {@code person} into the database. */
+	DbPerson save(DbPerson person);
 }
