@@ -40,14 +40,19 @@ public class PersonsApi {
 	public ResponseEntity<Person> get(@PathVariable("id") int id)
 			throws NotFoundException {
 		DbPerson o = personService.findById(id);
-		return new ResponseEntity<Person>(toJsonPerson(o), HttpStatus.OK);
+		if (o == null) {
+			// When adding test testPersonsById_notFound, was getting a NullPointerException
+			// here, so needed to add this.
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+		return new ResponseEntity<>(toJsonPerson(o), HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<Void> delete(@PathVariable("id") int id)
 			throws NotFoundException {
 		personService.delete(id);
-		return new ResponseEntity<Void>(HttpStatus.OK);
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
@@ -58,13 +63,13 @@ public class PersonsApi {
 				.transform((DbPerson o) -> { return toJsonPerson(o); })
 				.toList();
 		
-		return new ResponseEntity<List<Person>>(persons, HttpStatus.OK);
+		return new ResponseEntity<>(persons, HttpStatus.OK);
 	}
 
 	// TODO(rcleveng): Implement this one.
 	@RequestMapping(method = RequestMethod.PUT)
 	public ResponseEntity<Void> put(@RequestBody Person person) throws NotFoundException {
-		return new ResponseEntity<Void>(HttpStatus.OK);
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
 }
