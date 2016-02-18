@@ -53,7 +53,7 @@ public class PersonsApiTest {
     	when(personService.findAll()).thenReturn(persons);
     	verifyNoMoreInteractions(personService);
     	
-    	mockMvc.perform(get("/api/persons")
+    	mockMvc.perform(get("/api/v1/profiles")
     			.accept(MediaType.APPLICATION_JSON))
     			.andExpect(status().isOk())
     			.andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -63,7 +63,7 @@ public class PersonsApiTest {
 
 
     /**
-     * Tests a {@code /persons/:id} where {@code id} is found.
+     * Tests a {@code /profiles/:id} where {@code id} is found.
      */
     @Test
     public void testPersonsById() throws Exception {
@@ -73,7 +73,7 @@ public class PersonsApiTest {
     	when(personService.findById(21)).thenReturn(p);
     	verifyNoMoreInteractions(personService);
     	
-    	mockMvc.perform(get("/api/persons/21")
+    	mockMvc.perform(get("/api/v1/profiles/21")
     			.accept(MediaType.APPLICATION_JSON))
     			.andExpect(status().isOk())
     			.andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -84,7 +84,7 @@ public class PersonsApiTest {
     }
 
     /**
-     * Tests a {@code /persons/:id} where {@code id} is not found.
+     * Tests a {@code /profiles/:id} where {@code id} is not found.
      */
     @Test
     public void testPersonsById_notFound() throws Exception {
@@ -92,7 +92,7 @@ public class PersonsApiTest {
     	when(personService.findById(21)).thenReturn(null);
     	verifyNoMoreInteractions(personService);
     	
-    	mockMvc.perform(get("/api/persons/21")
+    	mockMvc.perform(get("/api/v1/profiles/21")
     			.accept(MediaType.APPLICATION_JSON))
     			.andExpect(status().isNotFound());
     	
@@ -107,7 +107,7 @@ public class PersonsApiTest {
     	when(personService.delete(21)).thenReturn(true);
     	verifyNoMoreInteractions(personService);
     	
-    	mockMvc.perform(delete("/api/persons/21")
+    	mockMvc.perform(delete("/api/v1/profiles/21")
     			.accept(MediaType.APPLICATION_JSON))
     			.andExpect(status().isOk());
     	

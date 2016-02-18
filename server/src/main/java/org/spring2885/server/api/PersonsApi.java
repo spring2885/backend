@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.google.common.collect.FluentIterable;
 
 @Controller
-@RequestMapping(value = "/api/persons", produces = { APPLICATION_JSON_VALUE })
+@RequestMapping(value = "/api/v1/profiles", produces = { APPLICATION_JSON_VALUE })
 public class PersonsApi {
 	
 	// TODO(rcleveng): Move this into a helper class.
