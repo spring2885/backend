@@ -16,37 +16,67 @@ info:
 paths:
   /newuser:
     post:
+      description: |
+        Creates a new user in the system
       parameters:
-        - name: person
-          in: body
-          description: The person you want to post
-          schema:
-            $ref: '#/definitions/person'
+        - name: email
+          in: formData
+          description: The email address to use for the new person.
           required: true
+          type: string
+          format: email
+        - name: password
+          in: formData
+          description: the unencrypted password to use
+          required: true
+          type: string
+          format: password
       responses:
         200:
-          description: Make a new person
+          description: Creates a new person in the system.
+        500:
+          description: An error creating the user.
 
   # This is the /profiles endpoint
-  /profiles:
+  /api/v1/profiles:
     # This is a HTTP operation
     get:
       # Describe this verb here. Note: you can use markdown
       description: |
-        Gets `person` objects.
-        Optional query param of **size** determines
-        size of returned array
+        Fetches all `profile` objects. up to **size** if specified
+        otherwise fetches all objects.
       # This is array of GET operation parameters:
       parameters:
         # An example parameter that is in query and is required
         -
           name: size
           in: query
-          description: Size of array
+          description: The maxinum number of profiles to fetch.
           required: false
           type: number
-          format: double
+          format: int32
       # Expected responses for this operation:
+      responses:
+        # Response code
+        200:
+          description: Successful response
+          # A schema describing your response object.
+          # Use JSON Schema format
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/person'
+
+  /api/v1/profiles/{id}:
+    get:
+      description: Fetches the `profile` for id `id`.
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the profile to fetch
+          required: true
+          type: number
+          format: int32
       responses:
         # Response code
         200:
@@ -59,16 +89,35 @@ paths:
               $ref: '#/definitions/person'
     put:
       parameters:
+        - name: id
+          in: path
+          description: The ID of the profile to fetch
+          required: true
+          type: number
+          format: int32
         - name: person
           in: body
-          description: The person you want to update
+          description: The profile to update.
           schema:
             $ref: '#/definitions/person'
           required: true
       responses:
         200:
           description: Updates the person
-  /jobs:
+    delete:
+      parameters:
+        - name: id
+          in: path
+          description: The profile to delete.
+          required: true
+          type: integer
+          format: int64
+      responses:
+        200:
+          description: Updates the person.
+        500:
+          description: Error deleting the profile "ID".
+  /api/v1/jobs:
     get:
       # Describe this verb here. Note: you can use markdown
       description: |
@@ -147,11 +196,13 @@ definitions:
       company_name:
         type: string
       birthdate:
-        type: object
+        type: string
+        format: date
       variety:
         type: string #as in alum, faculty, student
       last_login_date:
-        type: object
+        type: string
+        format: date
   Job:
     type: object
     properties:

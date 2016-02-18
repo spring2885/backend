@@ -113,6 +113,9 @@ public class DbPerson {
 		this.birthdate = birthdate;
 	}
 	public int getType() {
+		if (type == null) {
+			return 0;
+		}
 		return type;
 	}
 	public void setType(int type) {

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import java.util.Date;
 
 import io.swagger.annotations.*;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -12,7 +13,7 @@ import java.util.Objects;
 
 
 @ApiModel(description = "")
-@javax.annotation.Generated(value = "class io.swagger.codegen.languages.SpringMVCServerCodegen", date = "2016-02-18T10:44:04.288-08:00")
+@javax.annotation.Generated(value = "class io.swagger.codegen.languages.SpringMVCServerCodegen", date = "2016-02-18T11:27:17.171-08:00")
 public class Person  {
   
   private Long id = null;
@@ -26,9 +27,9 @@ public class Person  {
   private String phone = null;
   private String occupation = null;
   private String companyName = null;
-  private Object birthdate = null;
+  private Date birthdate = null;
   private String variety = null;
-  private Object lastLoginDate = null;
+  private Date lastLoginDate = null;
 
   
   /**
@@ -167,10 +168,10 @@ public class Person  {
    **/
   @ApiModelProperty(value = "")
   @JsonProperty("birthdate")
-  public Object getBirthdate() {
+  public Date getBirthdate() {
     return birthdate;
   }
-  public void setBirthdate(Object birthdate) {
+  public void setBirthdate(Date birthdate) {
     this.birthdate = birthdate;
   }
 
@@ -191,10 +192,10 @@ public class Person  {
    **/
   @ApiModelProperty(value = "")
   @JsonProperty("last_login_date")
-  public Object getLastLoginDate() {
+  public Date getLastLoginDate() {
     return lastLoginDate;
   }
-  public void setLastLoginDate(Object lastLoginDate) {
+  public void setLastLoginDate(Date lastLoginDate) {
     this.lastLoginDate = lastLoginDate;
   }
 
