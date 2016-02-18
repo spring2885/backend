@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
-@RequestMapping(value = "/api/jobs", produces = { APPLICATION_JSON_VALUE })
+@RequestMapping(value = "/api/v1/jobs", produces = { APPLICATION_JSON_VALUE })
 public class JobsApi {
 	@RequestMapping(value = "", method = RequestMethod.GET)
 	public ResponseEntity<List<Job>> jobsGet(@RequestParam(value = "size", required = false) Double size)
