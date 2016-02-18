@@ -1,4 +1,4 @@
-# Spring2885 API Description.
+# Spring2885 Backend API.
 swagger: '2.0'
 
 # This is your document metadata
@@ -14,8 +14,21 @@ info:
 
 # Describe your paths here
 paths:
-  # This is a path endpoint. Change it.
-  /persons:
+  /newuser:
+    post:
+      parameters:
+        - name: person
+          in: body
+          description: The person you want to post
+          schema:
+            $ref: '#/definitions/person'
+          required: true
+      responses:
+        200:
+          description: Make a new person
+
+  # This is the /profiles endpoint
+  /profiles:
     # This is a HTTP operation
     get:
       # Describe this verb here. Note: you can use markdown
@@ -30,7 +43,7 @@ paths:
           name: size
           in: query
           description: Size of array
-          required: true
+          required: false
           type: number
           format: double
       # Expected responses for this operation:
@@ -44,17 +57,6 @@ paths:
             type: array
             items:
               $ref: '#/definitions/person'
-    post:
-      parameters:
-        - name: person
-          in: body
-          description: The person you want to post
-          schema:
-            $ref: '#/definitions/person'
-          required: true
-      responses:
-        200:
-          description: Make a new person
     put:
       parameters:
         - name: person
@@ -123,26 +125,33 @@ definitions:
       id: 
         type: integer
         format: int64
-      username:
+      name:
         type: string
-      profile picture:
-        type: object
-      firstname:
+      student_id:
+        type: integer
+        format: int32
+      title:
         type: string
-      lastname:
+      about_me:
+        type: string
+      resume_url:
+        type: string
+      image_url:
         type: string
       email: 
         type: string
       phone:
         type: string
-      birthdate:
-        type: object
       occupation:
         type: string
-      last_login_date:
+      company_name:
+        type: string
+      birthdate:
         type: object
       variety:
         type: string #as in alum, faculty, student
+      last_login_date:
+        type: object
   Job:
     type: object
     properties:

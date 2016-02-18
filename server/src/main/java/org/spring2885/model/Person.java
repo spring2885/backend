@@ -12,20 +12,23 @@ import java.util.Objects;
 
 
 @ApiModel(description = "")
-@javax.annotation.Generated(value = "class io.swagger.codegen.languages.SpringMVCServerCodegen", date = "2016-02-16T21:38:18.078-08:00")
+@javax.annotation.Generated(value = "class io.swagger.codegen.languages.SpringMVCServerCodegen", date = "2016-02-18T10:44:04.288-08:00")
 public class Person  {
   
   private Long id = null;
-  private String username = null;
-  private Object profilePicture = null;
-  private String firstname = null;
-  private String lastname = null;
+  private String name = null;
+  private Integer studentId = null;
+  private String title = null;
+  private String aboutMe = null;
+  private String resumeUrl = null;
+  private String imageUrl = null;
   private String email = null;
   private String phone = null;
-  private Object birthdate = null;
   private String occupation = null;
-  private Object lastLoginDate = null;
+  private String companyName = null;
+  private Object birthdate = null;
   private String variety = null;
+  private Object lastLoginDate = null;
 
   
   /**
@@ -43,48 +46,72 @@ public class Person  {
   /**
    **/
   @ApiModelProperty(value = "")
-  @JsonProperty("username")
-  public String getUsername() {
-    return username;
+  @JsonProperty("name")
+  public String getName() {
+    return name;
   }
-  public void setUsername(String username) {
-    this.username = username;
-  }
-
-  
-  /**
-   **/
-  @ApiModelProperty(value = "")
-  @JsonProperty("profile picture")
-  public Object getProfilePicture() {
-    return profilePicture;
-  }
-  public void setProfilePicture(Object profilePicture) {
-    this.profilePicture = profilePicture;
+  public void setName(String name) {
+    this.name = name;
   }
 
   
   /**
    **/
   @ApiModelProperty(value = "")
-  @JsonProperty("firstname")
-  public String getFirstname() {
-    return firstname;
+  @JsonProperty("student_id")
+  public Integer getStudentId() {
+    return studentId;
   }
-  public void setFirstname(String firstname) {
-    this.firstname = firstname;
+  public void setStudentId(Integer studentId) {
+    this.studentId = studentId;
   }
 
   
   /**
    **/
   @ApiModelProperty(value = "")
-  @JsonProperty("lastname")
-  public String getLastname() {
-    return lastname;
+  @JsonProperty("title")
+  public String getTitle() {
+    return title;
   }
-  public void setLastname(String lastname) {
-    this.lastname = lastname;
+  public void setTitle(String title) {
+    this.title = title;
+  }
+
+  
+  /**
+   **/
+  @ApiModelProperty(value = "")
+  @JsonProperty("about_me")
+  public String getAboutMe() {
+    return aboutMe;
+  }
+  public void setAboutMe(String aboutMe) {
+    this.aboutMe = aboutMe;
+  }
+
+  
+  /**
+   **/
+  @ApiModelProperty(value = "")
+  @JsonProperty("resume_url")
+  public String getResumeUrl() {
+    return resumeUrl;
+  }
+  public void setResumeUrl(String resumeUrl) {
+    this.resumeUrl = resumeUrl;
+  }
+
+  
+  /**
+   **/
+  @ApiModelProperty(value = "")
+  @JsonProperty("image_url")
+  public String getImageUrl() {
+    return imageUrl;
+  }
+  public void setImageUrl(String imageUrl) {
+    this.imageUrl = imageUrl;
   }
 
   
@@ -115,18 +142,6 @@ public class Person  {
   /**
    **/
   @ApiModelProperty(value = "")
-  @JsonProperty("birthdate")
-  public Object getBirthdate() {
-    return birthdate;
-  }
-  public void setBirthdate(Object birthdate) {
-    this.birthdate = birthdate;
-  }
-
-  
-  /**
-   **/
-  @ApiModelProperty(value = "")
   @JsonProperty("occupation")
   public String getOccupation() {
     return occupation;
@@ -139,12 +154,24 @@ public class Person  {
   /**
    **/
   @ApiModelProperty(value = "")
-  @JsonProperty("last_login_date")
-  public Object getLastLoginDate() {
-    return lastLoginDate;
+  @JsonProperty("company_name")
+  public String getCompanyName() {
+    return companyName;
   }
-  public void setLastLoginDate(Object lastLoginDate) {
-    this.lastLoginDate = lastLoginDate;
+  public void setCompanyName(String companyName) {
+    this.companyName = companyName;
+  }
+
+  
+  /**
+   **/
+  @ApiModelProperty(value = "")
+  @JsonProperty("birthdate")
+  public Object getBirthdate() {
+    return birthdate;
+  }
+  public void setBirthdate(Object birthdate) {
+    this.birthdate = birthdate;
   }
 
   
@@ -160,6 +187,18 @@ public class Person  {
   }
 
   
+  /**
+   **/
+  @ApiModelProperty(value = "")
+  @JsonProperty("last_login_date")
+  public Object getLastLoginDate() {
+    return lastLoginDate;
+  }
+  public void setLastLoginDate(Object lastLoginDate) {
+    this.lastLoginDate = lastLoginDate;
+  }
+
+  
 
   @Override
   public boolean equals(Object o) {
@@ -171,21 +210,24 @@ public class Person  {
     }
     Person person = (Person) o;
     return Objects.equals(id, person.id) &&
-        Objects.equals(username, person.username) &&
-        Objects.equals(profilePicture, person.profilePicture) &&
-        Objects.equals(firstname, person.firstname) &&
-        Objects.equals(lastname, person.lastname) &&
+        Objects.equals(name, person.name) &&
+        Objects.equals(studentId, person.studentId) &&
+        Objects.equals(title, person.title) &&
+        Objects.equals(aboutMe, person.aboutMe) &&
+        Objects.equals(resumeUrl, person.resumeUrl) &&
+        Objects.equals(imageUrl, person.imageUrl) &&
         Objects.equals(email, person.email) &&
         Objects.equals(phone, person.phone) &&
-        Objects.equals(birthdate, person.birthdate) &&
         Objects.equals(occupation, person.occupation) &&
-        Objects.equals(lastLoginDate, person.lastLoginDate) &&
-        Objects.equals(variety, person.variety);
+        Objects.equals(companyName, person.companyName) &&
+        Objects.equals(birthdate, person.birthdate) &&
+        Objects.equals(variety, person.variety) &&
+        Objects.equals(lastLoginDate, person.lastLoginDate);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, username, profilePicture, firstname, lastname, email, phone, birthdate, occupation, lastLoginDate, variety);
+    return Objects.hash(id, name, studentId, title, aboutMe, resumeUrl, imageUrl, email, phone, occupation, companyName, birthdate, variety, lastLoginDate);
   }
 
   @Override
@@ -194,16 +236,19 @@ public class Person  {
     sb.append("class Person {\n");
     
     sb.append("  id: ").append(id).append("\n");
-    sb.append("  username: ").append(username).append("\n");
-    sb.append("  profilePicture: ").append(profilePicture).append("\n");
-    sb.append("  firstname: ").append(firstname).append("\n");
-    sb.append("  lastname: ").append(lastname).append("\n");
+    sb.append("  name: ").append(name).append("\n");
+    sb.append("  studentId: ").append(studentId).append("\n");
+    sb.append("  title: ").append(title).append("\n");
+    sb.append("  aboutMe: ").append(aboutMe).append("\n");
+    sb.append("  resumeUrl: ").append(resumeUrl).append("\n");
+    sb.append("  imageUrl: ").append(imageUrl).append("\n");
     sb.append("  email: ").append(email).append("\n");
     sb.append("  phone: ").append(phone).append("\n");
-    sb.append("  birthdate: ").append(birthdate).append("\n");
     sb.append("  occupation: ").append(occupation).append("\n");
-    sb.append("  lastLoginDate: ").append(lastLoginDate).append("\n");
+    sb.append("  companyName: ").append(companyName).append("\n");
+    sb.append("  birthdate: ").append(birthdate).append("\n");
     sb.append("  variety: ").append(variety).append("\n");
+    sb.append("  lastLoginDate: ").append(lastLoginDate).append("\n");
     sb.append("}\n");
     return sb.toString();
   }

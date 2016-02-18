@@ -67,29 +67,7 @@
         }
       }
     },
-    "/persons" : {
-      "get" : {
-        "description" : "Gets `person` objects.\nOptional query param of **size** determines\nsize of returned array\n",
-        "parameters" : [ {
-          "name" : "size",
-          "in" : "query",
-          "description" : "Size of array",
-          "required" : true,
-          "type" : "number",
-          "format" : "double"
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "Successful response",
-            "schema" : {
-              "type" : "array",
-              "items" : {
-                "$ref" : "#/definitions/person"
-              }
-            }
-          }
-        }
-      },
+    "/newuser" : {
       "post" : {
         "parameters" : [ {
           "in" : "body",
@@ -103,6 +81,30 @@
         "responses" : {
           "200" : {
             "description" : "Make a new person"
+          }
+        }
+      }
+    },
+    "/profiles" : {
+      "get" : {
+        "description" : "Gets `person` objects.\nOptional query param of **size** determines\nsize of returned array\n",
+        "parameters" : [ {
+          "name" : "size",
+          "in" : "query",
+          "description" : "Size of array",
+          "required" : false,
+          "type" : "number",
+          "format" : "double"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful response",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/person"
+              }
+            }
           }
         }
       },
@@ -132,17 +134,23 @@
           "type" : "integer",
           "format" : "int64"
         },
-        "username" : {
+        "name" : {
           "type" : "string"
         },
-        "profile picture" : {
-          "type" : "object",
-          "properties" : { }
+        "student_id" : {
+          "type" : "integer",
+          "format" : "int32"
         },
-        "firstname" : {
+        "title" : {
           "type" : "string"
         },
-        "lastname" : {
+        "about_me" : {
+          "type" : "string"
+        },
+        "resume_url" : {
+          "type" : "string"
+        },
+        "image_url" : {
           "type" : "string"
         },
         "email" : {
@@ -151,19 +159,22 @@
         "phone" : {
           "type" : "string"
         },
-        "birthdate" : {
-          "type" : "object",
-          "properties" : { }
-        },
         "occupation" : {
           "type" : "string"
         },
-        "last_login_date" : {
+        "company_name" : {
+          "type" : "string"
+        },
+        "birthdate" : {
           "type" : "object",
           "properties" : { }
         },
         "variety" : {
           "type" : "string"
+        },
+        "last_login_date" : {
+          "type" : "object",
+          "properties" : { }
         }
       }
     },
