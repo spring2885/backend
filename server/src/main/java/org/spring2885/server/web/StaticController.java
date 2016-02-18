@@ -13,7 +13,7 @@ public class StaticController {
 		model.put("message",
 			"This server is only for service APIs.\n"
             + "It is not intended to be accessed from a browser... \n"
-            + "These are not the driods you are looking for... yada yada..");
+            + "These are not the droids you are looking for... yada yada..");
 		model.put("title", "Spring 2885 Server");
 		model.put("date", new Date());
 		return "home";
