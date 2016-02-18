@@ -42,6 +42,7 @@ public class PersonsApiTest {
     
     @Test
     public void testPersons() throws Exception {
+    	// Setup the expectations.
     	List<DbPerson> persons = new ArrayList<>();
     	DbPerson p = new DbPerson();
     	p.setEmail("me@example.com");
@@ -50,6 +51,7 @@ public class PersonsApiTest {
     	p2.setEmail("me2@example.com");
     	persons.add(p2);
     	when(personService.findAll()).thenReturn(persons);
+    	verifyNoMoreInteractions(personService);
     	
     	mockMvc.perform(get("/api/persons")
     			.accept(MediaType.APPLICATION_JSON))
@@ -60,16 +62,57 @@ public class PersonsApiTest {
     }
 
 
+    /**
+     * Tests a {@code /persons/:id} where {@code id} is found.
+     */
     @Test
     public void testPersonsById() throws Exception {
+    	// Setup the expectations.
     	DbPerson p = new DbPerson();
     	p.setEmail("me@example.com");
     	when(personService.findById(21)).thenReturn(p);
+    	verifyNoMoreInteractions(personService);
     	
     	mockMvc.perform(get("/api/persons/21")
     			.accept(MediaType.APPLICATION_JSON))
     			.andExpect(status().isOk())
     			.andExpect(content().contentType(MediaType.APPLICATION_JSON))
     			.andExpect(jsonPath("$.email", Matchers.is("me@example.com")));
+    	
+    	// N.B: We don't have to verify anything here since we're asserting
+    	// the results that were setup by PersonService.
+    }
+
+    /**
+     * Tests a {@code /persons/:id} where {@code id} is not found.
+     */
+    @Test
+    public void testPersonsById_notFound() throws Exception {
+    	// Setup the expectations.
+    	when(personService.findById(21)).thenReturn(null);
+    	verifyNoMoreInteractions(personService);
+    	
+    	mockMvc.perform(get("/api/persons/21")
+    			.accept(MediaType.APPLICATION_JSON))
+    			.andExpect(status().isNotFound());
+    	
+    	// N.B: We don't have to verify anything here since we're asserting
+    	// the results that were setup by PersonService.
+    }
+
+
+    @Test
+    public void testDeletePersonsById() throws Exception {
+    	// Setup the expectations.
+    	when(personService.delete(21)).thenReturn(true);
+    	verifyNoMoreInteractions(personService);
+    	
+    	mockMvc.perform(delete("/api/persons/21")
+    			.accept(MediaType.APPLICATION_JSON))
+    			.andExpect(status().isOk());
+    	
+    	// Ensure PersonService#delete method was called since the result of our
+    	// method is the same no matter what.
+    	verify(personService).delete(21);
     }
 }
