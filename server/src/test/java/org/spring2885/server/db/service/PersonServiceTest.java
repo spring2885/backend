@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.spring2885.server.api.TestConfig;
 import org.spring2885.server.db.model.DbPerson;
@@ -96,6 +97,36 @@ public class PersonServiceTest {
     @Test
     public void testExistsByEmail_doesNotExist() {
     	assertFalse(service.existsByEmail("me@"));
+    }
+    
+    @Test
+    public void testDelete() {
+    	DbPerson p = new DbPerson();
+    	when(repository.findOne(21)).thenReturn(p);
+    	
+    	assertTrue(service.delete(21));
+    	verify(repository).delete(21);
+    }
+
+    @Test
+    public void testDelete_notFound() {
+    	DbPerson p = new DbPerson();
+    	when(repository.findOne(22)).thenReturn(p);
+    	
+    	assertFalse(service.delete(21));
+    	// Since a call to findOne(21) will return null by default, delete should
+    	// never be called. Let's verify that.
+    	verify(repository, never()).delete(21);
+    }
+
+    @Test
+    public void testSave() {
+    	DbPerson p = new DbPerson();
+    	DbPerson expected = new DbPerson();
+    	when(repository.save(same(p))).thenReturn(expected);
+    	
+    	DbPerson actual = service.save(p);
+    	assertSame(expected, actual);
     }
 }
 
