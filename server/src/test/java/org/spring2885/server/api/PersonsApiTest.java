@@ -1,13 +1,13 @@
 package org.spring2885.server.api;
 
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -17,6 +17,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
+import org.spring2885.model.Person;
 import org.spring2885.server.db.model.DbPerson;
 import org.spring2885.server.db.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,9 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = { TestConfig.class })
@@ -158,6 +162,34 @@ public class PersonsApiTest {
     	verify(personService, never()).delete(Mockito.anyInt());
     }
     
+    @Test
+    @WithMockUser(username="me@example.com",roles={"USER"})
+    public void testPut() throws Exception {
+    	// Setup the expectations.
+    	DbPerson db = new DbPerson();
+    	db.setEmail("me@example.com");
+    	db.setId(4);
+    	when(personService.findById(4)).thenReturn(db);
+    	when(personService.findByEmail("me@example.com"))
+    		.thenReturn(Collections.singletonList(db));
+    	
+    	Person p = new Person();
+    	p.setEmail("me@example.com");
+    	p.setId(4L);
+    	p.setAboutMe("aboutMe");
+    	mockMvc.perform(put("/api/v1/profiles/4")
+    			.contentType(MediaType.APPLICATION_JSON)
+    			.content(convertObjectToJsonBytes(p))
+    			.accept(MediaType.APPLICATION_JSON))
+    			.andExpect(status().isOk());
+    	
+    	DbPerson newDb = new DbPerson();
+    	newDb.setEmail("me@example.com");
+    	newDb.setId(4);
+    	newDb.setAboutMe("aboutMe");
+    	verify(personService).save(Mockito.any(DbPerson.class));
+    }
+    
     @Configuration
     @EnableWebSecurity
     @EnableWebMvc
@@ -182,5 +214,10 @@ public class PersonsApiTest {
             auth.inMemoryAuthentication()
             	.withUser("user").password("password").roles("USER");
         }
+    }
+    
+    public static byte[] convertObjectToJsonBytes(Object object) throws IOException  {
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.writeValueAsBytes(object);
     }    
 }
