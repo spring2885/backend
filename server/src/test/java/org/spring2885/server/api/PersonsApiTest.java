@@ -30,8 +30,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders;
-import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.FormLoginRequestBuilder;
 import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -158,14 +156,14 @@ public class PersonsApiTest {
                     .usernameParameter("user")
                     .passwordParameter("pass")
                     .loginPage("/login")
-                 .and().csrf().disable();
+                 .and()
+                 	.csrf().disable();
         }
 
         @Autowired
         public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-            auth
-                .inMemoryAuthentication()
-                    .withUser("user").password("password").roles("USER");
+            auth.inMemoryAuthentication()
+            	.withUser("user").password("password").roles("USER");
         }
     }    
 }
