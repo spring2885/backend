@@ -1,5 +1,10 @@
 package org.spring2885.server;
 
+import java.io.IOException;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +18,10 @@ import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
@@ -44,12 +51,15 @@ public class ServerApplication extends WebMvcConfigurerAdapter {
 		protected void configure(HttpSecurity http) throws Exception {
 			http.authorizeRequests()
 					.antMatchers("/api/**").fullyAuthenticated()
+					.antMatchers("/user").fullyAuthenticated()
 					.antMatchers("/").permitAll()
 				// Enable form login at /login.  POST with "username" and "password"
 				// as the form parameters needed.
 				.and()
+				.exceptionHandling().authenticationEntryPoint(new RestAuthenticationEntryPoint())
+				.and()
 				.formLogin()
-				.loginPage("/login").failureUrl("/login?error").permitAll()
+				.loginPage("/login").permitAll()
 				.and()
 				.logout().logoutUrl("/logout").deleteCookies().invalidateHttpSession(true).logoutSuccessUrl("/")
 				.and()
@@ -74,5 +84,14 @@ public class ServerApplication extends WebMvcConfigurerAdapter {
 		    return new BCryptPasswordEncoder();
 		}
 	}
+	
+	static class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
+		@Override
+		public void commence(HttpServletRequest request, HttpServletResponse response,
+				AuthenticationException ex) throws IOException, ServletException {
+			response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
+
+		}
+	}
 }
