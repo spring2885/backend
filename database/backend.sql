@@ -160,4 +160,9 @@ FOREIGN KEY(person_id) REFERENCES Person(id),
 FOREIGN KEY(social_service_id) REFERENCES Social_Service(id)
 );
 
+DROP TABLE IF EXISTS roles;
+CREATE TABLE roles(
+id INT NOT NULL, 
+rolename VARCHAR(60)
+);
 
