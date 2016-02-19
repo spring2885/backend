@@ -1,5 +1,6 @@
 package org.spring2885.server.api;
 
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verify;
@@ -14,9 +15,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 
 import org.hamcrest.Matchers;
 import org.junit.Before;
@@ -43,6 +42,7 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.ImmutableList;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = { TestConfig.class })
@@ -55,6 +55,11 @@ public class PersonsApiTest {
     
     @Autowired
     private PersonService personService;
+    
+    private DbPerson dbMe;
+    private Person me;
+    private DbPerson otherDbPerson;
+    private Person otherPerson;
 
     @Before
     public void setup() {
@@ -62,20 +67,44 @@ public class PersonsApiTest {
         mockMvc = webAppContextSetup(webappContext)
         		.apply(SecurityMockMvcConfigurers.springSecurity())
         		.build();
+        
+        dbMe = createDbPerson(4, "me@example.com", "aboutMe");
+        me = createPerson(4, "me@example.com", "aboutMe");
+        otherPerson = createPerson(21, "other@example.com", "user 21");
+        otherDbPerson = createDbPerson(21, "other@example.com", "user 21");
+    }
+    
+    static DbPerson createDbPerson(int id, String email, String aboutMe) {
+    	DbPerson p = new DbPerson();
+    	p.setId(id);
+    	p.setEmail(email);
+    	p.setAboutMe(aboutMe);
+    	return p;
+    }
+    
+    static Person createPerson(long id, String email, String aboutMe) {
+    	Person p = new Person();
+    	p.setId(id);
+    	p.setEmail(email);
+    	p.setAboutMe(aboutMe);
+    	return p;
+    }
+
+    void makeMeFound() {
+    	when(personService.findById(4)).thenReturn(dbMe);
+    	when(personService.findById(21)).thenReturn(otherDbPerson);
+    	when(personService.findByEmail("me@example.com"))
+    		.thenReturn(Collections.singletonList(dbMe));
     }
     
     @Test
     @WithMockUser
     public void testPersons() throws Exception {
     	// Setup the expectations.
-    	List<DbPerson> persons = new ArrayList<>();
-    	DbPerson p = new DbPerson();
-    	p.setEmail("me@example.com");
-    	persons.add(p);
-    	DbPerson p2 = new DbPerson();
-    	p2.setEmail("me2@example.com");
-    	persons.add(p2);
-    	when(personService.findAll()).thenReturn(persons);
+    	when(personService.findAll())
+    		.thenReturn(ImmutableList.of(
+    			createDbPerson(5,  "me@example.com", ""),
+    			createDbPerson(5,  "me2@example.com", "")));
     	verifyNoMoreInteractions(personService);
     	
     	mockMvc.perform(get("/api/v1/profiles")
@@ -95,7 +124,7 @@ public class PersonsApiTest {
     public void testPersonsById() throws Exception {
     	// Setup the expectations.
     	DbPerson p = new DbPerson();
-    	p.setEmail("me@example.com");
+    	p.setEmail("other@example.com");
     	when(personService.findById(21)).thenReturn(p);
     	verifyNoMoreInteractions(personService);
     	
@@ -103,7 +132,7 @@ public class PersonsApiTest {
     			.accept(MediaType.APPLICATION_JSON))
     			.andExpect(status().isOk())
     			.andExpect(content().contentType(MediaType.APPLICATION_JSON))
-    			.andExpect(jsonPath("$.email", Matchers.is("me@example.com")));
+    			.andExpect(jsonPath("$.email", Matchers.is("other@example.com")));
     	
     	// N.B: We don't have to verify anything here since we're asserting
     	// the results that were setup by PersonService.
@@ -132,11 +161,8 @@ public class PersonsApiTest {
     @WithMockUser(username="me@example.com",roles={"USER","ADMIN"})
     public void testDeletePersonsById() throws Exception {
     	// Setup the expectations.
-    	DbPerson p = new DbPerson();
-    	p.setEmail("me@example.com");
-    	p.setId(4);
-    	when(personService.findByEmail(Mockito.anyString()))
-    		.thenReturn(Collections.singletonList(p));
+    	when(personService.findByEmail(eq("me@example.com")))
+    		.thenReturn(Collections.singletonList(dbMe));
     	when(personService.delete(4)).thenReturn(true);
     	
     	mockMvc.perform(delete("/api/v1/profiles/4")
@@ -150,13 +176,10 @@ public class PersonsApiTest {
     
     @Test
     @WithMockUser(username="me@example.com",roles={"USER"})
-    public void testDeletePersonsById_notAdminUser() throws Exception {
+    public void testDelete_anotherPersons_notAdminUser() throws Exception {
     	// Setup the expectations.
-    	DbPerson p = new DbPerson();
-    	p.setEmail("me@example.com");
-    	p.setId(4);
-    	when(personService.findByEmail(Mockito.anyString()))
-    		.thenReturn(Collections.singletonList(p));
+    	when(personService.findByEmail(eq("me@example.com")))
+    		.thenReturn(Collections.singletonList(dbMe));
     	
     	mockMvc.perform(delete("/api/v1/profiles/21")
     			.accept(MediaType.APPLICATION_JSON))
@@ -171,27 +194,61 @@ public class PersonsApiTest {
     @WithMockUser(username="me@example.com",roles={"USER"})
     public void testPut() throws Exception {
     	// Setup the expectations.
-    	DbPerson db = new DbPerson();
-    	db.setEmail("me@example.com");
-    	db.setId(4);
-    	when(personService.findById(4)).thenReturn(db);
-    	when(personService.findByEmail("me@example.com"))
-    		.thenReturn(Collections.singletonList(db));
+    	makeMeFound();
     	
-    	Person p = new Person();
-    	p.setEmail("me@example.com");
-    	p.setId(4L);
-    	p.setAboutMe("aboutMe");
     	mockMvc.perform(put("/api/v1/profiles/4")
     			.contentType(MediaType.APPLICATION_JSON)
-    			.content(convertObjectToJsonBytes(p))
+    			.content(convertObjectToJsonBytes(me))
     			.accept(MediaType.APPLICATION_JSON))
     			.andExpect(status().isOk());
     	
-    	DbPerson newDb = new DbPerson();
-    	newDb.setEmail("me@example.com");
-    	newDb.setId(4);
-    	newDb.setAboutMe("aboutMe");
+    	verify(personService).save(Mockito.any(DbPerson.class));
+    }
+    
+    @Test
+    @WithMockUser(username="me@example.com",roles={"USER"})
+    public void testPut_canNotFindMe() throws Exception {
+    	// Setup the expectations.
+    	when(personService.findById(4)).thenReturn(dbMe);
+    	when(personService.findByEmail("me@example.com"))
+    		.thenReturn(Collections.emptyList());
+    	
+    	mockMvc.perform(put("/api/v1/profiles/4")
+    			.contentType(MediaType.APPLICATION_JSON)
+    			.content(convertObjectToJsonBytes(me))
+    			.accept(MediaType.APPLICATION_JSON))
+    			.andExpect(status().isForbidden());
+    	
+    	verify(personService, never()).save(Mockito.any(DbPerson.class));
+    }
+    
+    @Test
+    @WithMockUser(username="me@example.com",roles={"USER"})
+    public void testPut_tryToDeleteAnother_notAdminUser() throws Exception {
+    	// Setup the expectations.
+    	makeMeFound();
+    	
+    	mockMvc.perform(put("/api/v1/profiles/21")
+    			.contentType(MediaType.APPLICATION_JSON)
+    			.content(convertObjectToJsonBytes(otherPerson))
+    			.accept(MediaType.APPLICATION_JSON))
+    			.andExpect(status().isForbidden());
+    	
+    	verify(personService, never()).save(Mockito.any(DbPerson.class));
+    }
+    
+    @Test
+    @WithMockUser(username="me@example.com",roles={"USER", "ADMIN"})
+    public void testPut_deleteAnother_adminUser() throws Exception {
+    	// Setup the expectations.
+    	makeMeFound();
+    	
+    	mockMvc.perform(put("/api/v1/profiles/21")
+    			.contentType(MediaType.APPLICATION_JSON)
+    			.content(convertObjectToJsonBytes(otherPerson))
+    			.accept(MediaType.APPLICATION_JSON))
+    			.andExpect(status().isOk());
+    	
     	verify(personService).save(Mockito.any(DbPerson.class));
     }
     

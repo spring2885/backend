@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.google.common.base.Preconditions;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Iterables;
 
@@ -79,7 +78,7 @@ public class PersonsApi {
 			@RequestBody Person person,
 			SecurityContextHolderAwareRequestWrapper request) throws NotFoundException {
 		
-		if (!checkAdminRequestIfNeeded(person.getId().intValue(), request)) {
+		if (!checkAdminRequestIfNeeded(id, request)) {
 			return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 		}
 
@@ -94,15 +93,18 @@ public class PersonsApi {
 	}
 	
 	
-	private boolean checkAdminRequestIfNeeded(int id, SecurityContextHolderAwareRequestWrapper request) {
+	private boolean checkAdminRequestIfNeeded(int requestId, SecurityContextHolderAwareRequestWrapper request) {
 		if (!request.isUserInRole("ROLE_ADMIN")) {
 			// Only admin's can change other profiles.
 			String name = request.getUserPrincipal().getName();
 			List<DbPerson> possibles = personService.findByEmail(name);
-			Preconditions.checkState(possibles.size() == 1, "I can't find myself... need more zen.");
+			if (possibles.size() != 1) {
+				// I can't find myself... need more zen.
+				return false;
+			}
 			
 			DbPerson me = Iterables.getOnlyElement(possibles);
-			if (me.getId() != id) {
+			if (me.getId() != requestId) {
 				// Someone is being naughty...
 				return false;
 			}
