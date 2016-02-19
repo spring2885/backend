@@ -239,4 +239,14 @@ public class DbPerson {
 			return false;
 		return true;
 	}
+	
+	@Override
+	public String toString() {
+		return new StringBuilder("{ Person: ")
+				.append("{ Id: ").append(id)
+				.append(", name; ").append(name)
+				.append(" }\n")
+				.append(" }\n")
+				.toString();
+	}
 }
