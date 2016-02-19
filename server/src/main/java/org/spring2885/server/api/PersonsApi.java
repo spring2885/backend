@@ -73,14 +73,23 @@ public class PersonsApi {
 		return new ResponseEntity<>(persons, HttpStatus.OK);
 	}
 
-	// TODO(rcleveng): Implement this one.
-	@RequestMapping(method = RequestMethod.PUT)
+	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<Void> put(
+			@PathVariable("id") Integer id,
 			@RequestBody Person person,
 			SecurityContextHolderAwareRequestWrapper request) throws NotFoundException {
+		
 		if (!checkAdminRequestIfNeeded(person.getId().intValue(), request)) {
 			return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 		}
+
+		DbPerson db = personService.findById(person.getId().intValue());
+		if (db == null) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+		DbPerson updatedDbPerson = PersonConverters.fromJsonToDb(db).apply(person);
+		personService.save(updatedDbPerson);
+		
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
