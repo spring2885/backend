@@ -44,13 +44,19 @@ public class PersonsApi {
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-	public ResponseEntity<Void> delete(
+	public ResponseEntity<String> delete(
 			@PathVariable("id") Integer id,
-			SecurityContextHolderAwareRequestWrapper request
-			)
+			SecurityContextHolderAwareRequestWrapper request)
 			throws NotFoundException {
 		
-		checkAdminRequestIfNeeded(id, request);
+		if (!checkAdminRequestIfNeeded(id, request)) {
+			String error = 
+					"Only admin's can change others... Read this: "
+					+ "God, grant me the serenity to accept the things I cannot change,"
+					+ "Courage to change the things I can,"
+					+ "And wisdom to know the difference.";
+			return new ResponseEntity<>(error, HttpStatus.FORBIDDEN);
+		}
 
 		personService.delete(id);
 		return new ResponseEntity<>(HttpStatus.OK);
@@ -72,12 +78,14 @@ public class PersonsApi {
 	public ResponseEntity<Void> put(
 			@RequestBody Person person,
 			SecurityContextHolderAwareRequestWrapper request) throws NotFoundException {
-		checkAdminRequestIfNeeded(person.getId().intValue(), request);
+		if (!checkAdminRequestIfNeeded(person.getId().intValue(), request)) {
+			return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+		}
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
 	
-	private void checkAdminRequestIfNeeded(int id, SecurityContextHolderAwareRequestWrapper request) {
+	private boolean checkAdminRequestIfNeeded(int id, SecurityContextHolderAwareRequestWrapper request) {
 		if (!request.isUserInRole("ROLE_ADMIN")) {
 			// Only admin's can change other profiles.
 			String name = request.getUserPrincipal().getName();
@@ -87,13 +95,10 @@ public class PersonsApi {
 			DbPerson me = Iterables.getOnlyElement(possibles);
 			if (me.getId() != id) {
 				// Someone is being naughty...
-				throw new RuntimeException("Only admin's can change others... Read this: "
-						+ "God, grant me the serenity to accept the things I cannot change,"
-						+ "Courage to change the things I can,"
-						+ "And wisdom to know the difference.");
+				return false;
 			}
 		}
-		
+		return true;
 	}
 
 }

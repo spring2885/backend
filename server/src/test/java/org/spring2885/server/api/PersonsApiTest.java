@@ -1,9 +1,6 @@
 package org.spring2885.server.api;
 
-import static org.mockito.Mockito.reset;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -30,8 +27,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders;
-import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.FormLoginRequestBuilder;
 import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -135,12 +130,32 @@ public class PersonsApiTest {
     		.thenReturn(Collections.singletonList(p));
     	when(personService.delete(4)).thenReturn(true);
     	
-    	mockMvc.perform(delete("/api/v1/profiles/4"))
+    	mockMvc.perform(delete("/api/v1/profiles/4")
+    			.accept(MediaType.APPLICATION_JSON))
     			.andExpect(status().isOk());
     	
     	// Ensure PersonService#delete method was called since the result of our
     	// method is the same no matter what.
     	verify(personService).delete(4);
+    }
+    
+    @Test
+    @WithMockUser(username="me@example.com",roles={"USER"})
+    public void testDeletePersonsById_notAdminUser() throws Exception {
+    	// Setup the expectations.
+    	DbPerson p = new DbPerson();
+    	p.setEmail("me@example.com");
+    	p.setId(4);
+    	when(personService.findByEmail(Mockito.anyString()))
+    		.thenReturn(Collections.singletonList(p));
+    	
+    	mockMvc.perform(delete("/api/v1/profiles/21")
+    			.accept(MediaType.APPLICATION_JSON))
+    			.andExpect(status().isForbidden());
+    	
+    	// Ensure PersonService#delete method was called since the result of our
+    	// method is the same no matter what.
+    	verify(personService, never()).delete(Mockito.anyInt());
     }
     
     @Configuration
@@ -158,14 +173,14 @@ public class PersonsApiTest {
                     .usernameParameter("user")
                     .passwordParameter("pass")
                     .loginPage("/login")
-                 .and().csrf().disable();
+                 .and()
+                 	.csrf().disable();
         }
 
         @Autowired
         public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-            auth
-                .inMemoryAuthentication()
-                    .withUser("user").password("password").roles("USER");
+            auth.inMemoryAuthentication()
+            	.withUser("user").password("password").roles("USER");
         }
     }    
 }
