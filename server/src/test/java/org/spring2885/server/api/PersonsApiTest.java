@@ -239,7 +239,7 @@ public class PersonsApiTest {
     
     @Test
     @WithMockUser(username="me@example.com",roles={"USER", "ADMIN"})
-    public void testPut_deleteAnother_adminUser() throws Exception {
+    public void testPut_updateAnother_adminUser() throws Exception {
     	// Setup the expectations.
     	makeMeFound();
     	
