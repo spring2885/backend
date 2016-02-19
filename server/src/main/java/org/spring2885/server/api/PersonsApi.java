@@ -82,7 +82,10 @@ public class PersonsApi {
 			return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 		}
 
-		DbPerson db = personService.findById(person.getId().intValue());
+		if (id.intValue() != person.getId().intValue()) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		DbPerson db = personService.findById(id);
 		if (db == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}

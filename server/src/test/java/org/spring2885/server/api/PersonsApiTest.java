@@ -224,7 +224,7 @@ public class PersonsApiTest {
     
     @Test
     @WithMockUser(username="me@example.com",roles={"USER"})
-    public void testPut_tryToDeleteAnother_notAdminUser() throws Exception {
+    public void testPut_tryToPutAnother_notAdminUser() throws Exception {
     	// Setup the expectations.
     	makeMeFound();
     	
@@ -250,6 +250,21 @@ public class PersonsApiTest {
     			.andExpect(status().isOk());
     	
     	verify(personService).save(Mockito.any(DbPerson.class));
+    }
+    
+    @Test
+    @WithMockUser(username="me@example.com",roles={"USER", "ADMIN"})
+    public void testPut_documentNotMatchURL() throws Exception {
+    	// Setup the expectations.
+    	makeMeFound();
+    	
+    	mockMvc.perform(put("/api/v1/profiles/21")
+    			.contentType(MediaType.APPLICATION_JSON)
+    			.content(convertObjectToJsonBytes(createPerson(22, "me@", "")))
+    			.accept(MediaType.APPLICATION_JSON))
+    			.andExpect(status().isBadRequest());
+    	
+    	verify(personService, never()).save(Mockito.any(DbPerson.class));
     }
     
     @Configuration
