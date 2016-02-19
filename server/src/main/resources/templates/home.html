@@ -18,32 +18,43 @@ body { padding-top: 70px; }
     <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container">
         <div class="navbar-header">
-          <a class="navbar-brand" href="#">Spring2885 API Server</a>
-  		  <a class="navbar-brand" href="/logout">Logout</a>
+          <a class="navbar-brand" href="/">Spring2885 API Server</a>
+  		  <a  sec:authorize="${#authorization.expression('isAuthenticated()')}" class="navbar-brand" href="/logout">Logout</a>
+  		  <a  sec:authorize="${#authorization.expression('isAnonymous()')}" class="navbar-brand" href="/login">Login</a>
         </div>
       </div>
     </nav>
     
     <div class="container">
-	    <div class="starter-template">
+	    <div class="row">
 		<h1 th:text="${title}">Title</h1>
 		<div class="lead" th:text="${message}">Fake content</div>
-		</div>
 
-		<div class="lead" sec:authorize="hasRole('ROLE_USER')">
+		</div>
+		<div class="row">
+		<div class="col-sm-6">
+		<div class="lead" sec:authorize="${#authorization.expression('isAuthenticated()')}">
 		You are logged in as 
          '<span sec:authentication="name">[thymeleaf:sec is broken]</span>'
+		<br />
+		Roles: <span sec:authentication="principal.authorities">[ROLE_NONE]</span>
          </div>
-		
    		<p class="lead">Since you are here, you may:
    		<ul>
    		<li><a href="/api-docs/index.html">View API Documentation</a></li>
    		<li><a href="/newuser">Create a New Account.</a></li>
-   		<li><a href="/login">Log in to the API Server.</a></li>
-   		<li><a href="/logout">Log out of the API Server.</a></li>
+   		<li sec:authorize="${#authorization.expression('isAnonymous()')}"><a href="/login">Log in to the API Server.</a></li>
+   		<li sec:authorize="${#authorization.expression('isAuthenticated()')}"><a href="/logout">Log out of the API Server.</a></li>
+   		<li><a href="https://github.com/spring2885/backend/issues/">View GitHub Issue List.</a></li>
+   		<li><a href="https://github.com/spring2885/artifacts/">View GitHub/Tools Documentation</a></li>
+   		<li><a href="http://mail.spring-2885.org/">Check Spring 2885 Email Account</a></li>
    		</ul>
    		</p>
+   		</div>
+   		<div class="col-sm-6">
 		<img src="/img/face.png" /><br/>
+		</div>
+		</div>
 	</div>
     <footer class="footer">
       <div class="container">

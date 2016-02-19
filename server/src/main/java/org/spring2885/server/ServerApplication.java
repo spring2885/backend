@@ -64,7 +64,8 @@ public class ServerApplication extends WebMvcConfigurerAdapter {
 				.dataSource(ds)
 				.passwordEncoder(passwordEncoder())
 				.usersByUsernameQuery("select email, password, true from person where email = ?")
-				.authoritiesByUsernameQuery("select email, 'ROLE_USER' from person where email = ?")
+				.authoritiesByUsernameQuery("select p.id, ifnull(r.rolename, 'USER') from person p left join roles r on r.id=p.id WHERE p.email = ?")
+				.rolePrefix("ROLE_")
 				.configure(auth);
 		}
 		
