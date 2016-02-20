@@ -17,7 +17,7 @@ paths:
   /newuser:
     post:
       tags: ["User"]
-      description: |
+      summary: |
         Creates a new user in the system
       parameters:
         - name: email
@@ -229,4 +229,8 @@ definitions:
         type: string
       news title:
         type: string
-      
+tags:
+  - name: User
+    description: Everything to do with User
+  - name: Profiles
+    description: Fetch, Delete, and update Profiles
