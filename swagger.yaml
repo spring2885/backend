@@ -17,7 +17,7 @@ paths:
   /newuser:
     post:
       tags: ["User"]
-      summary: |
+      description: |
         Creates a new user in the system
       parameters:
         - name: email
@@ -89,7 +89,7 @@ paths:
           schema:
             $ref: '#/definitions/person'
     put:
-      tags: ["Profiles"]
+      tags: ["Profile"]
       parameters:
         - name: id
           in: path
@@ -107,7 +107,7 @@ paths:
         200:
           description: Updates the person
     delete:
-      tags: ["Profiles"]
+      tags: ["Profile"]
       parameters:
         - name: id
           in: path
