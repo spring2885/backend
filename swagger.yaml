@@ -230,6 +230,19 @@ definitions:
         type: array
         items:
           $ref: '#/definitions/SocialConnection'
+      # student fields
+      degree_major:
+        type: string
+      degree_minor:
+        type: string
+      graduation_year:
+        type: integer
+        format: int32
+      degree_type:
+        type: string
+      # faculty only fields
+      faculty_department:
+        type: string
   Job:
     type: object
     properties:

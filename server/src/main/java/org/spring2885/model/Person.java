@@ -15,7 +15,7 @@ import java.util.Objects;
 
 
 @ApiModel(description = "")
-@javax.annotation.Generated(value = "class io.swagger.codegen.languages.SpringMVCServerCodegen", date = "2016-02-20T08:29:39.529-08:00")
+@javax.annotation.Generated(value = "class io.swagger.codegen.languages.SpringMVCServerCodegen", date = "2016-02-20T13:56:45.746-08:00")
 public class Person  {
   
   private Long id = null;
@@ -33,6 +33,11 @@ public class Person  {
   private String variety = null;
   private Date lastLoginDate = null;
   private List<SocialConnection> socialConnections = new ArrayList<SocialConnection>();
+  private String degreeMajor = null;
+  private String degreeMinor = null;
+  private Integer graduationYear = null;
+  private String degreeType = null;
+  private String facultyDepartment = null;
 
   
   /**
@@ -215,6 +220,66 @@ public class Person  {
   }
 
   
+  /**
+   **/
+  @ApiModelProperty(value = "")
+  @JsonProperty("degree_major")
+  public String getDegreeMajor() {
+    return degreeMajor;
+  }
+  public void setDegreeMajor(String degreeMajor) {
+    this.degreeMajor = degreeMajor;
+  }
+
+  
+  /**
+   **/
+  @ApiModelProperty(value = "")
+  @JsonProperty("degree_minor")
+  public String getDegreeMinor() {
+    return degreeMinor;
+  }
+  public void setDegreeMinor(String degreeMinor) {
+    this.degreeMinor = degreeMinor;
+  }
+
+  
+  /**
+   **/
+  @ApiModelProperty(value = "")
+  @JsonProperty("graduation_year")
+  public Integer getGraduationYear() {
+    return graduationYear;
+  }
+  public void setGraduationYear(Integer graduationYear) {
+    this.graduationYear = graduationYear;
+  }
+
+  
+  /**
+   **/
+  @ApiModelProperty(value = "")
+  @JsonProperty("degree_type")
+  public String getDegreeType() {
+    return degreeType;
+  }
+  public void setDegreeType(String degreeType) {
+    this.degreeType = degreeType;
+  }
+
+  
+  /**
+   **/
+  @ApiModelProperty(value = "")
+  @JsonProperty("faculty_department")
+  public String getFacultyDepartment() {
+    return facultyDepartment;
+  }
+  public void setFacultyDepartment(String facultyDepartment) {
+    this.facultyDepartment = facultyDepartment;
+  }
+
+  
 
   @Override
   public boolean equals(Object o) {
@@ -239,12 +304,17 @@ public class Person  {
         Objects.equals(birthdate, person.birthdate) &&
         Objects.equals(variety, person.variety) &&
         Objects.equals(lastLoginDate, person.lastLoginDate) &&
-        Objects.equals(socialConnections, person.socialConnections);
+        Objects.equals(socialConnections, person.socialConnections) &&
+        Objects.equals(degreeMajor, person.degreeMajor) &&
+        Objects.equals(degreeMinor, person.degreeMinor) &&
+        Objects.equals(graduationYear, person.graduationYear) &&
+        Objects.equals(degreeType, person.degreeType) &&
+        Objects.equals(facultyDepartment, person.facultyDepartment);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, name, studentId, title, aboutMe, resumeUrl, imageUrl, email, phone, occupation, companyName, birthdate, variety, lastLoginDate, socialConnections);
+    return Objects.hash(id, name, studentId, title, aboutMe, resumeUrl, imageUrl, email, phone, occupation, companyName, birthdate, variety, lastLoginDate, socialConnections, degreeMajor, degreeMinor, graduationYear, degreeType, facultyDepartment);
   }
 
   @Override
@@ -267,6 +337,11 @@ public class Person  {
     sb.append("  variety: ").append(variety).append("\n");
     sb.append("  lastLoginDate: ").append(lastLoginDate).append("\n");
     sb.append("  socialConnections: ").append(socialConnections).append("\n");
+    sb.append("  degreeMajor: ").append(degreeMajor).append("\n");
+    sb.append("  degreeMinor: ").append(degreeMinor).append("\n");
+    sb.append("  graduationYear: ").append(graduationYear).append("\n");
+    sb.append("  degreeType: ").append(degreeType).append("\n");
+    sb.append("  facultyDepartment: ").append(facultyDepartment).append("\n");
     sb.append("}\n");
     return sb.toString();
   }

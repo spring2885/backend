@@ -46,6 +46,11 @@ public class DbPerson {
 	private String password;
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy="person")
 	private Set<DbSocialConnection> socialConnections = new HashSet<>();
+	private String degreeMajor;
+	private String degreeMinor;
+	private Integer graduationYear;
+	private String degreeType;
+	private String facultyDepartment;
 	
 	public Long getId() {
 		return id;
@@ -143,6 +148,46 @@ public class DbPerson {
 		return socialConnections;
 	}
 	
+	public String getDegreeMajor() {
+		return degreeMajor;
+	}
+
+	public void setDegreeMajor(String degreeMajor) {
+		this.degreeMajor = degreeMajor;
+	}
+
+	public String getDegreeMinor() {
+		return degreeMinor;
+	}
+
+	public void setDegreeMinor(String degreeMinor) {
+		this.degreeMinor = degreeMinor;
+	}
+
+	public Integer getGraduationYear() {
+		return graduationYear;
+	}
+
+	public void setGraduationYear(Integer graduationYear) {
+		this.graduationYear = graduationYear;
+	}
+
+	public String getDegreeType() {
+		return degreeType;
+	}
+
+	public void setDegreeType(String degreeType) {
+		this.degreeType = degreeType;
+	}
+
+	public String getFacultyDepartment() {
+		return facultyDepartment;
+	}
+
+	public void setFacultyDepartment(String facultyDepartment) {
+		this.facultyDepartment = facultyDepartment;
+	}
+
 	// Since we won't have this object outside without the ID, we're ok
 	// See https://developer.jboss.org/wiki/EqualsandHashCode
 	@Override
