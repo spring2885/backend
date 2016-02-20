@@ -3,6 +3,7 @@ package org.spring2885.server.db.model;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.spring2885.model.Person;
 import org.spring2885.model.SocialConnection;
@@ -29,8 +30,12 @@ public final class PersonConverters {
 			p.setOccupation(db.getOccupation());
 			p.setCompanyName(db.getCompanyName());
 			p.setBirthdate(db.getBirthdate());
-			// TODO(rob): Fix this.
-			p.setVariety(Integer.toString(db.getType()));
+			DbPersonType personType = db.getType();
+			if (personType != null) {
+				p.setVariety(db.getType().getName());
+			} else {
+				p.setVariety(null);
+			}
 			p.setLastLoginDate(db.getLastLogon());
 			
 			// Add social networks.
@@ -48,6 +53,7 @@ public final class PersonConverters {
 	public static class JsonToDbConverter implements Function<Person, DbPerson> {
 		private Supplier<DbPerson> dbSupplier = Suppliers.ofInstance(new DbPerson());
 		private Map<String, DbSocialService> socialServices = new HashMap<>();
+		private Map<String, DbPersonType> personTypes = new HashMap<>();
 		
 		JsonToDbConverter() {
 		}
@@ -63,9 +69,14 @@ public final class PersonConverters {
 		}
 		
 		public JsonToDbConverter withSocialServices(Set<DbSocialService> socialServices) {
-			for (DbSocialService s : socialServices) {
-				this.socialServices.put(s.getName(), s);
-			}
+			this.socialServices = socialServices.stream()
+					.collect(Collectors.toMap(DbSocialService::getName, (s) -> s));
+			return this;
+		}
+
+		public JsonToDbConverter withPersonTypes(Set<DbPersonType> personTypes) {
+			this.personTypes = personTypes.stream()
+					.collect(Collectors.toMap(DbPersonType::getName, (p) -> p));
 			return this;
 		}
 		
@@ -92,18 +103,19 @@ public final class PersonConverters {
 			if (birthDate != null) {
 				db.setBirthdate(new java.sql.Date(p.getBirthdate().getTime()));
 			} else {
-				db.setBirthdate(new java.sql.Date(0));
+				db.setBirthdate(null);
 			}
-			try {
-				db.setType(Integer.parseInt(p.getVariety()));
-			} catch (NumberFormatException e) {
-				db.setType(0);
+			String personType = p.getVariety();
+			if (personType != null && personTypes.containsKey(personType)) {
+				db.setType(personTypes.get(personType));
+			} else {
+				db.setType(personTypes.get("student"));
 			}
 			java.util.Date lastLoginDate = p.getLastLoginDate();
 			if (lastLoginDate != null) {
 				db.setLastLogon(new java.sql.Date(p.getLastLoginDate().getTime()));
 			} else {
-				db.setLastLogon(new java.sql.Date(0));
+				db.setLastLogon(null);
 			}
 			
 			// Add all social connections
