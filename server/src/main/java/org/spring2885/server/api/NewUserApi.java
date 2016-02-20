@@ -5,6 +5,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import org.spring2885.server.api.exceptions.NotFoundException;
 import org.spring2885.server.db.model.DbPerson;
 import org.spring2885.server.db.service.PersonService;
+import org.spring2885.server.db.service.PersonTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +26,7 @@ public class NewUserApi {
 
 	@Autowired private PasswordEncoder passwordEncoder;
 	@Autowired PersonService personService;
+	@Autowired PersonTypeService personTypeService;
 	
 	/**
 	 * Mapping for /newuser webpage. This is where a stub page
@@ -55,6 +57,7 @@ public class NewUserApi {
 		person.setEmail(email);
 		String hashedPassword = passwordEncoder.encode(password);
 		person.setPassword(hashedPassword);
+		person.setType(personTypeService.defaultType());
 		personService.save(person);
 		System.err.printf("User %s added with hashed pw; '%s'\n", email, hashedPassword);
 		return new ResponseEntity<Void>(HttpStatus.OK);

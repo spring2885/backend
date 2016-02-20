@@ -24,7 +24,9 @@ import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.spring2885.model.Person;
 import org.spring2885.server.db.model.DbPerson;
+import org.spring2885.server.db.model.DbPersonType;
 import org.spring2885.server.db.service.PersonService;
+import org.spring2885.server.db.service.PersonTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
@@ -50,11 +52,9 @@ import com.google.common.collect.ImmutableList;
 public class PersonsApiTest {
     protected MockMvc mockMvc;
     
-    @Autowired
-    protected WebApplicationContext webappContext;
-    
-    @Autowired
-    private PersonService personService;
+    @Autowired protected WebApplicationContext webappContext;
+    @Autowired private PersonService personService;
+    @Autowired PersonTypeService personTypeService;
     
     private DbPerson dbMe;
     private Person me;
@@ -72,6 +72,11 @@ public class PersonsApiTest {
         me = createPerson(4, "me@example.com", "aboutMe");
         otherPerson = createPerson(21, "other@example.com", "user 21");
         otherDbPerson = createDbPerson(21, "other@example.com", "user 21");
+        
+        // Our tests assume a single default person type of student.
+        DbPersonType defaultPersonType = new DbPersonType(0, "student");
+        when(personTypeService.defaultType()).thenReturn(defaultPersonType);
+        when(personTypeService.findAll()).thenReturn(Collections.singleton(defaultPersonType));
     }
     
     static DbPerson createDbPerson(long id, String email, String aboutMe) {

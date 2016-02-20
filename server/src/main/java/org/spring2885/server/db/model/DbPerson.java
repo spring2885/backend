@@ -7,9 +7,12 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -35,7 +38,9 @@ public class DbPerson {
 	@Column(name="company_name")
 	private String companyName;
 	private Date birthdate;
-	private Integer type;
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="type")
+	private DbPersonType type;
 	@Column(name="last_logon")
 	private Date lastLogon;
 	private String password;
@@ -55,13 +60,10 @@ public class DbPerson {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public int getStudentId() {
-		if (studentId == null) {
-			return 0;
-		}
+	public Integer getStudentId() {
 		return studentId;
 	}
-	public void setStudentId(int studentId) {
+	public void setStudentId(Integer studentId) {
 		this.studentId = studentId;
 	}
 	public String getTitle() {
@@ -118,13 +120,10 @@ public class DbPerson {
 	public void setBirthdate(Date birthdate) {
 		this.birthdate = birthdate;
 	}
-	public int getType() {
-		if (type == null) {
-			return 0;
-		}
+	public DbPersonType getType() {
 		return type;
 	}
-	public void setType(int type) {
+	public void setType(DbPersonType type) {
 		this.type = type;
 	}
 	public Date getLastLogon() {
