@@ -9,10 +9,19 @@ import javax.persistence.Table;
 @Entity
 @Table(name="Person_Type")
 public class DbPersonType {
+	
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Long id;
 	private String name;
+	
+	public DbPersonType() {
+	}
+	
+	public DbPersonType(long id, String name) {
+		this.id = id;
+		this.name = name;
+	}
 
 	public String getName() {
 		return name;
