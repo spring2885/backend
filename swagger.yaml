@@ -16,6 +16,7 @@ info:
 paths:
   /newuser:
     post:
+      tags: ["User"]
       description: |
         Creates a new user in the system
       parameters:
@@ -41,6 +42,7 @@ paths:
   /api/v1/profiles:
     # This is a HTTP operation
     get:
+      tags: ["Profiles"]
       # Describe this verb here. Note: you can use markdown
       description: |
         Fetches all `profile` objects. up to **size** if specified
@@ -69,6 +71,7 @@ paths:
 
   /api/v1/profiles/{id}:
     get:
+      tags: ["Profiles"]
       description: Fetches the `profile` for id `id`.
       parameters:
         - name: id
@@ -86,6 +89,7 @@ paths:
           schema:
             $ref: '#/definitions/person'
     put:
+      tags: ["Profile"]
       parameters:
         - name: id
           in: path
@@ -103,6 +107,7 @@ paths:
         200:
           description: Updates the person
     delete:
+      tags: ["Profile"]
       parameters:
         - name: id
           in: path
@@ -117,6 +122,7 @@ paths:
           description: Error deleting the profile "ID".
   /api/v1/jobs:
     get:
+      tags: ["Jobs"]
       # Describe this verb here. Note: you can use markdown
       description: |
         Gets `Job` objects.
@@ -144,6 +150,7 @@ paths:
             items:
               $ref: '#/definitions/Job'
     post:
+      tags: ["Jobs"]
       parameters:
         - name: Job
           in: body
@@ -155,6 +162,7 @@ paths:
         200:
           description: Make a new Job
     put:
+      tags: ["Jobs"]
       parameters:
         - name: job
           in: body
