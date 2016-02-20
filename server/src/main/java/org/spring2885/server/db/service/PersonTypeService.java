@@ -9,5 +9,7 @@ public interface PersonTypeService {
 	 * Returns all {@link DbPersonType} instances.
 	 */
 	Set<DbPersonType> findAll();
-
+	
+	/** Gets the default person type (student). */
+	DbPersonType defaultType();
 }

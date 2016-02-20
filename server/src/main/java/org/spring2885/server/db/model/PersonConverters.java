@@ -85,12 +85,7 @@ public final class PersonConverters {
 			DbPerson db = dbSupplier.get();
 			// Leave the ID null since we're updating an existing person.
 			db.setName(p.getName());
-			Integer studentId = p.getStudentId();
-			if (studentId != null) {
-				db.setStudentId(p.getStudentId());
-			} else {
-				db.setStudentId(0);
-			}
+			db.setStudentId(p.getStudentId());
 			db.setTitle(p.getTitle());
 			db.setAboutMe(db.getAboutMe());
 			db.setResumeURL(p.getResumeUrl());

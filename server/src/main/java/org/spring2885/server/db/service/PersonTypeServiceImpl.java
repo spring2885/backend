@@ -30,4 +30,9 @@ public class PersonTypeServiceImpl implements PersonTypeService {
 		return result;
 	}
 
+	@Override
+	public DbPersonType defaultType() {
+		return repository.findOne(Long.valueOf(0));
+	}
+
 }
