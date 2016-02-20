@@ -13,6 +13,7 @@
   "paths" : {
     "/api/v1/jobs" : {
       "get" : {
+        "tags" : [ "Jobs" ],
         "description" : "Gets `Job` objects.\nOptional query param of **size** determines\nsize of returned array\n",
         "parameters" : [ {
           "name" : "size",
@@ -35,6 +36,7 @@
         }
       },
       "post" : {
+        "tags" : [ "Jobs" ],
         "parameters" : [ {
           "in" : "body",
           "name" : "Job",
@@ -51,6 +53,7 @@
         }
       },
       "put" : {
+        "tags" : [ "Jobs" ],
         "parameters" : [ {
           "in" : "body",
           "name" : "job",
@@ -69,6 +72,7 @@
     },
     "/api/v1/profiles" : {
       "get" : {
+        "tags" : [ "Profiles" ],
         "description" : "Fetches all `profile` objects. up to **size** if specified\notherwise fetches all objects.\n",
         "parameters" : [ {
           "name" : "size",
@@ -93,6 +97,7 @@
     },
     "/api/v1/profiles/{id}" : {
       "get" : {
+        "tags" : [ "Profiles" ],
         "description" : "Fetches the `profile` for id `id`.",
         "parameters" : [ {
           "name" : "id",
@@ -112,6 +117,7 @@
         }
       },
       "put" : {
+        "tags" : [ "Profiles" ],
         "parameters" : [ {
           "name" : "id",
           "in" : "path",
@@ -135,6 +141,7 @@
         }
       },
       "delete" : {
+        "tags" : [ "Profiles" ],
         "parameters" : [ {
           "name" : "id",
           "in" : "path",
@@ -155,6 +162,7 @@
     },
     "/newuser" : {
       "post" : {
+        "tags" : [ "User" ],
         "description" : "Creates a new user in the system\n",
         "parameters" : [ {
           "name" : "email",
