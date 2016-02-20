@@ -40,7 +40,7 @@ public class DbPerson {
 	private Date lastLogon;
 	private String password;
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy="person")
-	private Set<SocialConnection> socialConnections = new HashSet<>();
+	private Set<DbSocialConnection> socialConnections = new HashSet<>();
 	
 	public Long getId() {
 		return id;
@@ -140,7 +140,7 @@ public class DbPerson {
 		this.password = password;
 	}
 
-	public Set<SocialConnection> socialConnections() {
+	public Set<DbSocialConnection> socialConnections() {
 		return socialConnections;
 	}
 	

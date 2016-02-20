@@ -7,9 +7,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 @Entity
-public class SocialConnection {
+@Table(name="social_connection")
+public class DbSocialConnection {
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Long id;
@@ -20,7 +22,7 @@ public class SocialConnection {
 	
 	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="social_service_id")
-	private SocialService socialService;
+	private DbSocialService socialService;
 	
 	private String url;
 
@@ -33,11 +35,11 @@ public class SocialConnection {
 		this.person = person;
 	}
 
-	public SocialService getSocialService() {
+	public DbSocialService getSocialService() {
 		return socialService;
 	}
 
-	public void setSocialService(SocialService socialService) {
+	public void setSocialService(DbSocialService socialService) {
 		this.socialService = socialService;
 	}
 

@@ -2,11 +2,8 @@ package org.spring2885.server.db.service;
 
 import java.util.List;
 
-import javax.persistence.EntityManager;
-
 import org.spring2885.server.db.model.DbPerson;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.JpaContext;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,14 +11,10 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class PersonServiceImpl implements PersonService {
 	private final PersonRepository repository;
-    private final JpaContext jpaContext;
-    private final EntityManager em;
 	
 	@Autowired
-	PersonServiceImpl(PersonRepository repository, JpaContext context) {
+	PersonServiceImpl(PersonRepository repository) {
 		this.repository = repository;
-		this.jpaContext = context;
-		this.em = context.getEntityManagerByManagedType(DbPerson.class);
 	}
 	
 	@Override
@@ -56,13 +49,7 @@ public class PersonServiceImpl implements PersonService {
 
 	@Override
 	public DbPerson save(DbPerson person) {
-		try {
-			//em.getTransaction().begin();
-			//em.createNativeQuery("DELETE FROM Social_Connections WHERE person_id = " + person.getId());
-			return repository.save(person);
-		} finally {
-			//em.getTransaction().commit();
-		}
+		return repository.save(person);
 	}
 
 }

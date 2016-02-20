@@ -4,7 +4,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import java.util.*;
 import java.util.Date;
+import org.spring2885.model.SocialConnection;
 
 import io.swagger.annotations.*;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -13,7 +15,7 @@ import java.util.Objects;
 
 
 @ApiModel(description = "")
-@javax.annotation.Generated(value = "class io.swagger.codegen.languages.SpringMVCServerCodegen", date = "2016-02-18T11:27:17.171-08:00")
+@javax.annotation.Generated(value = "class io.swagger.codegen.languages.SpringMVCServerCodegen", date = "2016-02-20T08:29:39.529-08:00")
 public class Person  {
   
   private Long id = null;
@@ -30,6 +32,7 @@ public class Person  {
   private Date birthdate = null;
   private String variety = null;
   private Date lastLoginDate = null;
+  private List<SocialConnection> socialConnections = new ArrayList<SocialConnection>();
 
   
   /**
@@ -200,6 +203,18 @@ public class Person  {
   }
 
   
+  /**
+   **/
+  @ApiModelProperty(value = "")
+  @JsonProperty("social_connections")
+  public List<SocialConnection> getSocialConnections() {
+    return socialConnections;
+  }
+  public void setSocialConnections(List<SocialConnection> socialConnections) {
+    this.socialConnections = socialConnections;
+  }
+
+  
 
   @Override
   public boolean equals(Object o) {
@@ -223,12 +238,13 @@ public class Person  {
         Objects.equals(companyName, person.companyName) &&
         Objects.equals(birthdate, person.birthdate) &&
         Objects.equals(variety, person.variety) &&
-        Objects.equals(lastLoginDate, person.lastLoginDate);
+        Objects.equals(lastLoginDate, person.lastLoginDate) &&
+        Objects.equals(socialConnections, person.socialConnections);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, name, studentId, title, aboutMe, resumeUrl, imageUrl, email, phone, occupation, companyName, birthdate, variety, lastLoginDate);
+    return Objects.hash(id, name, studentId, title, aboutMe, resumeUrl, imageUrl, email, phone, occupation, companyName, birthdate, variety, lastLoginDate, socialConnections);
   }
 
   @Override
@@ -250,6 +266,7 @@ public class Person  {
     sb.append("  birthdate: ").append(birthdate).append("\n");
     sb.append("  variety: ").append(variety).append("\n");
     sb.append("  lastLoginDate: ").append(lastLoginDate).append("\n");
+    sb.append("  socialConnections: ").append(socialConnections).append("\n");
     sb.append("}\n");
     return sb.toString();
   }

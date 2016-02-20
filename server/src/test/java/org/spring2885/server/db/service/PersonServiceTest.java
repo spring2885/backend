@@ -28,12 +28,11 @@ import com.google.common.collect.Lists;
 @RunWith(JUnit4.class)
 public class PersonServiceTest {
 	@Mock PersonRepository repository;
-	@Mock JpaContext context;
 	private PersonService service;
 
     @Before public void initMocks() {
         MockitoAnnotations.initMocks(this);
-        service = new PersonServiceImpl(repository, context);
+        service = new PersonServiceImpl(repository);
 
     	// return empty list by default
     	when(repository.findByEmail(anyString())).thenReturn(Collections.emptyList());
