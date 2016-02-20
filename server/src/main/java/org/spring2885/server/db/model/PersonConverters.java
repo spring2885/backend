@@ -1,6 +1,11 @@
 package org.spring2885.server.db.model;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+
 import org.spring2885.model.Person;
+import org.spring2885.model.SocialConnection;
 
 import com.google.common.base.Function;
 import com.google.common.base.Supplier;
@@ -12,7 +17,7 @@ public final class PersonConverters {
 		@Override
 		public Person apply(DbPerson db) {
 			Person p = new Person();
-			p.setId((long)db.getId());
+			p.setId(db.getId());
 			p.setName(db.getName());
 			p.setStudentId(db.getStudentId());
 			p.setTitle(db.getTitle());
@@ -28,15 +33,40 @@ public final class PersonConverters {
 			p.setVariety(Integer.toString(db.getType()));
 			p.setLastLoginDate(db.getLastLogon());
 			
+			// Add social networks.
+			for (DbSocialConnection dbSocial : db.socialConnections()) {
+				SocialConnection social = new SocialConnection();
+				social.setName(dbSocial.getSocialService().getName());
+				social.setUrl(dbSocial.getUrl());
+				p.getSocialConnections().add(social);
+			}
+			
 			return p;
 		}
 	}
 	
-	private static class FromJsonToDb implements Function<Person, DbPerson> {
-		private final Supplier<DbPerson> dbSupplier;
+	public static class JsonToDbConverter implements Function<Person, DbPerson> {
+		private Supplier<DbPerson> dbSupplier = Suppliers.ofInstance(new DbPerson());
+		private Map<String, DbSocialService> socialServices = new HashMap<>();
 		
-		FromJsonToDb(Supplier<DbPerson> dbSupplier) {
+		JsonToDbConverter() {
+		}
+		
+		public JsonToDbConverter withDbPersonSupplier(Supplier<DbPerson> dbSupplier) {
 			this.dbSupplier = dbSupplier;
+			return this;
+		}
+		
+		public JsonToDbConverter withDbPerson(DbPerson db) {
+			this.dbSupplier = Suppliers.ofInstance(db);
+			return this;
+		}
+		
+		public JsonToDbConverter withSocialServices(Set<DbSocialService> socialServices) {
+			for (DbSocialService s : socialServices) {
+				this.socialServices.put(s.getName(), s);
+			}
+			return this;
 		}
 		
 		@Override
@@ -76,6 +106,18 @@ public final class PersonConverters {
 				db.setLastLogon(new java.sql.Date(0));
 			}
 			
+			// Add all social connections
+			for (SocialConnection social : p.getSocialConnections()) {
+				DbSocialService dbService = socialServices.get(social.getName());
+				if (dbService == null) {
+					continue;
+				}
+				DbSocialConnection connection = new DbSocialConnection();
+				connection.setPerson(db);
+				connection.setSocialService(dbService);
+				connection.setUrl(social.getUrl());
+				db.socialConnections().add(connection);
+			}
 			return db;
 		}
 	}
@@ -84,21 +126,8 @@ public final class PersonConverters {
 		return new FromDbToJson();
 	}
 	
-	public static Function<Person, DbPerson> fromJsonToDb() {
-		return fromJsonToDb(new Supplier<DbPerson>() {
-			@Override public DbPerson get() {
-				return new DbPerson(); 
-			} 
-		});
+	public static JsonToDbConverter fromJsonToDb() {
+		return new JsonToDbConverter();
 	}
-	
-	public static Function<Person, DbPerson> fromJsonToDb(Supplier<DbPerson> dbPersonSupplier) {
-		return new FromJsonToDb(dbPersonSupplier);
-	}
-	
-	public static Function<Person, DbPerson> fromJsonToDb(DbPerson dbPerson) {
-		return new FromJsonToDb(Suppliers.ofInstance(dbPerson));
-	}
-	
 	private PersonConverters() {}
 }

@@ -1,25 +1,29 @@
 package org.spring2885.server.db.service;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.same;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.util.Collections;
+import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.spring2885.server.api.TestConfig;
 import org.spring2885.server.db.model.DbPerson;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.data.jpa.repository.JpaContext;
 
 import com.google.common.collect.Lists;
-
-import static org.mockito.Mockito.*;
-import static org.junit.Assert.*;
-
-import java.util.Collections;
-import java.util.List;
 
 @RunWith(JUnit4.class)
 public class PersonServiceTest {
@@ -73,7 +77,7 @@ public class PersonServiceTest {
     public void testFindById() {
     	DbPerson expected = new DbPerson();
     	expected.setEmail("me@");
-    	when(repository.findOne(1234)).thenReturn(expected);
+    	when(repository.findOne(Long.valueOf(1234))).thenReturn(expected);
     	
     	DbPerson actual = service.findById(1234);
     	assertSame(expected, actual);
@@ -102,21 +106,21 @@ public class PersonServiceTest {
     @Test
     public void testDelete() {
     	DbPerson p = new DbPerson();
-    	when(repository.findOne(21)).thenReturn(p);
+    	when(repository.findOne(Long.valueOf(21))).thenReturn(p);
     	
     	assertTrue(service.delete(21));
-    	verify(repository).delete(21);
+    	verify(repository).delete(Long.valueOf(21));
     }
 
     @Test
     public void testDelete_notFound() {
     	DbPerson p = new DbPerson();
-    	when(repository.findOne(22)).thenReturn(p);
+    	when(repository.findOne(Long.valueOf(22))).thenReturn(p);
     	
     	assertFalse(service.delete(21));
     	// Since a call to findOne(21) will return null by default, delete should
     	// never be called. Let's verify that.
-    	verify(repository, never()).delete(21);
+    	verify(repository, never()).delete(Long.valueOf(21));
     }
 
     @Test

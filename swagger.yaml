@@ -183,6 +183,14 @@ paths:
         200:
           description: Updates the Job
 definitions:
+  SocialConnection:
+    type: object
+    properties:
+      name:
+        type: string
+      url:
+        type: string
+
   person:
     type: object
     properties:
@@ -218,6 +226,10 @@ definitions:
       last_login_date:
         type: string
         format: date
+      social_connections:
+        type: array
+        items:
+          $ref: '#/definitions/SocialConnection'
   Job:
     type: object
     properties:
