@@ -106,10 +106,7 @@
           "200" : {
             "description" : "Successful response",
             "schema" : {
-              "type" : "array",
-              "items" : {
-                "$ref" : "#/definitions/person"
-              }
+              "$ref" : "#/definitions/person"
             }
           }
         }
