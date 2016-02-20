@@ -37,7 +37,7 @@ public class ServerApplication extends WebMvcConfigurerAdapter {
 	}
 
 	public static void main(String[] args) throws Exception {
-		new SpringApplicationBuilder(ServerApplication.class).run(args);
+		new SpringApplicationBuilder(ServerApplication.class).run(args);  // $COVERAGE-IGNORE$
 	}
 
 	@Configuration
