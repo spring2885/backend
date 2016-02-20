@@ -267,6 +267,22 @@
           "items" : {
             "$ref" : "#/definitions/SocialConnection"
           }
+        },
+        "degree_major" : {
+          "type" : "string"
+        },
+        "degree_minor" : {
+          "type" : "string"
+        },
+        "graduation_year" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "degree_type" : {
+          "type" : "string"
+        },
+        "faculty_department" : {
+          "type" : "string"
         }
       }
     },
