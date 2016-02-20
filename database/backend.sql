@@ -142,8 +142,7 @@ FOREIGN KEY(news_id) REFERENCES News(id)
 DROP TABLE IF EXISTS Social_Service;
 CREATE TABLE Social_Service
 (
-id int NOT NULL AUTO_INCREMENT,
-name varchar(200),
+id varchar(60) NOT NULL,
 url varchar(200),
 PRIMARY KEY(id)
 );
@@ -153,7 +152,7 @@ CREATE TABLE Social_Connection
 (
 id int NOT NULL AUTO_INCREMENT,
 person_id int,
-social_service_id int,
+social_service_id varchar(60),
 url varchar(200),
 PRIMARY KEY(id),
 FOREIGN KEY(person_id) REFERENCES Person(id),
