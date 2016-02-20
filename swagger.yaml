@@ -17,7 +17,7 @@ paths:
   /newuser:
     post:
       tags: ["User"]
-      summary: |
+      description: |
         Creates a new user in the system
       description: |
       parameters:
