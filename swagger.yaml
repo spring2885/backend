@@ -84,9 +84,7 @@ paths:
           # A schema describing your response object.
           # Use JSON Schema format
           schema:
-            type: array
-            items:
-              $ref: '#/definitions/person'
+            $ref: '#/definitions/person'
     put:
       parameters:
         - name: id
