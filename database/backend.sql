@@ -142,16 +142,16 @@ FOREIGN KEY(news_id) REFERENCES News(id)
 DROP TABLE IF EXISTS Social_Service;
 CREATE TABLE Social_Service
 (
-id int,
+id int NOT NULL AUTO_INCREMENT,
 name varchar(200),
 url varchar(200),
 PRIMARY KEY(id)
 );
 
-DROP TABLE IF EXISTS Social_Connections;
-CREATE TABLE Social_Connections
+DROP TABLE IF EXISTS Social_Connection;
+CREATE TABLE Social_Connection
 (
-id int,
+id int NOT NULL AUTO_INCREMENT,
 person_id int,
 social_service_id int,
 url varchar(200),

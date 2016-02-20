@@ -74,7 +74,7 @@ public class PersonsApiTest {
         otherDbPerson = createDbPerson(21, "other@example.com", "user 21");
     }
     
-    static DbPerson createDbPerson(int id, String email, String aboutMe) {
+    static DbPerson createDbPerson(long id, String email, String aboutMe) {
     	DbPerson p = new DbPerson();
     	p.setId(id);
     	p.setEmail(email);
