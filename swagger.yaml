@@ -19,6 +19,7 @@ paths:
       tags: ["User"]
       summary: |
         Creates a new user in the system
+      description: |
       parameters:
         - name: email
           in: formData
@@ -44,6 +45,8 @@ paths:
     get:
       tags: ["Profiles"]
       # Describe this verb here. Note: you can use markdown
+      summary: |
+        Fetches all `profile` objects
       description: |
         Fetches all `profile` objects. up to **size** if specified
         otherwise fetches all objects.
@@ -72,7 +75,9 @@ paths:
   /api/v1/profiles/{id}:
     get:
       tags: ["Profiles"]
-      description: Fetches the `profile` for id `id`.
+      summary: |
+        Fetches the `profile` for id `id`.
+      description: |
       parameters:
         - name: id
           in: path
@@ -90,6 +95,8 @@ paths:
             $ref: '#/definitions/person'
     put:
       tags: ["Profiles"]
+      summary: |
+          The profile to update.
       parameters:
         - name: id
           in: path
@@ -108,6 +115,8 @@ paths:
           description: Updates the person
     delete:
       tags: ["Profiles"]
+      summary: |
+        The profile to delete.
       parameters:
         - name: id
           in: path
@@ -234,3 +243,4 @@ tags:
     description: Everything to do with User
   - name: Profiles
     description: Fetch, Delete, and update Profiles
+    
