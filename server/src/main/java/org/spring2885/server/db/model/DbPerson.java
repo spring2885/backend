@@ -5,7 +5,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -23,25 +22,19 @@ public class DbPerson {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Long id;
 	private String name;
-	@Column(name="student_id")
 	private Integer studentId;
 	private String title;
-	@Column(name="about_me")
 	private String aboutMe;
-	@Column(name="resume_url")
-	private String resumeURL;
-	@Column(name="image_url")
-	private String imageURL;
+	private String resumeUrl;
+	private String imageUrl;
 	private String email;
 	private String phone;
 	private String occupation;
-	@Column(name="company_name")
 	private String companyName;
 	private Date birthdate;
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="type")
 	private DbPersonType type;
-	@Column(name="last_logon")
 	private Date lastLogon;
 	private String password;
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy="person")
@@ -84,16 +77,16 @@ public class DbPerson {
 		this.aboutMe = aboutMe;
 	}
 	public String getResumeURL() {
-		return resumeURL;
+		return resumeUrl;
 	}
 	public void setResumeURL(String resumeURL) {
-		this.resumeURL = resumeURL;
+		this.resumeUrl = resumeURL;
 	}
 	public String getImageURL() {
-		return imageURL;
+		return imageUrl;
 	}
 	public void setImageURL(String imageURL) {
-		this.imageURL = imageURL;
+		this.imageUrl = imageURL;
 	}
 	public String getEmail() {
 		return email;
