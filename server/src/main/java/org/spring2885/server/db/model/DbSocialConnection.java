@@ -1,5 +1,7 @@
 package org.spring2885.server.db.model;
 
+import java.util.Objects;
+
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -49,6 +51,23 @@ public class DbSocialConnection {
 
 	public void setUrl(String url) {
 		this.url = url;
+	}
+	
+	@Override
+	public int hashCode() {
+	    return Objects.hash(person, socialService);
+	}
+	
+	@Override
+	public boolean equals(Object o) {
+	    if (this == o) { return true; }
+	    if (o == null) { return false; }
+	    if (!(o instanceof DbSocialConnection)) {
+	        return false;
+	    }
+	    DbSocialConnection that = (DbSocialConnection) o;
+        return Objects.equals(this.person, that.person)
+                && Objects.equals(this.socialService, that.socialService);
 	}
 
 }
