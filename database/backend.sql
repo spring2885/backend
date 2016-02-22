@@ -12,6 +12,10 @@ name varchar(100),
 PRIMARY KEY (id)
 );
 
+#
+# Person is a union of the base person plus
+# student, alumni, faculty
+#
 DROP TABLE IF EXISTS Person;
 CREATE TABLE Person
 (
@@ -30,42 +34,16 @@ birthdate DATE,
 type int,
 last_logon DATE,
 password varchar(255),
+# student only fields
+degree_major varchar(200),
+degree_minor varchar(200),
+# student/alumni shared fields
+graduation_year int,
+degree_type varchar(200),
+# faculty field
+faculty_department varchar(200),
 PRIMARY KEY (id),
 FOREIGN KEY (type) REFERENCES Person_Type(id)
-);
-
-DROP TABLE IF EXISTS Faculty;
-CREATE TABLE Faculty
-(
-id int,
-person_id int,
-faculty_department varchar(255),
-PRIMARY KEY (id),
-FOREIGN KEY (person_id) REFERENCES Person(id)
-);
-
-DROP TABLE IF EXISTS Alumni;
-CREATE TABLE Alumni
-(
-id int,
-person_id int,
-alumni_gradyear int,
-alumni_degree varchar(256),
-PRIMARY KEY (id),
-FOREIGN KEY (person_id) REFERENCES Person(id)
-);
-
-
-DROP TABLE IF EXISTS Current_Student;
-CREATE TABLE Current_Student
-(
-id int,
-person_id int,
-major varchar(256),
-minor varchar(256),
-graduation_date varchar(256),
-PRIMARY KEY(id),
-FOREIGN KEY (person_id) REFERENCES Person(id)
 );
 
 DROP TABLE IF EXISTS Job_Type;
@@ -142,18 +120,17 @@ FOREIGN KEY(news_id) REFERENCES News(id)
 DROP TABLE IF EXISTS Social_Service;
 CREATE TABLE Social_Service
 (
-id int,
-name varchar(200),
+id varchar(60) NOT NULL,
 url varchar(200),
 PRIMARY KEY(id)
 );
 
-DROP TABLE IF EXISTS Social_Connections;
-CREATE TABLE Social_Connections
+DROP TABLE IF EXISTS Social_Connection;
+CREATE TABLE Social_Connection
 (
-id int,
+id int NOT NULL AUTO_INCREMENT,
 person_id int,
-social_service_id int,
+social_service_id varchar(60),
 url varchar(200),
 PRIMARY KEY(id),
 FOREIGN KEY(person_id) REFERENCES Person(id),

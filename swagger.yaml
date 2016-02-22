@@ -16,8 +16,10 @@ info:
 paths:
   /newuser:
     post:
+      tags: ["User"]
       description: |
         Creates a new user in the system
+      description: |
       parameters:
         - name: email
           in: formData
@@ -41,7 +43,10 @@ paths:
   /api/v1/profiles:
     # This is a HTTP operation
     get:
+      tags: ["Profiles"]
       # Describe this verb here. Note: you can use markdown
+      summary: |
+        Fetches all `profile` objects
       description: |
         Fetches all `profile` objects. up to **size** if specified
         otherwise fetches all objects.
@@ -69,7 +74,10 @@ paths:
 
   /api/v1/profiles/{id}:
     get:
-      description: Fetches the `profile` for id `id`.
+      tags: ["Profiles"]
+      summary: |
+        Fetches the `profile` for id `id`.
+      description: |
       parameters:
         - name: id
           in: path
@@ -86,6 +94,9 @@ paths:
           schema:
             $ref: '#/definitions/person'
     put:
+      tags: ["Profiles"]
+      summary: |
+          The profile to update.
       parameters:
         - name: id
           in: path
@@ -103,6 +114,9 @@ paths:
         200:
           description: Updates the person
     delete:
+      tags: ["Profiles"]
+      summary: |
+        The profile to delete.
       parameters:
         - name: id
           in: path
@@ -117,6 +131,7 @@ paths:
           description: Error deleting the profile "ID".
   /api/v1/jobs:
     get:
+      tags: ["Jobs"]
       # Describe this verb here. Note: you can use markdown
       description: |
         Gets `Job` objects.
@@ -144,6 +159,7 @@ paths:
             items:
               $ref: '#/definitions/Job'
     post:
+      tags: ["Jobs"]
       parameters:
         - name: Job
           in: body
@@ -155,6 +171,7 @@ paths:
         200:
           description: Make a new Job
     put:
+      tags: ["Jobs"]
       parameters:
         - name: job
           in: body
@@ -166,6 +183,14 @@ paths:
         200:
           description: Updates the Job
 definitions:
+  SocialConnection:
+    type: object
+    properties:
+      name:
+        type: string
+      url:
+        type: string
+
   person:
     type: object
     properties:
@@ -201,6 +226,23 @@ definitions:
       last_login_date:
         type: string
         format: date
+      social_connections:
+        type: array
+        items:
+          $ref: '#/definitions/SocialConnection'
+      # student fields
+      degree_major:
+        type: string
+      degree_minor:
+        type: string
+      graduation_year:
+        type: integer
+        format: int32
+      degree_type:
+        type: string
+      # faculty only fields
+      faculty_department:
+        type: string
   Job:
     type: object
     properties:
@@ -221,4 +263,9 @@ definitions:
         type: string
       news title:
         type: string
-      
+tags:
+  - name: User
+    description: Everything to do with User
+  - name: Profiles
+    description: Fetch, Delete, and update Profiles
+    

@@ -10,9 +10,17 @@
       "email" : "api@spring-2885.org"
     }
   },
+  "tags" : [ {
+    "name" : "User",
+    "description" : "Everything to do with User"
+  }, {
+    "name" : "Profiles",
+    "description" : "Fetch, Delete, and update Profiles"
+  } ],
   "paths" : {
     "/api/v1/jobs" : {
       "get" : {
+        "tags" : [ "Jobs" ],
         "description" : "Gets `Job` objects.\nOptional query param of **size** determines\nsize of returned array\n",
         "parameters" : [ {
           "name" : "size",
@@ -35,6 +43,7 @@
         }
       },
       "post" : {
+        "tags" : [ "Jobs" ],
         "parameters" : [ {
           "in" : "body",
           "name" : "Job",
@@ -51,6 +60,7 @@
         }
       },
       "put" : {
+        "tags" : [ "Jobs" ],
         "parameters" : [ {
           "in" : "body",
           "name" : "job",
@@ -69,6 +79,8 @@
     },
     "/api/v1/profiles" : {
       "get" : {
+        "tags" : [ "Profiles" ],
+        "summary" : "Fetches all `profile` objects\n",
         "description" : "Fetches all `profile` objects. up to **size** if specified\notherwise fetches all objects.\n",
         "parameters" : [ {
           "name" : "size",
@@ -93,7 +105,9 @@
     },
     "/api/v1/profiles/{id}" : {
       "get" : {
-        "description" : "Fetches the `profile` for id `id`.",
+        "tags" : [ "Profiles" ],
+        "summary" : "Fetches the `profile` for id `id`.\n",
+        "description" : "",
         "parameters" : [ {
           "name" : "id",
           "in" : "path",
@@ -112,6 +126,8 @@
         }
       },
       "put" : {
+        "tags" : [ "Profiles" ],
+        "summary" : "The profile to update.\n",
         "parameters" : [ {
           "name" : "id",
           "in" : "path",
@@ -135,6 +151,8 @@
         }
       },
       "delete" : {
+        "tags" : [ "Profiles" ],
+        "summary" : "The profile to delete.\n",
         "parameters" : [ {
           "name" : "id",
           "in" : "path",
@@ -155,7 +173,8 @@
     },
     "/newuser" : {
       "post" : {
-        "description" : "Creates a new user in the system\n",
+        "tags" : [ "User" ],
+        "description" : "",
         "parameters" : [ {
           "name" : "email",
           "in" : "formData",
@@ -183,6 +202,17 @@
     }
   },
   "definitions" : {
+    "SocialConnection" : {
+      "type" : "object",
+      "properties" : {
+        "name" : {
+          "type" : "string"
+        },
+        "url" : {
+          "type" : "string"
+        }
+      }
+    },
     "person" : {
       "type" : "object",
       "properties" : {
@@ -231,6 +261,28 @@
         "last_login_date" : {
           "type" : "string",
           "format" : "date"
+        },
+        "social_connections" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/SocialConnection"
+          }
+        },
+        "degree_major" : {
+          "type" : "string"
+        },
+        "degree_minor" : {
+          "type" : "string"
+        },
+        "graduation_year" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "degree_type" : {
+          "type" : "string"
+        },
+        "faculty_department" : {
+          "type" : "string"
         }
       }
     },

@@ -8,7 +8,7 @@ public interface PersonService {
 	/**
 	 * Returns a {@link DbPerson} by the primary key or {@code null} if none exist.
 	 */
-	DbPerson findById(int id);
+	DbPerson findById(long id);
 	
 	/**
 	 * Returns all {@code DbPerson} instances.
@@ -26,7 +26,7 @@ public interface PersonService {
 	 * 
 	 * @return true on success, false otherwise.
 	 */
-	boolean delete(int id);
+	boolean delete(long id);
 	
 	/** Returns {@code true} if a user exists for this email address. */
 	boolean existsByEmail(String email);

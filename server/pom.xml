@@ -90,25 +90,7 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
-
-			<plugin>
-				<groupId>io.swagger</groupId>
-				<artifactId>swagger-codegen-maven-plugin</artifactId>
-				<executions>
-					<execution>
-						<goals>
-							<goal>generate</goal>
-						</goals>
-						<configuration>
-							<inputSpec>../swagger.yaml</inputSpec>
-							<language>swagger</language>
-							<output>${basedir}/src/main/webapp</output>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
 		</plugins>
-
 	</build>
 
 	<organization>

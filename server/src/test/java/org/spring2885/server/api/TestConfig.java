@@ -3,6 +3,8 @@ package org.spring2885.server.api;
 import static org.mockito.Mockito.mock;
 
 import org.spring2885.server.db.service.PersonService;
+import org.spring2885.server.db.service.PersonTypeService;
+import org.spring2885.server.db.service.SocialServiceService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -19,6 +21,16 @@ public class TestConfig {
 	@Bean
 	public PersonService personServiceMock() {
 		return mock(PersonService.class);
+	}
+
+	@Bean
+	public PersonTypeService personTypeServiceMock() {
+		return mock(PersonTypeService.class);
+	}
+
+	@Bean
+	public SocialServiceService socialServiceMock() {
+		return mock(SocialServiceService.class);
 	}
 
 	@Bean
