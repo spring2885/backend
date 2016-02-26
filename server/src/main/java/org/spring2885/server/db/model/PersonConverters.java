@@ -1,6 +1,12 @@
 package org.spring2885.server.db.model;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import org.spring2885.model.Person;
+import org.spring2885.model.SocialConnection;
 
 import com.google.common.base.Function;
 import com.google.common.base.Supplier;
@@ -12,7 +18,7 @@ public final class PersonConverters {
 		@Override
 		public Person apply(DbPerson db) {
 			Person p = new Person();
-			p.setId((long)db.getId());
+			p.setId(db.getId());
 			p.setName(db.getName());
 			p.setStudentId(db.getStudentId());
 			p.setTitle(db.getTitle());
@@ -24,32 +30,62 @@ public final class PersonConverters {
 			p.setOccupation(db.getOccupation());
 			p.setCompanyName(db.getCompanyName());
 			p.setBirthdate(db.getBirthdate());
-			// TODO(rob): Fix this.
-			p.setVariety(Integer.toString(db.getType()));
+			DbPersonType personType = db.getType();
+			if (personType != null) {
+				p.setVariety(db.getType().getName());
+			} else {
+				p.setVariety(null);
+			}
 			p.setLastLoginDate(db.getLastLogon());
-			
+
+			// Add social networks.
+			for (DbSocialConnection dbSocial : db.socialConnections()) {
+				SocialConnection social = new SocialConnection();
+				social.setName(dbSocial.getSocialService().getName());
+				social.setUrl(dbSocial.getUrl());
+				p.getSocialConnections().add(social);
+			}
+
 			return p;
 		}
 	}
-	
-	private static class FromJsonToDb implements Function<Person, DbPerson> {
-		private final Supplier<DbPerson> dbSupplier;
-		
-		FromJsonToDb(Supplier<DbPerson> dbSupplier) {
-			this.dbSupplier = dbSupplier;
+
+	public static class JsonToDbConverter implements Function<Person, DbPerson> {
+		private Supplier<DbPerson> dbSupplier = Suppliers.ofInstance(new DbPerson());
+		private Map<String, DbSocialService> socialServices = new HashMap<>();
+		private Map<String, DbPersonType> personTypes = new HashMap<>();
+
+		JsonToDbConverter() {
 		}
-		
+
+		public JsonToDbConverter withDbPersonSupplier(Supplier<DbPerson> dbSupplier) {
+			this.dbSupplier = dbSupplier;
+			return this;
+		}
+
+		public JsonToDbConverter withDbPerson(DbPerson db) {
+			this.dbSupplier = Suppliers.ofInstance(db);
+			return this;
+		}
+
+		public JsonToDbConverter withSocialServices(Set<DbSocialService> socialServices) {
+			this.socialServices = socialServices.stream()
+					.collect(Collectors.toMap(DbSocialService::getName, (s) -> s));
+			return this;
+		}
+
+		public JsonToDbConverter withPersonTypes(Set<DbPersonType> personTypes) {
+			this.personTypes = personTypes.stream()
+					.collect(Collectors.toMap(DbPersonType::getName, (p) -> p));
+			return this;
+		}
+
 		@Override
 		public DbPerson apply(Person p) {
 			DbPerson db = dbSupplier.get();
 			// Leave the ID null since we're updating an existing person.
 			db.setName(p.getName());
-			Integer studentId = p.getStudentId();
-			if (studentId != null) {
-				db.setStudentId(p.getStudentId());
-			} else {
-				db.setStudentId(0);
-			}
+			db.setStudentId(p.getStudentId());
 			db.setTitle(p.getTitle());
 			db.setAboutMe(db.getAboutMe());
 			db.setResumeURL(p.getResumeUrl());
@@ -58,47 +94,54 @@ public final class PersonConverters {
 			db.setPhone(p.getPhone());
 			db.setOccupation(p.getOccupation());
 			db.setCompanyName(p.getCompanyName());
-			java.util.Date birthDate = p.getBirthdate();
-			if (birthDate != null) {
-				db.setBirthdate(new java.sql.Date(p.getBirthdate().getTime()));
+			db.setBirthdate(asSqlDate(p.getBirthdate()));
+			String personType = p.getVariety();
+			if (personType != null && personTypes.containsKey(personType)) {
+				db.setType(personTypes.get(personType));
 			} else {
-				db.setBirthdate(new java.sql.Date(0));
+				db.setType(personTypes.get("student"));
 			}
-			try {
-				db.setType(Integer.parseInt(p.getVariety()));
-			} catch (NumberFormatException e) {
-				db.setType(0);
+			db.setLastLogon(asSqlDate(p.getLastLoginDate()));
+
+			// Add all social connections
+			for (SocialConnection social : p.getSocialConnections()) {
+				DbSocialService dbService = socialServices.get(social.getName());
+				if (dbService == null) {
+					continue;
+				}
+				DbSocialConnection connection = new DbSocialConnection();
+				connection.setPerson(db);
+				connection.setSocialService(dbService);
+				connection.setUrl(social.getUrl());
+				db.socialConnections().add(connection);
 			}
-			java.util.Date lastLoginDate = p.getLastLoginDate();
-			if (lastLoginDate != null) {
-				db.setLastLogon(new java.sql.Date(p.getLastLoginDate().getTime()));
-			} else {
-				db.setLastLogon(new java.sql.Date(0));
-			}
-			
+
+			// student only fields
+			db.setDegreeMajor(p.getDegreeMajor());
+			db.setDegreeMinor(p.getDegreeMinor());
+			// student/alumni shared field
+			db.setGraduationYear(p.getGraduationYear());
+			db.setDegreeType(p.getDegreeType());
+			// faculty fields
+			db.setFacultyDepartment(p.getFacultyDepartment());
+
 			return db;
 		}
 	}
-	
+
+	private static java.sql.Date asSqlDate(java.util.Date d) {
+		if (d == null) {
+			return null;
+		}
+		return new java.sql.Date(d.getTime());
+	}
+
 	public static Function<DbPerson, Person> fromDbToJson() {
 		return new FromDbToJson();
 	}
-	
-	public static Function<Person, DbPerson> fromJsonToDb() {
-		return fromJsonToDb(new Supplier<DbPerson>() {
-			@Override public DbPerson get() {
-				return new DbPerson(); 
-			} 
-		});
+
+	public static JsonToDbConverter fromJsonToDb() {
+		return new JsonToDbConverter();
 	}
-	
-	public static Function<Person, DbPerson> fromJsonToDb(Supplier<DbPerson> dbPersonSupplier) {
-		return new FromJsonToDb(dbPersonSupplier);
-	}
-	
-	public static Function<Person, DbPerson> fromJsonToDb(DbPerson dbPerson) {
-		return new FromJsonToDb(Suppliers.ofInstance(dbPerson));
-	}
-	
 	private PersonConverters() {}
 }

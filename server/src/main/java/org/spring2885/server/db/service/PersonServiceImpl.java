@@ -18,7 +18,7 @@ public class PersonServiceImpl implements PersonService {
 	}
 	
 	@Override
-	public DbPerson findById(int id) {
+	public DbPerson findById(long id) {
 		return repository.findOne(id);
 	}
 
@@ -33,7 +33,7 @@ public class PersonServiceImpl implements PersonService {
 	}
 
 	@Override
-	public boolean delete(int id) {
+	public boolean delete(long id) {
 		DbPerson p = findById(id);
 		if (p != null) {
 			repository.delete(id);

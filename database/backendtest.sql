@@ -1,21 +1,5 @@
 USE backend;
 
-/*Already in DB*/
-INSERT into person_type values (
-    1,
-    'student');
-
-INSERT into person_type values (
-    2,
-    'faculty');
-    
-INSERT into person_type values (
-    3,
-    'alumni');
-    
-Insert into job_type values (
-    1,
-    "job type");
     
 /*Person*/  
 /*Student*/
