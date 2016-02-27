@@ -160,6 +160,7 @@ CREATE TABLE token(
     email varchar(200),
     uuid varchar(200),
     uuidStatus varchar (20),
-    dateCreate DATE
+    dateCreate DATE,
+    PRIMARY KEY(uuid)
 );
 
