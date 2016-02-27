@@ -53,8 +53,7 @@ paths:
       # This is array of GET operation parameters:
       parameters:
         # An example parameter that is in query and is required
-        -
-          name: size
+        - name: size
           in: query
           description: The maxinum number of profiles to fetch.
           required: false
@@ -170,18 +169,158 @@ paths:
       responses:
         200:
           description: Make a new Job
+
+  /api/v1/jobs/{id}:
+    get:
+      tags: ["Jobs"]
+      summary: |
+        Fetches the `job` for id `id`.
+      description: |
+        Gets `Job` objects.
+        Optional query param of **size** determines
+        size of returned array
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the job to fetch
+          required: true
+          type: number
+          format: int64
+      responses:
+        200:
+          description: Successful response
+          schema:
+            $ref: '#/definitions/Job'
     put:
       tags: ["Jobs"]
+      summary: |
+          The job to update.
       parameters:
+        - name: id
+          in: path
+          description: The id of the Job you want to update
+          required: true
+          type: number
+          format: in64
         - name: job
           in: body
           description: The Job you want to update
+          required: true
           schema:
             $ref: '#/definitions/Job'
           required: true
       responses:
         200:
           description: Updates the Job
+    delete:
+      tags: ["Jobs"]
+      summary: |
+        The job to delete.
+      parameters:
+        - name: id
+          in: path
+          description: The job to delete.
+          required: true
+          type: integer
+          format: int64
+      responses:
+        200:
+          description: Updates the person.
+        500:
+          description: Error deleting the profile "ID".
+
+  /api/v1/news:
+    get:
+      description: |
+        Gets `News` objects.
+        Optional querry param of **size** determines
+        size of return array
+      parameters:
+        - name: size
+          in: query
+          description: Size of array
+          required: false
+          type: number
+          format: int32
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/News'
+    post:
+      tags: ["News"]
+      description: |
+      parameters:
+        - name : News
+          in: body
+          description: The News you want to post
+          schema:
+            $ref: '#/definitions/News'
+          required: true
+      responses:
+        200:
+          description: Makes a new News 
+  /news/{id}:
+    get:
+      tags: ["News"]
+      description: |
+        Retrives a News entry
+      parameters:
+        - name: id
+          in: path
+          description: a single News entry
+          required: true
+          type: number
+          format: int64
+      responses:
+        200:
+          description: Sucussful deletion 
+          schema:
+            $ref: '#/definitions/News'
+    delete:
+      tags: ["News"]
+      summary: |
+        The News to delete
+      parameters:
+        - name: id
+          in: path
+          description: The News to be deleted.
+          required: true
+          type: integer
+          format: int64
+      responses:
+        200:
+          description: Deletes News
+        500:
+          description: Error with deleting News by id. 
+    put:
+      tags: ["News"]
+      summary: |
+        The News to update
+      parameters:
+        - name: id
+          in: path
+          description: The id of the News to be update.
+          required: true
+          type: integer
+          format: int64
+        - name: news
+          in: body
+          description: The News item you want to update
+          required: true
+          schema:
+            $ref: '#/definitions/News'
+          required: true
+      responses:
+        200:
+          description: Deletes News
+        500:
+          description: Error with deleting News by id. 
+      
+
+
 definitions:
   SocialConnection:
     type: object
@@ -252,20 +391,43 @@ definitions:
       description:
         type: string
       job_type:
+        format: int64
+      title: 
         type: string
+      industry:
+        format: int64
+      location:
+        type: string
+      start_date:
+        type: string
+      end_date:
+        type: object
+      posted_by_person_id:
+        format: int64
+      hours:
+        format: int64
   News:
     type: object
     properties:
       id:
         type: integer
         format: int64
-      description:
+      news_title:
         type: string
-      news title:
+      news_description:
         type: string
+      news_posted:
+        type: object
+      news_expired:
+        type: object
+      news_person_id:
+        type: integer
+        format: int64
+      news_views:
+        type: integer
+        format: int64
 tags:
   - name: User
     description: Everything to do with User
   - name: Profiles
     description: Fetch, Delete, and update Profiles
-    

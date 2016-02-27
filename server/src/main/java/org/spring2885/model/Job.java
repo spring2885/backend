@@ -12,12 +12,15 @@ import java.util.Objects;
 
 
 @ApiModel(description = "")
-@javax.annotation.Generated(value = "class io.swagger.codegen.languages.SpringMVCServerCodegen", date = "2016-02-20T13:56:45.746-08:00")
+@javax.annotation.Generated(value = "class io.swagger.codegen.languages.SpringMVCServerCodegen", date = "2016-02-26T18:10:04.165-08:00")
 public class Job  {
   
   private Long id = null;
   private String description = null;
-  private String jobType = null;
+  private String title = null;
+  private String location = null;
+  private String startDate = null;
+  private Object endDate = null;
 
   
   /**
@@ -47,12 +50,48 @@ public class Job  {
   /**
    **/
   @ApiModelProperty(value = "")
-  @JsonProperty("job_type")
-  public String getJobType() {
-    return jobType;
+  @JsonProperty("title")
+  public String getTitle() {
+    return title;
   }
-  public void setJobType(String jobType) {
-    this.jobType = jobType;
+  public void setTitle(String title) {
+    this.title = title;
+  }
+
+  
+  /**
+   **/
+  @ApiModelProperty(value = "")
+  @JsonProperty("location")
+  public String getLocation() {
+    return location;
+  }
+  public void setLocation(String location) {
+    this.location = location;
+  }
+
+  
+  /**
+   **/
+  @ApiModelProperty(value = "")
+  @JsonProperty("start_date")
+  public String getStartDate() {
+    return startDate;
+  }
+  public void setStartDate(String startDate) {
+    this.startDate = startDate;
+  }
+
+  
+  /**
+   **/
+  @ApiModelProperty(value = "")
+  @JsonProperty("end_date")
+  public Object getEndDate() {
+    return endDate;
+  }
+  public void setEndDate(Object endDate) {
+    this.endDate = endDate;
   }
 
   
@@ -68,12 +107,15 @@ public class Job  {
     Job job = (Job) o;
     return Objects.equals(id, job.id) &&
         Objects.equals(description, job.description) &&
-        Objects.equals(jobType, job.jobType);
+        Objects.equals(title, job.title) &&
+        Objects.equals(location, job.location) &&
+        Objects.equals(startDate, job.startDate) &&
+        Objects.equals(endDate, job.endDate);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, description, jobType);
+    return Objects.hash(id, description, title, location, startDate, endDate);
   }
 
   @Override
@@ -83,7 +125,10 @@ public class Job  {
     
     sb.append("  id: ").append(id).append("\n");
     sb.append("  description: ").append(description).append("\n");
-    sb.append("  jobType: ").append(jobType).append("\n");
+    sb.append("  title: ").append(title).append("\n");
+    sb.append("  location: ").append(location).append("\n");
+    sb.append("  startDate: ").append(startDate).append("\n");
+    sb.append("  endDate: ").append(endDate).append("\n");
     sb.append("}\n");
     return sb.toString();
   }
