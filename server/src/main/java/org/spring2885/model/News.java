@@ -12,12 +12,16 @@ import java.util.Objects;
 
 
 @ApiModel(description = "")
-@javax.annotation.Generated(value = "class io.swagger.codegen.languages.SpringMVCServerCodegen", date = "2016-02-20T13:56:45.746-08:00")
+@javax.annotation.Generated(value = "class io.swagger.codegen.languages.SpringMVCServerCodegen", date = "2016-02-26T18:10:04.165-08:00")
 public class News  {
   
   private Long id = null;
-  private String description = null;
   private String newsTitle = null;
+  private String newsDescription = null;
+  private Object newsPosted = null;
+  private Object newsExpired = null;
+  private Long newsPersonId = null;
+  private Long newsViews = null;
 
   
   /**
@@ -35,24 +39,72 @@ public class News  {
   /**
    **/
   @ApiModelProperty(value = "")
-  @JsonProperty("description")
-  public String getDescription() {
-    return description;
+  @JsonProperty("news_title")
+  public String getNewsTitle() {
+    return newsTitle;
   }
-  public void setDescription(String description) {
-    this.description = description;
+  public void setNewsTitle(String newsTitle) {
+    this.newsTitle = newsTitle;
   }
 
   
   /**
    **/
   @ApiModelProperty(value = "")
-  @JsonProperty("news title")
-  public String getNewsTitle() {
-    return newsTitle;
+  @JsonProperty("news_description")
+  public String getNewsDescription() {
+    return newsDescription;
   }
-  public void setNewsTitle(String newsTitle) {
-    this.newsTitle = newsTitle;
+  public void setNewsDescription(String newsDescription) {
+    this.newsDescription = newsDescription;
+  }
+
+  
+  /**
+   **/
+  @ApiModelProperty(value = "")
+  @JsonProperty("news_posted")
+  public Object getNewsPosted() {
+    return newsPosted;
+  }
+  public void setNewsPosted(Object newsPosted) {
+    this.newsPosted = newsPosted;
+  }
+
+  
+  /**
+   **/
+  @ApiModelProperty(value = "")
+  @JsonProperty("news_expired")
+  public Object getNewsExpired() {
+    return newsExpired;
+  }
+  public void setNewsExpired(Object newsExpired) {
+    this.newsExpired = newsExpired;
+  }
+
+  
+  /**
+   **/
+  @ApiModelProperty(value = "")
+  @JsonProperty("news_person_id")
+  public Long getNewsPersonId() {
+    return newsPersonId;
+  }
+  public void setNewsPersonId(Long newsPersonId) {
+    this.newsPersonId = newsPersonId;
+  }
+
+  
+  /**
+   **/
+  @ApiModelProperty(value = "")
+  @JsonProperty("news_views")
+  public Long getNewsViews() {
+    return newsViews;
+  }
+  public void setNewsViews(Long newsViews) {
+    this.newsViews = newsViews;
   }
 
   
@@ -67,13 +119,17 @@ public class News  {
     }
     News news = (News) o;
     return Objects.equals(id, news.id) &&
-        Objects.equals(description, news.description) &&
-        Objects.equals(newsTitle, news.newsTitle);
+        Objects.equals(newsTitle, news.newsTitle) &&
+        Objects.equals(newsDescription, news.newsDescription) &&
+        Objects.equals(newsPosted, news.newsPosted) &&
+        Objects.equals(newsExpired, news.newsExpired) &&
+        Objects.equals(newsPersonId, news.newsPersonId) &&
+        Objects.equals(newsViews, news.newsViews);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, description, newsTitle);
+    return Objects.hash(id, newsTitle, newsDescription, newsPosted, newsExpired, newsPersonId, newsViews);
   }
 
   @Override
@@ -82,8 +138,12 @@ public class News  {
     sb.append("class News {\n");
     
     sb.append("  id: ").append(id).append("\n");
-    sb.append("  description: ").append(description).append("\n");
     sb.append("  newsTitle: ").append(newsTitle).append("\n");
+    sb.append("  newsDescription: ").append(newsDescription).append("\n");
+    sb.append("  newsPosted: ").append(newsPosted).append("\n");
+    sb.append("  newsExpired: ").append(newsExpired).append("\n");
+    sb.append("  newsPersonId: ").append(newsPersonId).append("\n");
+    sb.append("  newsViews: ").append(newsViews).append("\n");
     sb.append("}\n");
     return sb.toString();
   }

@@ -58,10 +58,41 @@
             "description" : "Make a new Job"
           }
         }
+      }
+    },
+    "/api/v1/jobs/{id}" : {
+      "get" : {
+        "tags" : [ "Jobs" ],
+        "summary" : "Fetches the `job` for id `id`.\n",
+        "description" : "Gets `Job` objects.\nOptional query param of **size** determines\nsize of returned array\n",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "The ID of the job to fetch",
+          "required" : true,
+          "type" : "number",
+          "format" : "int64"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful response",
+            "schema" : {
+              "$ref" : "#/definitions/Job"
+            }
+          }
+        }
       },
       "put" : {
         "tags" : [ "Jobs" ],
+        "summary" : "The job to update.\n",
         "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "The id of the Job you want to update",
+          "required" : true,
+          "type" : "number",
+          "format" : "in64"
+        }, {
           "in" : "body",
           "name" : "job",
           "description" : "The Job you want to update",
@@ -73,6 +104,68 @@
         "responses" : {
           "200" : {
             "description" : "Updates the Job"
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "Jobs" ],
+        "summary" : "The job to delete.\n",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "The job to delete.",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int64"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Updates the person."
+          },
+          "500" : {
+            "description" : "Error deleting the profile \"ID\"."
+          }
+        }
+      }
+    },
+    "/api/v1/news" : {
+      "get" : {
+        "description" : "Gets `News` objects.\nOptional querry param of **size** determines\nsize of return array\n",
+        "parameters" : [ {
+          "name" : "size",
+          "in" : "query",
+          "description" : "Size of array",
+          "required" : false,
+          "type" : "number",
+          "format" : "int32"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful response",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/News"
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "News" ],
+        "description" : "",
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "News",
+          "description" : "The News you want to post",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/News"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Makes a new News"
           }
         }
       }
@@ -167,6 +260,76 @@
           },
           "500" : {
             "description" : "Error deleting the profile \"ID\"."
+          }
+        }
+      }
+    },
+    "/news/{id}" : {
+      "get" : {
+        "tags" : [ "News" ],
+        "description" : "Retrives a News entry\n",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "a single News entry",
+          "required" : true,
+          "type" : "number",
+          "format" : "int64"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Sucussful deletion",
+            "schema" : {
+              "$ref" : "#/definitions/News"
+            }
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "News" ],
+        "summary" : "The News to update\n",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "The id of the News to be update.",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int64"
+        }, {
+          "in" : "body",
+          "name" : "news",
+          "description" : "The News item you want to update",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/News"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Deletes News"
+          },
+          "500" : {
+            "description" : "Error with deleting News by id."
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "News" ],
+        "summary" : "The News to delete\n",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "The News to be deleted.",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int64"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Deletes News"
+          },
+          "500" : {
+            "description" : "Error with deleting News by id."
           }
         }
       }
@@ -296,8 +459,18 @@
         "description" : {
           "type" : "string"
         },
-        "job_type" : {
+        "title" : {
           "type" : "string"
+        },
+        "location" : {
+          "type" : "string"
+        },
+        "start_date" : {
+          "type" : "string"
+        },
+        "end_date" : {
+          "type" : "object",
+          "properties" : { }
         }
       }
     },
@@ -308,11 +481,27 @@
           "type" : "integer",
           "format" : "int64"
         },
-        "description" : {
+        "news_title" : {
           "type" : "string"
         },
-        "news title" : {
+        "news_description" : {
           "type" : "string"
+        },
+        "news_posted" : {
+          "type" : "object",
+          "properties" : { }
+        },
+        "news_expired" : {
+          "type" : "object",
+          "properties" : { }
+        },
+        "news_person_id" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "news_views" : {
+          "type" : "integer",
+          "format" : "int64"
         }
       }
     }
