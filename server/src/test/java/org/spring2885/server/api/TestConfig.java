@@ -2,6 +2,8 @@ package org.spring2885.server.api;
 
 import static org.mockito.Mockito.mock;
 
+import org.spring2885.server.db.service.JobService;
+import org.spring2885.server.db.service.JobTypeService;
 import org.spring2885.server.db.service.PersonService;
 import org.spring2885.server.db.service.PersonTypeService;
 import org.spring2885.server.db.service.SocialServiceService;
@@ -37,4 +39,15 @@ public class TestConfig {
 	public PasswordEncoder passwordEncoder() {
 		return NoOpPasswordEncoder.getInstance();
 	}
+	
+	@Bean
+	public JobService jobServiceMock() {
+		return mock(JobService.class);
+	}
+	
+	@Bean
+	public JobTypeService jobTypeServiceMock() {
+		return mock(JobTypeService.class);
+	}
+	
 }
