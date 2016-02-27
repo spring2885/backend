@@ -4,11 +4,10 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>org.spring2885.server</groupId>
-	<artifactId>server</artifactId>
+	<artifactId>api</artifactId>
 	<version>1.0-SNAPSHOT</version>
-	<packaging>war</packaging>
 
-	<name>server</name>
+	<name>api</name>
 	<description>Spring 2885 Server</description>
 
 	<parent>
@@ -89,25 +88,7 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
-
-			<plugin>
-				<groupId>io.swagger</groupId>
-				<artifactId>swagger-codegen-maven-plugin</artifactId>
-				<executions>
-					<execution>
-						<goals>
-							<goal>generate</goal>
-						</goals>
-						<configuration>
-							<inputSpec>../swagger.yaml</inputSpec>
-							<language>swagger</language>
-							<output>${basedir}/src/main/webapp</output>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
 		</plugins>
-
 	</build>
 
 	<organization>

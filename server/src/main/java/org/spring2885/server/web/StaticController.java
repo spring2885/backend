@@ -1,6 +1,5 @@
 package org.spring2885.server.web;
 
-import java.security.Principal;
 import java.util.Date;
 import java.util.Map;
 

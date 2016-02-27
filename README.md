@@ -32,18 +32,11 @@ Follow along with how I imported the ```server``` (and only) project into the ``
 ![Import Project](./docs/import-projects.png)
 
 
-### Setting up Eclipse Web Server 
-
-You can use any web server that the WTP supports, however I'm using *Tomcat 8.0* since it's the latest Tomcat supported by Eclipse 4.5.1.
-
-Download tomcat from http://tomcat.apache.org and unzip it somewhere.  I put mine in the home directory, i.e. ````/Users/rob/````
-
-You will now need to add a J2EE server into Eclipse, and also make sure your backend project is installed on it.
-
-
 ### Compile, Run, Debug
 
-You should be able to Compile, Run and Debug on the Server now just like any other web application in Eclipse.
+You should be able to Compile, Run and Debug on the Server now just like any other Java Application in Eclipse.
+
+The Main Class is ```org.spring2885.server.ServerApplication```
 
 
 ## Command Line Instructions
@@ -69,7 +62,7 @@ At the end you should see a success message such as:
 
 ### Running 
 
-To run the Web Application, we use the spring-boot plugin in maven. Here's the command to run the application.  It uses port ````8080```` by default.  Access it through your browser using: ````http://localhost:8080/````.
+To run the Java Application, we use the spring-boot plugin in maven. Here's the command to run the application.  It uses port ````8888```` by default.  Access it through your browser using: ````http://localhost:8888/````.
 
 ````
 ./mvnw spring-boot:run
@@ -103,7 +96,7 @@ A successful test run should look similar to this:
 ````
 Results :
 
-Tests run: 48, Failures: 0, Errors: 0, Skipped: 0
+Tests run: 50, Failures: 0, Errors: 0, Skipped: 0
 
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD SUCCESS
