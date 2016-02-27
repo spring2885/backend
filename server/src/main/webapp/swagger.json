@@ -58,10 +58,41 @@
             "description" : "Make a new Job"
           }
         }
+      }
+    },
+    "/api/v1/jobs/{id}" : {
+      "get" : {
+        "tags" : [ "Jobs" ],
+        "summary" : "Fetches the `job` for id `id`.\n",
+        "description" : "Gets `Job` objects.\nOptional query param of **size** determines\nsize of returned array\n",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "The ID of the job to fetch",
+          "required" : true,
+          "type" : "number",
+          "format" : "int64"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful response",
+            "schema" : {
+              "$ref" : "#/definitions/Job"
+            }
+          }
+        }
       },
       "put" : {
         "tags" : [ "Jobs" ],
+        "summary" : "The job to update.\n",
         "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "The id of the Job you want to update",
+          "required" : true,
+          "type" : "number",
+          "format" : "in64"
+        }, {
           "in" : "body",
           "name" : "job",
           "description" : "The Job you want to update",
@@ -73,6 +104,26 @@
         "responses" : {
           "200" : {
             "description" : "Updates the Job"
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "Jobs" ],
+        "summary" : "The job to delete.\n",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "The job to delete.",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int64"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Updates the person."
+          },
+          "500" : {
+            "description" : "Error deleting the profile \"ID\"."
           }
         }
       }
@@ -296,8 +347,18 @@
         "description" : {
           "type" : "string"
         },
-        "job_type" : {
+        "title" : {
           "type" : "string"
+        },
+        "location" : {
+          "type" : "string"
+        },
+        "start_date" : {
+          "type" : "string"
+        },
+        "end_date" : {
+          "type" : "object",
+          "properties" : { }
         }
       }
     },
