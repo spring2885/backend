@@ -409,7 +409,6 @@ definitions:
   News:
     type: object
     properties:
-    properties:
       id:
         type: integer
         format: int64
