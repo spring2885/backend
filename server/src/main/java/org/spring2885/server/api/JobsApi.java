@@ -33,7 +33,7 @@ public class JobsApi {
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public ResponseEntity<Job> get(
 			@PathVariable("id") int id) throws NotFoundException {
-		DbJob o = jobService.findbyId(id);
+		DbJob o = jobService.findById(id);
 		if (o == null) {
 			// When adding test testJobsById_notFound, was getting a NullPointerException
 			// here, so needed to add this.
@@ -85,7 +85,7 @@ public class JobsApi {
 		if (id.intValue() != job.getId().intValue()) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
-		DbJob db = jobService.findbyId(id);
+		DbJob db = jobService.findById(id);
 		if (db == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
@@ -100,7 +100,7 @@ public class JobsApi {
 		if (!request.isUserInRole("ROLE_ADMIN")) {
 			// Only admin's can change other profiles.
 			String name = request.getUserPrincipal().getName();
-			List<DbJob> possibles = jobService.findbyTitle(name);
+			List<DbJob> possibles = jobService.findByTitle(name);
 			if (possibles.size() != 1) {
 				// I can't find myself... need more zen.
 				return false;
