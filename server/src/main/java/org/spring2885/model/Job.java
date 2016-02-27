@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import java.util.Date;
 
 import io.swagger.annotations.*;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -13,20 +12,15 @@ import java.util.Objects;
 
 
 @ApiModel(description = "")
-@javax.annotation.Generated(value = "class io.swagger.codegen.languages.SpringMVCServerCodegen", date = "2016-02-20T13:56:45.746-08:00")
+@javax.annotation.Generated(value = "class io.swagger.codegen.languages.SpringMVCServerCodegen", date = "2016-02-26T17:49:44.616-08:00")
 public class Job  {
   
   private Long id = null;
-  private String title = null;
-  private Integer industry = null;
-  private String location = null;
   private String description = null;
-  private Integer jobType = null;
-  private Date startDate = null;
-  private Date endDate = null;
-  private Integer postedbypersonId = null;
-  private Integer hours = null;
-  
+  private String title = null;
+  private String location = null;
+  private String startDate = null;
+  private Object endDate = null;
 
   
   /**
@@ -38,6 +32,18 @@ public class Job  {
   }
   public void setId(Long id) {
     this.id = id;
+  }
+
+  
+  /**
+   **/
+  @ApiModelProperty(value = "")
+  @JsonProperty("description")
+  public String getDescription() {
+    return description;
+  }
+  public void setDescription(String description) {
+    this.description = description;
   }
 
   
@@ -56,21 +62,9 @@ public class Job  {
   /**
    **/
   @ApiModelProperty(value = "")
-  @JsonProperty("industry")
-  public Integer getIndustry() {
-    return industry;
-  }
-  public void setIndustry(Integer industry) {
-    this.industry = industry;
-  }
-
-  
-  /**
-   **/
-  @ApiModelProperty(value = "")
   @JsonProperty("location")
   public String getLocation() {
-    return title;
+    return location;
   }
   public void setLocation(String location) {
     this.location = location;
@@ -80,35 +74,11 @@ public class Job  {
   /**
    **/
   @ApiModelProperty(value = "")
-  @JsonProperty("description")
-  public String description() {
-    return description;
-  }
-  public void setDescription(String description) {
-    this.description = description;
-  }
-
-  
-  /**
-   **/
-  @ApiModelProperty(value = "")
-  @JsonProperty("jobType")
-  public Integer getjobType() {
-    return jobType;
-  }
-  public void setjobType(Integer jobType) {
-    this.jobType = jobType;
-  }
-
-  
-  /**
-   **/
-  @ApiModelProperty(value = "")
-  @JsonProperty("startDate")
-  public Date getstartDate() {
+  @JsonProperty("start_date")
+  public String getStartDate() {
     return startDate;
   }
-  public void setstartDate(Date startDate) {
+  public void setStartDate(String startDate) {
     this.startDate = startDate;
   }
 
@@ -116,40 +86,14 @@ public class Job  {
   /**
    **/
   @ApiModelProperty(value = "")
-  @JsonProperty("endDate")
-  public Date getendDate() {
+  @JsonProperty("end_date")
+  public Object getEndDate() {
     return endDate;
   }
-  public void setendDate(Date endDate) {
+  public void setEndDate(Object endDate) {
     this.endDate = endDate;
   }
 
-  
-  /**
-   **/
-  @ApiModelProperty(value = "")
-  @JsonProperty("postedbypersonId")
-  public Integer getpostedbypersonId() {
-    return postedbypersonId;
-  }
-  public void setpostedbypersonId(Integer postedbypersonId) {
-    this.postedbypersonId = postedbypersonId;
-  }
-
-  
-  /**
-   **/
-  @ApiModelProperty(value = "")
-  @JsonProperty("hours")
-  public Integer getHours() {
-    return hours;
-  }
-  public void setHours(Integer hours) {
-    this.hours = hours;
-  }
-
-  
-  
   
 
   @Override
@@ -162,39 +106,29 @@ public class Job  {
     }
     Job job = (Job) o;
     return Objects.equals(id, job.id) &&
-        Objects.equals(title, job.title) &&
-        Objects.equals(industry, job.industry) &&
-        Objects.equals(location, job.location) &&
         Objects.equals(description, job.description) &&
-        Objects.equals(jobType, job.jobType) &&
+        Objects.equals(title, job.title) &&
+        Objects.equals(location, job.location) &&
         Objects.equals(startDate, job.startDate) &&
-        Objects.equals(endDate, job.endDate) &&
-        Objects.equals(postedbypersonId, job.postedbypersonId) &&
-        Objects.equals(hours, job.hours);
-        
+        Objects.equals(endDate, job.endDate);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, title, industry, location, description, jobType, startDate, endDate, postedbypersonId,hours);
+    return Objects.hash(id, description, title, location, startDate, endDate);
   }
 
   @Override
   public String toString()  {
     StringBuilder sb = new StringBuilder();
-    sb.append("class Person {\n");
+    sb.append("class Job {\n");
     
     sb.append("  id: ").append(id).append("\n");
-    sb.append("  title: ").append(title).append("\n");
-    sb.append("  industry: ").append(industry).append("\n");
-    sb.append("  location: ").append(location).append("\n");
     sb.append("  description: ").append(description).append("\n");
-    sb.append("  jobType: ").append(jobType).append("\n");
+    sb.append("  title: ").append(title).append("\n");
+    sb.append("  location: ").append(location).append("\n");
     sb.append("  startDate: ").append(startDate).append("\n");
     sb.append("  endDate: ").append(endDate).append("\n");
-    sb.append("  postedbypersonId: ").append(postedbypersonId).append("\n");
-    sb.append("  hours: ").append(hours).append("\n");
-    
     sb.append("}\n");
     return sb.toString();
   }
