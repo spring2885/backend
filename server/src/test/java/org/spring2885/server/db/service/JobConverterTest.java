@@ -17,15 +17,13 @@ public class JobConverterTest {
 	public void testFromDbToJson(){
 		Function<DbJob, Job> dtoj = JobConverters.fromDbToJson();
 		DbJob dbp = new DbJob();
-		Job p = new Job();
-		p = dtoj.apply(dbp);
+		Job p = dtoj.apply(dbp);
 	}
 	
 	@Test
 	public void testFromJsonToDb(){
 		Function<Job, DbJob> jtod = JobConverters.fromJsonToDb();
 		Job p = new Job();
-		DbJob dbp = new DbJob();
-		dbp = jtod.apply(p);
+		DbJob dbp = jtod.apply(p);
 	}
 }

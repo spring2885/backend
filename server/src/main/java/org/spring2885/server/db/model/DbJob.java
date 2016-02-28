@@ -2,14 +2,11 @@ package org.spring2885.server.db.model;
 
 import java.sql.Date;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
-import com.mysql.fabric.xmlrpc.base.Data;
 
 @Entity
 @Table(name="job")
@@ -27,19 +24,13 @@ public class DbJob {
 	
 	private String description;
 	
-	
 	private Integer jobType;
-	
-	
 
 	private Date startDate;
 	
-	
 	private Date endDate;
 	
-	
 	private Integer postedbyPersonId;
-	
 	
 	private Integer hours;
 	
@@ -56,10 +47,10 @@ public class DbJob {
 	public void setTitle(String title) {
 		this.title = title;
 	}
-	public int getIndustry() {
+	public Integer getIndustry() {
 		return industry;
 	}
-	public void setIndustry(int industry) {
+	public void setIndustry(Integer industry) {
 		this.industry = industry;
 	}
 	public String getLocation() {
@@ -106,9 +97,6 @@ public class DbJob {
 	public void setHours(int hours) {
 		this.hours = hours;
 	}
-	
-	
-	
 	
 	@Override
 	public int hashCode() {
