@@ -28,12 +28,7 @@ import org.spring2885.server.db.model.DbPersonType;
 import org.spring2885.server.db.service.PersonService;
 import org.spring2885.server.db.service.PersonTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers;
 import org.springframework.test.context.ContextConfiguration;
@@ -41,7 +36,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableList;
@@ -270,32 +264,6 @@ public class PersonsApiTest {
     			.andExpect(status().isBadRequest());
     	
     	verify(personService, never()).save(Mockito.any(DbPerson.class));
-    }
-    
-    @Configuration
-    @EnableWebSecurity
-    @EnableWebMvc
-    static class TestSecurityConfig extends WebSecurityConfigurerAdapter {
-
-        @Override
-        protected void configure(HttpSecurity http) throws Exception {
-            http
-                .authorizeRequests()
-                    .anyRequest().authenticated()
-                    .and()
-                .formLogin()
-                    .usernameParameter("user")
-                    .passwordParameter("pass")
-                    .loginPage("/login")
-                 .and()
-                 	.csrf().disable();
-        }
-
-        @Autowired
-        public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-            auth.inMemoryAuthentication()
-            	.withUser("user").password("password").roles("USER");
-        }
     }
     
     public static byte[] convertObjectToJsonBytes(Object object) throws IOException  {
