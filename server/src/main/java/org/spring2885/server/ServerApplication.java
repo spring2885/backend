@@ -18,10 +18,16 @@ import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
+import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
+import org.springframework.security.web.savedrequest.RequestCache;
+import org.springframework.security.web.savedrequest.SavedRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
@@ -33,7 +39,7 @@ public class ServerApplication extends WebMvcConfigurerAdapter {
 
 	@Override
 	public void addViewControllers(ViewControllerRegistry registry) {
-		registry.addViewController("/login").setViewName("login");
+		registry.addViewController("/formlogin").setViewName("login");
 	}
 
 	public static void main(String[] args) throws Exception {
@@ -53,13 +59,13 @@ public class ServerApplication extends WebMvcConfigurerAdapter {
 					.antMatchers("/api/**").fullyAuthenticated()
 					.antMatchers("/user").fullyAuthenticated()
 					.antMatchers("/").permitAll()
-				// Enable form login at /login.  POST with "username" and "password"
+				// Enable form login at /formlogin.  POST with "username" and "password"
 				// as the form parameters needed.
 				.and()
 				.exceptionHandling().authenticationEntryPoint(new RestAuthenticationEntryPoint())
 				.and()
 				.formLogin()
-				.loginPage("/login").permitAll()
+				.loginPage("/formlogin").successHandler(new NoRedirectAuthenticationSuccessHandler()).permitAll()
 				.and()
 				.logout().logoutUrl("/logout").deleteCookies().invalidateHttpSession(true).logoutSuccessUrl("/")
 				.and()
@@ -85,6 +91,13 @@ public class ServerApplication extends WebMvcConfigurerAdapter {
 		}
 	}
 	
+    public static class NoRedirectAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
+        @Override
+        public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
+                Authentication authentication) throws ServletException, IOException {
+        }
+    }
+
 	static class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
 		@Override

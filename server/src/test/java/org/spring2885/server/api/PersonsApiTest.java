@@ -14,7 +14,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
-import java.io.IOException;
 import java.util.Collections;
 
 import org.hamcrest.Matchers;
@@ -114,7 +113,6 @@ public class PersonsApiTest {
     			.andExpect(jsonPath("$[1].email", Matchers.is("me2@example.com")));
     }
 
-
     /**
      * Tests a {@code /profiles/:id} where {@code id} is found.
      */
@@ -197,7 +195,7 @@ public class PersonsApiTest {
     	
     	mockMvc.perform(put("/api/v1/profiles/4")
     			.contentType(MediaType.APPLICATION_JSON)
-    			.content(convertObjectToJsonBytes(me))
+    			.content(new ObjectMapper().writeValueAsBytes(me))
     			.accept(MediaType.APPLICATION_JSON))
     			.andExpect(status().isOk());
     	
@@ -214,7 +212,7 @@ public class PersonsApiTest {
     	
     	mockMvc.perform(put("/api/v1/profiles/4")
     			.contentType(MediaType.APPLICATION_JSON)
-    			.content(convertObjectToJsonBytes(me))
+    			.content(new ObjectMapper().writeValueAsBytes(me))
     			.accept(MediaType.APPLICATION_JSON))
     			.andExpect(status().isForbidden());
     	
@@ -229,7 +227,7 @@ public class PersonsApiTest {
     	
     	mockMvc.perform(put("/api/v1/profiles/21")
     			.contentType(MediaType.APPLICATION_JSON)
-    			.content(convertObjectToJsonBytes(otherPerson))
+    			.content(new ObjectMapper().writeValueAsBytes(otherPerson))
     			.accept(MediaType.APPLICATION_JSON))
     			.andExpect(status().isForbidden());
     	
@@ -244,7 +242,7 @@ public class PersonsApiTest {
     	
     	mockMvc.perform(put("/api/v1/profiles/21")
     			.contentType(MediaType.APPLICATION_JSON)
-    			.content(convertObjectToJsonBytes(otherPerson))
+    			.content(new ObjectMapper().writeValueAsBytes(otherPerson))
     			.accept(MediaType.APPLICATION_JSON))
     			.andExpect(status().isOk());
     	
@@ -259,15 +257,10 @@ public class PersonsApiTest {
     	
     	mockMvc.perform(put("/api/v1/profiles/21")
     			.contentType(MediaType.APPLICATION_JSON)
-    			.content(convertObjectToJsonBytes(createPerson(22, "me@", "")))
+    			.content(new ObjectMapper().writeValueAsBytes(createPerson(22, "me@", "")))
     			.accept(MediaType.APPLICATION_JSON))
     			.andExpect(status().isBadRequest());
     	
     	verify(personService, never()).save(Mockito.any(DbPerson.class));
-    }
-    
-    public static byte[] convertObjectToJsonBytes(Object object) throws IOException  {
-        ObjectMapper mapper = new ObjectMapper();
-        return mapper.writeValueAsBytes(object);
     }    
 }
