@@ -4,6 +4,7 @@ import static org.mockito.Mockito.mock;
 
 import org.spring2885.server.db.service.JobService;
 import org.spring2885.server.db.service.JobTypeService;
+import org.spring2885.server.db.service.LanguageService;
 import org.spring2885.server.db.service.PersonService;
 import org.spring2885.server.db.service.PersonTypeService;
 import org.spring2885.server.db.service.SocialServiceService;
@@ -38,6 +39,11 @@ public class TestConfig {
 	@Bean
 	public SocialServiceService socialServiceMock() {
 		return mock(SocialServiceService.class);
+	}
+	
+	@Bean
+	public LanguageService languageServiceMock() {
+	    return mock(LanguageService.class);
 	}
 
 	@Bean
