@@ -35,6 +35,9 @@ public class DbPerson {
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="type")
 	private DbPersonType type;
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="lang")
+    private DbLanguage lang;
 	private Date lastLogon;
 	private String password;
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy="person")
@@ -126,6 +129,12 @@ public class DbPerson {
 	}
 	public Date getLastLogon() {
 		return lastLogon;
+	}
+	public DbLanguage getLanguage() {
+	    return lang;
+	}
+	public void setLanguage(DbLanguage lang) {
+	    this.lang = lang;
 	}
 	public void setLastLogon(Date lastLogon) {
 		this.lastLogon = lastLogon;

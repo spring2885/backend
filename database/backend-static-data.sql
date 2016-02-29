@@ -31,3 +31,5 @@ INSERT INTO Social_Service VALUES(
 INSERT INTO Social_Service VALUES(
 	'Facebook', 'http://www.facebook.com/');
 
+INSERT INTO Language VALUES('en', 'English');
+
