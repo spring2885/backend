@@ -69,7 +69,7 @@ paths:
           schema:
             type: array
             items:
-              $ref: '#/definitions/person'
+              $ref: '#/definitions/Person'
 
   /api/v1/profiles/{id}:
     get:
@@ -91,7 +91,7 @@ paths:
           # A schema describing your response object.
           # Use JSON Schema format
           schema:
-            $ref: '#/definitions/person'
+            $ref: '#/definitions/Person'
     put:
       tags: ["Profiles"]
       summary: |
@@ -107,7 +107,7 @@ paths:
           in: body
           description: The profile to update.
           schema:
-            $ref: '#/definitions/person'
+            $ref: '#/definitions/Person'
           required: true
       responses:
         200:
@@ -330,7 +330,7 @@ definitions:
       url:
         type: string
 
-  person:
+  Person:
     type: object
     properties:
       id: 
@@ -369,6 +369,8 @@ definitions:
         type: array
         items:
           $ref: '#/definitions/SocialConnection'
+      lang:
+        type: string
       # student fields
       degree_major:
         type: string
