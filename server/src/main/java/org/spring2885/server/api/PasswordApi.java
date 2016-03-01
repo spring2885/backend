@@ -34,33 +34,24 @@ public class PasswordApi {
 	
 	@Autowired TokenService tokenService;
 	@Autowired private PasswordEncoder passwordEncoder;
-	UUID uuidToken = null;
+	//UUID uuidToken = null;
 	
 	@RequestMapping(value = "/forgot",method = RequestMethod.POST)
-	public /*ResponseEntity<Void>*/ UUID personsResetToken(
+	public UUID personsResetToken(
 			@RequestParam("email") String email
 			) throws NotFoundException {
-		//String token = "";
-		//UUID uuidToken = null;
+		
 		DbToken token = new DbToken();
+		UUID uuidToken = null;
 		if (tokenService.existsByEmail(email)) {
-			/*
-			 * uuidToken is assigned a random uuid.
-			 * the if statement checks to see if it exists in the database? (how to do this)
-			 * if it exists, it creates a new one again (though this should never have to occur)
-			 * how to save UUID in database.
-			 */
 			uuidToken = UUID.randomUUID();
-			if(uuidToken.equals(token.getUuid())){
+			if (uuidToken.equals(token.getUuid())){
 				uuidToken = UUID.randomUUID();
 				token.setUuidStatus("new");
 			}
-			
-			//return token;
 		} else {
 			throw new RuntimeException("email not found: " + email);
 		}
-		//return token;
 		return uuidToken;
 	}
 	
@@ -69,15 +60,12 @@ public class PasswordApi {
 			@RequestParam("email") String email,
 			@RequestParam("token") String token,
 			@RequestParam("newPassword") String nPassword) throws Exception {
-		
-		if(tokenService.existsByEmail(email)){
-			//need to verify that the token is correct
+		UUID uuidToken = null;
+		if (tokenService.existsByEmail(email)){
 			DbPerson person = new DbPerson();
 			DbToken token2 = new DbToken();
-			
-			//need to figure out how to access database to get the UUID
-			
-			if(uuidToken != null && token.equals(uuidToken)){
+						
+			if (uuidToken != null && token.equals(uuidToken)){
 				String hashedPassword = passwordEncoder.encode(nPassword);
 				person.setPassword(hashedPassword);
 				token2.setUuidStatus("used");

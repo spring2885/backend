@@ -156,7 +156,7 @@ rolename VARCHAR(60)
 
 DROP TABLE IF EXISTS token;
 CREATE TABLE token(
-    id int not null,    
+    id int NOT NULL,    
     email varchar(200),
     uuid varchar(200),
     uuidStatus varchar (20),
