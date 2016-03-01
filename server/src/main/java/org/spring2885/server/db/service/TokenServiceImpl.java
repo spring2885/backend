@@ -35,7 +35,7 @@ public class TokenServiceImpl implements TokenService {
 	@Override
 	public boolean delete(long id){
 		DbToken token = findById(id);
-		if(token != null){
+		if (token != null){
 			repository.delete(id);
 			return true;
 		}
@@ -45,9 +45,8 @@ public class TokenServiceImpl implements TokenService {
 	public boolean deleteByEmail(String email){
 		List<DbToken> token = findByEmail(email);
 		for(DbToken t : token){
-			if(t.getEmail() != null){
+			if (t.getEmail() != null){
 				repository.delete(token);
-				return true;
 			}
 		}
 		return false;

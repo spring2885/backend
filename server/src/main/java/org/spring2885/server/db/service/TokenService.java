@@ -36,7 +36,7 @@ public interface TokenService {
 	DbToken save(DbToken token);
 	
 	/**
-	 * delete tokens identified with matching email
+	 * Deletes all tokens identified by {@code email}.
 	 */
 	boolean deleteByEmail(String email);
 }
