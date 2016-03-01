@@ -39,6 +39,54 @@ paths:
         500:
           description: An error creating the user.
 
+  /auth/forgot:
+    post:
+      tags: ["Reset"]
+      description: |
+        sends a request for a new password
+      parameters:
+        - name: email
+          in: formData
+          description: the email the user wants a new password for.
+          required: true
+          type: string
+          format: email
+      responses:
+        200:
+          description: request for new password sent.
+          schema:
+            $ref: '#/definitions/Reset'
+        500:
+          description: error requesting for a password
+  /auth/reset:
+    post:
+      tags: ["Reset"]
+      description: |
+        setting new password for users email
+      parameters:
+        - name: email
+          in: formData
+          description: the email the user wants a new password for.
+          required: true
+          type: string
+        - name: token
+          in: formData
+          description: the unique password token generated for the user.
+          required: true
+          type: string
+        - name: newPassword
+          in: formData
+          description: the new password the user wnats to set.
+          required: true
+          type: string
+      responses:
+        200:
+          description: new password set.
+          schema:
+            $ref: '#/definitions/Reset'
+        500:
+          description: error setting new password
+          
   # This is the /profiles endpoint
   /api/v1/profiles:
     # This is a HTTP operation
@@ -426,8 +474,19 @@ definitions:
       news_views:
         type: integer
         format: int64
+  Reset:
+    type: object
+    properties:
+      email:
+        type: string
+      token:
+        type: string
+      new_password:
+        type: string
 tags:
   - name: User
     description: Everything to do with User
   - name: Profiles
     description: Fetch, Delete, and update Profiles
+  - name: Reset
+    description: Everything used for resetting password
