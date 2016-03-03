@@ -41,46 +41,45 @@ public class TokenServiceTest {
 	@Test
 	public void testFindAll(){
 		DbToken t = new DbToken();
-    	when(repository.findAll()).thenReturn(Collections.singleton(t));
+		when(repository.findAll()).thenReturn(Collections.singleton(t));
 
-    	List<DbToken> tokens = Lists.newArrayList(service.findAll());
-    	assertEquals(1, tokens.size());
-    	assertSame(t, tokens.get(0));
+		List<DbToken> tokens = Lists.newArrayList(service.findAll());
+		assertEquals(1, tokens.size());
+		assertSame(t, tokens.get(0));
 	}
 	
 	@Test
-    public void testFindAll_none() {
-    	when(repository.findAll()).thenReturn(Collections.emptyList());
-
-    	List<DbToken> tokens = Lists.newArrayList(service.findAll());
-    	assertEquals(0, tokens.size());
-    }
+	public void testFindAll_none() {
+		when(repository.findAll()).thenReturn(Collections.emptyList());
+		List<DbToken> tokens = Lists.newArrayList(service.findAll());
+		assertEquals(0, tokens.size());
+	}
 	
 	@Test
-    public void testFindByEmail() {
-    	DbToken t = new DbToken();
-    	t.setEmail("me@");
-    	when(repository.findByEmail("me@")).thenReturn(Collections.singletonList(t));
+	public void testFindByEmail() {
+		DbToken t = new DbToken();
+		t.setEmail("me@");
+		when(repository.findByEmail("me@")).thenReturn(Collections.singletonList(t));
     	
-    	List<DbToken> tokens = Lists.newArrayList(service.findByEmail("me@"));
-    	assertEquals(1, tokens.size());
-    	assertSame(t, tokens.get(0));
-    }
+		List<DbToken> tokens = Lists.newArrayList(service.findByEmail("me@"));
+		assertEquals(1, tokens.size());
+		assertSame(t, tokens.get(0));
+	}
 	
 	@Test
-    public void testFindByEmail_None() {
-    	List<DbToken> tokens = Lists.newArrayList(service.findByEmail("badboy@"));
-    	assertEquals(0, tokens.size());
-    }
+	public void testFindByEmail_None() {
+		List<DbToken> tokens = Lists.newArrayList(service.findByEmail("badboy@"));
+		assertEquals(0, tokens.size());
+	}
 	
 	@Test
     public void testFindById() {
-    	DbToken expected = new DbToken();
-    	expected.setEmail("me@");
-    	when(repository.findOne(Long.valueOf(1234))).thenReturn(expected);
-    	
-    	DbToken actual = service.findById(1234);
-    	assertSame(expected, actual);
+		DbToken expected = new DbToken();
+		expected.setEmail("me@");
+		when(repository.findOne(Long.valueOf(1234))).thenReturn(expected);
+		
+		DbToken actual = service.findById(1234);
+		assertSame(expected, actual);
     }
 	
 	@Test
@@ -90,48 +89,48 @@ public class TokenServiceTest {
     }
 	
 	@Test
-    public void testExistsByEmail() {
-    	DbToken t = new DbToken();
-    	t.setEmail("me@");
-    	when(repository.findByEmail("me@")).thenReturn(Collections.singletonList(t));
-
-    	assertTrue(service.existsByEmail("me@"));
-    }
+	public void testExistsByEmail() {
+		DbToken t = new DbToken();
+		t.setEmail("me@");
+		
+		when(repository.findByEmail("me@")).thenReturn(Collections.singletonList(t));
+		assertTrue(service.existsByEmail("me@"));
+	}
 	
 	@Test
-    public void testExistsByEmail_doesNotExist() {
-    	assertFalse(service.existsByEmail("me@"));
-    }
+	public void testExistsByEmail_doesNotExist() {
+		assertFalse(service.existsByEmail("me@"));
+	}
 	
 	@Test
-    public void testDelete() {
-    	DbToken t = new DbToken();
-    	when(repository.findOne(Long.valueOf(21))).thenReturn(t);
+	public void testDelete() {
+		DbToken t = new DbToken();
+		when(repository.findOne(Long.valueOf(21))).thenReturn(t);
     	
-    	assertTrue(service.delete(21));
-    	verify(repository).delete(Long.valueOf(21));
+		assertTrue(service.delete(21));
+		verify(repository).delete(Long.valueOf(21));
+	}
+	
+	@Test
+	public void testDelete_notFound() {
+		DbToken t = new DbToken();
+		when(repository.findOne(Long.valueOf(22))).thenReturn(t);
+    	
+		assertFalse(service.delete(21));
+		// Since a call to findOne(21) will return null by default, delete should
+		// never be called. Let's verify that.
+		verify(repository, never()).delete(Long.valueOf(21));
     }
 	
 	@Test
-    public void testDelete_notFound() {
-    	DbToken t = new DbToken();
-    	when(repository.findOne(Long.valueOf(22))).thenReturn(t);
+	public void testSave() {
+		DbToken t = new DbToken();
+		DbToken expected = new DbToken();
+		when(repository.save(same(t))).thenReturn(expected);
     	
-    	assertFalse(service.delete(21));
-    	// Since a call to findOne(21) will return null by default, delete should
-    	// never be called. Let's verify that.
-    	verify(repository, never()).delete(Long.valueOf(21));
-    }
-	
-	@Test
-    public void testSave() {
-    	DbToken t = new DbToken();
-    	DbToken expected = new DbToken();
-    	when(repository.save(same(t))).thenReturn(expected);
-    	
-    	DbToken actual = service.save(t);
-    	assertSame(expected, actual);
-    }
+		DbToken actual = service.save(t);
+		assertSame(expected, actual);
+	}
 	
 	/**
 	 * test deleteByEmail(String email);
@@ -140,7 +139,7 @@ public class TokenServiceTest {
 	public void testDeleteByEmail(){
 		DbToken t = new DbToken();
 		when(repository.deleteByEmail(t.getEmail())).thenReturn((List<DbToken>) t);
-	
+		
 		//assertTrue(service.deleteByEmail("matt@spring2885.org"));
 		verify(repository).deleteByEmail("matt@spring2885.org");
 	} 

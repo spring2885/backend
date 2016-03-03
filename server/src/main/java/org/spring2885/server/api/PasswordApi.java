@@ -3,11 +3,13 @@ package org.spring2885.server.api;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import java.security.SecureRandom;
+import java.util.List;
 import java.util.UUID;
 
 import org.spring2885.server.api.exceptions.NotFoundException;
 import org.spring2885.server.db.model.DbPerson;
 import org.spring2885.server.db.model.DbToken;
+import org.spring2885.server.db.service.PersonService;
 import org.spring2885.server.db.service.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,14 +29,10 @@ import com.google.common.collect.Iterables;
 @RestController
 @RequestMapping(value = "/auth", produces = { APPLICATION_JSON_VALUE })
 public class PasswordApi {
-
-	/*
-	 * CHANGE TO TOKENSERVICE
-	 */
 	
 	@Autowired TokenService tokenService;
+	@Autowired PersonService personService;
 	@Autowired private PasswordEncoder passwordEncoder;
-	//UUID uuidToken = null;
 	
 	@RequestMapping(value = "/forgot",method = RequestMethod.POST)
 	public UUID personsResetToken(
@@ -62,14 +60,28 @@ public class PasswordApi {
 			@RequestParam("newPassword") String nPassword) throws Exception {
 		UUID uuidToken = null;
 		if (tokenService.existsByEmail(email)){
-			DbPerson person = new DbPerson();
-			DbToken token2 = new DbToken();
+			List<DbPerson> person = personService.findByEmail(email);
+			List<DbToken> tokenD = tokenService.findByEmail(email);
+			
+			for(DbToken t : tokenD){
+				for(DbPerson p : person){
+					if(t.getEmail().equals(p.getEmail())){
+						if(token.equals(t.getUuid())){
+							String hashedpassword = passwordEncoder.encode(nPassword);
+							p.setPassword(hashedpassword);
+							personService.save(p);
+							t.setUuidStatus("used");
+							tokenService.save(t);
+						}
+					}
+				}
+			}
 						
-			if (uuidToken != null && token.equals(uuidToken)){
-				String hashedPassword = passwordEncoder.encode(nPassword);
-				person.setPassword(hashedPassword);
-				token2.setUuidStatus("used");
-			}			
+			/*if (uuidToken != null && token.equals(uuidToken)){
+				//String hashedPassword = passwordEncoder.encode(nPassword);
+				//person.setPassword(hashedPassword);
+				//token2.setUuidStatus("used");
+			}*/			
 		}
 		
 	}
