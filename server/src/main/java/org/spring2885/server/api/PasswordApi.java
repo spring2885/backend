@@ -39,17 +39,22 @@ public class PasswordApi {
 			@RequestParam("email") String email
 			) throws NotFoundException {
 		
-		DbToken token = new DbToken();
+		//List<DbToken> tokens = tokenService.findByEmail(email);
+		List<DbPerson> persons = personService.findByEmail(email);
 		UUID uuidToken = null;
-		if (tokenService.existsByEmail(email)) {
-			uuidToken = UUID.randomUUID();
-			if (uuidToken.equals(token.getUuid())){
+		DbToken tokenData = null;
+		for (DbPerson p : persons){
+			if (p.getEmail() != null && p.getEmail().equals(email)){
 				uuidToken = UUID.randomUUID();
-				token.setUuidStatus("new");
+				tokenData = new DbToken();
+				tokenData.setEmail(email);
+				tokenData.setUuid(uuidToken.toString());
+				tokenData.setUuidStatus("NEW");
+				tokenService.save(tokenData);
+			} else {
+				throw new RuntimeException("email not found: " + email);
 			}
-		} else {
-			throw new RuntimeException("email not found: " + email);
-		}
+		} 
 		return uuidToken;
 	}
 	
@@ -60,10 +65,14 @@ public class PasswordApi {
 			@RequestParam("newPassword") String nPassword) throws Exception {
 		UUID uuidToken = null;
 		if (tokenService.existsByEmail(email)){
-			List<DbPerson> person = personService.findByEmail(email);
-			List<DbToken> tokenD = tokenService.findByEmail(email);
+			List<DbPerson> persons = personService.findByEmail(email);
+			List<DbToken> tokens = tokenService.findByEmail(email);
 			
-			for(DbToken t : tokenD){
+			if (!containsToken(tokens, token)) {
+				throw new RuntimeException("token not found: " + token);
+			} 
+			
+			/*for(DbToken t : tokenD){
 				for(DbPerson p : person){
 					if(t.getEmail().equals(p.getEmail())){
 						if(token.equals(t.getUuid())){
@@ -75,7 +84,7 @@ public class PasswordApi {
 						}
 					}
 				}
-			}
+			}*/
 						
 			/*if (uuidToken != null && token.equals(uuidToken)){
 				//String hashedPassword = passwordEncoder.encode(nPassword);
@@ -86,14 +95,13 @@ public class PasswordApi {
 		
 	}
 	
-	//used for random token
-	static final String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-	static SecureRandom rnd = new SecureRandom();
+	private boolean containsToken(Iterable<DbToken> tokens, String uuid) {
+		  for (DbToken t : tokens) {
+		    if (uuid.equals(t.getUuid())) { 
+		      return true;
+		    }
+		  }
+		  return false;
+		}
 
-	String randomString( int len ){
-	   StringBuilder sb = new StringBuilder( len );
-	   for( int i = 0; i < len; i++ ) 
-	      sb.append( AB.charAt( rnd.nextInt(AB.length()) ) );
-	   return sb.toString();
-	}
 }
