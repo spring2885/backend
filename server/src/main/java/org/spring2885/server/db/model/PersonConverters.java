@@ -67,7 +67,6 @@ public final class PersonConverters {
 			this.dbSupplier = Suppliers.ofInstance(db);
 			return this;
 		}
-
 		public JsonToDbConverter withSocialServices(Set<DbSocialService> socialServices) {
 			this.socialServices = socialServices.stream()
 					.collect(Collectors.toMap(DbSocialService::getName, (s) -> s));

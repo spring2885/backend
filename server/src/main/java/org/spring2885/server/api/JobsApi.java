@@ -25,7 +25,6 @@ public class JobsApi {
 		List<Job> jobs = new ArrayList<Job>();
 		Job job = new Job();
 		job.setId(1L);
-		job.setJobType("full_time");
 		job.setDescription("This is a really good job.");
 		jobs.add(job);
 		return new ResponseEntity<List<Job>>(jobs, HttpStatus.OK);
