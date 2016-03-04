@@ -137,8 +137,9 @@ public class TokenServiceTest {
 	 */
 	@Test
 	public void testDeleteByEmail(){
-		DbToken t = new DbToken();
-		when(repository.deleteByEmail(t.getEmail())).thenReturn((List<DbToken>) t);
+		List<DbToken> t = service.findByEmail("matt@spring2885.org");
+		//when(repository.deleteByEmail(t.getEmail())).thenReturn((List<DbToken>) t);
+		when(repository.deleteByEmail(((DbToken) t).getEmail())).thenReturn(t);
 		
 		//assertTrue(service.deleteByEmail("matt@spring2885.org"));
 		verify(repository).deleteByEmail("matt@spring2885.org");
