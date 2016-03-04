@@ -96,13 +96,13 @@ public class NewsApiTest {
     			.accept(MediaType.APPLICATION_JSON))
     			.andExpect(status().isOk())
     			.andExpect(content().contentType(MediaType.APPLICATION_JSON))
-    			.andExpect(jsonPath("$[0].title", Matchers.is("Title")))
-    			.andExpect(jsonPath("$[1].title", Matchers.is("Title2")));
+    			.andExpect(jsonPath("$[0].news_title", Matchers.is("Title")))
+    			.andExpect(jsonPath("$[1].news_title", Matchers.is("Title2")));
     }
 
 
     /**
-     * Tests a {@code /profiles/:id} where {@code id} is found.
+     * Tests a {@code /news/:id} where {@code id} is found.
      */
     @Test
     @WithMockUser
@@ -111,13 +111,12 @@ public class NewsApiTest {
     	DbNews p = new DbNews();
     	p.setNewsTitle("ThisTitle");
     	when(newsService.findById(21)).thenReturn(p);
-    	verifyNoMoreInteractions(newsService);
     	
     	mockMvc.perform(get("/api/v1/news/21")
     			.accept(MediaType.APPLICATION_JSON))
     			.andExpect(status().isOk())
     			.andExpect(content().contentType(MediaType.APPLICATION_JSON))
-    			.andExpect(jsonPath("$.title", Matchers.is("ThisTitle")));
+    			.andExpect(jsonPath("$.news_title", Matchers.is("ThisTitle")));
     	
     	// N.B: We don't have to verify anything here since we're asserting
     	// the results that were setup by PersonService.
@@ -131,7 +130,6 @@ public class NewsApiTest {
     public void testNewsById_notFound() throws Exception {
     	// Setup the expectations.
     	when(newsService.findById(21)).thenReturn(null);
-    	verifyNoMoreInteractions(newsService);
     	
     	mockMvc.perform(get("/api/v1/news/21")
     			.accept(MediaType.APPLICATION_JSON))

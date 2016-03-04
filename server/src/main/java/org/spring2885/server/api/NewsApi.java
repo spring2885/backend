@@ -31,7 +31,6 @@ public class NewsApi {
 	
 	@Autowired
 	private NewsService newsService;
-	@Autowired
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public ResponseEntity<News> get(
@@ -93,10 +92,10 @@ public class NewsApi {
 		if (db == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-		DbNews updatedDbPerson = NewsConverters.fromJsonToDb()
+		DbNews updatedDbNews = NewsConverters.fromJsonToDb()
 				.withDbNews(db)
 				.apply(news);
-		newsService.save(updatedDbPerson);
+		newsService.save(updatedDbNews);
 		
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
