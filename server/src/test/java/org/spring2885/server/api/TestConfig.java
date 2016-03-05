@@ -4,6 +4,7 @@ import static org.mockito.Mockito.mock;
 
 import org.spring2885.server.db.service.JobService;
 import org.spring2885.server.db.service.JobTypeService;
+import org.spring2885.server.db.service.NewsService;
 import org.spring2885.server.db.service.TokenService;
 import org.spring2885.server.db.service.person.LanguageService;
 import org.spring2885.server.db.service.person.PersonService;
@@ -67,10 +68,16 @@ public class TestConfig {
 	    return mock(TokenService.class);
 	}
 	
+    @Bean
+    public NewsService newsServiceMock()
+    {
+        return mock(NewsService.class);
+    }
+	
 	@Configuration
 	@EnableWebSecurity
 	@EnableWebMvc 
-	public static class TestSecurityConfig extends WebSecurityConfigurerAdapter {
+    public static class TestSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	    @Override
 	    protected void configure(HttpSecurity http) throws Exception {
