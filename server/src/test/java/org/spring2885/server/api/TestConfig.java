@@ -8,6 +8,7 @@ import org.spring2885.server.db.service.LanguageService;
 import org.spring2885.server.db.service.PersonService;
 import org.spring2885.server.db.service.PersonTypeService;
 import org.spring2885.server.db.service.SocialServiceService;
+import org.spring2885.server.db.service.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -59,6 +60,11 @@ public class TestConfig {
 	@Bean
 	public JobTypeService jobTypeServiceMock() {
 		return mock(JobTypeService.class);
+	}
+	
+	@Bean
+	public TokenService tokenStreamMock() {
+	    return mock(TokenService.class);
 	}
 	
     @Configuration
