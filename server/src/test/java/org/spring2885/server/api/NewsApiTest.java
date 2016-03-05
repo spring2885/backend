@@ -22,7 +22,6 @@ import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.spring2885.model.News;
 import org.spring2885.server.db.model.DbNews;
-import org.spring2885.server.db.model.PersonConverters;
 import org.spring2885.server.db.service.NewsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;

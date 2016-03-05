@@ -25,7 +25,6 @@ import org.spring2885.model.Person;
 import org.spring2885.server.db.model.DbLanguage;
 import org.spring2885.server.db.model.DbPerson;
 import org.spring2885.server.db.model.DbPersonType;
-import org.spring2885.server.db.model.PersonConverters;
 import org.spring2885.server.db.service.person.LanguageService;
 import org.spring2885.server.db.service.person.PersonService;
 import org.spring2885.server.db.service.person.PersonTypeService;

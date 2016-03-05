@@ -46,6 +46,7 @@ public final class NewsConverters {
 		public DbNews apply(News p) {
 			DbNews db = dbSupplier.get();
 			db.setId(p.getId());
+			db.setTitle(p.getNewsTitle());
 			db.setDescription(p.getNewsDescription());
 			db.setExpired(asSqlData(p.getNewsExpired()));
 			db.setPersonId(p.getNewsPersonId());

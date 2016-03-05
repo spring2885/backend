@@ -24,7 +24,6 @@ import org.mockito.Mockito;
 import org.spring2885.model.Job;
 import org.spring2885.server.db.model.DbJob;
 import org.spring2885.server.db.model.DbJobType;
-import org.spring2885.server.db.model.PersonConverters;
 import org.spring2885.server.db.service.JobService;
 import org.spring2885.server.db.service.JobTypeService;
 import org.springframework.beans.factory.annotation.Autowired;

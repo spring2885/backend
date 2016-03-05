@@ -3,7 +3,6 @@ package org.spring2885.server.api;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import java.util.List;
-import java.util.Set;
 
 import org.spring2885.model.News;
 import org.spring2885.server.api.exceptions.NotFoundException;
@@ -64,7 +63,8 @@ public class NewsApi {
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
-	public ResponseEntity<List<News>> list(@RequestParam(value = "size", required = false) Double size)
+	public ResponseEntity<List<News>> list(
+	        @RequestParam(value = "size", required = false) Integer size)
 			throws NotFoundException {
 		
 		Function<DbNews, News> fromDbToJson = NewsConverters.fromDbToJson();
@@ -100,8 +100,19 @@ public class NewsApi {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
-	
-	private boolean checkAdminRequestIfNeeded(int requestId, SecurityContextHolderAwareRequestWrapper request) {
+    @RequestMapping(method = RequestMethod.POST)
+    public ResponseEntity<Void> put(@RequestBody News news) throws NotFoundException {
+        
+        DbNews db = new DbNews();
+        DbNews updatedDbNews = NewsConverters.fromJsonToDb()
+                .withDbNews(db)
+                .apply(news);
+        newsService.save(updatedDbNews);
+        
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+    
+   	private boolean checkAdminRequestIfNeeded(int requestId, SecurityContextHolderAwareRequestWrapper request) {
 		if (!request.isUserInRole("ROLE_ADMIN")) {
 			// Only admin's can change other profiles.
 			String name = request.getUserPrincipal().getName();
