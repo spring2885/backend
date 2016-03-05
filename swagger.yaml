@@ -92,15 +92,12 @@ paths:
     # This is a HTTP operation
     get:
       tags: ["Profiles"]
-      # Describe this verb here. Note: you can use markdown
       summary: |
         Fetches all `profile` objects
       description: |
-        Fetches all `profile` objects. up to **size** if specified
+        Fetches all `profile` objects. up to `size` if specified,
         otherwise fetches all objects.
-      # This is array of GET operation parameters:
       parameters:
-        # An example parameter that is in query and is required
         - name: size
           in: query
           description: The maxinum number of profiles to fetch.
@@ -109,7 +106,31 @@ paths:
           format: int32
         - name: q
           in: query
-          description: query string
+          description: |
+            ## Basic query string.
+            ### Format:
+              ```?q=search terms```
+
+            ### Example:
+              ```?q=Oracle```
+
+          required: false
+          type: string
+        - name: aq
+          in: query
+          description: |
+            ## Advanced query string.
+            ### Format:
+              ```?aq=(attribute OP term),...```
+
+            ### Example:
+              ```?aq=graduation_year>2000,occupation:manager```
+
+            ### Available OPs:
+              * ':' for equality
+              * '!' for not
+              * '>' greater than
+              * '<' less than
           required: false
           type: string
       # Expected responses for this operation:

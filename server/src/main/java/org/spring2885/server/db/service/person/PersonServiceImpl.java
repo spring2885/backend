@@ -1,9 +1,13 @@
-package org.spring2885.server.db.service;
+package org.spring2885.server.db.service.person;
 
+import java.util.Iterator;
 import java.util.List;
 
 import org.spring2885.server.db.model.DbPerson;
+import org.spring2885.server.db.service.search.SearchCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,7 +20,7 @@ public class PersonServiceImpl implements PersonService {
 	private final PersonRepository repository;
 	
 	@Autowired
-	PersonServiceImpl(PersonRepository repository) {
+	public PersonServiceImpl(PersonRepository repository) {
 		this.repository = repository;
 	}
 	
@@ -81,6 +85,19 @@ public class PersonServiceImpl implements PersonService {
     @Override
     public List<DbPerson> findByGraduationYear(Integer year) {
         return repository.findByGraduationYear(year);
+    }
+
+    @Override
+    public Iterable<DbPerson> findAll(List<SearchCriteria> criterias) {
+        if (criterias.isEmpty()) {
+            return findAll();
+        }
+        Iterator<SearchCriteria> iter = criterias.iterator();
+        Specification<DbPerson> specs = new DbPersonSpecification(iter.next());
+        while (iter.hasNext()) {
+            specs = Specifications.where(specs).and(new DbPersonSpecification(iter.next()));
+        }
+        return repository.findAll(specs);
     }
 
 }

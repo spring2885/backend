@@ -29,7 +29,7 @@
           "name" : "size",
           "in" : "query",
           "description" : "Size of array",
-          "required" : true,
+          "required" : false,
           "type" : "number",
           "format" : "double"
         } ],
@@ -177,7 +177,7 @@
       "get" : {
         "tags" : [ "Profiles" ],
         "summary" : "Fetches all `profile` objects\n",
-        "description" : "Fetches all `profile` objects. up to **size** if specified\notherwise fetches all objects.\n",
+        "description" : "Fetches all `profile` objects. up to `size` if specified,\notherwise fetches all objects.\n",
         "parameters" : [ {
           "name" : "size",
           "in" : "query",
@@ -188,7 +188,13 @@
         }, {
           "name" : "q",
           "in" : "query",
-          "description" : "query string",
+          "description" : "## Basic query string.\n### Format:\n  ```?q=search terms```\n\n### Example:\n  ```?q=Oracle```\n",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "aq",
+          "in" : "query",
+          "description" : "## Advanced query string.\n### Format:\n  ```?aq=(attribute OP term),...```\n\n### Example:\n  ```?aq=graduation_year>2000,occupation:manager```\n\n### Available OPs:\n  * ':' for equality\n  * '!' for not\n  * '>' greater than\n  * '<' less than\n",
           "required" : false,
           "type" : "string"
         } ],

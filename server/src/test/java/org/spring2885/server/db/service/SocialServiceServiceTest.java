@@ -13,6 +13,9 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.spring2885.server.db.model.DbSocialService;
+import org.spring2885.server.db.service.person.SocialServiceRepository;
+import org.spring2885.server.db.service.person.SocialServiceService;
+import org.spring2885.server.db.service.person.SocialServiceServiceImpl;
 
 public class SocialServiceServiceTest {
 

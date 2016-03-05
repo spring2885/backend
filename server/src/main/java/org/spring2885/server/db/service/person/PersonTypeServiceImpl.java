@@ -1,4 +1,4 @@
-package org.spring2885.server.db.service;
+package org.spring2885.server.db.service.person;
 
 import java.util.HashSet;
 import java.util.Set;

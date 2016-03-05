@@ -4,11 +4,11 @@ import static org.mockito.Mockito.mock;
 
 import org.spring2885.server.db.service.JobService;
 import org.spring2885.server.db.service.JobTypeService;
-import org.spring2885.server.db.service.LanguageService;
-import org.spring2885.server.db.service.PersonService;
-import org.spring2885.server.db.service.PersonTypeService;
-import org.spring2885.server.db.service.SocialServiceService;
 import org.spring2885.server.db.service.TokenService;
+import org.spring2885.server.db.service.person.LanguageService;
+import org.spring2885.server.db.service.person.PersonService;
+import org.spring2885.server.db.service.person.PersonTypeService;
+import org.spring2885.server.db.service.person.SocialServiceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
