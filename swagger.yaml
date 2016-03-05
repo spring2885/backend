@@ -501,9 +501,9 @@ definitions:
       expired:
         type: string
         format: date
-      person_id:
-        type: integer
-        format: int64
+      posted_by:
+        type: string
+        format: email
       views:
         type: integer
         format: int64
