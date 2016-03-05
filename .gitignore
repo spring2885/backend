@@ -34,3 +34,7 @@ server/src/main/webapp/README.md
 .settings/
 .metadata/
 Servers/
+
+# Mac metatada
+.DS_Store
+
