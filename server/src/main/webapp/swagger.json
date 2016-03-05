@@ -185,6 +185,12 @@
           "required" : false,
           "type" : "number",
           "format" : "int32"
+        }, {
+          "name" : "q",
+          "in" : "query",
+          "description" : "query string",
+          "required" : false,
+          "type" : "string"
         } ],
         "responses" : {
           "200" : {

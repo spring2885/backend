@@ -10,16 +10,24 @@ public interface PersonService {
 	 */
 	DbPerson findById(long id);
 	
-	/**
-	 * Returns all {@code DbPerson} instances.
-	 */
-	Iterable<DbPerson> findAll();
-	
+    /**
+     * Returns all {@code DbPerson} instances.
+     */
+    Iterable<DbPerson> findAll();
+    
+    /**
+     * Returns all {@code DbPerson} instances with search string {code q}.
+     */
+    Iterable<DbPerson> findAll(String q);
+    
 	/**
 	 * Returns all {@code DbPerson} instances with email address of {@code email}
 	 * or an empty {@link Iterator} if none exist.
 	 */
 	List<DbPerson> findByEmail(String email);
+	
+	/** Returns all by grad year. */
+	List<DbPerson> findByGraduationYear(Integer year);
 	
 	/**
 	 * Deletes a user by primary key.

@@ -36,17 +36,17 @@ public class PersonsApi {
     @Autowired
     private PersonConverters.FromDbToJson dbToJsonConverter;
 
-	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
-	public ResponseEntity<Person> get(
-			@PathVariable("id") int id) throws NotFoundException {
-		DbPerson o = personService.findById(id);
-		if (o == null) {
-			// When adding test testPersonsById_notFound, was getting a NullPointerException
-			// here, so needed to add this.
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
-		return new ResponseEntity<>(dbToJsonConverter.apply(o), HttpStatus.OK);
-	}
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    public ResponseEntity<Person> get(
+            @PathVariable("id") int id) throws NotFoundException {
+        DbPerson o = personService.findById(id);
+        if (o == null) {
+            // When adding test testPersonsById_notFound, was getting a NullPointerException
+            // here, so needed to add this.
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(dbToJsonConverter.apply(o), HttpStatus.OK);
+    }
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<String> delete(
@@ -68,14 +68,26 @@ public class PersonsApi {
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
-	public ResponseEntity<List<Person>> list(@RequestParam(value = "size", required = false) Double size)
-			throws NotFoundException {
+	public ResponseEntity<List<Person>> list(
+            @RequestParam(value = "q", required = false) String q,
+	        @RequestParam(value = "size", required = false) Integer size
+	        ) throws NotFoundException {
+	    
+	    Iterable<DbPerson> all;
+	    if (q != null && q.length() > 0) {
+	        System.out.println("q=" + q);
+	        all = personService.findAll(q);
+	    } else {
+	        all = personService.findAll();
+	    }
 		
-		List<Person> persons = FluentIterable.from(personService.findAll())
-				.transform(dbToJsonConverter)
-				.toList();
-		
-		return new ResponseEntity<>(persons, HttpStatus.OK);
+		FluentIterable<Person> iterable = FluentIterable.from(all)
+				.transform(dbToJsonConverter);
+		// Support size parameter, but only if it's set (and not 0)
+		if (size != null && size.intValue() > 0) {
+		    iterable.limit(size);
+		}
+		return new ResponseEntity<>(iterable.toList(), HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
