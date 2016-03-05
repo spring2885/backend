@@ -77,7 +77,7 @@ PRIMARY KEY(id)
 DROP TABLE IF EXISTS Job;
 CREATE TABLE Job
 (
-id int,
+id int NOT NULL AUTO_INCREMENT,
 title varchar(200),
 industry int,
 location varchar(200),
@@ -97,7 +97,7 @@ FOREIGN KEY(posted_by_person_id) REFERENCES Person(id)
 DROP TABLE IF EXISTS News;
 CREATE TABLE News
 (
-id int,
+id int NOT NULL AUTO_INCREMENT,
 title varchar(256),
 description TEXT(65535),
 posted DATE,
@@ -105,7 +105,7 @@ expired DATE,
 person_id int,
 views int,
 PRIMARY KEY(id),
-FOREIGN KEY(news_person_id) REFERENCES Person(id)
+FOREIGN KEY(person_id) REFERENCES Person(id)
 );
 
 DROP TABLE IF EXISTS Comment;
