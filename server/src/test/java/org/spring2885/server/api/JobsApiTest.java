@@ -41,7 +41,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableList;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = { TestConfig.class, PersonConverters.class})
+@ContextConfiguration(classes = { TestConfig.class })
 @WebAppConfiguration
 public class JobsApiTest {
     protected MockMvc mockMvc;

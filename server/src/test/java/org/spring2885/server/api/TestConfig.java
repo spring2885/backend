@@ -2,6 +2,7 @@ package org.spring2885.server.api;
 
 import static org.mockito.Mockito.mock;
 
+import org.spring2885.server.db.model.PersonConverters;
 import org.spring2885.server.db.service.JobService;
 import org.spring2885.server.db.service.JobTypeService;
 import org.spring2885.server.db.service.NewsService;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -27,6 +29,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
         "org.spring2885.server.api",
         "org.spring2885.server.model"
 })
+@Import(PersonConverters.class)
 public class TestConfig {
 	@Bean
 	public PersonService personServiceMock() {
