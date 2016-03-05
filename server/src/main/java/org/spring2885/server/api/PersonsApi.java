@@ -3,19 +3,12 @@ package org.spring2885.server.api;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import java.util.List;
-import java.util.Set;
 
 import org.spring2885.model.Person;
 import org.spring2885.server.api.exceptions.NotFoundException;
-import org.spring2885.server.db.model.DbLanguage;
 import org.spring2885.server.db.model.DbPerson;
-import org.spring2885.server.db.model.DbPersonType;
-import org.spring2885.server.db.model.DbSocialService;
 import org.spring2885.server.db.model.PersonConverters;
-import org.spring2885.server.db.service.LanguageService;
 import org.spring2885.server.db.service.PersonService;
-import org.spring2885.server.db.service.PersonTypeService;
-import org.spring2885.server.db.service.SocialServiceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.google.common.base.Function;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Iterables;
 
@@ -37,12 +29,12 @@ public class PersonsApi {
 	
 	@Autowired
 	private PersonService personService;
-	@Autowired
-	private SocialServiceService socialServiceService;
-	@Autowired
-	private PersonTypeService personTypeService;
-	@Autowired
-	private LanguageService languageService;
+
+    @Autowired
+    private PersonConverters.JsonToDbConverter jsonToDbConverter;
+
+    @Autowired
+    private PersonConverters.FromDbToJson dbToJsonConverter;
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public ResponseEntity<Person> get(
@@ -53,7 +45,7 @@ public class PersonsApi {
 			// here, so needed to add this.
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-		return new ResponseEntity<>(PersonConverters.fromDbToJson().apply(o), HttpStatus.OK);
+		return new ResponseEntity<>(dbToJsonConverter.apply(o), HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
@@ -79,9 +71,8 @@ public class PersonsApi {
 	public ResponseEntity<List<Person>> list(@RequestParam(value = "size", required = false) Double size)
 			throws NotFoundException {
 		
-		Function<DbPerson, Person> fromDbToJson = PersonConverters.fromDbToJson();
 		List<Person> persons = FluentIterable.from(personService.findAll())
-				.transform(fromDbToJson)
+				.transform(dbToJsonConverter)
 				.toList();
 		
 		return new ResponseEntity<>(persons, HttpStatus.OK);
@@ -104,15 +95,8 @@ public class PersonsApi {
 		if (db == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-		Set<DbSocialService> socialServices = socialServiceService.findAll();
-		Set<DbPersonType> personTypes = personTypeService.findAll();
-		Set<DbLanguage> languages = languageService.findAll();
-		DbPerson updatedDbPerson = PersonConverters.fromJsonToDb()
-				.withDbPerson(db)
-				.withSocialServices(socialServices)
-				.withPersonTypes(personTypes)
-				.withLanguages(languages)
-				.apply(person);
+		jsonToDbConverter.withDbPerson(db);
+		DbPerson updatedDbPerson = jsonToDbConverter.apply(person);
 		personService.save(updatedDbPerson);
 		
 		return new ResponseEntity<>(HttpStatus.OK);
