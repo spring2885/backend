@@ -12,6 +12,10 @@ public class DbLanguage {
     private String description;
     
     public DbLanguage() {}
+    public DbLanguage(String code, String description) {
+        this.code = code;
+        this.description = description;
+    }
 
     public String getCode() {
         return code;

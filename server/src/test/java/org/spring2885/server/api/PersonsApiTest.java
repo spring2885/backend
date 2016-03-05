@@ -22,8 +22,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.spring2885.model.Person;
+import org.spring2885.server.db.model.DbLanguage;
 import org.spring2885.server.db.model.DbPerson;
 import org.spring2885.server.db.model.DbPersonType;
+import org.spring2885.server.db.service.LanguageService;
 import org.spring2885.server.db.service.PersonService;
 import org.spring2885.server.db.service.PersonTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +40,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = { TestConfig.class })
@@ -48,6 +51,7 @@ public class PersonsApiTest {
     @Autowired protected WebApplicationContext webappContext;
     @Autowired private PersonService personService;
     @Autowired PersonTypeService personTypeService;
+    @Autowired LanguageService languageService;
     
     private DbPerson dbMe;
     private Person me;
@@ -70,6 +74,11 @@ public class PersonsApiTest {
         DbPersonType defaultPersonType = new DbPersonType(0, "student");
         when(personTypeService.defaultType()).thenReturn(defaultPersonType);
         when(personTypeService.findAll()).thenReturn(Collections.singleton(defaultPersonType));
+        
+        DbLanguage enLanguage = new DbLanguage("en", "English");
+        DbLanguage defaultLanguage = new DbLanguage("eo", "Esperanto");
+        when(languageService.defaultLanguage()).thenReturn(defaultLanguage);
+        when(languageService.findAll()).thenReturn(ImmutableSet.of(enLanguage, defaultLanguage));
     }
     
     static DbPerson createDbPerson(long id, String email, String aboutMe) {
@@ -77,6 +86,7 @@ public class PersonsApiTest {
     	p.setId(id);
     	p.setEmail(email);
     	p.setAboutMe(aboutMe);
+    	p.setLanguage(new DbLanguage("eo", "Esperanto"));
     	return p;
     }
     
@@ -85,6 +95,7 @@ public class PersonsApiTest {
     	p.setId(id);
     	p.setEmail(email);
     	p.setAboutMe(aboutMe);
+    	p.setLang("eo");
     	return p;
     }
 
