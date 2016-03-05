@@ -154,3 +154,13 @@ id INT NOT NULL,
 rolename VARCHAR(60)
 );
 
+DROP TABLE IF EXISTS token;
+CREATE TABLE token(
+    id int NOT NULL,    
+    email varchar(200),
+    uuid varchar(200),
+    uuidStatus varchar (20),
+    dateCreate DATE,
+    PRIMARY KEY(uuid)
+);
+
