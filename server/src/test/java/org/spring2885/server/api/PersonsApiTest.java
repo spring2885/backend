@@ -25,6 +25,7 @@ import org.spring2885.model.Person;
 import org.spring2885.server.db.model.DbLanguage;
 import org.spring2885.server.db.model.DbPerson;
 import org.spring2885.server.db.model.DbPersonType;
+import org.spring2885.server.db.model.PersonConverters;
 import org.spring2885.server.db.service.LanguageService;
 import org.spring2885.server.db.service.PersonService;
 import org.spring2885.server.db.service.PersonTypeService;
@@ -43,7 +44,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = { TestConfig.class })
+@ContextConfiguration(classes = { TestConfig.class, PersonConverters.class })
 @WebAppConfiguration
 public class PersonsApiTest {
     protected MockMvc mockMvc;
@@ -63,8 +64,8 @@ public class PersonsApiTest {
         reset(personService);
         mockMvc = webAppContextSetup(webappContext)
         		.apply(SecurityMockMvcConfigurers.springSecurity())
+        		.dispatchOptions(true)
         		.build();
-        
         dbMe = createDbPerson(4, "me@example.com", "aboutMe");
         me = createPerson(4, "me@example.com", "aboutMe");
         otherPerson = createPerson(21, "other@example.com", "user 21");

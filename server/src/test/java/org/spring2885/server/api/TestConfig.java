@@ -2,6 +2,7 @@ package org.spring2885.server.api;
 
 import static org.mockito.Mockito.mock;
 
+import org.spring2885.server.db.model.PersonConverters;
 import org.spring2885.server.db.service.JobService;
 import org.spring2885.server.db.service.JobTypeService;
 import org.spring2885.server.db.service.LanguageService;
@@ -22,9 +23,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @Configuration
-@EnableWebMvc
 @ComponentScan(basePackages = {
-		"org.spring2885.server.api"
+        "org.spring2885.server.api",
+        "org.spring2885.server.model"
 })
 public class TestConfig {
 	@Bean
@@ -67,30 +68,29 @@ public class TestConfig {
 	    return mock(TokenService.class);
 	}
 	
-    @Configuration
-    @EnableWebSecurity
-    @EnableWebMvc
-    static class TestSecurityConfig extends WebSecurityConfigurerAdapter {
+	@Configuration
+	@EnableWebSecurity
+	@EnableWebMvc 
+	public static class TestSecurityConfig extends WebSecurityConfigurerAdapter {
 
-        @Override
-        protected void configure(HttpSecurity http) throws Exception {
-            http
-                .authorizeRequests()
-                    .anyRequest().authenticated()
-                    .and()
-                .formLogin()
-                    .usernameParameter("user")
-                    .passwordParameter("pass")
-                    .loginPage("/login")
-                 .and()
-                    .csrf().disable();
-        }
+	    @Override
+	    protected void configure(HttpSecurity http) throws Exception {
+	        http
+	            .authorizeRequests()
+	                .anyRequest().authenticated()
+	                .and()
+	            .formLogin()
+	                .usernameParameter("user")
+	                .passwordParameter("pass")
+	                .loginPage("/login")
+	             .and()
+	                .csrf().disable();
+	    }
 
-        @Autowired
-        public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-            auth.inMemoryAuthentication()
-                .withUser("user").password("password").roles("USER");
-        }
-    }
-    
+	    @Autowired
+	    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+	        auth.inMemoryAuthentication()
+	            .withUser("user").password("password").roles("USER");
+	    }
+	}
 }

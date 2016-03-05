@@ -5,6 +5,8 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import java.util.List;
 import java.util.Set;
 
+import javax.annotation.Resource;
+
 import org.spring2885.model.Person;
 import org.spring2885.server.api.exceptions.NotFoundException;
 import org.spring2885.server.db.model.DbLanguage;
@@ -37,12 +39,9 @@ public class PersonsApi {
 	
 	@Autowired
 	private PersonService personService;
+
 	@Autowired
-	private SocialServiceService socialServiceService;
-	@Autowired
-	private PersonTypeService personTypeService;
-	@Autowired
-	private LanguageService languageService;
+	private PersonConverters.JsonToDbConverter jsonToDbConverter;
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public ResponseEntity<Person> get(
@@ -104,15 +103,8 @@ public class PersonsApi {
 		if (db == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-		Set<DbSocialService> socialServices = socialServiceService.findAll();
-		Set<DbPersonType> personTypes = personTypeService.findAll();
-		Set<DbLanguage> languages = languageService.findAll();
-		DbPerson updatedDbPerson = PersonConverters.fromJsonToDb()
-				.withDbPerson(db)
-				.withSocialServices(socialServices)
-				.withPersonTypes(personTypes)
-				.withLanguages(languages)
-				.apply(person);
+		jsonToDbConverter.withDbPerson(db);
+		DbPerson updatedDbPerson = jsonToDbConverter.apply(person);
 		personService.save(updatedDbPerson);
 		
 		return new ResponseEntity<>(HttpStatus.OK);
