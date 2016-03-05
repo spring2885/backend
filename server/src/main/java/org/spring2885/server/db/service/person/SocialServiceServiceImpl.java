@@ -1,4 +1,4 @@
-package org.spring2885.server.db.service;
+package org.spring2885.server.db.service.person;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -16,7 +16,7 @@ public class SocialServiceServiceImpl implements SocialServiceService {
 	private final SocialServiceRepository repository;
 	
 	@Autowired
-	SocialServiceServiceImpl(SocialServiceRepository repository) {
+	public SocialServiceServiceImpl(SocialServiceRepository repository) {
 		this.repository = repository;
 	}
 

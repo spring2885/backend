@@ -1,4 +1,4 @@
-package org.spring2885.server.db.service;
+package org.spring2885.server.db.service.person;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -16,7 +16,7 @@ public class LanguageServiceImpl implements LanguageService {
     private final LanguageRepository repository;
     
     @Autowired
-    LanguageServiceImpl(LanguageRepository repository) {
+    public LanguageServiceImpl(LanguageRepository repository) {
         this.repository = repository;
     }
 

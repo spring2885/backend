@@ -4,11 +4,15 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.spring2885.model.Person;
 import org.spring2885.server.api.exceptions.NotFoundException;
 import org.spring2885.server.db.model.DbPerson;
 import org.spring2885.server.db.model.PersonConverters;
-import org.spring2885.server.db.service.PersonService;
+import org.spring2885.server.db.service.person.PersonService;
+import org.spring2885.server.db.service.search.SearchCriteria;
+import org.spring2885.server.db.service.search.SearchParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +30,7 @@ import com.google.common.collect.Iterables;
 @RestController
 @RequestMapping(value = "/api/v1/profiles", produces = { APPLICATION_JSON_VALUE })
 public class PersonsApi {
+    private static final Logger logger = LoggerFactory.getLogger(PersonsApi.class);
 	
 	@Autowired
 	private PersonService personService;
@@ -69,14 +74,18 @@ public class PersonsApi {
 
 	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<List<Person>> list(
+	        @RequestParam(value = "aq", required = false) String aq,
             @RequestParam(value = "q", required = false) String q,
 	        @RequestParam(value = "size", required = false) Integer size
 	        ) throws NotFoundException {
-	    
+	    logger.info("PersonsApi GET: q={}, aq={}, size={}", q, aq, size);
 	    Iterable<DbPerson> all;
 	    if (q != null && q.length() > 0) {
-	        System.out.println("q=" + q);
 	        all = personService.findAll(q);
+	    } else if (aq != null && aq.length() > 0) {
+	        SearchParser parser = new SearchParser();
+	        List<SearchCriteria> criterias = parser.parse(aq);
+            all = personService.findAll(criterias);
 	    } else {
 	        all = personService.findAll();
 	    }

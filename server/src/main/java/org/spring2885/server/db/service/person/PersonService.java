@@ -1,8 +1,9 @@
-package org.spring2885.server.db.service;
+package org.spring2885.server.db.service.person;
 
 import java.util.List;
 
 import org.spring2885.server.db.model.DbPerson;
+import org.spring2885.server.db.service.search.SearchCriteria;
 
 public interface PersonService {
 	/**
@@ -19,6 +20,11 @@ public interface PersonService {
      * Returns all {@code DbPerson} instances with search string {code q}.
      */
     Iterable<DbPerson> findAll(String q);
+    
+    /**
+     * Returns all {@code DbPerson} instances with search string {code q}.
+     */
+    Iterable<DbPerson> findAll(List<SearchCriteria> criterias);
     
 	/**
 	 * Returns all {@code DbPerson} instances with email address of {@code email}

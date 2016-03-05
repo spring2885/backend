@@ -5,9 +5,9 @@ import java.util.stream.Collectors;
 
 import org.spring2885.model.Person;
 import org.spring2885.model.SocialConnection;
-import org.spring2885.server.db.service.LanguageService;
-import org.spring2885.server.db.service.PersonTypeService;
-import org.spring2885.server.db.service.SocialServiceService;
+import org.spring2885.server.db.service.person.LanguageService;
+import org.spring2885.server.db.service.person.PersonTypeService;
+import org.spring2885.server.db.service.person.SocialServiceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;

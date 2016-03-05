@@ -21,6 +21,9 @@ import org.junit.runners.JUnit4;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.spring2885.server.db.model.DbPerson;
+import org.spring2885.server.db.service.person.PersonRepository;
+import org.spring2885.server.db.service.person.PersonService;
+import org.spring2885.server.db.service.person.PersonServiceImpl;
 
 import com.google.common.collect.Lists;
 
