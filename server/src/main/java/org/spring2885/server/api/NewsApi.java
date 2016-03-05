@@ -35,6 +35,10 @@ public class NewsApi {
     
     @Autowired
     private PersonService personService;
+    @Autowired
+    NewsConverters.FromDbToJson fromDbToJson;
+    @Autowired
+    NewsConverters.JsonToDbConverter fromJsonToDb;
     
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public ResponseEntity<News> get(
@@ -45,7 +49,7 @@ public class NewsApi {
 			// here, so needed to add this.
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-		return new ResponseEntity<>(NewsConverters.fromDbToJson().apply(o), HttpStatus.OK);
+		return new ResponseEntity<>(fromDbToJson.apply(o), HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
@@ -72,7 +76,6 @@ public class NewsApi {
 	        @RequestParam(value = "size", required = false) Integer size)
 			throws NotFoundException {
 		
-		Function<DbNews, News> fromDbToJson = NewsConverters.fromDbToJson();
 		List<News> news = FluentIterable.from(newsService.findAll())
 				.transform(fromDbToJson)
 				.toList();
@@ -97,7 +100,7 @@ public class NewsApi {
 		if (db == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-		DbNews updatedDbNews = NewsConverters.fromJsonToDb()
+		DbNews updatedDbNews = fromJsonToDb
 				.withDbNews(db)
 				.apply(news);
 		newsService.save(updatedDbNews);
@@ -109,7 +112,7 @@ public class NewsApi {
     public ResponseEntity<Void> put(@RequestBody News news) throws NotFoundException {
         
         DbNews db = new DbNews();
-        DbNews updatedDbNews = NewsConverters.fromJsonToDb()
+        DbNews updatedDbNews = fromJsonToDb
                 .withDbNews(db)
                 .apply(news);
         newsService.save(updatedDbNews);

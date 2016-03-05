@@ -3,9 +3,12 @@ package org.spring2885.server.db.model;
 import java.sql.Date;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -18,7 +21,9 @@ public class DbNews {
 	private String description;
 	private Date posted;
 	private Date expired;
-	private Long personId;
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="person_id")
+    private DbPerson personId;
 	private Long views;
 	
 	public Long getId() {
@@ -61,11 +66,11 @@ public class DbNews {
         this.expired = expired;
     }
 
-    public Long getPersonId() {
+    public DbPerson getPerson() {
         return personId;
     }
 
-    public void setPersonId(Long personId) {
+    public void setPersonId(DbPerson personId) {
         this.personId = personId;
     }
 

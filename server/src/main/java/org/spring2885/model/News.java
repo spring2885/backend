@@ -13,7 +13,7 @@ import java.util.Objects;
 
 
 @ApiModel(description = "")
-@javax.annotation.Generated(value = "class io.swagger.codegen.languages.SpringMVCServerCodegen", date = "2016-03-05T13:31:45.577-08:00")
+@javax.annotation.Generated(value = "class io.swagger.codegen.languages.SpringMVCServerCodegen", date = "2016-03-05T14:08:56.619-08:00")
 public class News  {
   
   private Long id = null;
@@ -21,7 +21,7 @@ public class News  {
   private String description = null;
   private Date posted = null;
   private Date expired = null;
-  private Long personId = null;
+  private String postedBy = null;
   private Long views = null;
 
   
@@ -88,12 +88,12 @@ public class News  {
   /**
    **/
   @ApiModelProperty(value = "")
-  @JsonProperty("person_id")
-  public Long getPersonId() {
-    return personId;
+  @JsonProperty("posted_by")
+  public String getPostedBy() {
+    return postedBy;
   }
-  public void setPersonId(Long personId) {
-    this.personId = personId;
+  public void setPostedBy(String postedBy) {
+    this.postedBy = postedBy;
   }
 
   
@@ -124,13 +124,13 @@ public class News  {
         Objects.equals(description, news.description) &&
         Objects.equals(posted, news.posted) &&
         Objects.equals(expired, news.expired) &&
-        Objects.equals(personId, news.personId) &&
+        Objects.equals(postedBy, news.postedBy) &&
         Objects.equals(views, news.views);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, title, description, posted, expired, personId, views);
+    return Objects.hash(id, title, description, posted, expired, postedBy, views);
   }
 
   @Override
@@ -143,7 +143,7 @@ public class News  {
     sb.append("  description: ").append(description).append("\n");
     sb.append("  posted: ").append(posted).append("\n");
     sb.append("  expired: ").append(expired).append("\n");
-    sb.append("  personId: ").append(personId).append("\n");
+    sb.append("  postedBy: ").append(postedBy).append("\n");
     sb.append("  views: ").append(views).append("\n");
     sb.append("}\n");
     return sb.toString();
