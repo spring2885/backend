@@ -107,6 +107,11 @@ paths:
           required: false
           type: number
           format: int32
+        - name: q
+          in: query
+          description: query string
+          required: false
+          type: string
       # Expected responses for this operation:
       responses:
         # Response code
@@ -191,7 +196,7 @@ paths:
           name: size
           in: query
           description: Size of array
-          required: true
+          required: false
           type: number
           format: double
       # Expected responses for this operation:

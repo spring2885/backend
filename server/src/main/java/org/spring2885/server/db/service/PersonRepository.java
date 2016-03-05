@@ -9,4 +9,6 @@ import org.springframework.data.repository.CrudRepository;
 public interface PersonRepository extends CrudRepository<DbPerson, Long>{
 
 	List<DbPerson> findByEmail(String email);
+	
+	List<DbPerson> findByGraduationYear(Integer year);
 }

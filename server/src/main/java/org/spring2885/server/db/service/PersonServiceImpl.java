@@ -7,6 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
+
 @Component("personService")
 @Transactional
 public class PersonServiceImpl implements PersonService {
@@ -27,6 +30,29 @@ public class PersonServiceImpl implements PersonService {
 		return repository.findAll();
 	}
 	
+    @Override
+    public Iterable<DbPerson> findAll(String q) {
+        // TODO(rob): Push this filter into the DB.
+        return Iterables.filter(findAll(), new Predicate<DbPerson>() {
+            @Override
+            public boolean apply(DbPerson p) {
+                if (p.getCompanyName() != null && p.getCompanyName().contains(q)) {
+                    return true;
+                }
+                if (p.getName() != null && p.getName().contains(q)) {
+                    return true;
+                }
+                if (p.getOccupation() != null && p.getOccupation().contains(q)) {
+                    return true;
+                } 
+                if (p.getTitle() != null && p.getTitle().contains(q)) {
+                    return true;
+                }
+                return false;
+            }
+        });
+    }
+
 	@Override
 	public List<DbPerson> findByEmail(String email) {
 		return repository.findByEmail(email);
@@ -51,5 +77,10 @@ public class PersonServiceImpl implements PersonService {
 	public DbPerson save(DbPerson person) {
 		return repository.save(person);
 	}
+
+    @Override
+    public List<DbPerson> findByGraduationYear(Integer year) {
+        return repository.findByGraduationYear(year);
+    }
 
 }
