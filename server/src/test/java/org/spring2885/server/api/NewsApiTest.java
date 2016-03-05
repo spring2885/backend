@@ -71,7 +71,7 @@ public class NewsApiTest {
     static News createNews(long id, String newsTitle) {
     	News n = new News();
     	n.setId(id);
-    	n.setNewsTitle(newsTitle);
+    	n.setTitle(newsTitle);
     	return n;
     }
     
@@ -88,8 +88,8 @@ public class NewsApiTest {
     			.accept(MediaType.APPLICATION_JSON))
     			.andExpect(status().isOk())
     			.andExpect(content().contentType(MediaType.APPLICATION_JSON))
-    			.andExpect(jsonPath("$[0].news_title", Matchers.is("Title")))
-    			.andExpect(jsonPath("$[1].news_title", Matchers.is("Title2")));
+    			.andExpect(jsonPath("$[0].title", Matchers.is("Title")))
+    			.andExpect(jsonPath("$[1].title", Matchers.is("Title2")));
     }
 
 
@@ -108,7 +108,7 @@ public class NewsApiTest {
     			.accept(MediaType.APPLICATION_JSON))
     			.andExpect(status().isOk())
     			.andExpect(content().contentType(MediaType.APPLICATION_JSON))
-    			.andExpect(jsonPath("$.news_title", Matchers.is("ThisTitle")));
+    			.andExpect(jsonPath("$.title", Matchers.is("ThisTitle")));
     	
     	// N.B: We don't have to verify anything here since we're asserting
     	// the results that were setup by PersonService.

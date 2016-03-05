@@ -21,7 +21,6 @@ import org.junit.runners.JUnit4;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.spring2885.server.db.model.DbToken;
-import org.springframework.data.jpa.repository.JpaContext;
 
 import com.google.common.collect.Lists;
 

@@ -54,7 +54,8 @@ degree_type varchar(200),
 faculty_department varchar(200),
 PRIMARY KEY (id),
 FOREIGN KEY (type) REFERENCES Person_Type(id),
-FOREIGN KEY (lang) REFERENCES Language(code)
+FOREIGN KEY (lang) REFERENCES Language(code),
+UNIQUE KEY (email)
 );
 
 DROP TABLE IF EXISTS Job_Type;

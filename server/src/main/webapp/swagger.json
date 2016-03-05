@@ -546,11 +546,12 @@
           "type" : "string"
         },
         "start_date" : {
-          "type" : "string"
+          "type" : "string",
+          "format" : "date"
         },
         "end_date" : {
-          "type" : "object",
-          "properties" : { }
+          "type" : "string",
+          "format" : "date"
         }
       }
     },
@@ -561,25 +562,25 @@
           "type" : "integer",
           "format" : "int64"
         },
-        "news_title" : {
+        "title" : {
           "type" : "string"
         },
-        "news_description" : {
+        "description" : {
           "type" : "string"
         },
-        "news_posted" : {
-          "type" : "object",
-          "properties" : { }
+        "posted" : {
+          "type" : "string",
+          "format" : "date"
         },
-        "news_expired" : {
-          "type" : "object",
-          "properties" : { }
+        "expired" : {
+          "type" : "string",
+          "format" : "date"
         },
-        "news_person_id" : {
+        "person_id" : {
           "type" : "integer",
           "format" : "int64"
         },
-        "news_views" : {
+        "views" : {
           "type" : "integer",
           "format" : "int64"
         }

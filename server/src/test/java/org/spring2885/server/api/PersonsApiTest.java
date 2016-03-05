@@ -103,7 +103,7 @@ public class PersonsApiTest {
     	when(personService.findById(4)).thenReturn(dbMe);
     	when(personService.findById(21)).thenReturn(otherDbPerson);
     	when(personService.findByEmail("me@example.com"))
-    		.thenReturn(Collections.singletonList(dbMe));
+    		.thenReturn(dbMe);
     }
     
     @Test
@@ -170,7 +170,7 @@ public class PersonsApiTest {
     public void testDeletePersonsById() throws Exception {
     	// Setup the expectations.
     	when(personService.findByEmail(eq("me@example.com")))
-    		.thenReturn(Collections.singletonList(dbMe));
+    		.thenReturn(dbMe);
     	when(personService.delete(4)).thenReturn(true);
     	
     	mockMvc.perform(delete("/api/v1/profiles/4")
@@ -187,7 +187,7 @@ public class PersonsApiTest {
     public void testDelete_anotherPersons_notAdminUser() throws Exception {
     	// Setup the expectations.
     	when(personService.findByEmail(eq("me@example.com")))
-    		.thenReturn(Collections.singletonList(dbMe));
+    		.thenReturn(dbMe);
     	
     	mockMvc.perform(delete("/api/v1/profiles/21")
     			.accept(MediaType.APPLICATION_JSON))
@@ -219,7 +219,7 @@ public class PersonsApiTest {
     	// Setup the expectations.
     	when(personService.findById(4)).thenReturn(dbMe);
     	when(personService.findByEmail("me@example.com"))
-    		.thenReturn(Collections.emptyList());
+    		.thenReturn(null);
     	
     	mockMvc.perform(put("/api/v1/profiles/4")
     			.contentType(MediaType.APPLICATION_JSON)

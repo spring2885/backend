@@ -30,7 +30,7 @@ public interface PersonService {
 	 * Returns all {@code DbPerson} instances with email address of {@code email}
 	 * or an empty {@link Iterator} if none exist.
 	 */
-	List<DbPerson> findByEmail(String email);
+	DbPerson findByEmail(String email);
 	
 	/** Returns all by grad year. */
 	List<DbPerson> findByGraduationYear(Integer year);

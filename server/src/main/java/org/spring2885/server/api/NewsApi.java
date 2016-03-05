@@ -7,8 +7,10 @@ import java.util.List;
 import org.spring2885.model.News;
 import org.spring2885.server.api.exceptions.NotFoundException;
 import org.spring2885.server.db.model.DbNews;
+import org.spring2885.server.db.model.DbPerson;
 import org.spring2885.server.db.model.NewsConverters;
 import org.spring2885.server.db.service.NewsService;
+import org.spring2885.server.db.service.person.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,9 +30,12 @@ import com.google.common.collect.Iterables;
 @RequestMapping(value = "/api/v1/news", produces = { APPLICATION_JSON_VALUE })
 public class NewsApi {
 	
-	@Autowired
-	private NewsService newsService;
-	
+    @Autowired
+    private NewsService newsService;
+    
+    @Autowired
+    private PersonService personService;
+    
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public ResponseEntity<News> get(
 			@PathVariable("id") int id) throws NotFoundException {
@@ -115,14 +120,13 @@ public class NewsApi {
    	private boolean checkAdminRequestIfNeeded(int requestId, SecurityContextHolderAwareRequestWrapper request) {
 		if (!request.isUserInRole("ROLE_ADMIN")) {
 			// Only admin's can change other profiles.
-			String name = request.getUserPrincipal().getName();
-			List<DbNews> possibles = newsService.findByTitle(name);
-			if (possibles.size() != 1) {
+			String email = request.getUserPrincipal().getName();
+			DbPerson me = personService.findByEmail(email);
+			if (me == null) {
 				// I can't find myself... need more zen.
 				return false;
 			}
 			
-			DbNews me = Iterables.getOnlyElement(possibles);
 			if (me.getId() != requestId) {
 				// Someone is being naughty...
 				return false;

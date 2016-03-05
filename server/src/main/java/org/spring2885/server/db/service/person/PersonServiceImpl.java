@@ -58,8 +58,14 @@ public class PersonServiceImpl implements PersonService {
     }
 
 	@Override
-	public List<DbPerson> findByEmail(String email) {
-		return repository.findByEmail(email);
+	public DbPerson findByEmail(String email) {
+	    List<DbPerson> candidates = repository.findByEmail(email);
+	    // Since the email column has a unique constraint on it, there can
+	    // only be 0 or 1 DbPerson's returned.
+	    if (candidates.isEmpty()) {
+	        return null;
+	    }
+	    return Iterables.getOnlyElement(candidates);
 	}
 
 	@Override
@@ -74,7 +80,7 @@ public class PersonServiceImpl implements PersonService {
 
 	@Override
 	public boolean existsByEmail(String email) {
-		return findByEmail(email).size() != 0;
+		return findByEmail(email) != null;
 	}
 
 	@Override

@@ -477,8 +477,10 @@ definitions:
         type: string
       start_date:
         type: string
+        format: date
       end_date:
-        type: object
+        type: string
+        format: date
       posted_by_person_id:
         format: int64
       hours:
@@ -489,18 +491,20 @@ definitions:
       id:
         type: integer
         format: int64
-      news_title:
+      title:
         type: string
-      news_description:
+      description:
         type: string
-      news_posted:
-        type: object
-      news_expired:
-        type: object
-      news_person_id:
+      posted:
+        type: string
+        format: date
+      expired:
+        type: string
+        format: date
+      person_id:
         type: integer
         format: int64
-      news_views:
+      views:
         type: integer
         format: int64
   Reset:

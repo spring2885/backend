@@ -71,8 +71,8 @@ public class PersonServiceTest {
 
     @Test
     public void testFindByEmail_None() {
-    	List<DbPerson> persons = Lists.newArrayList(service.findByEmail("badboy@"));
-    	assertEquals(0, persons.size());
+    	DbPerson person = service.findByEmail("badboy@");
+    	assertNull(person);
     }
 
     @Test

@@ -1,7 +1,5 @@
 package org.spring2885.server.db.model;
 
-import java.sql.Date;
-
 import org.spring2885.model.News;
 
 import com.google.common.base.Function;
@@ -15,12 +13,12 @@ public final class NewsConverters {
 		public News apply(DbNews db) {
 			News n = new News();
 			n.setId(db.getId());
-			n.setNewsDescription(db.getDescription());
-			n.setNewsExpired(db.getExpired());
-			n.setNewsPersonId(db.getPersonId());
-			n.setNewsPosted(db.getPosted());
-			n.setNewsTitle(db.getTitle());
-			n.setNewsViews(db.getViews());
+			n.setDescription(db.getDescription());
+			n.setExpired(db.getExpired());
+			n.setPersonId(db.getPersonId());
+			n.setPosted(db.getPosted());
+			n.setTitle(db.getTitle());
+			n.setViews(db.getViews());
 			
 			return n;
 		}
@@ -46,20 +44,15 @@ public final class NewsConverters {
 		public DbNews apply(News p) {
 			DbNews db = dbSupplier.get();
 			db.setId(p.getId());
-			db.setTitle(p.getNewsTitle());
-			db.setDescription(p.getNewsDescription());
-			db.setExpired(asSqlData(p.getNewsExpired()));
-			db.setPersonId(p.getNewsPersonId());
-			db.setPosted(asSqlData(p.getNewsPosted()));
+			db.setTitle(p.getTitle());
+			db.setDescription(p.getDescription());
+			db.setExpired(asSqlDate(p.getExpired()));
+			db.setPersonId(p.getPersonId());
+			db.setPosted(asSqlDate(p.getPosted()));
 			db.setTitle(db.getTitle());
-			db.setViews(p.getNewsViews());
+			db.setViews(p.getViews());
 			return db;
 		}
-
-		private Date asSqlData(Object newsExpired) {
-			// TODO Auto-generated method stub
-			return null;
-		}	
 	}
 	
 	private static java.sql.Date asSqlDate(java.util.Date d) {
