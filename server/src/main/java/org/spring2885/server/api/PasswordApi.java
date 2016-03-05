@@ -5,6 +5,8 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import java.util.List;
 import java.util.UUID;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.spring2885.server.api.exceptions.NotFoundException;
 import org.spring2885.server.db.model.DbPerson;
 import org.spring2885.server.db.model.DbToken;
@@ -21,7 +23,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/auth", produces = { APPLICATION_JSON_VALUE })
 public class PasswordApi {
 	
-	@Autowired TokenService tokenService;
+    private static final Logger logger = LoggerFactory.getLogger(PasswordApi.class);
+
+    @Autowired TokenService tokenService;
 	@Autowired PersonService personService;
 	@Autowired private PasswordEncoder passwordEncoder;
 	
@@ -33,13 +37,21 @@ public class PasswordApi {
             throw new RuntimeException("email not found: " + email);
         }
         
-	    UUID uuidToken = UUID.randomUUID();
+        // Delete the old tokens.
+        tokenService.deleteByEmail(email);
+        
+        // Add a new token.
+        UUID uuid = UUID.randomUUID();
 		DbToken tokenData = new DbToken();
 		tokenData.setEmail(email);
-		tokenData.setUuid(uuidToken.toString());
-		tokenData.setUuidStatus("NEW");
+		tokenData.setUuid(uuid.toString());
+		tokenData.setDateCreated(new java.sql.Date(System.currentTimeMillis()));
 		tokenService.save(tokenData);
-		return uuidToken;
+		
+        // TODO: Send Email
+		logger.info("Send Email to {} with token: {}", email, uuid);
+
+		return uuid;
 	}
 	
 	@RequestMapping(value = "/reset", method = RequestMethod.POST)
@@ -59,9 +71,7 @@ public class PasswordApi {
                 throw new RuntimeException("Person not found for email address: " + email);
             }
             
-            // At this point we looked up the saved token from the database and found
-            // one.  
-            
+            // At this point we looked up the saved token from the database and found one.
             if (!savedToken.getEmail().equals(email)) {
                 // Our saved token was for someone else.
                 throw new RuntimeException("token does not match email address: " + tokenString);
@@ -73,8 +83,9 @@ public class PasswordApi {
             person.setPassword(hashedPassword);
             personService.save(person);
             
-            savedToken.setUuidStatus("USED");
-            tokenService.save(savedToken);
+            tokenService.delete(savedToken.getUuid());
+            
+            logger.info("Updated password for " + person.getEmail());
 		}
 	}
 	

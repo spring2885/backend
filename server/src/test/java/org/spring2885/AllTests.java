@@ -15,6 +15,7 @@ import org.spring2885.server.db.service.NewsServiceTest;
 import org.spring2885.server.db.service.PersonConverterTest;
 import org.spring2885.server.db.service.PersonServiceTest;
 import org.spring2885.server.db.service.SocialServiceServiceTest;
+import org.spring2885.server.db.service.TokenServiceTest;
 
 /**
  * Lists each test class in the project.
@@ -35,6 +36,7 @@ import org.spring2885.server.db.service.SocialServiceServiceTest;
     PersonServiceTest.class,
     PersonConverterTest.class,
     SocialServiceServiceTest.class,
+    TokenServiceTest.class,
 })
 @RunWith(Suite.class)
 public class AllTests {

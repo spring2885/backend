@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.google.common.collect.FluentIterable;
-import com.google.common.collect.Iterables;
 
 @RestController
 @RequestMapping(value = "/api/v1/profiles", produces = { APPLICATION_JSON_VALUE })
