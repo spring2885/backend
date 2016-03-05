@@ -3,7 +3,6 @@ package org.spring2885.server.api;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -21,11 +20,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
-import org.spring2885.model.Job;
-import org.spring2885.server.db.model.DbJob;
-import org.spring2885.server.db.model.DbJobType;
-import org.spring2885.server.db.service.JobService;
-import org.spring2885.server.db.service.JobTypeService;
+import org.spring2885.model.News;
+import org.spring2885.server.db.model.DbNews;
+import org.spring2885.server.db.service.NewsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -42,88 +39,76 @@ import com.google.common.collect.ImmutableList;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = { TestConfig.class })
 @WebAppConfiguration
-public class JobsApiTest {
+public class NewsApiTest {
     protected MockMvc mockMvc;
     
     @Autowired protected WebApplicationContext webappContext;
-    @Autowired private JobService jobService;
-    @Autowired JobTypeService jobTypeService;
+    @Autowired private NewsService newsService;
+  
     
-    private DbJob dbMe;
-    private Job me;
-    
-
+    private DbNews dbMe;
+    private News me;
+   
     @Before
     public void setup() {
-        reset(jobService);
+        reset(newsService);
         mockMvc = webAppContextSetup(webappContext)
         		.apply(SecurityMockMvcConfigurers.springSecurity())
         		.build();
         
-        dbMe = createDbJob(1, "enginner");
-        me = createJob(4, "me@example.com");
-        
-        
-        // Our tests assume a single default person type of student.
-        DbJobType defaultPersonType = new DbJobType(0, "student");
-        //when(personTypeService.defaultType()).thenReturn(defaultPersonType);
-      //  when(personTypeService.findAll()).thenReturn(Collections.singleton(defaultPersonType));
+        dbMe = createDbNews(1, "TitleNews1");
+        me = createNews(4, "TitleNews2");
+       
     }
     
-    static DbJob createDbJob(long id, String title) {
-    	DbJob p = new DbJob();
-    	p.setId(id);
-    	p.setTitle(title);
-    	
-    	return p;
+    static DbNews createDbNews(long id, String newsTitle) {
+    	DbNews n = new DbNews();
+    	n.setId(id);
+    	n.setTitle(newsTitle);
+    	return n;
     }
     
-    static Job createJob(long id, String title) {
-    	Job p = new Job();
-    	p.setId(id);
-    	p.setTitle(title);
-    	
-    	return p;
+    static News createNews(long id, String newsTitle) {
+    	News n = new News();
+    	n.setId(id);
+    	n.setNewsTitle(newsTitle);
+    	return n;
     }
-
-    
     
     @Test
     @WithMockUser
-    public void testJobs() throws Exception {
+    public void testNews() throws Exception {
     	// Setup the expectations.
-    	when(jobService.findAll())
+    	when(newsService.findAll())
     		.thenReturn(ImmutableList.of(
-    			createDbJob(5,  "me@example.com"),
-    			createDbJob(5,  "me2@example.com")));
+    			createDbNews(5,  "Title"),
+    			createDbNews(5,  "Title2")));
     	
-    	
-    	mockMvc.perform(get("/api/v1/jobs")
+    	mockMvc.perform(get("/api/v1/news")
     			.accept(MediaType.APPLICATION_JSON))
     			.andExpect(status().isOk())
     			.andExpect(content().contentType(MediaType.APPLICATION_JSON))
-    			.andExpect(jsonPath("$[0].title", Matchers.is("me@example.com")))
-    			.andExpect(jsonPath("$[1].title", Matchers.is("me2@example.com")));
+    			.andExpect(jsonPath("$[0].news_title", Matchers.is("Title")))
+    			.andExpect(jsonPath("$[1].news_title", Matchers.is("Title2")));
     }
 
 
     /**
-     * Tests a {@code /profiles/:id} where {@code id} is found.
+     * Tests a {@code /news/:id} where {@code id} is found.
      */
     @Test
     @WithMockUser
-    public void testJobById() throws Exception {
+    public void testNewsById() throws Exception {
     	// Setup the expectations.
-    	DbJob p = new DbJob();
-    	p.setTitle("other@example.com");
-    	when(jobService.findById(21)).thenReturn(p);
-    	verifyNoMoreInteractions(jobService);
+    	DbNews p = new DbNews();
+    	p.setTitle("ThisTitle");
+    	when(newsService.findById(21)).thenReturn(p);
     	
-    	mockMvc.perform(get("/api/v1/jobs/21")
+    	mockMvc.perform(get("/api/v1/news/21")
     			.accept(MediaType.APPLICATION_JSON))
     			.andExpect(status().isOk())
     			.andExpect(content().contentType(MediaType.APPLICATION_JSON))
-    			.andExpect(jsonPath("$.title", Matchers.is("other@example.com")));
+    			.andExpect(jsonPath("$.news_title", Matchers.is("ThisTitle")));
     	
     	// N.B: We don't have to verify anything here since we're asserting
     	// the results that were setup by PersonService.
@@ -134,12 +119,11 @@ public class JobsApiTest {
      */
     @Test
     @WithMockUser
-    public void testJobsById_notFound() throws Exception {
+    public void testNewsById_notFound() throws Exception {
     	// Setup the expectations.
-    	when(jobService.findById(21)).thenReturn(null);
-    	verifyNoMoreInteractions(jobService);
+    	when(newsService.findById(21)).thenReturn(null);
     	
-    	mockMvc.perform(get("/api/v1/jobs/21")
+    	mockMvc.perform(get("/api/v1/news/21")
     			.accept(MediaType.APPLICATION_JSON))
     			.andExpect(status().isNotFound());
     	
@@ -149,43 +133,37 @@ public class JobsApiTest {
 
 
     @Test
-    @WithMockUser(username="me@example.com",roles={"USER","ADMIN"})
-    public void testDeleteJobsById() throws Exception {
+    @WithMockUser(username="Title",roles={"USER","ADMIN"})
+    public void testDeleteNewsById() throws Exception {
     	// Setup the expectations.
-    	when(jobService.delete(4)).thenReturn(true);
+    	when(newsService.delete(4)).thenReturn(true);
     	//my mock is goiing to do thiss
-    	mockMvc.perform(delete("/api/v1/jobs/4")
+    	mockMvc.perform(delete("/api/v1/news/4")
     			.accept(MediaType.APPLICATION_JSON))
     			.andExpect(status().isOk());
-    	
     	// Ensure PersonService#delete method was called since the result of our
     	// method is the same no matter what.
-    	verify(jobService).delete(4);
+    	verify(newsService).delete(4);
     }
     
-    
-    
-   
+
     
     @Test
-    @WithMockUser(username="me@example.com",roles={"USER"})
+    @WithMockUser(username="Title",roles={"USER"})
     public void testPut_canNotFindMe() throws Exception {
     	// Setup the expectations.
-    	when(jobService.findById(4)).thenReturn(dbMe);
-    	when(jobService.findByTitle("me@example.com"))
+    	when(newsService.findById(4)).thenReturn(dbMe);
+    	when(newsService.findByTitle("Title"))
     		.thenReturn(Collections.emptyList());
     	
-    	mockMvc.perform(put("/api/v1/jobs/4")
+    	mockMvc.perform(put("/api/v1/news/4")
     			.contentType(MediaType.APPLICATION_JSON)
     			.content(convertObjectToJsonBytes(me))
     			.accept(MediaType.APPLICATION_JSON))
     			.andExpect(status().isForbidden());
     	
-    	verify(jobService, never()).save(Mockito.any(DbJob.class));
+    	verify(newsService, never()).save(Mockito.any(DbNews.class));
     }
-    
-    
-    
     
    
     public static byte[] convertObjectToJsonBytes(Object object) throws IOException  {

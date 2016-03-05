@@ -2,8 +2,10 @@ package org.spring2885.server.api;
 
 import static org.mockito.Mockito.mock;
 
+import org.spring2885.server.db.model.PersonConverters;
 import org.spring2885.server.db.service.JobService;
 import org.spring2885.server.db.service.JobTypeService;
+import org.spring2885.server.db.service.NewsService;
 import org.spring2885.server.db.service.TokenService;
 import org.spring2885.server.db.service.person.LanguageService;
 import org.spring2885.server.db.service.person.PersonService;
@@ -13,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -26,6 +29,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
         "org.spring2885.server.api",
         "org.spring2885.server.model"
 })
+@Import(PersonConverters.class)
 public class TestConfig {
 	@Bean
 	public PersonService personServiceMock() {
@@ -67,10 +71,16 @@ public class TestConfig {
 	    return mock(TokenService.class);
 	}
 	
+    @Bean
+    public NewsService newsServiceMock()
+    {
+        return mock(NewsService.class);
+    }
+	
 	@Configuration
 	@EnableWebSecurity
 	@EnableWebMvc 
-	public static class TestSecurityConfig extends WebSecurityConfigurerAdapter {
+    public static class TestSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	    @Override
 	    protected void configure(HttpSecurity http) throws Exception {

@@ -305,6 +305,7 @@ paths:
 
   /api/v1/news:
     get:
+      tags: ["News"]
       description: |
         Gets `News` objects.
         Optional querry param of **size** determines
@@ -336,7 +337,7 @@ paths:
       responses:
         200:
           description: Makes a new News 
-  /news/{id}:
+  /api/v1/news/{id}:
     get:
       tags: ["News"]
       description: |

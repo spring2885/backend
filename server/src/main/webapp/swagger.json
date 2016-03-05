@@ -133,6 +133,7 @@
     },
     "/api/v1/news" : {
       "get" : {
+        "tags" : [ "News" ],
         "description" : "Gets `News` objects.\nOptional querry param of **size** determines\nsize of return array\n",
         "parameters" : [ {
           "name" : "size",
@@ -169,6 +170,76 @@
         "responses" : {
           "200" : {
             "description" : "Makes a new News"
+          }
+        }
+      }
+    },
+    "/api/v1/news/{id}" : {
+      "get" : {
+        "tags" : [ "News" ],
+        "description" : "Retrives a News entry\n",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "a single News entry",
+          "required" : true,
+          "type" : "number",
+          "format" : "int64"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Sucussful deletion",
+            "schema" : {
+              "$ref" : "#/definitions/News"
+            }
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "News" ],
+        "summary" : "The News to update\n",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "The id of the News to be update.",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int64"
+        }, {
+          "in" : "body",
+          "name" : "news",
+          "description" : "The News item you want to update",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/News"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Deletes News"
+          },
+          "500" : {
+            "description" : "Error with deleting News by id."
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "News" ],
+        "summary" : "The News to delete\n",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "The News to be deleted.",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int64"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Deletes News"
+          },
+          "500" : {
+            "description" : "Error with deleting News by id."
           }
         }
       }
@@ -336,76 +407,6 @@
           },
           "500" : {
             "description" : "error setting new password"
-          }
-        }
-      }
-    },
-    "/news/{id}" : {
-      "get" : {
-        "tags" : [ "News" ],
-        "description" : "Retrives a News entry\n",
-        "parameters" : [ {
-          "name" : "id",
-          "in" : "path",
-          "description" : "a single News entry",
-          "required" : true,
-          "type" : "number",
-          "format" : "int64"
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "Sucussful deletion",
-            "schema" : {
-              "$ref" : "#/definitions/News"
-            }
-          }
-        }
-      },
-      "put" : {
-        "tags" : [ "News" ],
-        "summary" : "The News to update\n",
-        "parameters" : [ {
-          "name" : "id",
-          "in" : "path",
-          "description" : "The id of the News to be update.",
-          "required" : true,
-          "type" : "integer",
-          "format" : "int64"
-        }, {
-          "in" : "body",
-          "name" : "news",
-          "description" : "The News item you want to update",
-          "required" : true,
-          "schema" : {
-            "$ref" : "#/definitions/News"
-          }
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "Deletes News"
-          },
-          "500" : {
-            "description" : "Error with deleting News by id."
-          }
-        }
-      },
-      "delete" : {
-        "tags" : [ "News" ],
-        "summary" : "The News to delete\n",
-        "parameters" : [ {
-          "name" : "id",
-          "in" : "path",
-          "description" : "The News to be deleted.",
-          "required" : true,
-          "type" : "integer",
-          "format" : "int64"
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "Deletes News"
-          },
-          "500" : {
-            "description" : "Error with deleting News by id."
           }
         }
       }
