@@ -18,8 +18,8 @@ public class TokenServiceImpl implements TokenService {
 	}
 	
 	@Override
-	public DbToken findById(long id) {
-		return repository.findOne(id);
+	public DbToken findById(String uuid) {
+		return repository.findOne(uuid);
 	}
 
 	@Override
@@ -33,23 +33,18 @@ public class TokenServiceImpl implements TokenService {
 	}
 	
 	@Override
-	public boolean delete(long id){
-		DbToken token = findById(id);
+	public boolean delete(String uuid){
+		DbToken token = findById(uuid);
 		if (token != null){
-			repository.delete(id);
+			repository.delete(uuid);
 			return true;
 		}
 		return false;
 	}
 	
-	public boolean deleteByEmail(String email){
-		List<DbToken> token = findByEmail(email);
-		for(DbToken t : token){
-			if (t.getEmail() != null){
-				repository.delete(token);
-			}
-		}
-		return false;
+	public boolean deleteByEmail(String email) {
+	    repository.deleteByEmail(email);
+		return true;
 	}
 
 	@Override
@@ -61,7 +56,4 @@ public class TokenServiceImpl implements TokenService {
 	public DbToken save(DbToken token) {
 		return repository.save(token);
 	}
-	
-	
-
 }

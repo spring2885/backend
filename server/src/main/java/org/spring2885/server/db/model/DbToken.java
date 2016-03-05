@@ -12,19 +12,10 @@ import javax.persistence.Table;
 @Table(name="token")
 public class DbToken {
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	private int id;
+    private String uuid;
 	private String email;
-	private String uuid;
-	private String uuidStatus;
-	private Date dateCreate;
+	private Date dateCreated;
 	
-	public int getId() {
-		return id;
-	}
-	public void setId(int id) {
-		this.id = id;
-	}
 	public String getEmail() {
 		return email;
 	}
@@ -37,25 +28,19 @@ public class DbToken {
 	public void setUuid(String uuid) {
 		this.uuid = uuid;
 	}
-	public String getUuidStatus() {
-		return uuidStatus;
+	public Date getDateCreated() {
+		return dateCreated;
 	}
-	public void setUuidStatus(String uuidStatus) {
-		this.uuidStatus = uuidStatus;
-	}
-	public Date getDateCreate() {
-		return dateCreate;
-	}
-	public void setDateCreate(Date dateCreate) {
-		this.dateCreate = dateCreate;
+	public void setDateCreated(Date dateCreated) {
+		this.dateCreated = dateCreated;
 	}
 	
 	@Override
 	public String toString() {
 		return new StringBuilder("{ Token: ")
-				.append("{ Id: ").append(id)
+				.append("{ uuid: ").append(uuid)
 				.append(", email; ").append(email)
-				.append(", uuidStatus; ").append(uuidStatus)
+				.append(", date_created: ").append(dateCreated)
 				.append(" }\n")
 				.append(" }\n")
 				.toString();
