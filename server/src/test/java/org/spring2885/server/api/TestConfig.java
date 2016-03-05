@@ -2,7 +2,6 @@ package org.spring2885.server.api;
 
 import static org.mockito.Mockito.mock;
 
-import org.spring2885.server.db.model.PersonConverters;
 import org.spring2885.server.db.service.JobService;
 import org.spring2885.server.db.service.JobTypeService;
 import org.spring2885.server.db.service.LanguageService;

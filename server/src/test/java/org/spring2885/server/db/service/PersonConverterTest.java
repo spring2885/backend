@@ -19,15 +19,16 @@ import com.google.common.base.Function;
 @WebAppConfiguration
 public class PersonConverterTest {
 	public PersonConverterTest(){}
-	@Autowired
-	private PersonConverters.JsonToDbConverter jsonToDb;
+    @Autowired
+    private PersonConverters.JsonToDbConverter jsonToDb;
+    @Autowired
+    private PersonConverters.FromDbToJson dbToJson;
 	
 	@Test
 	public void testFromDbToJson(){
-		Function<DbPerson, Person> dtoj = PersonConverters.fromDbToJson();
 		DbPerson dbp = new DbPerson();
 		Person p = new Person();
-		p = dtoj.apply(dbp);
+		p = dbToJson.apply(dbp);
 	}
 	
 	@Test

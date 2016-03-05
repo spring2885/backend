@@ -40,8 +40,11 @@ public class PersonsApi {
 	@Autowired
 	private PersonService personService;
 
-	@Autowired
-	private PersonConverters.JsonToDbConverter jsonToDbConverter;
+    @Autowired
+    private PersonConverters.JsonToDbConverter jsonToDbConverter;
+
+    @Autowired
+    private PersonConverters.FromDbToJson dbToJsonConverter;
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public ResponseEntity<Person> get(
@@ -52,7 +55,7 @@ public class PersonsApi {
 			// here, so needed to add this.
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-		return new ResponseEntity<>(PersonConverters.fromDbToJson().apply(o), HttpStatus.OK);
+		return new ResponseEntity<>(dbToJsonConverter.apply(o), HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
@@ -78,9 +81,8 @@ public class PersonsApi {
 	public ResponseEntity<List<Person>> list(@RequestParam(value = "size", required = false) Double size)
 			throws NotFoundException {
 		
-		Function<DbPerson, Person> fromDbToJson = PersonConverters.fromDbToJson();
 		List<Person> persons = FluentIterable.from(personService.findAll())
-				.transform(fromDbToJson)
+				.transform(dbToJsonConverter)
 				.toList();
 		
 		return new ResponseEntity<>(persons, HttpStatus.OK);

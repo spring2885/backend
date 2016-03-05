@@ -25,7 +25,12 @@ public final class PersonConverters {
     @Autowired
     private LanguageService languageService;
 
-    private static class FromDbToJson implements Function<DbPerson, Person> {
+    @Bean
+    public FromDbToJson dbToJsonConverter() {
+        return new FromDbToJson();
+    }
+
+    public static class FromDbToJson implements Function<DbPerson, Person> {
 
 		@Override
 		public Person apply(DbPerson db) {
@@ -152,10 +157,6 @@ public final class PersonConverters {
 			return null;
 		}
 		return new java.sql.Date(d.getTime());
-	}
-
-	public static Function<DbPerson, Person> fromDbToJson() {
-		return new FromDbToJson();
 	}
 
 	private PersonConverters() {}
