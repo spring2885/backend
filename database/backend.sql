@@ -98,12 +98,12 @@ DROP TABLE IF EXISTS News;
 CREATE TABLE News
 (
 id int,
-news_title varchar(256),
-news_description TEXT(65535),
-news_posted DATE,
-new_expired DATE,
-news_person_id int,
-news_views int,
+title varchar(256),
+description TEXT(65535),
+posted DATE,
+expired DATE,
+person_id int,
+views int,
 PRIMARY KEY(id),
 FOREIGN KEY(news_person_id) REFERENCES Person(id)
 );

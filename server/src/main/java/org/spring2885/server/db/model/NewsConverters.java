@@ -1,10 +1,6 @@
 package org.spring2885.server.db.model;
 
 import java.sql.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.spring2885.model.News;
 
@@ -19,12 +15,12 @@ public final class NewsConverters {
 		public News apply(DbNews db) {
 			News n = new News();
 			n.setId(db.getId());
-			n.setNewsDescription(db.getNewsDescription());
-			n.setNewsExpired(db.getNewsExpired());
-			n.setNewsPersonId(db.getNewsPersonId());
-			n.setNewsPosted(db.getNewsPosted());
-			n.setNewsTitle(db.getNewsTitle());
-			n.setNewsViews(db.getNewsViews());
+			n.setNewsDescription(db.getDescription());
+			n.setNewsExpired(db.getExpired());
+			n.setNewsPersonId(db.getPersonId());
+			n.setNewsPosted(db.getPosted());
+			n.setNewsTitle(db.getTitle());
+			n.setNewsViews(db.getViews());
 			
 			return n;
 		}
@@ -50,12 +46,12 @@ public final class NewsConverters {
 		public DbNews apply(News p) {
 			DbNews db = dbSupplier.get();
 			db.setId(p.getId());
-			db.setNewsDescription(p.getNewsDescription());
-			db.setNewsExpired(asSqlData(p.getNewsExpired()));
-			db.setNewsPersonId(p.getNewsPersonId());
-			db.setNewsPosted(asSqlData(p.getNewsPosted()));
-			db.setNewsTitle(db.getNewsTitle());
-			db.setNewsViews(p.getNewsViews());
+			db.setDescription(p.getNewsDescription());
+			db.setExpired(asSqlData(p.getNewsExpired()));
+			db.setPersonId(p.getNewsPersonId());
+			db.setPosted(asSqlData(p.getNewsPosted()));
+			db.setTitle(db.getTitle());
+			db.setViews(p.getNewsViews());
 			return db;
 		}
 
