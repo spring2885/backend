@@ -1,7 +1,5 @@
 package org.spring2885.server.db.model;
 
-import java.sql.Date;
-
 import org.spring2885.model.News;
 
 import com.google.common.base.Function;

@@ -128,13 +128,12 @@ public class PersonsApi {
 		if (!request.isUserInRole("ROLE_ADMIN")) {
 			// Only admin's can change other profiles.
 			String name = request.getUserPrincipal().getName();
-			List<DbPerson> possibles = personService.findByEmail(name);
-			if (possibles.size() != 1) {
+			DbPerson me = personService.findByEmail(name);
+			if (me == null) {
 				// I can't find myself... need more zen.
 				return false;
 			}
 			
-			DbPerson me = Iterables.getOnlyElement(possibles);
 			if (me.getId() != requestId) {
 				// Someone is being naughty...
 				return false;
