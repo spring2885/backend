@@ -7,10 +7,12 @@ import java.util.Set;
 
 import org.spring2885.model.Person;
 import org.spring2885.server.api.exceptions.NotFoundException;
+import org.spring2885.server.db.model.DbLanguage;
 import org.spring2885.server.db.model.DbPerson;
 import org.spring2885.server.db.model.DbPersonType;
 import org.spring2885.server.db.model.DbSocialService;
 import org.spring2885.server.db.model.PersonConverters;
+import org.spring2885.server.db.service.LanguageService;
 import org.spring2885.server.db.service.PersonService;
 import org.spring2885.server.db.service.PersonTypeService;
 import org.spring2885.server.db.service.SocialServiceService;
@@ -39,6 +41,8 @@ public class PersonsApi {
 	private SocialServiceService socialServiceService;
 	@Autowired
 	private PersonTypeService personTypeService;
+	@Autowired
+	private LanguageService languageService;
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public ResponseEntity<Person> get(
@@ -102,10 +106,12 @@ public class PersonsApi {
 		}
 		Set<DbSocialService> socialServices = socialServiceService.findAll();
 		Set<DbPersonType> personTypes = personTypeService.findAll();
+		Set<DbLanguage> languages = languageService.findAll();
 		DbPerson updatedDbPerson = PersonConverters.fromJsonToDb()
 				.withDbPerson(db)
 				.withSocialServices(socialServices)
 				.withPersonTypes(personTypes)
+				.withLanguages(languages)
 				.apply(person);
 		personService.save(updatedDbPerson);
 		

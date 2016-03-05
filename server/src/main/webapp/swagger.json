@@ -192,7 +192,7 @@
             "schema" : {
               "type" : "array",
               "items" : {
-                "$ref" : "#/definitions/person"
+                "$ref" : "#/definitions/Person"
               }
             }
           }
@@ -216,7 +216,7 @@
           "200" : {
             "description" : "Successful response",
             "schema" : {
-              "$ref" : "#/definitions/person"
+              "$ref" : "#/definitions/Person"
             }
           }
         }
@@ -237,7 +237,7 @@
           "description" : "The profile to update.",
           "required" : true,
           "schema" : {
-            "$ref" : "#/definitions/person"
+            "$ref" : "#/definitions/Person"
           }
         } ],
         "responses" : {
@@ -440,7 +440,7 @@
         }
       }
     },
-    "person" : {
+    "Person" : {
       "type" : "object",
       "properties" : {
         "id" : {
@@ -494,6 +494,9 @@
           "items" : {
             "$ref" : "#/definitions/SocialConnection"
           }
+        },
+        "lang" : {
+          "type" : "string"
         },
         "degree_major" : {
           "type" : "string"

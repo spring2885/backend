@@ -20,29 +20,29 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.spring2885.server.db.model.DbPerson;
+import org.spring2885.server.db.model.DbJob;
 
 import com.google.common.collect.Lists;
 
 @RunWith(JUnit4.class)
-public class PersonServiceTest {
-	@Mock PersonRepository repository;
-	private PersonService service;
+public class JobServiceTest {
+	@Mock JobRepository repository;
+	private JobService service;
 
     @Before public void initMocks() {
         MockitoAnnotations.initMocks(this);
-        service = new PersonServiceImpl(repository);
+        service = new JobServiceImpl(repository);
 
     	// return empty list by default
-    	when(repository.findByEmail(anyString())).thenReturn(Collections.emptyList());
+    	when(repository.findByTitle(anyString())).thenReturn(Collections.emptyList());
     }
     
     @Test
     public void testFindAll() {
-    	DbPerson p = new DbPerson();
+    	DbJob p = new DbJob();
     	when(repository.findAll()).thenReturn(Collections.singleton(p));
 
-    	List<DbPerson> persons = Lists.newArrayList(service.findAll());
+    	List<DbJob> persons = Lists.newArrayList(service.findAll());
     	assertEquals(1, persons.size());
     	assertSame(p, persons.get(0));
     }
@@ -51,60 +51,61 @@ public class PersonServiceTest {
     public void testFindAll_none() {
     	when(repository.findAll()).thenReturn(Collections.emptyList());
 
-    	List<DbPerson> persons = Lists.newArrayList(service.findAll());
+    	List<DbJob> persons = Lists.newArrayList(service.findAll());
     	assertEquals(0, persons.size());
     }
     
     @Test
-    public void testFindByEmail() {
-    	DbPerson p = new DbPerson();
-    	p.setEmail("me@");
-    	when(repository.findByEmail("me@")).thenReturn(Collections.singletonList(p));
+    public void testFindByTitle() {
+    	DbJob p = new DbJob();
+    	p.setTitle("Hello");
+    	//p.setjob("Hello");
+    	when(repository.findByTitle("Hello")).thenReturn(Collections.singletonList(p));
     	
-    	List<DbPerson> persons = Lists.newArrayList(service.findByEmail("me@"));
+    	List<DbJob> persons = Lists.newArrayList(service.findByTitle("Hello"));
     	assertEquals(1, persons.size());
     	assertSame(p, persons.get(0));
     }
 
     @Test
     public void testFindByEmail_None() {
-    	List<DbPerson> persons = Lists.newArrayList(service.findByEmail("badboy@"));
-    	assertEquals(0, persons.size());
+    	List<DbJob> jobs = Lists.newArrayList(service.findByTitle("World"));
+    	assertEquals(0, jobs.size());
     }
 
     @Test
     public void testFindById() {
-    	DbPerson expected = new DbPerson();
-    	expected.setEmail("me@");
+    	DbJob expected = new DbJob();
+    	expected.setTitle("Hellow");
     	when(repository.findOne(Long.valueOf(1234))).thenReturn(expected);
     	
-    	DbPerson actual = service.findById(1234);
+    	DbJob actual = service.findById(1234);
     	assertSame(expected, actual);
     }
     
     @Test
     public void testFindById_notFound() {
-    	DbPerson actual = service.findById(1234);
+    	DbJob actual = service.findById(1234);
     	assertNull(actual);
     }
     
     @Test
-    public void testExistsByEmail() {
-    	DbPerson p = new DbPerson();
-    	p.setEmail("me@");
-    	when(repository.findByEmail("me@")).thenReturn(Collections.singletonList(p));
+    public void testExistsByTitle() {
+    	DbJob p = new DbJob();
+    	p.setTitle("Hello");
+    	when(repository.findByTitle("Hello")).thenReturn(Collections.singletonList(p));
 
-    	assertTrue(service.existsByEmail("me@"));
+    	assertTrue(service.existsByTitle("Hello"));
     }
     
     @Test
     public void testExistsByEmail_doesNotExist() {
-    	assertFalse(service.existsByEmail("me@"));
+    	assertFalse(service.existsByTitle("me@"));
     }
     
     @Test
     public void testDelete() {
-    	DbPerson p = new DbPerson();
+    	DbJob p = new DbJob();
     	when(repository.findOne(Long.valueOf(21))).thenReturn(p);
     	
     	assertTrue(service.delete(21));
@@ -113,7 +114,7 @@ public class PersonServiceTest {
 
     @Test
     public void testDelete_notFound() {
-    	DbPerson p = new DbPerson();
+    	DbJob p = new DbJob();
     	when(repository.findOne(Long.valueOf(22))).thenReturn(p);
     	
     	assertFalse(service.delete(21));
@@ -124,11 +125,11 @@ public class PersonServiceTest {
 
     @Test
     public void testSave() {
-    	DbPerson p = new DbPerson();
-    	DbPerson expected = new DbPerson();
+    	DbJob p = new DbJob();
+    	DbJob expected = new DbJob();
     	when(repository.save(same(p))).thenReturn(expected);
     	
-    	DbPerson actual = service.save(p);
+    	DbJob actual = service.save(p);
     	assertSame(expected, actual);
     }
 }
