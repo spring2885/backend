@@ -3,21 +3,12 @@ package org.spring2885.server.api;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import java.util.List;
-import java.util.Set;
-
-import javax.annotation.Resource;
 
 import org.spring2885.model.Person;
 import org.spring2885.server.api.exceptions.NotFoundException;
-import org.spring2885.server.db.model.DbLanguage;
 import org.spring2885.server.db.model.DbPerson;
-import org.spring2885.server.db.model.DbPersonType;
-import org.spring2885.server.db.model.DbSocialService;
 import org.spring2885.server.db.model.PersonConverters;
-import org.spring2885.server.db.service.LanguageService;
 import org.spring2885.server.db.service.PersonService;
-import org.spring2885.server.db.service.PersonTypeService;
-import org.spring2885.server.db.service.SocialServiceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.google.common.base.Function;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Iterables;
 
