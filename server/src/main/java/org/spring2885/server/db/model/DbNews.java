@@ -2,7 +2,6 @@ package org.spring2885.server.db.model;
 
 import java.sql.Date;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -14,97 +13,74 @@ import javax.persistence.Table;
 public class DbNews {
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	private long id;
-	@Column(name="news_title")
-	private String newsTitle;
-	@Column(name="news_description")
-	private String newsDescription;
-	@Column(name="news_posted")
-	private Date newsPosted;
-	@Column(name="news_expired")
-	private Date newsExpired;
-	@Column(name="news_person_id")
-	private long newsPersonId;
-	@Column(name="news_views")
-	private long newsViews;
+	private Long id;
+	private String title;
+	private String description;
+	private Date posted;
+	private Date expired;
+	private Long personId;
+	private Long views;
 	
-
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
+    public String getTitle() {
+        return title;
+    }
 
-	public String getNewsTitle() {
-		return newsTitle;
-	}
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
+    public String getDescription() {
+        return description;
+    }
 
-	public void setNewsTitle(String newsTitle) {
-		this.newsTitle = newsTitle;
-	}
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
+    public Date getPosted() {
+        return posted;
+    }
 
-	public String getNewsDescription() {
-		return newsDescription;
-	}
+    public void setPosted(Date posted) {
+        this.posted = posted;
+    }
 
+    public Date getExpired() {
+        return expired;
+    }
 
-	public void setNewsDescription(String newsDescription) {
-		this.newsDescription = newsDescription;
-	}
+    public void setExpired(Date expired) {
+        this.expired = expired;
+    }
 
+    public Long getPersonId() {
+        return personId;
+    }
 
-	public Date getNewsPosted() {
-		return newsPosted;
-	}
+    public void setPersonId(Long personId) {
+        this.personId = personId;
+    }
 
+    public Long getViews() {
+        return views;
+    }
 
-	public void setNewsPosted(Date newsPosted) {
-		this.newsPosted = newsPosted;
-	}
+    public void setViews(Long views) {
+        this.views = views;
+    }
 
+    @Override
+    public String toString() {
+        return "DbNews [id=" + id + ", title=" + title + ", description=" + description + ", posted=" + posted
+                + ", expired=" + expired + ", personId=" + personId + ", views=" + views + "]";
+    }
 
-	public Date getNewsExpired() {
-		return newsExpired;
-	}
-
-
-	public void setNewsExpired(Date newsExpired) {
-		this.newsExpired = newsExpired;
-	}
-
-
-	public long getNewsPersonId() {
-		return newsPersonId;
-	}
-
-
-	public void setNewsPersonId(long newsPersonId) {
-		this.newsPersonId = newsPersonId;
-	}
-
-
-	public long getNewsViews() {
-		return newsViews;
-	}
-
-
-	public void setNewsViews(long newsViews) {
-		this.newsViews = newsViews;
-	}
-
-
-	@Override
-	public String toString() {
-		return "DbNews [id=" + id + ", newsTitle=" + newsTitle + ", newsDescription=" + newsDescription
-				+ ", newsPosted=" + newsPosted + ", newsExpired=" + newsExpired + ", newsPersonId=" + newsPersonId
-				+ ", newsViews=" + newsViews + "]";
-	}
-	
-	
 }
