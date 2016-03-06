@@ -84,8 +84,8 @@ industry INT,
 location VARCHAR(200),
 description TEXT(65535),
 job_type INT,
-start_date DATE,
-end_date DATE,
+start_date DATETIME,
+end_date DATETIME,
 posted_by_person_id INT,
 hours INT,
 PRIMARY KEY(id),
@@ -159,7 +159,7 @@ DROP TABLE IF EXISTS token;
 CREATE TABLE token(
     uuid VARCHAR(200) NOT NULL,
     email VARCHAR(200) NOT NULL UNIQUE,
-    date_created DATE,
+    date_created DATETIME,
     PRIMARY KEY(uuid)
 );
 
