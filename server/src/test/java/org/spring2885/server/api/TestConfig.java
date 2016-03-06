@@ -12,6 +12,7 @@ import org.spring2885.server.db.service.person.LanguageService;
 import org.spring2885.server.db.service.person.PersonService;
 import org.spring2885.server.db.service.person.PersonTypeService;
 import org.spring2885.server.db.service.person.SocialServiceService;
+import org.spring2885.server.mail.Mailer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -73,9 +74,12 @@ public class TestConfig {
 	}
 	
     @Bean
-    public NewsService newsServiceMock()
-    {
+    public NewsService newsServiceMock() {
         return mock(NewsService.class);
+    }
+    
+    @Bean Mailer mailerMock() {
+        return mock(Mailer.class);
     }
 	
 	@Configuration

@@ -1,9 +1,9 @@
 package org.spring2885.server.db.service.search;
 
-public class SearchCriteria {
-    private String key;
-    private SearchOperator operator;
-    private String term;
+public final class SearchCriteria {
+    private final String key;
+    private final SearchOperator operator;
+    private final String term;
     
     public SearchCriteria(String key, SearchOperator operator, String term) {
         this.key = key;
