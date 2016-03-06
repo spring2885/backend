@@ -27,6 +27,9 @@ buildNumber.properties
 server/src/main/webapp/README.md
 .recommenders/
 
+# Developer specific properties
+server/src/main/resources/application-dev.properties
+
 # Eclipse artifacts we don't need since we are
 # maven only.
 .classpath
