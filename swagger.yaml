@@ -205,7 +205,6 @@ paths:
   /api/v1/jobs:
     get:
       tags: ["Jobs"]
-      # Describe this verb here. Note: you can use markdown
       description: |
         Gets `Job` objects.
         Optional query param of **size** determines
@@ -523,3 +522,7 @@ tags:
     description: Fetch, Delete, and update Profiles
   - name: Reset
     description: Everything used for resetting password
+  - name: Jobs
+    description: Everything to do with Jobs
+  - name: News
+    description: Everything to do with News

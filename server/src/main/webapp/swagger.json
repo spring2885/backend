@@ -19,6 +19,12 @@
   }, {
     "name" : "Reset",
     "description" : "Everything used for resetting password"
+  }, {
+    "name" : "Jobs",
+    "description" : "Everything to do with Jobs"
+  }, {
+    "name" : "News",
+    "description" : "Everything to do with News"
   } ],
   "paths" : {
     "/api/v1/jobs" : {

@@ -2,6 +2,7 @@ package org.spring2885.server.db.model;
 
 import java.sql.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -21,10 +22,12 @@ public class DbNews {
 	private String description;
 	private Date posted;
 	private Date expired;
-    @ManyToOne(fetch=FetchType.LAZY)
+    @ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name="person_id")
-    private DbPerson personId;
+    private DbPerson person;
 	private Long views;
+	@Column(nullable = false, columnDefinition = "TINYINT", length = 1)
+	private boolean active;
 	
 	public Long getId() {
 		return id;
@@ -67,11 +70,11 @@ public class DbNews {
     }
 
     public DbPerson getPerson() {
-        return personId;
+        return person;
     }
 
     public void setPersonId(DbPerson personId) {
-        this.personId = personId;
+        this.person = personId;
     }
 
     public Long getViews() {
@@ -82,10 +85,18 @@ public class DbNews {
         this.views = views;
     }
 
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
     @Override
     public String toString() {
         return "DbNews [id=" + id + ", title=" + title + ", description=" + description + ", posted=" + posted
-                + ", expired=" + expired + ", personId=" + personId + ", views=" + views + "]";
+                + ", expired=" + expired + ", personId=" + person + ", views=" + views + "]";
     }
 
 }
