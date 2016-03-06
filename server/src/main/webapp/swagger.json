@@ -6,8 +6,8 @@
     "title" : "NDNU Community Access API",
     "contact" : {
       "name" : "Spring2885 Backend Development Team",
-      "url" : "https://github.com/rob2885/backend",
-      "email" : "api@spring-2885.org"
+      "url" : "https://github.com/spring2885/backend",
+      "email" : "team@spring-2885.org"
     }
   },
   "tags" : [ {

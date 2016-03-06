@@ -8,8 +8,8 @@ info:
   description: An API for the Spring2885 FrontEnd.
   contact: 
     name: Spring2885 Backend Development Team
-    email: api@spring-2885.org
-    url: https://github.com/rob2885/backend
+    email: team@spring-2885.org
+    url: https://github.com/spring2885/backend
   
 
 # Describe your paths here
