@@ -20,14 +20,14 @@ import org.springframework.stereotype.Component;
 import com.samskivert.mustache.Mustache;
 import com.samskivert.mustache.Template;
 
-@Component
-public class Mailer {
-    private static final Logger logger = LoggerFactory.getLogger(Mailer.class);
+@Component("mailer")
+public class MailerImpl {
+    private static final Logger logger = LoggerFactory.getLogger(MailerImpl.class);
     
     private JavaMailSender sender;
     
     @Autowired
-    public Mailer(JavaMailSender javaMailSender) {
+    public MailerImpl(JavaMailSender javaMailSender) {
         this.sender = javaMailSender;
     }
     

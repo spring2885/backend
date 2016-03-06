@@ -16,6 +16,7 @@ import org.spring2885.server.db.service.PersonConverterTest;
 import org.spring2885.server.db.service.PersonServiceTest;
 import org.spring2885.server.db.service.SocialServiceServiceTest;
 import org.spring2885.server.db.service.TokenServiceTest;
+import org.spring2885.server.db.service.search.SearchParserTest;
 
 /**
  * Lists each test class in the project.
@@ -35,6 +36,7 @@ import org.spring2885.server.db.service.TokenServiceTest;
     PersonsApiTest.class,
     PersonServiceTest.class,
     PersonConverterTest.class,
+    SearchParserTest.class,
     SocialServiceServiceTest.class,
     TokenServiceTest.class,
 })
