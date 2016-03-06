@@ -109,9 +109,8 @@ public class NewsApi {
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<Void> put(@RequestBody News news) throws NotFoundException {
         
-        DbNews db = new DbNews();
         DbNews updatedDbNews = fromJsonToDb
-                .withDbNews(db)
+                .withDbNews(new DbNews())
                 .apply(news);
         newsService.save(updatedDbNews);
         
