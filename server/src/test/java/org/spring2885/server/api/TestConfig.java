@@ -12,14 +12,13 @@ import org.spring2885.server.db.service.person.LanguageService;
 import org.spring2885.server.db.service.person.PersonService;
 import org.spring2885.server.db.service.person.PersonTypeService;
 import org.spring2885.server.db.service.person.SocialServiceService;
+import org.spring2885.server.db.service.search.SearchParser;
 import org.spring2885.server.mail.Mailer;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.Scope;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -82,6 +81,11 @@ public class TestConfig {
     
     @Bean Mailer mailerMock() {
         return mock(Mailer.class);
+    }
+    
+    @Bean
+    SearchParser searchParser() {
+        return new SearchParser();
     }
 	
 	@Configuration

@@ -1,6 +1,6 @@
 package org.spring2885.server.api;
 
-import static org.mockito.Matchers.eq;
+import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verify;
@@ -15,6 +15,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
 import java.util.Collections;
+import java.util.List;
 
 import org.hamcrest.Matchers;
 import org.junit.After;
@@ -29,6 +30,8 @@ import org.spring2885.server.db.model.DbPersonType;
 import org.spring2885.server.db.service.person.LanguageService;
 import org.spring2885.server.db.service.person.PersonService;
 import org.spring2885.server.db.service.person.PersonTypeService;
+import org.spring2885.server.db.service.search.SearchCriteria;
+import org.spring2885.server.db.service.search.SearchOperator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -129,6 +132,46 @@ public class PersonsApiTest {
     			.andExpect(jsonPath("$[1].email", Matchers.is("me2@example.com")));
     }
 
+    @Test
+    @WithMockUser
+    public void testPersons_q() throws Exception {
+        // Setup the expectations.
+        when(personService.findAll())
+            .thenReturn(ImmutableList.of(
+                createDbPerson(5,  "me@example.com", ""),
+                createDbPerson(5,  "me2@example.com", "")));
+        when(personService.findAll(eq("me2")))
+            .thenReturn(ImmutableList.of(
+                createDbPerson(5,  "me2@example.com", "")));
+        
+        mockMvc.perform(get("/api/v1/profiles?q=me2")
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$[0].email", Matchers.is("me2@example.com")));
+    }
+
+    @SuppressWarnings("unchecked")
+    @Test
+    @WithMockUser
+    public void testPersons_aq() throws Exception {
+        // Setup the expectations.
+        when(personService.findAll())
+            .thenReturn(ImmutableList.of(
+                createDbPerson(5,  "me@example.com", ""),
+                createDbPerson(5,  "me2@example.com", "")));
+        SearchCriteria expected = new SearchCriteria("email", SearchOperator.EQ, "me2*");
+        
+        when(personService.findAll(Collections.singletonList(expected)))
+            .thenReturn(ImmutableList.of(
+                createDbPerson(5,  "me2@example.com", "")));
+        
+        mockMvc.perform(get("/api/v1/profiles?aq=email:me2*")
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$[0].email", Matchers.is("me2@example.com")));
+    }
     /**
      * Tests a {@code /profiles/:id} where {@code id} is found.
      */

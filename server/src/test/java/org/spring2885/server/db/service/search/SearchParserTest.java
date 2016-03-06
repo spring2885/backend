@@ -10,8 +10,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import nl.jqno.equalsverifier.EqualsVerifier;
-
 @RunWith(JUnit4.class)
 public class SearchParserTest {
     private SearchCriteria name = new SearchCriteria("name", SearchOperator.EQ, "rob*");
@@ -54,8 +52,4 @@ public class SearchParserTest {
         assertThat(actual, contains(name));
     }
 
-    @Test
-    public void equalsContract() {
-        EqualsVerifier.forClass(SearchParser.class).verify();
-    }    
 }

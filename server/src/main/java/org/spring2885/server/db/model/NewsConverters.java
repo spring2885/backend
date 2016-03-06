@@ -41,11 +41,6 @@ public final class NewsConverters {
 		JsonToDbConverter() {
 		}
 		
-		public JsonToDbConverter withDbNewsSupplier(Supplier<DbNews> dbSupplier) {
-			this.dbSupplier = dbSupplier;
-			return this;
-		}
-		
 		public JsonToDbConverter withDbNews(DbNews db) {
 			this.dbSupplier = Suppliers.ofInstance(db);
 			return this;

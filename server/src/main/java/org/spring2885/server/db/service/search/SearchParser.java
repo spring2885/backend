@@ -7,8 +7,10 @@ import java.util.StringTokenizer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
-public final class SearchParser {
+@Component("searchParser")
+public class SearchParser {
     private static final Logger logger = LoggerFactory.getLogger(SearchParser.class);
 
     private final String delims;
