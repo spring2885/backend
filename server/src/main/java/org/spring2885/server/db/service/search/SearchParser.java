@@ -8,7 +8,7 @@ import java.util.StringTokenizer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class SearchParser {
+public final class SearchParser {
     private static final Logger logger = LoggerFactory.getLogger(SearchParser.class);
 
     private final String delims;

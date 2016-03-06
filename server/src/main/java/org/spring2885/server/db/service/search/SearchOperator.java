@@ -22,7 +22,7 @@ public enum SearchOperator {
     }
     /** Finds the search operator or {@code null} on error. */
     public static SearchOperator find(String s) {
-        if (s.length() != 1) {
+        if (s == null || s.length() != 1) {
             logger.warn("Invalid SearchOperator {}", s);
             return null;
         }
