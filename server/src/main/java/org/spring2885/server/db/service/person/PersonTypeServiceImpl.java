@@ -16,6 +16,7 @@ public class PersonTypeServiceImpl implements PersonTypeService {
 	private final PersonTypeRepository repository;
 	
 	@Autowired
+    public
 	PersonTypeServiceImpl(PersonTypeRepository repository) {
 		this.repository = repository;
 	}
