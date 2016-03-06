@@ -6,8 +6,8 @@
     "title" : "NDNU Community Access API",
     "contact" : {
       "name" : "Spring2885 Backend Development Team",
-      "url" : "https://github.com/rob2885/backend",
-      "email" : "api@spring-2885.org"
+      "url" : "https://github.com/spring2885/backend",
+      "email" : "team@spring-2885.org"
     }
   },
   "tags" : [ {
@@ -19,6 +19,12 @@
   }, {
     "name" : "Reset",
     "description" : "Everything used for resetting password"
+  }, {
+    "name" : "Jobs",
+    "description" : "Everything to do with Jobs"
+  }, {
+    "name" : "News",
+    "description" : "Everything to do with News"
   } ],
   "paths" : {
     "/api/v1/jobs" : {

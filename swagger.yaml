@@ -8,8 +8,8 @@ info:
   description: An API for the Spring2885 FrontEnd.
   contact: 
     name: Spring2885 Backend Development Team
-    email: api@spring-2885.org
-    url: https://github.com/rob2885/backend
+    email: team@spring-2885.org
+    url: https://github.com/spring2885/backend
   
 
 # Describe your paths here
@@ -205,7 +205,6 @@ paths:
   /api/v1/jobs:
     get:
       tags: ["Jobs"]
-      # Describe this verb here. Note: you can use markdown
       description: |
         Gets `Job` objects.
         Optional query param of **size** determines
@@ -523,3 +522,7 @@ tags:
     description: Fetch, Delete, and update Profiles
   - name: Reset
     description: Everything used for resetting password
+  - name: Jobs
+    description: Everything to do with Jobs
+  - name: News
+    description: Everything to do with News
