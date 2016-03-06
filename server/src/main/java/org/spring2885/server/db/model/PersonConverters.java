@@ -36,10 +36,13 @@ public final class PersonConverters {
 		public Person apply(DbPerson db) {
 			Person p = new Person();
 			p.setId(db.getId());
+			p.setAboutMe(db.getAboutMe());
 			p.setName(db.getName());
+			p.setDegreeMajor(db.getDegreeMajor());
+			p.setDegreeMinor(db.getDegreeMinor());
+			p.setDegreeType(db.getDegreeType());
 			p.setStudentId(db.getStudentId());
 			p.setTitle(db.getTitle());
-			p.setAboutMe(p.getAboutMe());
 			p.setResumeUrl(db.getResumeURL());
 			p.setImageUrl(db.getImageURL());
 			p.setEmail(db.getEmail());
@@ -47,6 +50,7 @@ public final class PersonConverters {
 			p.setOccupation(db.getOccupation());
 			p.setCompanyName(db.getCompanyName());
 			p.setBirthdate(db.getBirthdate());
+			p.setGraduationYear(db.getGraduationYear());
 			DbPersonType personType = db.getType();
 			if (personType != null) {
 				p.setVariety(db.getType().getName());
@@ -67,6 +71,7 @@ public final class PersonConverters {
 				p.getSocialConnections().add(social);
 			}
 
+            p.setFacultyDepartment(db.getFacultyDepartment());
 			return p;
 		}
 	}
@@ -78,19 +83,9 @@ public final class PersonConverters {
     
 	public class JsonToDbConverter implements Function<Person, DbPerson> {
 
-        private final Map<String, DbSocialService> socialServices;
-		private final Map<String, DbPersonType> personTypes;
-		private final Map<String, DbLanguage> languages;
-
 		private Supplier<DbPerson> dbSupplier = Suppliers.ofInstance(new DbPerson());
 
 		public JsonToDbConverter() {
-            this.socialServices = socialServiceService.findAll().stream()
-                    .collect(Collectors.toMap(DbSocialService::getName, (s) -> s));
-            this.personTypes = personTypeService.findAll().stream()
-                    .collect(Collectors.toMap(DbPersonType::getName, (s) -> s));
-            this.languages = languageService.findAll().stream()
-                    .collect(Collectors.toMap(DbLanguage::getCode, (s) -> s));
 		}
 
 		public void withDbPerson(DbPerson db) {
@@ -99,12 +94,22 @@ public final class PersonConverters {
 
 		@Override
 		public DbPerson apply(Person p) {
-			DbPerson db = dbSupplier.get();
+	        Map<String, DbSocialService> socialServices = 
+	                socialServiceService.findAll().stream()
+                    .collect(Collectors.toMap(DbSocialService::getName, (s) -> s));
+	        Map<String, DbPersonType> personTypes = 
+	                personTypeService.findAll().stream()
+                    .collect(Collectors.toMap(DbPersonType::getName, (s) -> s));
+	        Map<String, DbLanguage> languages = 
+	                languageService.findAll().stream()
+                    .collect(Collectors.toMap(DbLanguage::getCode, (s) -> s));
+
+            DbPerson db = dbSupplier.get();
 			// Leave the ID null since we're updating an existing person.
 			db.setName(p.getName());
 			db.setStudentId(p.getStudentId());
 			db.setTitle(p.getTitle());
-			db.setAboutMe(db.getAboutMe());
+			db.setAboutMe(p.getAboutMe());
 			db.setResumeURL(p.getResumeUrl());
 			db.setImageURL(p.getImageUrl());
 			db.setEmail(p.getEmail());
@@ -119,7 +124,7 @@ public final class PersonConverters {
 			    db.setType(personTypeService.defaultType());
 			}
 			String languageCode = p.getLang();
-			if (languageCode == null && languages.containsKey(languageCode)) {
+			if (languageCode != null && languages.containsKey(languageCode)) {
 			    db.setLanguage(languages.get(languageCode));
 			} else {
 			    db.setLanguage(languageService.defaultLanguage());

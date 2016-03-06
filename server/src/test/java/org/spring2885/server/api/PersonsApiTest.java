@@ -17,6 +17,7 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppC
 import java.util.Collections;
 
 import org.hamcrest.Matchers;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -58,6 +59,10 @@ public class PersonsApiTest {
     private DbPerson otherDbPerson;
     private Person otherPerson;
 
+    @After
+    public void after() {
+        Mockito.reset(personService, personTypeService, languageService);
+    }
     @Before
     public void setup() {
         reset(personService);
