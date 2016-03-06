@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.google.common.base.Strings;
 import com.google.common.collect.FluentIterable;
 
 @RestController
@@ -39,6 +40,9 @@ public class PersonsApi {
 
     @Autowired
     private PersonConverters.FromDbToJson dbToJsonConverter;
+    
+    @Autowired
+    private SearchParser searchParser;
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ResponseEntity<Person> get(
@@ -79,11 +83,10 @@ public class PersonsApi {
 	        ) throws NotFoundException {
 	    logger.info("PersonsApi GET: q={}, aq={}, size={}", q, aq, size);
 	    Iterable<DbPerson> all;
-	    if (q != null && q.length() > 0) {
+	    if (!Strings.isNullOrEmpty(q)) {
 	        all = personService.findAll(q);
-	    } else if (aq != null && aq.length() > 0) {
-	        SearchParser parser = new SearchParser();
-	        List<SearchCriteria> criterias = parser.parse(aq);
+	    } else if (!Strings.isNullOrEmpty(aq)) {
+	        List<SearchCriteria> criterias = searchParser.parse(aq);
             all = personService.findAll(criterias);
 	    } else {
 	        all = personService.findAll();
