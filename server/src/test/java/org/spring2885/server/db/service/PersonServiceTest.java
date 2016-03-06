@@ -25,6 +25,8 @@ import org.spring2885.server.db.service.person.PersonRepository;
 import org.spring2885.server.db.service.person.PersonService;
 import org.spring2885.server.db.service.person.PersonServiceImpl;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
 @RunWith(JUnit4.class)
@@ -48,6 +50,30 @@ public class PersonServiceTest {
     	List<DbPerson> persons = Lists.newArrayList(service.findAll());
     	assertEquals(1, persons.size());
     	assertSame(p, persons.get(0));
+    }
+
+    @Test
+    public void testFindAll_q() {
+        List<DbPerson> expected = sampleDbPersons();
+        when(repository.findAll()).thenReturn(expected);
+
+        List<DbPerson> actual = Lists.newArrayList(service.findAll("1foo"));
+        assertSame(expected.get(0), Iterables.getOnlyElement(actual));
+
+        actual = Lists.newArrayList(service.findAll("2foo"));
+        assertSame(expected.get(1), Iterables.getOnlyElement(actual));
+        
+        actual = Lists.newArrayList(service.findAll("1comp"));
+        assertSame(expected.get(0), Iterables.getOnlyElement(actual));
+
+        actual = Lists.newArrayList(service.findAll("1occ"));
+        assertSame(expected.get(0), Iterables.getOnlyElement(actual));
+
+        actual = Lists.newArrayList(service.findAll("1title"));
+        assertSame(expected.get(0), Iterables.getOnlyElement(actual));
+
+        actual = Lists.newArrayList(service.findAll("asdf"));
+        assertEquals(0, actual.size());
     }
 
     @Test
@@ -133,6 +159,22 @@ public class PersonServiceTest {
     	
     	DbPerson actual = service.save(p);
     	assertSame(expected, actual);
+    }
+    
+    private List<DbPerson> sampleDbPersons() {
+        DbPerson p1 = new DbPerson();
+        p1.setName("1foo");
+        p1.setOccupation("1occ");
+        p1.setCompanyName("1comp");
+        p1.setTitle("1title");
+        
+        DbPerson p2 = new DbPerson();
+        p2.setName("2foo");
+        p2.setOccupation("2occ");
+        p2.setCompanyName("2comp");
+        p2.setTitle("2title");
+        
+        return ImmutableList.of(p1, p2);
     }
 }
 
