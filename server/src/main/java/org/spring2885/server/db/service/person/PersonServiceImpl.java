@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.spring2885.server.db.model.DbPerson;
 import org.spring2885.server.db.service.search.SearchCriteria;
+import org.spring2885.server.db.service.search.SearchCriteriaSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.domain.Specifications;
@@ -99,9 +100,9 @@ public class PersonServiceImpl implements PersonService {
             return findAll();
         }
         Iterator<SearchCriteria> iter = criterias.iterator();
-        Specification<DbPerson> specs = new DbPersonSpecification(iter.next());
+        Specification<DbPerson> specs = new SearchCriteriaSpecification<>(iter.next());
         while (iter.hasNext()) {
-            specs = Specifications.where(specs).and(new DbPersonSpecification(iter.next()));
+            specs = Specifications.where(specs).and(new SearchCriteriaSpecification<>(iter.next()));
         }
         return repository.findAll(specs);
     }
