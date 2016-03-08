@@ -1,4 +1,4 @@
-package org.spring2885.server.db.service;
+package org.spring2885.server.db.service.person;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -16,6 +16,7 @@ public class PersonTypeServiceImpl implements PersonTypeService {
 	private final PersonTypeRepository repository;
 	
 	@Autowired
+    public
 	PersonTypeServiceImpl(PersonTypeRepository repository) {
 		this.repository = repository;
 	}

@@ -1,6 +1,6 @@
 package org.spring2885.server.api;
 
-import static org.mockito.Matchers.eq;
+import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verify;
@@ -15,8 +15,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
 import java.util.Collections;
+import java.util.List;
 
 import org.hamcrest.Matchers;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,9 +27,11 @@ import org.spring2885.model.Person;
 import org.spring2885.server.db.model.DbLanguage;
 import org.spring2885.server.db.model.DbPerson;
 import org.spring2885.server.db.model.DbPersonType;
-import org.spring2885.server.db.service.LanguageService;
-import org.spring2885.server.db.service.PersonService;
-import org.spring2885.server.db.service.PersonTypeService;
+import org.spring2885.server.db.service.person.LanguageService;
+import org.spring2885.server.db.service.person.PersonService;
+import org.spring2885.server.db.service.person.PersonTypeService;
+import org.spring2885.server.db.service.search.SearchCriteria;
+import org.spring2885.server.db.service.search.SearchOperator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -58,13 +62,17 @@ public class PersonsApiTest {
     private DbPerson otherDbPerson;
     private Person otherPerson;
 
+    @After
+    public void after() {
+        Mockito.reset(personService, personTypeService, languageService);
+    }
     @Before
     public void setup() {
         reset(personService);
         mockMvc = webAppContextSetup(webappContext)
         		.apply(SecurityMockMvcConfigurers.springSecurity())
+        		.dispatchOptions(true)
         		.build();
-        
         dbMe = createDbPerson(4, "me@example.com", "aboutMe");
         me = createPerson(4, "me@example.com", "aboutMe");
         otherPerson = createPerson(21, "other@example.com", "user 21");
@@ -103,7 +111,7 @@ public class PersonsApiTest {
     	when(personService.findById(4)).thenReturn(dbMe);
     	when(personService.findById(21)).thenReturn(otherDbPerson);
     	when(personService.findByEmail("me@example.com"))
-    		.thenReturn(Collections.singletonList(dbMe));
+    		.thenReturn(dbMe);
     }
     
     @Test
@@ -124,6 +132,46 @@ public class PersonsApiTest {
     			.andExpect(jsonPath("$[1].email", Matchers.is("me2@example.com")));
     }
 
+    @Test
+    @WithMockUser
+    public void testPersons_q() throws Exception {
+        // Setup the expectations.
+        when(personService.findAll())
+            .thenReturn(ImmutableList.of(
+                createDbPerson(5,  "me@example.com", ""),
+                createDbPerson(5,  "me2@example.com", "")));
+        when(personService.findAll(eq("me2")))
+            .thenReturn(ImmutableList.of(
+                createDbPerson(5,  "me2@example.com", "")));
+        
+        mockMvc.perform(get("/api/v1/profiles?q=me2")
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$[0].email", Matchers.is("me2@example.com")));
+    }
+
+    @SuppressWarnings("unchecked")
+    @Test
+    @WithMockUser
+    public void testPersons_aq() throws Exception {
+        // Setup the expectations.
+        when(personService.findAll())
+            .thenReturn(ImmutableList.of(
+                createDbPerson(5,  "me@example.com", ""),
+                createDbPerson(5,  "me2@example.com", "")));
+        SearchCriteria expected = new SearchCriteria("email", SearchOperator.EQ, "me2*");
+        
+        when(personService.findAll(Collections.singletonList(expected)))
+            .thenReturn(ImmutableList.of(
+                createDbPerson(5,  "me2@example.com", "")));
+        
+        mockMvc.perform(get("/api/v1/profiles?aq=email:me2*")
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$[0].email", Matchers.is("me2@example.com")));
+    }
     /**
      * Tests a {@code /profiles/:id} where {@code id} is found.
      */
@@ -170,7 +218,7 @@ public class PersonsApiTest {
     public void testDeletePersonsById() throws Exception {
     	// Setup the expectations.
     	when(personService.findByEmail(eq("me@example.com")))
-    		.thenReturn(Collections.singletonList(dbMe));
+    		.thenReturn(dbMe);
     	when(personService.delete(4)).thenReturn(true);
     	
     	mockMvc.perform(delete("/api/v1/profiles/4")
@@ -187,7 +235,7 @@ public class PersonsApiTest {
     public void testDelete_anotherPersons_notAdminUser() throws Exception {
     	// Setup the expectations.
     	when(personService.findByEmail(eq("me@example.com")))
-    		.thenReturn(Collections.singletonList(dbMe));
+    		.thenReturn(dbMe);
     	
     	mockMvc.perform(delete("/api/v1/profiles/21")
     			.accept(MediaType.APPLICATION_JSON))
@@ -219,7 +267,7 @@ public class PersonsApiTest {
     	// Setup the expectations.
     	when(personService.findById(4)).thenReturn(dbMe);
     	when(personService.findByEmail("me@example.com"))
-    		.thenReturn(Collections.emptyList());
+    		.thenReturn(null);
     	
     	mockMvc.perform(put("/api/v1/profiles/4")
     			.contentType(MediaType.APPLICATION_JSON)

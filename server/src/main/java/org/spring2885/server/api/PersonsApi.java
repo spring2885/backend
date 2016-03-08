@@ -3,19 +3,16 @@ package org.spring2885.server.api;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import java.util.List;
-import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.spring2885.model.Person;
 import org.spring2885.server.api.exceptions.NotFoundException;
-import org.spring2885.server.db.model.DbLanguage;
 import org.spring2885.server.db.model.DbPerson;
-import org.spring2885.server.db.model.DbPersonType;
-import org.spring2885.server.db.model.DbSocialService;
 import org.spring2885.server.db.model.PersonConverters;
-import org.spring2885.server.db.service.LanguageService;
-import org.spring2885.server.db.service.PersonService;
-import org.spring2885.server.db.service.PersonTypeService;
-import org.spring2885.server.db.service.SocialServiceService;
+import org.spring2885.server.db.service.person.PersonService;
+import org.spring2885.server.db.service.search.SearchCriteria;
+import org.spring2885.server.db.service.search.SearchParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,34 +24,37 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.google.common.base.Function;
+import com.google.common.base.Strings;
 import com.google.common.collect.FluentIterable;
-import com.google.common.collect.Iterables;
 
 @RestController
 @RequestMapping(value = "/api/v1/profiles", produces = { APPLICATION_JSON_VALUE })
 public class PersonsApi {
+    private static final Logger logger = LoggerFactory.getLogger(PersonsApi.class);
 	
 	@Autowired
 	private PersonService personService;
-	@Autowired
-	private SocialServiceService socialServiceService;
-	@Autowired
-	private PersonTypeService personTypeService;
-	@Autowired
-	private LanguageService languageService;
 
-	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
-	public ResponseEntity<Person> get(
-			@PathVariable("id") int id) throws NotFoundException {
-		DbPerson o = personService.findById(id);
-		if (o == null) {
-			// When adding test testPersonsById_notFound, was getting a NullPointerException
-			// here, so needed to add this.
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
-		return new ResponseEntity<>(PersonConverters.fromDbToJson().apply(o), HttpStatus.OK);
-	}
+    @Autowired
+    private PersonConverters.JsonToDbConverter jsonToDbConverter;
+
+    @Autowired
+    private PersonConverters.FromDbToJson dbToJsonConverter;
+    
+    @Autowired
+    private SearchParser searchParser;
+
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    public ResponseEntity<Person> get(
+            @PathVariable("id") int id) throws NotFoundException {
+        DbPerson o = personService.findById(id);
+        if (o == null) {
+            // When adding test testPersonsById_notFound, was getting a NullPointerException
+            // here, so needed to add this.
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(dbToJsonConverter.apply(o), HttpStatus.OK);
+    }
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<String> delete(
@@ -76,15 +76,29 @@ public class PersonsApi {
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
-	public ResponseEntity<List<Person>> list(@RequestParam(value = "size", required = false) Double size)
-			throws NotFoundException {
+	public ResponseEntity<List<Person>> list(
+	        @RequestParam(value = "aq", required = false) String aq,
+            @RequestParam(value = "q", required = false) String q,
+	        @RequestParam(value = "size", required = false) Integer size
+	        ) throws NotFoundException {
+	    logger.info("PersonsApi GET: q={}, aq={}, size={}", q, aq, size);
+	    Iterable<DbPerson> all;
+	    if (!Strings.isNullOrEmpty(q)) {
+	        all = personService.findAll(q);
+	    } else if (!Strings.isNullOrEmpty(aq)) {
+	        List<SearchCriteria> criterias = searchParser.parse(aq);
+            all = personService.findAll(criterias);
+	    } else {
+	        all = personService.findAll();
+	    }
 		
-		Function<DbPerson, Person> fromDbToJson = PersonConverters.fromDbToJson();
-		List<Person> persons = FluentIterable.from(personService.findAll())
-				.transform(fromDbToJson)
-				.toList();
-		
-		return new ResponseEntity<>(persons, HttpStatus.OK);
+		FluentIterable<Person> iterable = FluentIterable.from(all)
+				.transform(dbToJsonConverter);
+		// Support size parameter, but only if it's set (and not 0)
+		if (size != null && size.intValue() > 0) {
+		    iterable.limit(size);
+		}
+		return new ResponseEntity<>(iterable.toList(), HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
@@ -104,15 +118,8 @@ public class PersonsApi {
 		if (db == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-		Set<DbSocialService> socialServices = socialServiceService.findAll();
-		Set<DbPersonType> personTypes = personTypeService.findAll();
-		Set<DbLanguage> languages = languageService.findAll();
-		DbPerson updatedDbPerson = PersonConverters.fromJsonToDb()
-				.withDbPerson(db)
-				.withSocialServices(socialServices)
-				.withPersonTypes(personTypes)
-				.withLanguages(languages)
-				.apply(person);
+		jsonToDbConverter.withDbPerson(db);
+		DbPerson updatedDbPerson = jsonToDbConverter.apply(person);
 		personService.save(updatedDbPerson);
 		
 		return new ResponseEntity<>(HttpStatus.OK);
@@ -123,13 +130,12 @@ public class PersonsApi {
 		if (!request.isUserInRole("ROLE_ADMIN")) {
 			// Only admin's can change other profiles.
 			String name = request.getUserPrincipal().getName();
-			List<DbPerson> possibles = personService.findByEmail(name);
-			if (possibles.size() != 1) {
+			DbPerson me = personService.findByEmail(name);
+			if (me == null) {
 				// I can't find myself... need more zen.
 				return false;
 			}
 			
-			DbPerson me = Iterables.getOnlyElement(possibles);
 			if (me.getId() != requestId) {
 				// Someone is being naughty...
 				return false;

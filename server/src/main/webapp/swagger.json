@@ -6,8 +6,8 @@
     "title" : "NDNU Community Access API",
     "contact" : {
       "name" : "Spring2885 Backend Development Team",
-      "url" : "https://github.com/rob2885/backend",
-      "email" : "api@spring-2885.org"
+      "url" : "https://github.com/spring2885/backend",
+      "email" : "team@spring-2885.org"
     }
   },
   "tags" : [ {
@@ -19,6 +19,12 @@
   }, {
     "name" : "Reset",
     "description" : "Everything used for resetting password"
+  }, {
+    "name" : "Jobs",
+    "description" : "Everything to do with Jobs"
+  }, {
+    "name" : "News",
+    "description" : "Everything to do with News"
   } ],
   "paths" : {
     "/api/v1/jobs" : {
@@ -29,7 +35,7 @@
           "name" : "size",
           "in" : "query",
           "description" : "Size of array",
-          "required" : true,
+          "required" : false,
           "type" : "number",
           "format" : "double"
         } ],
@@ -133,6 +139,7 @@
     },
     "/api/v1/news" : {
       "get" : {
+        "tags" : [ "News" ],
         "description" : "Gets `News` objects.\nOptional querry param of **size** determines\nsize of return array\n",
         "parameters" : [ {
           "name" : "size",
@@ -173,11 +180,81 @@
         }
       }
     },
+    "/api/v1/news/{id}" : {
+      "get" : {
+        "tags" : [ "News" ],
+        "description" : "Retrives a News entry\n",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "a single News entry",
+          "required" : true,
+          "type" : "number",
+          "format" : "int64"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Sucussful deletion",
+            "schema" : {
+              "$ref" : "#/definitions/News"
+            }
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "News" ],
+        "summary" : "The News to update\n",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "The id of the News to be update.",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int64"
+        }, {
+          "in" : "body",
+          "name" : "news",
+          "description" : "The News item you want to update",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/News"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Deletes News"
+          },
+          "500" : {
+            "description" : "Error with deleting News by id."
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "News" ],
+        "summary" : "The News to delete\n",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "The News to be deleted.",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int64"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Deletes News"
+          },
+          "500" : {
+            "description" : "Error with deleting News by id."
+          }
+        }
+      }
+    },
     "/api/v1/profiles" : {
       "get" : {
         "tags" : [ "Profiles" ],
         "summary" : "Fetches all `profile` objects\n",
-        "description" : "Fetches all `profile` objects. up to **size** if specified\notherwise fetches all objects.\n",
+        "description" : "Fetches all `profile` objects. up to `size` if specified,\notherwise fetches all objects.\n",
         "parameters" : [ {
           "name" : "size",
           "in" : "query",
@@ -185,6 +262,18 @@
           "required" : false,
           "type" : "number",
           "format" : "int32"
+        }, {
+          "name" : "q",
+          "in" : "query",
+          "description" : "## Basic query string.\n### Format:\n  ```?q=search terms```\n\n### Example:\n  ```?q=Oracle```\n",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "aq",
+          "in" : "query",
+          "description" : "## Advanced query string.\n### Format:\n  ```?aq=(attribute OP term),...```\n\n### Example:\n  ```?aq=graduation_year>2000,occupation:manager```\n\n### Available OPs:\n  * ':' for equality\n  * '!' for not\n  * '>' greater than\n  * '<' less than\n",
+          "required" : false,
+          "type" : "string"
         } ],
         "responses" : {
           "200" : {
@@ -328,76 +417,6 @@
         }
       }
     },
-    "/news/{id}" : {
-      "get" : {
-        "tags" : [ "News" ],
-        "description" : "Retrives a News entry\n",
-        "parameters" : [ {
-          "name" : "id",
-          "in" : "path",
-          "description" : "a single News entry",
-          "required" : true,
-          "type" : "number",
-          "format" : "int64"
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "Sucussful deletion",
-            "schema" : {
-              "$ref" : "#/definitions/News"
-            }
-          }
-        }
-      },
-      "put" : {
-        "tags" : [ "News" ],
-        "summary" : "The News to update\n",
-        "parameters" : [ {
-          "name" : "id",
-          "in" : "path",
-          "description" : "The id of the News to be update.",
-          "required" : true,
-          "type" : "integer",
-          "format" : "int64"
-        }, {
-          "in" : "body",
-          "name" : "news",
-          "description" : "The News item you want to update",
-          "required" : true,
-          "schema" : {
-            "$ref" : "#/definitions/News"
-          }
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "Deletes News"
-          },
-          "500" : {
-            "description" : "Error with deleting News by id."
-          }
-        }
-      },
-      "delete" : {
-        "tags" : [ "News" ],
-        "summary" : "The News to delete\n",
-        "parameters" : [ {
-          "name" : "id",
-          "in" : "path",
-          "description" : "The News to be deleted.",
-          "required" : true,
-          "type" : "integer",
-          "format" : "int64"
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "Deletes News"
-          },
-          "500" : {
-            "description" : "Error with deleting News by id."
-          }
-        }
-      }
-    },
     "/newuser" : {
       "post" : {
         "tags" : [ "User" ],
@@ -533,11 +552,12 @@
           "type" : "string"
         },
         "start_date" : {
-          "type" : "string"
+          "type" : "string",
+          "format" : "date"
         },
         "end_date" : {
-          "type" : "object",
-          "properties" : { }
+          "type" : "string",
+          "format" : "date"
         }
       }
     },
@@ -548,25 +568,25 @@
           "type" : "integer",
           "format" : "int64"
         },
-        "news_title" : {
+        "title" : {
           "type" : "string"
         },
-        "news_description" : {
+        "description" : {
           "type" : "string"
         },
-        "news_posted" : {
-          "type" : "object",
-          "properties" : { }
+        "posted" : {
+          "type" : "string",
+          "format" : "date"
         },
-        "news_expired" : {
-          "type" : "object",
-          "properties" : { }
+        "expired" : {
+          "type" : "string",
+          "format" : "date"
         },
-        "news_person_id" : {
-          "type" : "integer",
-          "format" : "int64"
+        "posted_by" : {
+          "type" : "string",
+          "format" : "email"
         },
-        "news_views" : {
+        "views" : {
           "type" : "integer",
           "format" : "int64"
         }

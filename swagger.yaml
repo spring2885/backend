@@ -8,8 +8,8 @@ info:
   description: An API for the Spring2885 FrontEnd.
   contact: 
     name: Spring2885 Backend Development Team
-    email: api@spring-2885.org
-    url: https://github.com/rob2885/backend
+    email: team@spring-2885.org
+    url: https://github.com/spring2885/backend
   
 
 # Describe your paths here
@@ -92,21 +92,47 @@ paths:
     # This is a HTTP operation
     get:
       tags: ["Profiles"]
-      # Describe this verb here. Note: you can use markdown
       summary: |
         Fetches all `profile` objects
       description: |
-        Fetches all `profile` objects. up to **size** if specified
+        Fetches all `profile` objects. up to `size` if specified,
         otherwise fetches all objects.
-      # This is array of GET operation parameters:
       parameters:
-        # An example parameter that is in query and is required
         - name: size
           in: query
           description: The maxinum number of profiles to fetch.
           required: false
           type: number
           format: int32
+        - name: q
+          in: query
+          description: |
+            ## Basic query string.
+            ### Format:
+              ```?q=search terms```
+
+            ### Example:
+              ```?q=Oracle```
+
+          required: false
+          type: string
+        - name: aq
+          in: query
+          description: |
+            ## Advanced query string.
+            ### Format:
+              ```?aq=(attribute OP term),...```
+
+            ### Example:
+              ```?aq=graduation_year>2000,occupation:manager```
+
+            ### Available OPs:
+              * ':' for equality
+              * '!' for not
+              * '>' greater than
+              * '<' less than
+          required: false
+          type: string
       # Expected responses for this operation:
       responses:
         # Response code
@@ -179,7 +205,6 @@ paths:
   /api/v1/jobs:
     get:
       tags: ["Jobs"]
-      # Describe this verb here. Note: you can use markdown
       description: |
         Gets `Job` objects.
         Optional query param of **size** determines
@@ -191,7 +216,7 @@ paths:
           name: size
           in: query
           description: Size of array
-          required: true
+          required: false
           type: number
           format: double
       # Expected responses for this operation:
@@ -279,6 +304,7 @@ paths:
 
   /api/v1/news:
     get:
+      tags: ["News"]
       description: |
         Gets `News` objects.
         Optional querry param of **size** determines
@@ -310,7 +336,7 @@ paths:
       responses:
         200:
           description: Makes a new News 
-  /news/{id}:
+  /api/v1/news/{id}:
     get:
       tags: ["News"]
       description: |
@@ -450,8 +476,10 @@ definitions:
         type: string
       start_date:
         type: string
+        format: date
       end_date:
-        type: object
+        type: string
+        format: date
       posted_by_person_id:
         format: int64
       hours:
@@ -462,18 +490,20 @@ definitions:
       id:
         type: integer
         format: int64
-      news_title:
+      title:
         type: string
-      news_description:
+      description:
         type: string
-      news_posted:
-        type: object
-      news_expired:
-        type: object
-      news_person_id:
-        type: integer
-        format: int64
-      news_views:
+      posted:
+        type: string
+        format: date
+      expired:
+        type: string
+        format: date
+      posted_by:
+        type: string
+        format: email
+      views:
         type: integer
         format: int64
   Reset:
@@ -492,3 +522,7 @@ tags:
     description: Fetch, Delete, and update Profiles
   - name: Reset
     description: Everything used for resetting password
+  - name: Jobs
+    description: Everything to do with Jobs
+  - name: News
+    description: Everything to do with News

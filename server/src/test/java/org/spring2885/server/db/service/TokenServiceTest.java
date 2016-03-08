@@ -9,6 +9,7 @@ import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.same;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.eq;
 import static org.mockito.Mockito.when;
 
 import java.util.Collections;
@@ -21,7 +22,6 @@ import org.junit.runners.JUnit4;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.spring2885.server.db.model.DbToken;
-import org.springframework.data.jpa.repository.JpaContext;
 
 import com.google.common.collect.Lists;
 
@@ -76,15 +76,15 @@ public class TokenServiceTest {
     public void testFindById() {
 		DbToken expected = new DbToken();
 		expected.setEmail("me@");
-		when(repository.findOne(Long.valueOf(1234))).thenReturn(expected);
+		when(repository.findOne("1234")).thenReturn(expected);
 		
-		DbToken actual = service.findById(1234);
+		DbToken actual = service.findById("1234");
 		assertSame(expected, actual);
     }
 	
 	@Test
     public void testFindById_notFound() {
-    	DbToken actual = service.findById(1234);
+    	DbToken actual = service.findById("1234");
     	assertNull(actual);
     }
 	
@@ -105,21 +105,21 @@ public class TokenServiceTest {
 	@Test
 	public void testDelete() {
 		DbToken t = new DbToken();
-		when(repository.findOne(Long.valueOf(21))).thenReturn(t);
+		when(repository.findOne("21")).thenReturn(t);
     	
-		assertTrue(service.delete(21));
-		verify(repository).delete(Long.valueOf(21));
+		assertTrue(service.delete("21"));
+		verify(repository).delete("21");
 	}
 	
 	@Test
 	public void testDelete_notFound() {
 		DbToken t = new DbToken();
-		when(repository.findOne(Long.valueOf(22))).thenReturn(t);
+		when(repository.findOne("22")).thenReturn(t);
     	
-		assertFalse(service.delete(21));
-		// Since a call to findOne(21) will return null by default, delete should
+		assertFalse(service.delete("21"));
+		// Since a call to findOne("21") will return null by default, delete should
 		// never be called. Let's verify that.
-		verify(repository, never()).delete(Long.valueOf(21));
+		verify(repository, never()).delete("21");
     }
 	
 	@Test
@@ -138,10 +138,10 @@ public class TokenServiceTest {
 	@Test
 	public void testDeleteByEmail(){
 		List<DbToken> t = service.findByEmail("matt@spring2885.org");
-		//when(repository.deleteByEmail(t.getEmail())).thenReturn((List<DbToken>) t);
-		when(repository.deleteByEmail(((DbToken) t).getEmail())).thenReturn(t);
+		when(repository.deleteByEmail(eq("matt@spring2885.org")))
+		        .thenReturn(t);
 		
-		//assertTrue(service.deleteByEmail("matt@spring2885.org"));
+		assertTrue(service.deleteByEmail("matt@spring2885.org"));
 		verify(repository).deleteByEmail("matt@spring2885.org");
 	} 
 }

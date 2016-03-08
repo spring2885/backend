@@ -1,8 +1,9 @@
-package org.spring2885.server.db.service;
+package org.spring2885.server.db.service.person;
 
 import java.util.List;
 
 import org.spring2885.server.db.model.DbPerson;
+import org.spring2885.server.db.service.search.SearchCriteria;
 
 public interface PersonService {
 	/**
@@ -10,16 +11,29 @@ public interface PersonService {
 	 */
 	DbPerson findById(long id);
 	
-	/**
-	 * Returns all {@code DbPerson} instances.
-	 */
-	Iterable<DbPerson> findAll();
-	
+    /**
+     * Returns all {@code DbPerson} instances.
+     */
+    Iterable<DbPerson> findAll();
+    
+    /**
+     * Returns all {@code DbPerson} instances with search string {code q}.
+     */
+    Iterable<DbPerson> findAll(String q);
+    
+    /**
+     * Returns all {@code DbPerson} instances with search string {code q}.
+     */
+    Iterable<DbPerson> findAll(List<SearchCriteria> criterias);
+    
 	/**
 	 * Returns all {@code DbPerson} instances with email address of {@code email}
 	 * or an empty {@link Iterator} if none exist.
 	 */
-	List<DbPerson> findByEmail(String email);
+	DbPerson findByEmail(String email);
+	
+	/** Returns all by grad year. */
+	List<DbPerson> findByGraduationYear(Integer year);
 	
 	/**
 	 * Deletes a user by primary key.

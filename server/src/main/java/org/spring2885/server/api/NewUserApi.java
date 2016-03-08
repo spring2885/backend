@@ -4,8 +4,8 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import org.spring2885.server.api.exceptions.NotFoundException;
 import org.spring2885.server.db.model.DbPerson;
-import org.spring2885.server.db.service.PersonService;
-import org.spring2885.server.db.service.PersonTypeService;
+import org.spring2885.server.db.service.person.PersonService;
+import org.spring2885.server.db.service.person.PersonTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

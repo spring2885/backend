@@ -7,7 +7,7 @@ public interface TokenService {
 	/**
 	 * Returns a {@link DbToken} by id
 	 */
-	DbToken findById(long id);
+	DbToken findById(String uuid);
 	
 	/**
 	 * Returns all {@code DbToken} instances
@@ -23,7 +23,7 @@ public interface TokenService {
 	 * Deletes by id
 	 * @return true on success, false otherwise.
 	 */
-	boolean delete(long id);
+	boolean delete(String uuid);
 	
 	/**
 	 * Returns {@code true} if an id exists for this email address
