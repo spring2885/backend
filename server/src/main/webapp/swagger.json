@@ -16,6 +16,9 @@
   }, {
     "name" : "Profiles",
     "description" : "Fetch, Delete, and update Profiles"
+  }, {
+    "name" : "Reset",
+    "description" : "Everything used for resetting password"
   } ],
   "paths" : {
     "/api/v1/jobs" : {
@@ -189,7 +192,7 @@
             "schema" : {
               "type" : "array",
               "items" : {
-                "$ref" : "#/definitions/person"
+                "$ref" : "#/definitions/Person"
               }
             }
           }
@@ -213,7 +216,7 @@
           "200" : {
             "description" : "Successful response",
             "schema" : {
-              "$ref" : "#/definitions/person"
+              "$ref" : "#/definitions/Person"
             }
           }
         }
@@ -234,7 +237,7 @@
           "description" : "The profile to update.",
           "required" : true,
           "schema" : {
-            "$ref" : "#/definitions/person"
+            "$ref" : "#/definitions/Person"
           }
         } ],
         "responses" : {
@@ -260,6 +263,67 @@
           },
           "500" : {
             "description" : "Error deleting the profile \"ID\"."
+          }
+        }
+      }
+    },
+    "/auth/forgot" : {
+      "post" : {
+        "tags" : [ "Reset" ],
+        "description" : "sends a request for a new password\n",
+        "parameters" : [ {
+          "name" : "email",
+          "in" : "formData",
+          "description" : "the email the user wants a new password for.",
+          "required" : true,
+          "type" : "string",
+          "format" : "email"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "request for new password sent.",
+            "schema" : {
+              "$ref" : "#/definitions/Reset"
+            }
+          },
+          "500" : {
+            "description" : "error requesting for a password"
+          }
+        }
+      }
+    },
+    "/auth/reset" : {
+      "post" : {
+        "tags" : [ "Reset" ],
+        "description" : "setting new password for users email\n",
+        "parameters" : [ {
+          "name" : "email",
+          "in" : "formData",
+          "description" : "the email the user wants a new password for.",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "token",
+          "in" : "formData",
+          "description" : "the unique password token generated for the user.",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "newPassword",
+          "in" : "formData",
+          "description" : "the new password the user wnats to set.",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "new password set.",
+            "schema" : {
+              "$ref" : "#/definitions/Reset"
+            }
+          },
+          "500" : {
+            "description" : "error setting new password"
           }
         }
       }
@@ -376,7 +440,7 @@
         }
       }
     },
-    "person" : {
+    "Person" : {
       "type" : "object",
       "properties" : {
         "id" : {
@@ -430,6 +494,9 @@
           "items" : {
             "$ref" : "#/definitions/SocialConnection"
           }
+        },
+        "lang" : {
+          "type" : "string"
         },
         "degree_major" : {
           "type" : "string"
@@ -502,6 +569,20 @@
         "news_views" : {
           "type" : "integer",
           "format" : "int64"
+        }
+      }
+    },
+    "Reset" : {
+      "type" : "object",
+      "properties" : {
+        "email" : {
+          "type" : "string"
+        },
+        "token" : {
+          "type" : "string"
+        },
+        "new_password" : {
+          "type" : "string"
         }
       }
     }

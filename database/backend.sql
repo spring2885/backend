@@ -12,6 +12,15 @@ name varchar(100),
 PRIMARY KEY (id)
 );
 
+DROP TABLE IF EXISTS Language;
+CREATE TABLE Language
+(
+	# IANA RFC 3066 language tags (ka ISO-639 + ISO-3166)
+	code varchar(20) NOT NULL,
+	description varchar(80) NOT NULL,
+	PRIMARY KEY(code)
+);
+
 #
 # Person is a union of the base person plus
 # student, alumni, faculty
@@ -32,6 +41,7 @@ occupation varchar(200),
 company_name varchar(200),
 birthdate DATE,
 type int,
+lang varchar(20),
 last_logon DATE,
 password varchar(255),
 # student only fields
@@ -43,7 +53,8 @@ degree_type varchar(200),
 # faculty field
 faculty_department varchar(200),
 PRIMARY KEY (id),
-FOREIGN KEY (type) REFERENCES Person_Type(id)
+FOREIGN KEY (type) REFERENCES Person_Type(id),
+FOREIGN KEY (lang) REFERENCES Language(code)
 );
 
 DROP TABLE IF EXISTS Job_Type;
@@ -141,5 +152,15 @@ DROP TABLE IF EXISTS roles;
 CREATE TABLE roles(
 id INT NOT NULL, 
 rolename VARCHAR(60)
+);
+
+DROP TABLE IF EXISTS token;
+CREATE TABLE token(
+    id int NOT NULL,    
+    email varchar(200),
+    uuid varchar(200),
+    uuidStatus varchar (20),
+    dateCreate DATE,
+    PRIMARY KEY(uuid)
 );
 

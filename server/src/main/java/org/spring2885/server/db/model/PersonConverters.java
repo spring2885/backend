@@ -36,6 +36,10 @@ public final class PersonConverters {
 			} else {
 				p.setVariety(null);
 			}
+			DbLanguage lang = db.getLanguage();
+			if (lang != null) {
+	            p.setLang(lang.getCode());
+			}
 			p.setLastLoginDate(db.getLastLogon());
 
 			// Add social networks.
@@ -54,6 +58,7 @@ public final class PersonConverters {
 		private Supplier<DbPerson> dbSupplier = Suppliers.ofInstance(new DbPerson());
 		private Map<String, DbSocialService> socialServices = new HashMap<>();
 		private Map<String, DbPersonType> personTypes = new HashMap<>();
+		private Map<String, DbLanguage> languages = new HashMap<>();
 
 		JsonToDbConverter() {
 		}
@@ -78,6 +83,12 @@ public final class PersonConverters {
 					.collect(Collectors.toMap(DbPersonType::getName, (p) -> p));
 			return this;
 		}
+		
+		public JsonToDbConverter withLanguages(Set<DbLanguage> languages) {
+		    this.languages = languages.stream()
+		            .collect(Collectors.toMap(DbLanguage::getCode, (p) -> p));
+		    return this;
+		}
 
 		@Override
 		public DbPerson apply(Person p) {
@@ -99,6 +110,12 @@ public final class PersonConverters {
 				db.setType(personTypes.get(personType));
 			} else {
 				db.setType(personTypes.get("student"));
+			}
+			String languageCode = p.getLang();
+			if (languageCode == null && languages.containsKey(languageCode)) {
+			    db.setLanguage(languages.get(languageCode));
+			} else {
+			    db.setLanguage(languages.get("en"));
 			}
 			db.setLastLogon(asSqlDate(p.getLastLoginDate()));
 
