@@ -3,7 +3,6 @@ package org.spring2885.server.db.service;
 import java.util.List;
 
 import org.spring2885.server.db.model.DbJob;
-import org.spring2885.server.db.model.DbPerson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;

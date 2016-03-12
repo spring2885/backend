@@ -21,7 +21,6 @@ import org.junit.runners.JUnit4;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.spring2885.server.db.model.DbNews;
-import org.springframework.data.jpa.repository.JpaContext;
 
 import com.google.common.collect.Lists;
 
@@ -59,7 +58,7 @@ public class NewsServiceTest {
     @Test
     public void testFindByEmail() {
     	DbNews p = new DbNews();
-    	p.setNewsTitle("Title");
+    	p.setTitle("Title");
     	when(repository.findByTitle("Title")).thenReturn(Collections.singletonList(p));
     	
     	List<DbNews> persons = Lists.newArrayList(service.findByTitle("Title"));
@@ -76,7 +75,7 @@ public class NewsServiceTest {
     @Test
     public void testFindById() {
     	DbNews expected = new DbNews();
-    	expected.setNewsTitle("T");
+    	expected.setTitle("T");
     	when(repository.findOne(Long.valueOf(1234))).thenReturn(expected);
     	
     	DbNews actual = service.findById(1234);
@@ -92,7 +91,7 @@ public class NewsServiceTest {
     @Test
     public void testExistsByEmail() {
     	DbNews p = new DbNews();
-    	p.setNewsTitle("Title");
+    	p.setTitle("Title");
     	when(repository.findByTitle("Title")).thenReturn(Collections.singletonList(p));
 
     	assertTrue(service.existsByTitle("Title"));

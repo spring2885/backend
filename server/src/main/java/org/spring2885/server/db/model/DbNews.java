@@ -4,9 +4,12 @@ import java.sql.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -14,97 +17,86 @@ import javax.persistence.Table;
 public class DbNews {
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	private long id;
-	@Column(name="news_title")
-	private String newsTitle;
-	@Column(name="news_description")
-	private String newsDescription;
-	@Column(name="news_posted")
-	private Date newsPosted;
-	@Column(name="news_expired")
-	private Date newsExpired;
-	@Column(name="news_person_id")
-	private long newsPersonId;
-	@Column(name="news_views")
-	private long newsViews;
+	private Long id;
+	private String title;
+	private String description;
+	private Date posted;
+	private Date expired;
+    @ManyToOne(fetch=FetchType.EAGER)
+    @JoinColumn(name="person_id")
+    private DbPerson person;
+	private Long views;
+	@Column(nullable = false, columnDefinition = "TINYINT", length = 1)
+	private boolean active;
 	
-
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
+    public String getTitle() {
+        return title;
+    }
 
-	public String getNewsTitle() {
-		return newsTitle;
-	}
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
+    public String getDescription() {
+        return description;
+    }
 
-	public void setNewsTitle(String newsTitle) {
-		this.newsTitle = newsTitle;
-	}
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
+    public Date getPosted() {
+        return posted;
+    }
 
-	public String getNewsDescription() {
-		return newsDescription;
-	}
+    public void setPosted(Date posted) {
+        this.posted = posted;
+    }
 
+    public Date getExpired() {
+        return expired;
+    }
 
-	public void setNewsDescription(String newsDescription) {
-		this.newsDescription = newsDescription;
-	}
+    public void setExpired(Date expired) {
+        this.expired = expired;
+    }
 
+    public DbPerson getPerson() {
+        return person;
+    }
 
-	public Date getNewsPosted() {
-		return newsPosted;
-	}
+    public void setPersonId(DbPerson personId) {
+        this.person = personId;
+    }
 
+    public Long getViews() {
+        return views;
+    }
 
-	public void setNewsPosted(Date newsPosted) {
-		this.newsPosted = newsPosted;
-	}
+    public void setViews(Long views) {
+        this.views = views;
+    }
 
+    public boolean isActive() {
+        return active;
+    }
 
-	public Date getNewsExpired() {
-		return newsExpired;
-	}
+    public void setActive(boolean active) {
+        this.active = active;
+    }
 
+    @Override
+    public String toString() {
+        return "DbNews [id=" + id + ", title=" + title + ", description=" + description + ", posted=" + posted
+                + ", expired=" + expired + ", personId=" + person + ", views=" + views + "]";
+    }
 
-	public void setNewsExpired(Date newsExpired) {
-		this.newsExpired = newsExpired;
-	}
-
-
-	public long getNewsPersonId() {
-		return newsPersonId;
-	}
-
-
-	public void setNewsPersonId(long newsPersonId) {
-		this.newsPersonId = newsPersonId;
-	}
-
-
-	public long getNewsViews() {
-		return newsViews;
-	}
-
-
-	public void setNewsViews(long newsViews) {
-		this.newsViews = newsViews;
-	}
-
-
-	@Override
-	public String toString() {
-		return "DbNews [id=" + id + ", newsTitle=" + newsTitle + ", newsDescription=" + newsDescription
-				+ ", newsPosted=" + newsPosted + ", newsExpired=" + newsExpired + ", newsPersonId=" + newsPersonId
-				+ ", newsViews=" + newsViews + "]";
-	}
-	
-	
 }

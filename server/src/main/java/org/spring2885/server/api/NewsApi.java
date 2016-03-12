@@ -3,13 +3,14 @@ package org.spring2885.server.api;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import java.util.List;
-import java.util.Set;
 
 import org.spring2885.model.News;
 import org.spring2885.server.api.exceptions.NotFoundException;
 import org.spring2885.server.db.model.DbNews;
+import org.spring2885.server.db.model.DbPerson;
 import org.spring2885.server.db.model.NewsConverters;
 import org.spring2885.server.db.service.NewsService;
+import org.spring2885.server.db.service.person.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,17 +22,22 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.google.common.base.Function;
 import com.google.common.collect.FluentIterable;
-import com.google.common.collect.Iterables;
 
 @RestController
 @RequestMapping(value = "/api/v1/news", produces = { APPLICATION_JSON_VALUE })
 public class NewsApi {
 	
-	@Autowired
-	private NewsService newsService;
-	
+    @Autowired
+    private NewsService newsService;
+    
+    @Autowired
+    private PersonService personService;
+    @Autowired
+    NewsConverters.FromDbToJson fromDbToJson;
+    @Autowired
+    NewsConverters.JsonToDbConverter fromJsonToDb;
+    
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public ResponseEntity<News> get(
 			@PathVariable("id") int id) throws NotFoundException {
@@ -41,7 +47,7 @@ public class NewsApi {
 			// here, so needed to add this.
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-		return new ResponseEntity<>(NewsConverters.fromDbToJson().apply(o), HttpStatus.OK);
+		return new ResponseEntity<>(fromDbToJson.apply(o), HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
@@ -64,10 +70,10 @@ public class NewsApi {
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
-	public ResponseEntity<List<News>> list(@RequestParam(value = "size", required = false) Double size)
+	public ResponseEntity<List<News>> list(
+	        @RequestParam(value = "size", required = false) Integer size)
 			throws NotFoundException {
 		
-		Function<DbNews, News> fromDbToJson = NewsConverters.fromDbToJson();
 		List<News> news = FluentIterable.from(newsService.findAll())
 				.transform(fromDbToJson)
 				.toList();
@@ -92,7 +98,7 @@ public class NewsApi {
 		if (db == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-		DbNews updatedDbNews = NewsConverters.fromJsonToDb()
+		DbNews updatedDbNews = fromJsonToDb
 				.withDbNews(db)
 				.apply(news);
 		newsService.save(updatedDbNews);
@@ -100,18 +106,27 @@ public class NewsApi {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
-	
-	private boolean checkAdminRequestIfNeeded(int requestId, SecurityContextHolderAwareRequestWrapper request) {
+    @RequestMapping(method = RequestMethod.POST)
+    public ResponseEntity<Void> put(@RequestBody News news) throws NotFoundException {
+        
+        DbNews updatedDbNews = fromJsonToDb
+                .withDbNews(new DbNews())
+                .apply(news);
+        newsService.save(updatedDbNews);
+        
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+    
+   	private boolean checkAdminRequestIfNeeded(int requestId, SecurityContextHolderAwareRequestWrapper request) {
 		if (!request.isUserInRole("ROLE_ADMIN")) {
 			// Only admin's can change other profiles.
-			String name = request.getUserPrincipal().getName();
-			List<DbNews> possibles = newsService.findByTitle(name);
-			if (possibles.size() != 1) {
+			String email = request.getUserPrincipal().getName();
+			DbPerson me = personService.findByEmail(email);
+			if (me == null) {
 				// I can't find myself... need more zen.
 				return false;
 			}
 			
-			DbNews me = Iterables.getOnlyElement(possibles);
 			if (me.getId() != requestId) {
 				// Someone is being naughty...
 				return false;

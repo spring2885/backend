@@ -2,106 +2,121 @@ package org.spring2885.server.api;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-import java.security.SecureRandom;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.spring2885.server.api.exceptions.NotFoundException;
 import org.spring2885.server.db.model.DbPerson;
 import org.spring2885.server.db.model.DbToken;
-import org.spring2885.server.db.service.PersonService;
 import org.spring2885.server.db.service.TokenService;
+import org.spring2885.server.db.service.person.PersonService;
+import org.spring2885.server.mail.Mailer;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestWrapper;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.google.common.collect.FluentIterable;
-import com.google.common.collect.Iterables;
-
 @RestController
 @RequestMapping(value = "/auth", produces = { APPLICATION_JSON_VALUE })
 public class PasswordApi {
 	
-	@Autowired TokenService tokenService;
+    private static final Logger logger = LoggerFactory.getLogger(PasswordApi.class);
+
+    @Autowired TokenService tokenService;
 	@Autowired PersonService personService;
 	@Autowired private PasswordEncoder passwordEncoder;
+	@Autowired private Mailer mailer;
+	@Value("${app.name}") private String appName;
+    @Value("${app.forgot.from.name}") private String fromName;
+    @Value("${app.forgot.reset.url}") private String resetUrl;
 	
 	@RequestMapping(value = "/forgot",method = RequestMethod.POST)
-	public UUID personsResetToken(
-			@RequestParam("email") String email
-			) throws NotFoundException {
+    public UUID personsResetToken(@RequestParam("email") String email) throws NotFoundException {
 		
-		//List<DbToken> tokens = tokenService.findByEmail(email);
-		List<DbPerson> persons = personService.findByEmail(email);
-		UUID uuidToken = null;
-		DbToken tokenData = null;
-		for (DbPerson p : persons){
-			if (p.getEmail() != null && p.getEmail().equals(email)){
-				uuidToken = UUID.randomUUID();
-				tokenData = new DbToken();
-				tokenData.setEmail(email);
-				tokenData.setUuid(uuidToken.toString());
-				tokenData.setUuidStatus("NEW");
-				tokenService.save(tokenData);
-			} else {
-				throw new RuntimeException("email not found: " + email);
-			}
-		} 
-		return uuidToken;
+        DbPerson p = personService.findByEmail(email);
+        if (p == null || !email.equals(p.getEmail()) ) {
+            throw new RuntimeException("email not found: " + email);
+        }
+        
+        // Delete the old tokens.
+        tokenService.deleteByEmail(email);
+        
+        // Add a new token.
+        UUID uuid = UUID.randomUUID();
+		DbToken tokenData = new DbToken();
+		tokenData.setEmail(email);
+		tokenData.setUuid(uuid.toString());
+		tokenData.setDateCreated(new java.sql.Date(System.currentTimeMillis()));
+		tokenService.save(tokenData);
+		
+		logger.info("Send Email to {} with token: {}", email, uuid);
+		Map<String, String> data = new HashMap<>();
+		data.put("name", p.getName());
+		data.put("app_name", appName);
+		data.put("reset_url", resetUrl);
+		data.put("from_name", fromName);
+		
+		try {
+            mailer.send(email, "forgot.txt", "Forgot Password.", data);
+        } catch (IOException | URISyntaxException e) {
+            // If we can't send the email there is no reason to give the UUID out.
+            logger.error("Error sending email to" + email, e);
+            throw new RuntimeException(e);
+        }
+
+		return uuid;
 	}
 	
 	@RequestMapping(value = "/reset", method = RequestMethod.POST)
 	public void resetPassword(
 			@RequestParam("email") String email,
-			@RequestParam("token") String token,
-			@RequestParam("newPassword") String nPassword) throws Exception {
-		UUID uuidToken = null;
+			@RequestParam("token") String tokenString,
+			@RequestParam("newPassword") String newPassword) throws Exception {
 		if (tokenService.existsByEmail(email)){
-			List<DbPerson> persons = personService.findByEmail(email);
 			List<DbToken> tokens = tokenService.findByEmail(email);
 			
-			if (!containsToken(tokens, token)) {
-				throw new RuntimeException("token not found: " + token);
+			DbToken savedToken = findToken(tokens, tokenString);
+			if (savedToken == null) {
+				throw new RuntimeException("token not found: " + tokenString);
 			} 
-			
-			/*for(DbToken t : tokenD){
-				for(DbPerson p : person){
-					if(t.getEmail().equals(p.getEmail())){
-						if(token.equals(t.getUuid())){
-							String hashedpassword = passwordEncoder.encode(nPassword);
-							p.setPassword(hashedpassword);
-							personService.save(p);
-							t.setUuidStatus("used");
-							tokenService.save(t);
-						}
-					}
-				}
-			}*/
-						
-			/*if (uuidToken != null && token.equals(uuidToken)){
-				//String hashedPassword = passwordEncoder.encode(nPassword);
-				//person.setPassword(hashedPassword);
-				//token2.setUuidStatus("used");
-			}*/			
+            DbPerson person = personService.findByEmail(email);
+            if (person == null) {
+                throw new RuntimeException("Person not found for email address: " + email);
+            }
+            
+            // At this point we looked up the saved token from the database and found one.
+            if (!savedToken.getEmail().equals(email)) {
+                // Our saved token was for someone else.
+                throw new RuntimeException("token does not match email address: " + tokenString);
+            }
+            
+            // All good from here on out.  Update the password and save the person.
+            // Ideally these two would be transactional.
+            String hashedPassword = passwordEncoder.encode(newPassword);
+            person.setPassword(hashedPassword);
+            personService.save(person);
+            
+            tokenService.delete(savedToken.getUuid());
+            
+            logger.info("Updated password for " + person.getEmail());
 		}
-		
 	}
 	
-	private boolean containsToken(Iterable<DbToken> tokens, String uuid) {
-		  for (DbToken t : tokens) {
-		    if (uuid.equals(t.getUuid())) { 
-		      return true;
-		    }
-		  }
-		  return false;
-		}
-
+    private DbToken findToken(Iterable<DbToken> tokens, String uuid) {
+        for (DbToken t : tokens) {
+            if (uuid.equals(t.getUuid())) {
+                return t;
+            }
+        }
+        return null;
+    }
 }

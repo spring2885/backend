@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import java.util.Date;
 
 import io.swagger.annotations.*;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -12,16 +13,16 @@ import java.util.Objects;
 
 
 @ApiModel(description = "")
-@javax.annotation.Generated(value = "class io.swagger.codegen.languages.SpringMVCServerCodegen", date = "2016-02-28T17:50:45.537-08:00")
+@javax.annotation.Generated(value = "class io.swagger.codegen.languages.SpringMVCServerCodegen", date = "2016-03-05T14:08:56.619-08:00")
 public class News  {
   
   private Long id = null;
-  private String newsTitle = null;
-  private String newsDescription = null;
-  private Object newsPosted = null;
-  private Object newsExpired = null;
-  private Long newsPersonId = null;
-  private Long newsViews = null;
+  private String title = null;
+  private String description = null;
+  private Date posted = null;
+  private Date expired = null;
+  private String postedBy = null;
+  private Long views = null;
 
   
   /**
@@ -39,72 +40,72 @@ public class News  {
   /**
    **/
   @ApiModelProperty(value = "")
-  @JsonProperty("news_title")
-  public String getNewsTitle() {
-    return newsTitle;
+  @JsonProperty("title")
+  public String getTitle() {
+    return title;
   }
-  public void setNewsTitle(String newsTitle) {
-    this.newsTitle = newsTitle;
-  }
-
-  
-  /**
-   **/
-  @ApiModelProperty(value = "")
-  @JsonProperty("news_description")
-  public String getNewsDescription() {
-    return newsDescription;
-  }
-  public void setNewsDescription(String newsDescription) {
-    this.newsDescription = newsDescription;
+  public void setTitle(String title) {
+    this.title = title;
   }
 
   
   /**
    **/
   @ApiModelProperty(value = "")
-  @JsonProperty("news_posted")
-  public Object getNewsPosted() {
-    return newsPosted;
+  @JsonProperty("description")
+  public String getDescription() {
+    return description;
   }
-  public void setNewsPosted(Object newsPosted) {
-    this.newsPosted = newsPosted;
-  }
-
-  
-  /**
-   **/
-  @ApiModelProperty(value = "")
-  @JsonProperty("news_expired")
-  public Object getNewsExpired() {
-    return newsExpired;
-  }
-  public void setNewsExpired(Object newsExpired) {
-    this.newsExpired = newsExpired;
+  public void setDescription(String description) {
+    this.description = description;
   }
 
   
   /**
    **/
   @ApiModelProperty(value = "")
-  @JsonProperty("news_person_id")
-  public Long getNewsPersonId() {
-    return newsPersonId;
+  @JsonProperty("posted")
+  public Date getPosted() {
+    return posted;
   }
-  public void setNewsPersonId(Long newsPersonId) {
-    this.newsPersonId = newsPersonId;
+  public void setPosted(Date posted) {
+    this.posted = posted;
   }
 
   
   /**
    **/
   @ApiModelProperty(value = "")
-  @JsonProperty("news_views")
-  public Long getNewsViews() {
-    return newsViews;
+  @JsonProperty("expired")
+  public Date getExpired() {
+    return expired;
   }
-  public void setNewsViews(Long newsViews) {
-    this.newsViews = newsViews;
+  public void setExpired(Date expired) {
+    this.expired = expired;
+  }
+
+  
+  /**
+   **/
+  @ApiModelProperty(value = "")
+  @JsonProperty("posted_by")
+  public String getPostedBy() {
+    return postedBy;
+  }
+  public void setPostedBy(String postedBy) {
+    this.postedBy = postedBy;
+  }
+
+  
+  /**
+   **/
+  @ApiModelProperty(value = "")
+  @JsonProperty("views")
+  public Long getViews() {
+    return views;
+  }
+  public void setViews(Long views) {
+    this.views = views;
   }
 
   
@@ -119,17 +120,17 @@ public class News  {
     }
     News news = (News) o;
     return Objects.equals(id, news.id) &&
-        Objects.equals(newsTitle, news.newsTitle) &&
-        Objects.equals(newsDescription, news.newsDescription) &&
-        Objects.equals(newsPosted, news.newsPosted) &&
-        Objects.equals(newsExpired, news.newsExpired) &&
-        Objects.equals(newsPersonId, news.newsPersonId) &&
-        Objects.equals(newsViews, news.newsViews);
+        Objects.equals(title, news.title) &&
+        Objects.equals(description, news.description) &&
+        Objects.equals(posted, news.posted) &&
+        Objects.equals(expired, news.expired) &&
+        Objects.equals(postedBy, news.postedBy) &&
+        Objects.equals(views, news.views);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, newsTitle, newsDescription, newsPosted, newsExpired, newsPersonId, newsViews);
+    return Objects.hash(id, title, description, posted, expired, postedBy, views);
   }
 
   @Override
@@ -138,12 +139,12 @@ public class News  {
     sb.append("class News {\n");
     
     sb.append("  id: ").append(id).append("\n");
-    sb.append("  newsTitle: ").append(newsTitle).append("\n");
-    sb.append("  newsDescription: ").append(newsDescription).append("\n");
-    sb.append("  newsPosted: ").append(newsPosted).append("\n");
-    sb.append("  newsExpired: ").append(newsExpired).append("\n");
-    sb.append("  newsPersonId: ").append(newsPersonId).append("\n");
-    sb.append("  newsViews: ").append(newsViews).append("\n");
+    sb.append("  title: ").append(title).append("\n");
+    sb.append("  description: ").append(description).append("\n");
+    sb.append("  posted: ").append(posted).append("\n");
+    sb.append("  expired: ").append(expired).append("\n");
+    sb.append("  postedBy: ").append(postedBy).append("\n");
+    sb.append("  views: ").append(views).append("\n");
     sb.append("}\n");
     return sb.toString();
   }

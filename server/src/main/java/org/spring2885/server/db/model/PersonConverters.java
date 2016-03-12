@@ -1,28 +1,48 @@
 package org.spring2885.server.db.model;
 
-import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.spring2885.model.Person;
 import org.spring2885.model.SocialConnection;
+import org.spring2885.server.db.service.person.LanguageService;
+import org.spring2885.server.db.service.person.PersonTypeService;
+import org.spring2885.server.db.service.person.SocialServiceService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Component;
 
 import com.google.common.base.Function;
 import com.google.common.base.Supplier;
 import com.google.common.base.Suppliers;
 
+@Component
 public final class PersonConverters {
-	private static class FromDbToJson implements Function<DbPerson, Person> {
+    @Autowired
+    private SocialServiceService socialServiceService;
+    @Autowired
+    private PersonTypeService personTypeService;
+    @Autowired
+    private LanguageService languageService;
+
+    @Bean
+    public FromDbToJson dbToJsonConverter() {
+        return new FromDbToJson();
+    }
+
+    public static class FromDbToJson implements Function<DbPerson, Person> {
 
 		@Override
 		public Person apply(DbPerson db) {
 			Person p = new Person();
 			p.setId(db.getId());
+			p.setAboutMe(db.getAboutMe());
 			p.setName(db.getName());
+			p.setDegreeMajor(db.getDegreeMajor());
+			p.setDegreeMinor(db.getDegreeMinor());
+			p.setDegreeType(db.getDegreeType());
 			p.setStudentId(db.getStudentId());
 			p.setTitle(db.getTitle());
-			p.setAboutMe(p.getAboutMe());
 			p.setResumeUrl(db.getResumeURL());
 			p.setImageUrl(db.getImageURL());
 			p.setEmail(db.getEmail());
@@ -30,6 +50,7 @@ public final class PersonConverters {
 			p.setOccupation(db.getOccupation());
 			p.setCompanyName(db.getCompanyName());
 			p.setBirthdate(db.getBirthdate());
+			p.setGraduationYear(db.getGraduationYear());
 			DbPersonType personType = db.getType();
 			if (personType != null) {
 				p.setVariety(db.getType().getName());
@@ -50,54 +71,45 @@ public final class PersonConverters {
 				p.getSocialConnections().add(social);
 			}
 
+            p.setFacultyDepartment(db.getFacultyDepartment());
 			return p;
 		}
 	}
 
-	public static class JsonToDbConverter implements Function<Person, DbPerson> {
+    @Bean
+    public JsonToDbConverter jsonToDbConverter() {
+        return new JsonToDbConverter();
+    }
+    
+	public class JsonToDbConverter implements Function<Person, DbPerson> {
+
 		private Supplier<DbPerson> dbSupplier = Suppliers.ofInstance(new DbPerson());
-		private Map<String, DbSocialService> socialServices = new HashMap<>();
-		private Map<String, DbPersonType> personTypes = new HashMap<>();
-		private Map<String, DbLanguage> languages = new HashMap<>();
 
-		JsonToDbConverter() {
+		public JsonToDbConverter() {
 		}
 
-		public JsonToDbConverter withDbPersonSupplier(Supplier<DbPerson> dbSupplier) {
-			this.dbSupplier = dbSupplier;
-			return this;
-		}
-
-		public JsonToDbConverter withDbPerson(DbPerson db) {
+		public void withDbPerson(DbPerson db) {
 			this.dbSupplier = Suppliers.ofInstance(db);
-			return this;
-		}
-		public JsonToDbConverter withSocialServices(Set<DbSocialService> socialServices) {
-			this.socialServices = socialServices.stream()
-					.collect(Collectors.toMap(DbSocialService::getName, (s) -> s));
-			return this;
-		}
-
-		public JsonToDbConverter withPersonTypes(Set<DbPersonType> personTypes) {
-			this.personTypes = personTypes.stream()
-					.collect(Collectors.toMap(DbPersonType::getName, (p) -> p));
-			return this;
-		}
-		
-		public JsonToDbConverter withLanguages(Set<DbLanguage> languages) {
-		    this.languages = languages.stream()
-		            .collect(Collectors.toMap(DbLanguage::getCode, (p) -> p));
-		    return this;
 		}
 
 		@Override
 		public DbPerson apply(Person p) {
-			DbPerson db = dbSupplier.get();
+	        Map<String, DbSocialService> socialServices = 
+	                socialServiceService.findAll().stream()
+                    .collect(Collectors.toMap(DbSocialService::getName, (s) -> s));
+	        Map<String, DbPersonType> personTypes = 
+	                personTypeService.findAll().stream()
+                    .collect(Collectors.toMap(DbPersonType::getName, (s) -> s));
+	        Map<String, DbLanguage> languages = 
+	                languageService.findAll().stream()
+                    .collect(Collectors.toMap(DbLanguage::getCode, (s) -> s));
+
+            DbPerson db = dbSupplier.get();
 			// Leave the ID null since we're updating an existing person.
 			db.setName(p.getName());
 			db.setStudentId(p.getStudentId());
 			db.setTitle(p.getTitle());
-			db.setAboutMe(db.getAboutMe());
+			db.setAboutMe(p.getAboutMe());
 			db.setResumeURL(p.getResumeUrl());
 			db.setImageURL(p.getImageUrl());
 			db.setEmail(p.getEmail());
@@ -109,13 +121,13 @@ public final class PersonConverters {
 			if (personType != null && personTypes.containsKey(personType)) {
 				db.setType(personTypes.get(personType));
 			} else {
-				db.setType(personTypes.get("student"));
+			    db.setType(personTypeService.defaultType());
 			}
 			String languageCode = p.getLang();
-			if (languageCode == null && languages.containsKey(languageCode)) {
+			if (languageCode != null && languages.containsKey(languageCode)) {
 			    db.setLanguage(languages.get(languageCode));
 			} else {
-			    db.setLanguage(languages.get("en"));
+			    db.setLanguage(languageService.defaultLanguage());
 			}
 			db.setLastLogon(asSqlDate(p.getLastLoginDate()));
 
@@ -152,12 +164,5 @@ public final class PersonConverters {
 		return new java.sql.Date(d.getTime());
 	}
 
-	public static Function<DbPerson, Person> fromDbToJson() {
-		return new FromDbToJson();
-	}
-
-	public static JsonToDbConverter fromJsonToDb() {
-		return new JsonToDbConverter();
-	}
 	private PersonConverters() {}
 }

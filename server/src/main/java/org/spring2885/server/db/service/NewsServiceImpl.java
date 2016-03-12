@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-@Component("NewsService")
+@Component("newsService")
 @Transactional
 public class NewsServiceImpl implements NewsService {
 	private final NewsRepository repository;
