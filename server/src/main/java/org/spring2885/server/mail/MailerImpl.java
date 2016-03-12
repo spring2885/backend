@@ -21,7 +21,7 @@ import com.samskivert.mustache.Mustache;
 import com.samskivert.mustache.Template;
 
 @Component("mailer")
-public class MailerImpl {
+public class MailerImpl implements Mailer {
     private static final Logger logger = LoggerFactory.getLogger(MailerImpl.class);
     
     private JavaMailSender sender;
