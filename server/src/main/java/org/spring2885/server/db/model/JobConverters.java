@@ -4,8 +4,6 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.spring2885.model.Job;
-import org.spring2885.server.db.model.JobConverters.FromDbToJson;
-import org.spring2885.server.db.model.JobConverters.JsonToDbConverter;
 import org.spring2885.server.db.service.JobTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -21,12 +19,11 @@ public final class JobConverters {
 	@Autowired
     private JobTypeService jobTypeService;
     
-
     @Bean
-    public FromDbToJson dbToJsonConverter() {
+    public FromDbToJson fromDbToJson() {
         return new FromDbToJson();
     }
-	public class FromDbToJson implements Function<DbJob, Job> {
+	public static class FromDbToJson implements Function<DbJob, Job> {
 
 		@Override
 		public Job apply(DbJob db) {

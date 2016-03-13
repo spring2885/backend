@@ -38,14 +38,14 @@ public class JobsApi {
 	@Autowired
 	private JobService jobService;
 	
-	 @Autowired
-	 private JobConverters.JsonToDbConverter jsonToDbConverter;
+	@Autowired
+	private JobConverters.JsonToDbConverter jsonToDbConverter;
 
-	    @Autowired
-	    private JobConverters.FromDbToJson dbToJsonConverter;
-	    
-	    @Autowired
-	    private SearchParser searchParser;
+    @Autowired
+    private JobConverters.FromDbToJson dbToJsonConverter;
+    
+    @Autowired
+    private SearchParser searchParser;
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public ResponseEntity<Job> get(
