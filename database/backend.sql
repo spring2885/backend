@@ -4,16 +4,16 @@ CREATE DATABASE IF NOT EXISTS backend;
 
 USE backend;
 
-DROP TABLE IF EXISTS Person_Type;
-CREATE TABLE Person_Type
+DROP TABLE IF EXISTS person_type;
+CREATE TABLE person_type
 (
 id INT,
 name VARCHAR(100),
 PRIMARY KEY (id)
 );
 
-DROP TABLE IF EXISTS Language;
-CREATE TABLE Language
+DROP TABLE IF EXISTS language;
+CREATE TABLE language
 (
 	# IANA RFC 3066 language tags (ka ISO-639 + ISO-3166)
 	code VARCHAR(20) NOT NULL,
@@ -22,11 +22,11 @@ CREATE TABLE Language
 );
 
 #
-# Person is a union of the base person plus
+# person is a union of the base person plus
 # student, alumni, faculty
 #
-DROP TABLE IF EXISTS Person;
-CREATE TABLE Person
+DROP TABLE IF EXISTS person;
+CREATE TABLE person
 (
 id INT NOT NULL AUTO_INCREMENT,
 name VARCHAR(200),
@@ -54,21 +54,21 @@ degree_type VARCHAR(200),
 faculty_department VARCHAR(200),
 active TINYINT(1) DEFAULT 1,
 PRIMARY KEY (id),
-FOREIGN KEY (type) REFERENCES Person_Type(id),
-FOREIGN KEY (lang) REFERENCES Language(code),
+FOREIGN KEY (type) REFERENCES person_type(id),
+FOREIGN KEY (lang) REFERENCES language(code),
 UNIQUE KEY (email)
 );
 
-DROP TABLE IF EXISTS Job_Type;
-CREATE TABLE Job_Type
+DROP TABLE IF EXISTS job_type;
+CREATE TABLE job_type
 (
 id INT,
 description VARCHAR(200),
 PRIMARY KEY(id)
 );
 
-DROP TABLE IF EXISTS Industry;
-CREATE TABLE Industry
+DROP TABLE IF EXISTS industry;
+CREATE TABLE industry
 (
 id INT,
 name VARCHAR(200),
@@ -76,8 +76,8 @@ PRIMARY KEY(id)
 );
 
 
-DROP TABLE IF EXISTS Job;
-CREATE TABLE Job
+DROP TABLE IF EXISTS job;
+CREATE TABLE job
 (
 id INT NOT NULL AUTO_INCREMENT,
 title VARCHAR(200),
@@ -91,14 +91,14 @@ posted_by_person_id INT,
 hours INT,
 active TINYINT(1) DEFAULT 1,
 PRIMARY KEY(id),
-FOREIGN KEY(industry) REFERENCES Industry(id),
-FOREIGN KEY(job_type) REFERENCES Job_Type(id),
-FOREIGN KEY(posted_by_person_id) REFERENCES Person(id)
+FOREIGN KEY(industry) REFERENCES industry(id),
+FOREIGN KEY(job_type) REFERENCES job_type(id),
+FOREIGN KEY(posted_by_person_id) REFERENCES person(id)
 );
 
 
-DROP TABLE IF EXISTS News;
-CREATE TABLE News
+DROP TABLE IF EXISTS news;
+CREATE TABLE news
 (
 id INT NOT NULL AUTO_INCREMENT,
 title VARCHAR(256),
@@ -109,47 +109,47 @@ person_id INT,
 views INT,
 active CHAR(1) DEFAULT 'Y',
 PRIMARY KEY(id),
-FOREIGN KEY(person_id) REFERENCES Person(id)
+FOREIGN KEY(person_id) REFERENCES person(id)
 );
 
-DROP TABLE IF EXISTS Comment;
-CREATE TABLE Comment
+DROP TABLE IF EXISTS comment;
+CREATE TABLE comment
 (
 id INT,
 news_id INT,
 comment_text TEXT(65535),
 comment_timestamp DATE,
 PRIMARY KEY(id),
-FOREIGN KEY(news_id) REFERENCES News(id)
+FOREIGN KEY(news_id) REFERENCES news(id)
 );
 
-DROP TABLE IF EXISTS News_Visibility_Scope;
-CREATE TABLE News_Visibility_Scope
+DROP TABLE IF EXISTS news_visibility_scope;
+CREATE TABLE news_visibility_scope
 (
 id INT,
 news_id INT,
 PRIMARY KEY(id),
-FOREIGN KEY(news_id) REFERENCES News(id)
+FOREIGN KEY(news_id) REFERENCES news(id)
 );
 
-DROP TABLE IF EXISTS Social_Service;
-CREATE TABLE Social_Service
+DROP TABLE IF EXISTS social_service;
+CREATE TABLE social_service
 (
 id VARCHAR(60) NOT NULL,
 url VARCHAR(200),
 PRIMARY KEY(id)
 );
 
-DROP TABLE IF EXISTS Social_Connection;
-CREATE TABLE Social_Connection
+DROP TABLE IF EXISTS social_connection;
+CREATE TABLE social_connection
 (
 id INT NOT NULL AUTO_INCREMENT,
 person_id INT,
 social_service_id VARCHAR(60),
 url VARCHAR(200),
 PRIMARY KEY(id),
-FOREIGN KEY(person_id) REFERENCES Person(id),
-FOREIGN KEY(social_service_id) REFERENCES Social_Service(id)
+FOREIGN KEY(person_id) REFERENCES person(id),
+FOREIGN KEY(social_service_id) REFERENCES social_service(id)
 );
 
 DROP TABLE IF EXISTS roles;
