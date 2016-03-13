@@ -128,9 +128,12 @@ public class JobsApiTest {
     @WithMockUser
     public void testJobs_q() throws Exception {
         // Setup the expectations.
+        when(jobService.findAll())
+        .thenReturn(ImmutableList.of(
+            createDbJob(5,"me@example.com"),
+            createDbJob(5,"me2@example.com")));
         when(jobService.findAll("me2"))
             .thenReturn(ImmutableList.of(
-                createDbJob(5,"me@example.com"),
                 createDbJob(5,"me2@example.com")));
         
         mockMvc.perform(get("/api/v1/jobs?q=me2")
