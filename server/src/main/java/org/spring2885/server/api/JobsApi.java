@@ -4,11 +4,17 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.spring2885.model.Job;
+import org.spring2885.model.Person;
 import org.spring2885.server.api.exceptions.NotFoundException;
 import org.spring2885.server.db.model.DbJob;
+import org.spring2885.server.db.model.DbPerson;
 import org.spring2885.server.db.model.JobConverters;
 import org.spring2885.server.db.service.JobService;
+import org.spring2885.server.db.service.search.SearchCriteria;
+import org.spring2885.server.db.service.search.SearchParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,15 +26,26 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.google.common.base.Strings;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Iterables;
 
 @RestController
 @RequestMapping(value = "/api/v1/jobs", produces = { APPLICATION_JSON_VALUE })
 public class JobsApi {
+	private static final Logger logger = LoggerFactory.getLogger(JobsApi.class);
 	
 	@Autowired
 	private JobService jobService;
+	
+	 @Autowired
+	 private JobConverters.JsonToDbConverter jsonToDbConverter;
+
+	    @Autowired
+	    private JobConverters.FromDbToJson dbToJsonConverter;
+	    
+	    @Autowired
+	    private SearchParser searchParser;
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public ResponseEntity<Job> get(
@@ -39,9 +56,26 @@ public class JobsApi {
 			// here, so needed to add this.
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-		return new ResponseEntity<>(JobConverters.fromDbToJson().apply(o), HttpStatus.OK);
+		return new ResponseEntity<>(dbToJsonConverter.apply(o), HttpStatus.OK);
 	}
 
+	@RequestMapping(method = RequestMethod.POST)
+	public ResponseEntity<Void> jobsPost(
+			
+			
+			@RequestBody Job job
+			
+			) throws NotFoundException {
+		
+		DbJob db = new DbJob();
+		
+		DbJob updatedDbJob = jsonToDbConverter.apply(job);
+		jobService.save(updatedDbJob);
+		
+		return new ResponseEntity<Void>(HttpStatus.OK);
+	}
+
+	
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<String> delete(
 			@PathVariable("id") Integer id,
@@ -62,16 +96,32 @@ public class JobsApi {
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
-	public ResponseEntity<List<Job>> list(@RequestParam(value = "size", required = false) Double size)
-			throws NotFoundException {
+	public ResponseEntity<List<Job>> list(
+	        @RequestParam(value = "aq", required = false) String aq,
+            @RequestParam(value = "q", required = false) String q,
+	        @RequestParam(value = "size", required = false) Integer size
+	        ) throws NotFoundException {
+	    logger.info("JobsApi GET: q={}, aq={}, size={}", q, aq, size);
+	    Iterable<DbJob> all;
+	    if (!Strings.isNullOrEmpty(q)) {
+	        all = jobService.findAll(q);
+	    } else if (!Strings.isNullOrEmpty(aq)) {
+	        List<SearchCriteria> criterias = searchParser.parse(aq);
+            all = jobService.findAll(criterias);
+	    } else {
+	        all = jobService.findAll();
+	    }
 		
-		List<Job> jobs = FluentIterable.from(jobService.findAll())
-				.transform(JobConverters.fromDbToJson())
-				.toList();
-		
-		return new ResponseEntity<>(jobs, HttpStatus.OK);
+		FluentIterable<Job> iterable = FluentIterable.from(all)
+				.transform(dbToJsonConverter);
+		// Support size parameter, but only if it's set (and not 0)
+		if (size != null && size.intValue() > 0) {
+		    iterable.limit(size);
+		}
+		return new ResponseEntity<>(iterable.toList(), HttpStatus.OK);
 	}
 
+	
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<Void> put(
 			@PathVariable("id") Integer id,
@@ -89,7 +139,8 @@ public class JobsApi {
 		if (db == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-		DbJob updatedDbJob = JobConverters.fromJsonToDb(db).apply(job);
+		jsonToDbConverter.withDbJob(db);
+		DbJob updatedDbJob = jsonToDbConverter.apply(job);
 		jobService.save(updatedDbJob);
 		
 		return new ResponseEntity<>(HttpStatus.OK);
@@ -100,13 +151,12 @@ public class JobsApi {
 		if (!request.isUserInRole("ROLE_ADMIN")) {
 			// Only admin's can change other profiles.
 			String name = request.getUserPrincipal().getName();
-			List<DbJob> possibles = jobService.findByTitle(name);
-			if (possibles.size() != 1) {
+			DbJob me = jobService.findByTitle(name);
+			if (me == null) {
 				// I can't find myself... need more zen.
 				return false;
 			}
 			
-			DbJob me = Iterables.getOnlyElement(possibles);
 			if (me.getId() != requestId) {
 				// Someone is being naughty...
 				return false;
@@ -114,5 +164,5 @@ public class JobsApi {
 		}
 		return true;
 	}
-
 }
+

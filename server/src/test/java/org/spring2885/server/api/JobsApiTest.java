@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.util.Collections;
 
 import org.hamcrest.Matchers;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,8 +25,12 @@ import org.mockito.Mockito;
 import org.spring2885.model.Job;
 import org.spring2885.server.db.model.DbJob;
 import org.spring2885.server.db.model.DbJobType;
+import org.spring2885.server.db.model.DbLanguage;
 import org.spring2885.server.db.service.JobService;
 import org.spring2885.server.db.service.JobTypeService;
+import org.spring2885.server.db.service.person.LanguageService;
+import org.spring2885.server.db.service.search.SearchCriteria;
+import org.spring2885.server.db.service.search.SearchOperator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -38,6 +43,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = { TestConfig.class })
@@ -48,32 +54,44 @@ public class JobsApiTest {
     @Autowired protected WebApplicationContext webappContext;
     @Autowired private JobService jobService;
     @Autowired JobTypeService jobTypeService;
+    @Autowired LanguageService languageService;
     
     private DbJob dbMe;
     private Job me;
     
 
+    
+    @After
+    public void after() {
+        Mockito.reset(jobService, jobTypeService, languageService);
+    }
     @Before
     public void setup() {
         reset(jobService);
         mockMvc = webAppContextSetup(webappContext)
         		.apply(SecurityMockMvcConfigurers.springSecurity())
+        		.dispatchOptions(true)
         		.build();
         
         dbMe = createDbJob(1, "enginner");
         me = createJob(4, "me@example.com");
         
+        DbJobType defaultJobType = new DbJobType(0, "teller");
+        when(jobTypeService.defaultType()).thenReturn(defaultJobType);
+        when(jobTypeService.findAll()).thenReturn(Collections.singleton(defaultJobType));
         
-        // Our tests assume a single default person type of student.
-        DbJobType defaultPersonType = new DbJobType(0, "student");
-        //when(personTypeService.defaultType()).thenReturn(defaultPersonType);
-      //  when(personTypeService.findAll()).thenReturn(Collections.singleton(defaultPersonType));
+        DbLanguage enLanguage = new DbLanguage("en", "English");
+        DbLanguage defaultLanguage = new DbLanguage("eo", "Esperanto");
+        when(languageService.defaultLanguage()).thenReturn(defaultLanguage);
+        when(languageService.findAll()).thenReturn(ImmutableSet.of(enLanguage, defaultLanguage));
     }
+    
     
     static DbJob createDbJob(long id, String title) {
     	DbJob p = new DbJob();
     	p.setId(id);
     	p.setTitle(title);
+    	//p.setLanguage(new DbLanguage("eo", "Esperanto"));
     	
     	return p;
     }
@@ -82,7 +100,7 @@ public class JobsApiTest {
     	Job p = new Job();
     	p.setId(id);
     	p.setTitle(title);
-    	
+    	//p.setLang("eo");
     	return p;
     }
 
@@ -94,8 +112,8 @@ public class JobsApiTest {
     	// Setup the expectations.
     	when(jobService.findAll())
     		.thenReturn(ImmutableList.of(
-    			createDbJob(5,  "me@example.com"),
-    			createDbJob(5,  "me2@example.com")));
+    			createDbJob(5,"me@example.com"),
+    			createDbJob(5,"me2@example.com")));
     	
     	
     	mockMvc.perform(get("/api/v1/jobs")
@@ -105,7 +123,44 @@ public class JobsApiTest {
     			.andExpect(jsonPath("$[0].title", Matchers.is("me@example.com")))
     			.andExpect(jsonPath("$[1].title", Matchers.is("me2@example.com")));
     }
+    
+    @Test
+    @WithMockUser
+    public void testJobs_q() throws Exception {
+        // Setup the expectations.
+        when(jobService.findAll())
+            .thenReturn(ImmutableList.of(
+                createDbJob(5,"me@example.com"),
+                createDbJob(5,"me2@example.com")));
+        
+        mockMvc.perform(get("/api/v1/profiles?q=me2")
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$[0].title", Matchers.is("me2@example.com")));
+    }
 
+	@SuppressWarnings("unchecked")
+    @Test
+    @WithMockUser
+    public void testJobs_aq() throws Exception {
+        // Setup the expectations.
+        when(jobService.findAll())
+            .thenReturn(ImmutableList.of(
+                createDbJob(5,  "me@example.com"),
+                createDbJob(5,  "me2@example.com")));
+        SearchCriteria expected = new SearchCriteria("email", SearchOperator.EQ, "me2*");
+        
+        when(jobService.findAll(Collections.singletonList(expected)))
+            .thenReturn(ImmutableList.of(
+                createDbJob(5,  "me2@example.com")));
+        
+        mockMvc.perform(get("/api/v1/profiles?aq=email:me2*")
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$[0].title", Matchers.is("me2@example.com")));
+    }
 
     /**
      * Tests a {@code /profiles/:id} where {@code id} is found.
@@ -173,7 +228,7 @@ public class JobsApiTest {
     	// Setup the expectations.
     	when(jobService.findById(4)).thenReturn(dbMe);
     	when(jobService.findByTitle("me@example.com"))
-    		.thenReturn(Collections.emptyList());
+    	.thenReturn(null);
     	
     	mockMvc.perform(put("/api/v1/jobs/4")
     			.contentType(MediaType.APPLICATION_JSON)
@@ -184,12 +239,10 @@ public class JobsApiTest {
     	verify(jobService, never()).save(Mockito.any(DbJob.class));
     }
     
-    
-    
-    
-   
+
     public static byte[] convertObjectToJsonBytes(Object object) throws IOException  {
         ObjectMapper mapper = new ObjectMapper();
         return mapper.writeValueAsBytes(object);
     }    
 }
+

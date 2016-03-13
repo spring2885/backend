@@ -30,7 +30,7 @@ public class DbJob {
 	
 	private Date endDate;
 	
-	private Integer postedbyPersonId;
+	private Integer postedByPersonId;
 	
 	private Integer hours;
 	
@@ -85,10 +85,10 @@ public class DbJob {
 	}
 	
 	public int getpostedbyPersonId() {
-		return postedbyPersonId;
+		return postedByPersonId;
 	}
 	public void setpostedbyPersonId(int postedbypersonId) {
-		this.postedbyPersonId = postedbypersonId;
+		this.postedByPersonId = postedbypersonId;
 	}
 	
 	public int getHours() {
@@ -154,10 +154,10 @@ public class DbJob {
 				return false;
 		} else if (!endDate.equals(other.endDate))
 			return false;
-		if (postedbyPersonId == null) {
-			if (other.postedbyPersonId != null)
+		if (postedByPersonId == null) {
+			if (other.postedByPersonId != null)
 				return false;
-		} else if (!postedbyPersonId.equals(other.postedbyPersonId))
+		} else if (!postedByPersonId.equals(other.postedByPersonId))
 			return false;
 		
 		return true;
