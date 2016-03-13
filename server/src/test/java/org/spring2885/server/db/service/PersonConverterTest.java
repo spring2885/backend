@@ -32,8 +32,8 @@ public class PersonConverterTest {
     @Autowired PersonTypeService personService;
     @Autowired PersonTypeService personTypeService;
     @Autowired LanguageService languageService;
-    @Autowired private PersonConverters.JsonToDbConverter jsonToDb;
-    @Autowired private PersonConverters.FromDbToJson dbToJson;
+    @Autowired private PersonConverters.JsonToDbConverter personJsonToDb;
+    @Autowired private PersonConverters.FromDbToJson personFromDbToJson;
     
     @Before
     public void before() {
@@ -46,7 +46,7 @@ public class PersonConverterTest {
         when(personTypeService.findAll()).thenReturn(ImmutableSet.of(t1, t2));
         when(personTypeService.defaultType()).thenReturn(t1);
         
-        jsonToDb.withDbPerson(new DbPerson());
+        personJsonToDb.withDbPerson(new DbPerson());
     }
 	
 	@Test
@@ -74,7 +74,7 @@ public class PersonConverterTest {
 		dbp.setTitle("Master of time and space");
 		dbp.setType(new DbPersonType(1, "student"));
 		
-		Person p = dbToJson.apply(dbp);
+		Person p = personFromDbToJson.apply(dbp);
 		
 		assertEquals(dbp.getAboutMe(), p.getAboutMe());
 		assertEquals(bday.toString(), p.getBirthdate().toString());
@@ -123,7 +123,7 @@ public class PersonConverterTest {
         p.setTitle("Master of time and space");
         p.setVariety("student");
         
-		DbPerson dbp = jsonToDb.apply(p);
+		DbPerson dbp = personJsonToDb.apply(p);
 		
         assertEquals(dbp.getAboutMe(), p.getAboutMe());
         assertEquals(bday.toString(), p.getBirthdate().toString());

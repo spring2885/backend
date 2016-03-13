@@ -15,7 +15,7 @@ public final class NewsConverters {
     @Autowired
     private PersonService personService;
 
-    public class FromDbToJson implements Function<DbNews, News> {
+    public class NewsFromDbToJson implements Function<DbNews, News> {
 		
 		@Override
 		public News apply(DbNews db) {
@@ -69,12 +69,12 @@ public final class NewsConverters {
 	}
 	
 	@Bean
-	public FromDbToJson fromDbToJson() {
-		return new FromDbToJson();
+	public NewsFromDbToJson newsFromDbToJson() {
+		return new NewsFromDbToJson();
 	}
 	
 	@Bean
-	public JsonToDbConverter fromJsonToDb() {
+	public JsonToDbConverter newsFromJsonToDb() {
 		return new JsonToDbConverter();
 	}
 	

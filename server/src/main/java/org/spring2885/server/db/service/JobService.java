@@ -3,6 +3,7 @@ package org.spring2885.server.db.service;
 import java.util.List;
 
 import org.spring2885.server.db.model.DbJob;
+import org.spring2885.server.db.service.search.SearchCriteria;
 
 public interface JobService {
 	/**
@@ -13,13 +14,28 @@ public interface JobService {
 	/**
 	 * Returns all {@code DbJob} instances.
 	 */
-	Iterable<DbJob> findAll();
+	 
+	 Iterable<DbJob> findAll();
+	 /**
+     * Returns all {@code DbJob} instances with search string {code q}.
+     */
+     
+      Iterable<DbJob> findAll(String q);
+    
+    /**
+     * Returns all {@code DbJob} instances with search string {code q}.
+     */
+     
+	Iterable<DbJob> findAll(List<SearchCriteria> criterias);
 	
 	/**
 	 * Returns all {@code DbJob} instances with email address of {@code email}
 	 * or an empty {@link Iterator} if none exist.
 	 */
-	List<DbJob> findByTitle(String title);
+	 
+	 DbJob findByTitle(String title);
+	 
+	List<DbJob> findByDescription(String title);
 	
 	/**
 	 * Deletes a user by primary key.
