@@ -26,7 +26,7 @@ public final class PersonConverters {
     private LanguageService languageService;
 
     @Bean
-    public FromDbToJson dbToJsonConverter() {
+    public FromDbToJson personFromDbToJson() {
         return new FromDbToJson();
     }
 
@@ -77,7 +77,7 @@ public final class PersonConverters {
 	}
 
     @Bean
-    public JsonToDbConverter jsonToDbConverter() {
+    public JsonToDbConverter personJsonToDb() {
         return new JsonToDbConverter();
     }
     

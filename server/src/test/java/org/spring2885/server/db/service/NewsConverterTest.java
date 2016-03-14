@@ -29,9 +29,9 @@ import org.springframework.test.context.web.WebAppConfiguration;
 @WebAppConfiguration
 public class NewsConverterTest {
     @Autowired
-    NewsConverters.FromDbToJson fromDbToJson;
+    NewsConverters.NewsFromDbToJson newsFromDbToJson;
     @Autowired
-    NewsConverters.JsonToDbConverter fromJsonToDb;
+    NewsConverters.JsonToDbConverter newsFromJsonToDb;
     @Autowired PersonService personService;
     private DbPerson dbp = new DbPerson();
 
@@ -78,7 +78,7 @@ public class NewsConverterTest {
 		d.setTitle("This is a title");
 		d.setViews(200L);
 
-		News p = fromDbToJson.apply(d);
+		News p = newsFromDbToJson.apply(d);
 		assertEquals(d.getDescription(), p.getDescription());
 		assertEquals(d.getExpired().toString(), p.getExpired().toString());
 		assertEquals(d.getPerson().getEmail(), p.getPostedBy());
@@ -102,8 +102,8 @@ public class NewsConverterTest {
         p.setViews(200L);
         
 		DbNews d = new DbNews();
-		fromJsonToDb.withDbNews(d);
-		d = fromJsonToDb.apply(p);
+		newsFromJsonToDb.withDbNews(d);
+		d = newsFromJsonToDb.apply(p);
 		
         assertEquals(d.getDescription(), p.getDescription());
         assertEquals(d.getExpired().toString(), p.getExpired().toString());

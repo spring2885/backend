@@ -34,9 +34,9 @@ public class NewsApi {
     @Autowired
     private PersonService personService;
     @Autowired
-    NewsConverters.FromDbToJson fromDbToJson;
+    NewsConverters.NewsFromDbToJson newsFromDbToJson;
     @Autowired
-    NewsConverters.JsonToDbConverter fromJsonToDb;
+    NewsConverters.JsonToDbConverter newsFromJsonToDb;
     
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public ResponseEntity<News> get(
@@ -47,7 +47,7 @@ public class NewsApi {
 			// here, so needed to add this.
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-		return new ResponseEntity<>(fromDbToJson.apply(o), HttpStatus.OK);
+		return new ResponseEntity<>(newsFromDbToJson.apply(o), HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
@@ -75,7 +75,7 @@ public class NewsApi {
 			throws NotFoundException {
 		
 		List<News> news = FluentIterable.from(newsService.findAll())
-				.transform(fromDbToJson)
+				.transform(newsFromDbToJson)
 				.toList();
 		
 		return new ResponseEntity<>(news, HttpStatus.OK);
@@ -98,7 +98,7 @@ public class NewsApi {
 		if (db == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-		DbNews updatedDbNews = fromJsonToDb
+		DbNews updatedDbNews = newsFromJsonToDb
 				.withDbNews(db)
 				.apply(news);
 		newsService.save(updatedDbNews);
@@ -109,7 +109,7 @@ public class NewsApi {
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<Void> put(@RequestBody News news) throws NotFoundException {
         
-        DbNews updatedDbNews = fromJsonToDb
+        DbNews updatedDbNews = newsFromJsonToDb
                 .withDbNews(new DbNews())
                 .apply(news);
         newsService.save(updatedDbNews);

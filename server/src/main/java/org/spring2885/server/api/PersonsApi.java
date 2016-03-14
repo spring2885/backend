@@ -36,7 +36,7 @@ public class PersonsApi {
 	private PersonService personService;
 
     @Autowired
-    private PersonConverters.JsonToDbConverter jsonToDbConverter;
+    private PersonConverters.JsonToDbConverter personJsonToDb;
 
     @Autowired
     private PersonConverters.FromDbToJson dbToJsonConverter;
@@ -118,8 +118,8 @@ public class PersonsApi {
 		if (db == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-		jsonToDbConverter.withDbPerson(db);
-		DbPerson updatedDbPerson = jsonToDbConverter.apply(person);
+		personJsonToDb.withDbPerson(db);
+		DbPerson updatedDbPerson = personJsonToDb.apply(person);
 		personService.save(updatedDbPerson);
 		
 		return new ResponseEntity<>(HttpStatus.OK);
