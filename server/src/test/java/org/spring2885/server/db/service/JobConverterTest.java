@@ -1,29 +1,64 @@
 package org.spring2885.server.db.service;
 
+import static org.mockito.Mockito.reset;
+import static org.mockito.Mockito.when;
+
+import java.util.Collections;
+
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
 import org.spring2885.model.Job;
+import org.spring2885.server.api.TestConfig;
 import org.spring2885.server.db.model.DbJob;
+import org.spring2885.server.db.model.DbJobType;
+import org.spring2885.server.db.model.DbLanguage;
 import org.spring2885.server.db.model.JobConverters;
+import org.spring2885.server.db.service.person.LanguageService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
 
-import com.google.common.base.Function;
 
-@RunWith(JUnit4.class)
+import com.google.common.collect.ImmutableSet;
+
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = { TestConfig.class })
+@WebAppConfiguration
 public class JobConverterTest {
 	public JobConverterTest(){}
-	
+	@Autowired JobTypeService jobService;
+    @Autowired JobTypeService jobTypeService;
+    @Autowired LanguageService languageService;
+    @Autowired private JobConverters.JsonToDbConverter jsonToDb;
+    @Autowired private JobConverters.FromDbToJson dbToJson;
+    
+    @Before
+    public void before() {
+        reset(languageService, jobService, jobTypeService);
+        DbLanguage l1 = new DbLanguage("es", "Spanish");
+        when(languageService.findAll()).thenReturn(Collections.singleton(l1));
+        
+        DbJobType t1 = new DbJobType(1, "teller");
+        DbJobType t2 = new DbJobType(1, "engineer");
+        when(jobTypeService.findAll()).thenReturn(ImmutableSet.of(t1, t2));
+        when(jobTypeService.defaultType()).thenReturn(t1);
+        
+        jsonToDb.withDbJob(new DbJob());
+    }
+    
 	@Test
 	public void testFromDbToJson(){
-		Function<DbJob, Job> dtoj = JobConverters.fromDbToJson();
+		
 		DbJob dbp = new DbJob();
-		Job p = dtoj.apply(dbp);
+		Job p = dbToJson.apply(dbp);
 	}
 	
 	@Test
 	public void testFromJsonToDb(){
-		Function<Job, DbJob> jtod = JobConverters.fromJsonToDb();
+		
 		Job p = new Job();
-		DbJob dbp = jtod.apply(p);
+		DbJob dbp = jsonToDb.apply(p);
 	}
 }

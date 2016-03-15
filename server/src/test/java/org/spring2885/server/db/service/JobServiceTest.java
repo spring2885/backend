@@ -68,7 +68,7 @@ public class JobServiceTest {
     }
 
     @Test
-    public void testFindByEmail_None() {
+    public void testFindByTitle_None() {
     	List<DbJob> jobs = Lists.newArrayList(service.findByTitle("World"));
     	assertEquals(0, jobs.size());
     }
