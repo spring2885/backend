@@ -2,6 +2,9 @@ package org.spring2885.server.db.service;
 
 import java.util.List;
 import org.spring2885.server.db.model.DbNews;
+import org.spring2885.server.db.model.DbPerson;
+import org.spring2885.server.db.service.*;
+import org.spring2885.server.db.service.search.SearchCriteria;
 
 public interface NewsService {
 
@@ -10,16 +13,24 @@ public interface NewsService {
 	 */
 	DbNews findById(long id);
 	
+	  /**
+     * Returns all {@code DbNews} instances with search string {code q}.
+     */
+    Iterable<DbNews> findAll(String q);
 	/**
 	 * Returns all {@code DbNews} instances.
 	 */
 	Iterable<DbNews> findAll();
 	
 	/**
+     * Returns all {@code DbNews} instances with search string {code q}.
+     */
+    Iterable<DbNews> findAll(List<SearchCriteria> criterias);
+	
+	/**
 	 * Returns all {@code DbNews} instances with news title of {@code title}
 	 * or an empty {@link Iterator} if none exist.
 	 */
-	
 	List<DbNews> findByTitle(String title);
 	
 	/**

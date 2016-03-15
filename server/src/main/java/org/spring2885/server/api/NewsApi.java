@@ -4,13 +4,18 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.spring2885.model.News;
+import org.spring2885.model.Person;
 import org.spring2885.server.api.exceptions.NotFoundException;
 import org.spring2885.server.db.model.DbNews;
 import org.spring2885.server.db.model.DbPerson;
 import org.spring2885.server.db.model.NewsConverters;
 import org.spring2885.server.db.service.NewsService;
 import org.spring2885.server.db.service.person.PersonService;
+import org.spring2885.server.db.service.search.SearchCriteria;
+import org.spring2885.server.db.service.search.SearchParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,11 +27,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.google.common.base.Strings;
 import com.google.common.collect.FluentIterable;
 
 @RestController
 @RequestMapping(value = "/api/v1/news", produces = { APPLICATION_JSON_VALUE })
 public class NewsApi {
+	private static final Logger logger = LoggerFactory.getLogger(NewsApi.class);
 	
     @Autowired
     private NewsService newsService;
@@ -34,9 +41,11 @@ public class NewsApi {
     @Autowired
     private PersonService personService;
     @Autowired
-    NewsConverters.FromDbToJson fromDbToJson;
+    NewsConverters.JsonToDbConverter jsonToDbConverter;
     @Autowired
-    NewsConverters.JsonToDbConverter fromJsonToDb;
+    NewsConverters.FromDbToJson dbToJsonConverter;
+    @Autowired
+    private SearchParser searchParser;
     
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public ResponseEntity<News> get(
@@ -47,7 +56,7 @@ public class NewsApi {
 			// here, so needed to add this.
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-		return new ResponseEntity<>(fromDbToJson.apply(o), HttpStatus.OK);
+		return new ResponseEntity<>(dbToJsonConverter.apply(o), HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
@@ -71,16 +80,30 @@ public class NewsApi {
 
 	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<List<News>> list(
+			@RequestParam(value = "aq", required = false) String aq,
+            @RequestParam(value = "q", required = false) String q,
 	        @RequestParam(value = "size", required = false) Integer size)
 			throws NotFoundException {
+		logger.info("NewsApi GET: q={}, aq={}, size={}", q, aq, size);
+	    Iterable<DbNews> all;
+	    if (!Strings.isNullOrEmpty(q)) {
+	        all = newsService.findAll(q);
+	    } else if (!Strings.isNullOrEmpty(aq)) {
+	        List<SearchCriteria> criterias = searchParser.parse(aq);
+            all = newsService.findAll(criterias);
+	    } else {
+	        all = newsService.findAll();
+	    }
 		
-		List<News> news = FluentIterable.from(newsService.findAll())
-				.transform(fromDbToJson)
-				.toList();
-		
-		return new ResponseEntity<>(news, HttpStatus.OK);
+		FluentIterable<News> iterable = FluentIterable.from(all)
+				.transform(dbToJsonConverter);
+		// Support size parameter, but only if it's set (and not 0)
+		if (size != null && size.intValue() > 0) {
+		    iterable.limit(size);
+		}
+		return new ResponseEntity<>(iterable.toList(), HttpStatus.OK);
 	}
-
+	
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<Void> put(
 			@PathVariable("id") Integer id,
@@ -98,7 +121,7 @@ public class NewsApi {
 		if (db == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-		DbNews updatedDbNews = fromJsonToDb
+		DbNews updatedDbNews = jsonToDbConverter
 				.withDbNews(db)
 				.apply(news);
 		newsService.save(updatedDbNews);
@@ -109,7 +132,7 @@ public class NewsApi {
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<Void> put(@RequestBody News news) throws NotFoundException {
         
-        DbNews updatedDbNews = fromJsonToDb
+        DbNews updatedDbNews = jsonToDbConverter
                 .withDbNews(new DbNews())
                 .apply(news);
         newsService.save(updatedDbNews);
