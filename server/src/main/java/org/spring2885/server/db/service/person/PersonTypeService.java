@@ -12,4 +12,5 @@ public interface PersonTypeService {
 	
 	/** Gets the default person type (student). */
 	DbPersonType defaultType();
+	
 }
