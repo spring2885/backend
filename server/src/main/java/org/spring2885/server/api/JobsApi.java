@@ -32,7 +32,7 @@ import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Iterables;
 
 @RestController
-@RequestMapping(value = "/api/v1/jobstype/{id}", produces = { APPLICATION_JSON_VALUE })
+@RequestMapping(value = "/api/v1/jobs", produces = { APPLICATION_JSON_VALUE })
 public class JobsApi {
 	private static final Logger logger = LoggerFactory.getLogger(JobsApi.class);
 	

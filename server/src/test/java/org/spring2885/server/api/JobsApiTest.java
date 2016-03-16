@@ -76,14 +76,6 @@ public class JobsApiTest {
         dbMe = createDbJob(1, "enginner");
         me = createJob(4, "me@example.com");
         
-        DbJobType defaultJobType = new DbJobType(0, "teller");
-        when(jobTypeService.defaultType()).thenReturn(defaultJobType);
-        when(jobTypeService.findAll()).thenReturn(Collections.singleton(defaultJobType));
-        
-        DbLanguage enLanguage = new DbLanguage("en", "English");
-        DbLanguage defaultLanguage = new DbLanguage("eo", "Esperanto");
-        when(languageService.defaultLanguage()).thenReturn(defaultLanguage);
-        when(languageService.findAll()).thenReturn(ImmutableSet.of(enLanguage, defaultLanguage));
     }
     
     
@@ -140,7 +132,7 @@ public class JobsApiTest {
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-            .andExpect(jsonPath("$[0].title", Matchers.is("title1")));
+            .andExpect(jsonPath("$[0].title", Matchers.is("title2")));
         
        
     }
@@ -164,7 +156,7 @@ public class JobsApiTest {
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$[0].title", Matchers.is("title1")));
+                .andExpect(jsonPath("$[0].title", Matchers.is("title2")));
     }
 
     /**
