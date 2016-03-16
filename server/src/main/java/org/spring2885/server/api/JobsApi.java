@@ -13,6 +13,7 @@ import org.spring2885.server.db.model.DbJob;
 import org.spring2885.server.db.model.DbPerson;
 import org.spring2885.server.db.model.JobConverters;
 import org.spring2885.server.db.service.JobService;
+import org.spring2885.server.db.service.person.PersonService;
 import org.spring2885.server.db.service.search.SearchCriteria;
 import org.spring2885.server.db.service.search.SearchParser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,12 +32,15 @@ import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Iterables;
 
 @RestController
-@RequestMapping(value = "/api/v1/jobs", produces = { APPLICATION_JSON_VALUE })
+@RequestMapping(value = "/api/v1/jobstype/{id}", produces = { APPLICATION_JSON_VALUE })
 public class JobsApi {
 	private static final Logger logger = LoggerFactory.getLogger(JobsApi.class);
 	
 	@Autowired
 	private JobService jobService;
+	
+	@Autowired
+    private PersonService personService;
 	
 	@Autowired
 	private JobConverters.JsonToDbConverter jsonToDbConverter;
@@ -62,7 +66,6 @@ public class JobsApi {
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<Void> jobsPost(
 			
-			
 			@RequestBody Job job
 			
 			) throws NotFoundException {
@@ -74,7 +77,6 @@ public class JobsApi {
 		
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
-
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<String> delete(
@@ -150,8 +152,8 @@ public class JobsApi {
 	private boolean checkAdminRequestIfNeeded(int requestId, SecurityContextHolderAwareRequestWrapper request) {
 		if (!request.isUserInRole("ROLE_ADMIN")) {
 			// Only admin's can change other profiles.
-			String name = request.getUserPrincipal().getName();
-			DbJob me = jobService.findByTitle(name);
+			String email = request.getUserPrincipal().getName();
+			DbPerson me = personService.findByEmail(email);
 			if (me == null) {
 				// I can't find myself... need more zen.
 				return false;
@@ -165,4 +167,3 @@ public class JobsApi {
 		return true;
 	}
 }
-
