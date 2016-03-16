@@ -421,7 +421,7 @@ paths:
       parameters:
         - name: PersonType
           in: body
-          descritpion: The persontype you want to post
+          description: The persontype you want to post
           schema:
             $ref: '#/definitions/PersonType'
           required: true
