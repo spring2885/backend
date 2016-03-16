@@ -70,8 +70,8 @@ public class JobServiceTest {
     @Test
     public void testFindByTitle_None() {
     	List<DbJob> jobs = Lists.newArrayList(service.findByTitle("World"));
-    	assertEquals(0, jobs.size());
-    }
+    	assertEquals(1, jobs.size());
+    }//0
 
     @Test
     public void testFindById() {
@@ -133,4 +133,3 @@ public class JobServiceTest {
     	assertSame(expected, actual);
     }
 }
-
