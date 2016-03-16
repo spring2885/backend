@@ -10,11 +10,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.collect.Iterables;
 
-@Component("LanguageTypeService")
+@Component("LanguageService")
 @Transactional(readOnly=true)
-public class LanguageTypeServiceImpl implements LanguageTypeService {
+public class LanguageServiceImpl implements languageService {
 	private final LangRepository repository;
-	LanguageTypeServiceImpl(LangRepository repository) {
+	LanguageServiceImpl(LangRepository repository) {
 		this.repository = repository;
 	}
 	@Override
