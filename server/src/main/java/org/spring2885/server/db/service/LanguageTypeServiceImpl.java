@@ -5,16 +5,17 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.spring2885.server.db.model.DbLanguage;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.collect.Iterables;
 
+@Component("LanguageTypeService")
+@Transactional(readOnly=true)
 public class LanguageTypeServiceImpl implements LanguageTypeService {
 	private final LangRepository repository;
 	LanguageTypeServiceImpl(LangRepository repository) {
 		this.repository = repository;
-	}
-	public DbLanguage defaultType() {
-		return repository.findOne(Long.valueOf(0));
 	}
 	@Override
 	public Set<DbLanguage> findAll() {
