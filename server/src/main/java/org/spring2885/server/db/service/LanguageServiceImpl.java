@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.collect.Iterables;
 
-@Component("LanguageService")
+@Component("languageService")
 @Transactional(readOnly=true)
 public class LanguageServiceImpl implements languageService {
 	private final LangRepository repository;
