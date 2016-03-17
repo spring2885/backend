@@ -20,6 +20,12 @@ public interface PersonTypeService {
 	 * Returns a {@link DbPersonType} by the primary key or {@code null} if none exist.
 	 */
 	DbPersonType findById(long id);
+	
+	/**
+	 * Returns all {@code DbPersonType} instances with name address of {@code name}
+	 * or an empty {@link Iterator} if none exist.
+	 */
+	DbPersonType findByName(String name);
     
     /**
      * Returns all {@code DbPersonType} instances with search string {code q}.
@@ -40,5 +46,10 @@ public interface PersonTypeService {
 
 	/** Saves (Inserts) the {@code person} into the database. */
 	DbPersonType save(DbPersonType personType);
+	
+	/**
+	 * Returns {@code true} if personType exists for this name.
+	 */
+	boolean existsByName(String name);
 	
 }

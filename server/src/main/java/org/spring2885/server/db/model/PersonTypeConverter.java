@@ -55,14 +55,7 @@ public class PersonTypeConverter {
 			return pT;
 		}
 		 
-	 }
-	 
-	 private static java.sql.Date asSqlDate(java.util.Date d) {
-			if (d == null) {
-				return null;
-			}
-			return new java.sql.Date(d.getTime());
-		}
+	}
 	 
 	 private PersonTypeConverter() {}
 }

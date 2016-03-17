@@ -15,6 +15,7 @@ import org.spring2885.server.db.model.DbNews;
 import org.spring2885.server.db.model.DbPerson;
 import org.spring2885.server.db.model.DbPersonType;
 import org.spring2885.server.db.model.PersonConverters;
+import org.spring2885.server.db.model.PersonTypeConverter;
 import org.spring2885.server.db.service.person.PersonService;
 import org.spring2885.server.db.service.person.PersonTypeService;
 import org.spring2885.server.db.service.search.SearchCriteria;
@@ -47,6 +48,12 @@ public class PersonTypeApi {
     @Autowired
     private SearchParser searchParser;
     
+    @Autowired
+    private PersonTypeConverter.FromDbToJson dbToJsonConverter;
+    
+    @Autowired
+    private PersonTypeConverter.JsonToDbConverter jsonToDbConverter;
+    
     @RequestMapping(value = "/type", method = RequestMethod.GET)
     public ResponseEntity<Set<DbPersonType>> list(
             ) throws NotFoundException {
@@ -61,22 +68,69 @@ public class PersonTypeApi {
     }
     
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public ResponseEntity<DbPersonType> get(
+    public ResponseEntity<PersonType> get(
             @PathVariable("id") int id) throws NotFoundException {
-        Set<DbPersonType> o = personTypeService.findAll();
-        ResponseEntity<DbPersonType> personType = null;
-        if (o == null) {
-            personType = new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        else {
-        	for (DbPersonType p : o){
-        		if (p.getId() == id){
-        			personType = new ResponseEntity<>(p, HttpStatus.OK);
-        		}
-        	}
-        }
-        return personType;
+    	Set<DbPersonType> o = personTypeService.findAll();
+    	if (o != null) {
+    	  for (DbPersonType p : o) {
+    	    // Note to Matt: You want to return the JSON model of a personType, NOT the DbPersonType
+    	    if (id == p.getId()) { return new ResponseEntity<>(dbToJsonConverter.apply(p), HttpStatus.OK); }
+    	  }
+    	}
+    	return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
     
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    public ResponseEntity<String> delete(
+			@PathVariable("id") Integer id,
+			SecurityContextHolderAwareRequestWrapper request)
+			throws NotFoundException {
+
+    	//TODO: verify admin request
+    	//if they are not an admin, return HttpStatus.FORBIDDEN;
+		personTypeService.delete(id);
+		if (personTypeService.findById(id) == null){
+			return new ResponseEntity<>(HttpStatus.OK);
+		}
+		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+	}
     
+    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+    public ResponseEntity<Void> put(
+    		@PathVariable("id") Integer id,
+    		@RequestBody PersonType personType) throws NotFoundException{
+    	
+    	//TODO: verify admin request
+    	//if they are not an admin, return HttpStatus.FORBIDDEN;
+    	if (id.intValue() != personType.getId().intValue()) {
+    		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    	}
+    	
+    	DbPersonType db = personTypeService.findById(id);
+    	if (db == null){
+    		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    	}
+    	jsonToDbConverter.withDbPersonType(db);
+    	DbPersonType updatedDbPersonType = jsonToDbConverter.apply(personType);
+    	personTypeService.save(updatedDbPersonType);
+    	
+    	return new ResponseEntity<>(HttpStatus.OK);
+    }
+    
+    @RequestMapping(value = "/new", method = RequestMethod.POST)
+    public ResponseEntity<Void> personTypePost(
+    		@RequestParam("id") Integer id,
+    		@RequestParam("name") String name
+    		) throws NotFoundException {
+    	
+    	if (personTypeService.existsByName(name)) {
+    		throw new RuntimeException("name already exists: " + name);
+    	}
+    	
+    	DbPersonType personType = new DbPersonType();
+    	personType.setId(id);
+    	personType.setName(name);
+    	personTypeService.save(personType);
+    	return new ResponseEntity<Void>(HttpStatus.OK);
+    }
 }

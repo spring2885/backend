@@ -91,5 +91,19 @@ public class PersonTypeServiceImpl implements PersonTypeService {
 	public DbPersonType save(DbPersonType personType) {
 		return repository.save(personType);
 	}
+	
+	@Override
+	public boolean existsByName(String name){
+		return findByName(name) != null;
+	}
+
+	@Override
+	public DbPersonType findByName(String name) {
+		List<DbPersonType> candidates = repository.findByName(name);
+		if (candidates.isEmpty()){
+			return null;
+		}
+		return Iterables.getOnlyElement(candidates);
+	}
 
 }
