@@ -7,8 +7,11 @@ import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.spring2885.model.News;
 import org.spring2885.model.Person;
+import org.spring2885.model.PersonType;
 import org.spring2885.server.api.exceptions.NotFoundException;
+import org.spring2885.server.db.model.DbNews;
 import org.spring2885.server.db.model.DbPerson;
 import org.spring2885.server.db.model.DbPersonType;
 import org.spring2885.server.db.model.PersonConverters;
@@ -39,44 +42,41 @@ public class PersonTypeApi {
 	private PersonTypeService personTypeService;
 
     @Autowired
-    private PersonConverters.JsonToDbConverter personJsonToDb;
+    private DbPersonType personType;
 
-    @Autowired
-    private PersonConverters.FromDbToJson dbToJsonConverter;
-    
     @Autowired
     private SearchParser searchParser;
-
-    /*@RequestMapping(value = "/{type}", method = RequestMethod.GET)
-    public ResponseEntity<DbPersonType> get(
-            @PathVariable("type") String type) throws NotFoundException {
-    	//findById() returns a person type by id
-    	Set<DbPersonType> o = personTypeService.findAll();
-        
-        //return o;
-        if (o == null) {
-            // When adding test testPersonsById_notFound, was getting a NullPointerException
-            // here, so needed to add this.
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<>(HttpStatus.OK);
-    }*/
     
-    /**
-     * get a list of PersonTypes
-     */
     @RequestMapping(value = "/type", method = RequestMethod.GET)
-    public ResponseEntity<DbPersonType> list(
+    public ResponseEntity<Set<DbPersonType>> list(
             ) throws NotFoundException {
-    	//findById() returns a person type by id
     	Set<DbPersonType> o = personTypeService.findAll();
         
-        //return o;
         if (o == null) {
             // When adding test testPersonsById_notFound, was getting a NullPointerException
             // here, so needed to add this.
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(o, HttpStatus.OK);
     }
+    
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    public ResponseEntity<DbPersonType> get(
+            @PathVariable("id") int id) throws NotFoundException {
+        Set<DbPersonType> o = personTypeService.findAll();
+        ResponseEntity<DbPersonType> personType = null;
+        if (o == null) {
+            personType = new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        else {
+        	for (DbPersonType p : o){
+        		if (p.getId() == id){
+        			personType = new ResponseEntity<>(p, HttpStatus.OK);
+        		}
+        	}
+        }
+        return personType;
+    }
+    
+    
 }
