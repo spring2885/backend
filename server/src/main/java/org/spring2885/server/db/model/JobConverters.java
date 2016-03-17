@@ -18,6 +18,8 @@ public final class JobConverters {
 	
 	@Autowired
     private JobTypeService jobTypeService;
+	
+	
     
     @Bean
     public FromDbToJson fromDbToJson() {
@@ -91,5 +93,3 @@ public final class JobConverters {
 	
 	}
 }
-
-	

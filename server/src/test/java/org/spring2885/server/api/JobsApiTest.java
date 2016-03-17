@@ -76,14 +76,6 @@ public class JobsApiTest {
         dbMe = createDbJob(1, "enginner");
         me = createJob(4, "me@example.com");
         
-        DbJobType defaultJobType = new DbJobType(0, "teller");
-        when(jobTypeService.defaultType()).thenReturn(defaultJobType);
-        when(jobTypeService.findAll()).thenReturn(Collections.singleton(defaultJobType));
-        
-        DbLanguage enLanguage = new DbLanguage("en", "English");
-        DbLanguage defaultLanguage = new DbLanguage("eo", "Esperanto");
-        when(languageService.defaultLanguage()).thenReturn(defaultLanguage);
-        when(languageService.findAll()).thenReturn(ImmutableSet.of(enLanguage, defaultLanguage));
     }
     
     
@@ -112,16 +104,16 @@ public class JobsApiTest {
     	// Setup the expectations.
     	when(jobService.findAll())
     		.thenReturn(ImmutableList.of(
-    			createDbJob(5,"me@example.com"),
-    			createDbJob(5,"me2@example.com")));
+    			createDbJob(5,"title1"),
+    			createDbJob(5,"title2")));
     	
     	
     	mockMvc.perform(get("/api/v1/jobs")
     			.accept(MediaType.APPLICATION_JSON))
     			.andExpect(status().isOk())
     			.andExpect(content().contentType(MediaType.APPLICATION_JSON))
-    			.andExpect(jsonPath("$[0].title", Matchers.is("me@example.com")))
-    			.andExpect(jsonPath("$[1].title", Matchers.is("me2@example.com")));
+    			.andExpect(jsonPath("$[0].title", Matchers.is("title1")))
+    			.andExpect(jsonPath("$[1].title", Matchers.is("title2")));
     }
     
     @Test
@@ -129,18 +121,20 @@ public class JobsApiTest {
     public void testJobs_q() throws Exception {
         // Setup the expectations.
         when(jobService.findAll())
-        .thenReturn(ImmutableList.of(
-            createDbJob(5,"me@example.com"),
-            createDbJob(5,"me2@example.com")));
-        when(jobService.findAll("me2"))
             .thenReturn(ImmutableList.of(
-                createDbJob(5,"me2@example.com")));
+                createDbJob(5,"title1"),
+                createDbJob(5,"title2")));
+        when(jobService.findAll("title2"))
+        .thenReturn(ImmutableList.of(
+            createDbJob(5,"title2")));
+    
+    mockMvc.perform(get("/api/v1/jobs?q=title2")
+            .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(jsonPath("$[0].title", Matchers.is("title2")));
         
-        mockMvc.perform(get("/api/v1/jobs?q=me2")
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$[0].title", Matchers.is("me2@example.com")));
+       
     }
 
 	@SuppressWarnings("unchecked")
@@ -150,19 +144,19 @@ public class JobsApiTest {
         // Setup the expectations.
         when(jobService.findAll())
             .thenReturn(ImmutableList.of(
-                createDbJob(5,  "me@example.com"),
-                createDbJob(5,  "me2@example.com")));
-        SearchCriteria expected = new SearchCriteria("email", SearchOperator.EQ, "me2*");
+                createDbJob(5,"title1"),
+                createDbJob(5,"title2")));
+        SearchCriteria expected = new SearchCriteria("title", SearchOperator.EQ, "title2*");
         
         when(jobService.findAll(Collections.singletonList(expected)))
             .thenReturn(ImmutableList.of(
-                createDbJob(5,  "me2@example.com")));
+                createDbJob(5,"title2")));
         
-        mockMvc.perform(get("/api/v1/jobs?aq=email:me2*")
+        mockMvc.perform(get("/api/v1/jobs?aq=title:title2*")
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$[0].title", Matchers.is("me2@example.com")));
+                .andExpect(jsonPath("$[0].title", Matchers.is("title2")));
     }
 
     /**
@@ -173,7 +167,7 @@ public class JobsApiTest {
     public void testJobById() throws Exception {
     	// Setup the expectations.
     	DbJob p = new DbJob();
-    	p.setTitle("other@example.com");
+    	p.setTitle("title1");
     	when(jobService.findById(21)).thenReturn(p);
     	verifyNoMoreInteractions(jobService);
     	
@@ -181,7 +175,7 @@ public class JobsApiTest {
     			.accept(MediaType.APPLICATION_JSON))
     			.andExpect(status().isOk())
     			.andExpect(content().contentType(MediaType.APPLICATION_JSON))
-    			.andExpect(jsonPath("$.title", Matchers.is("other@example.com")));
+    			.andExpect(jsonPath("$.title", Matchers.is("title1")));
     	
     	// N.B: We don't have to verify anything here since we're asserting
     	// the results that were setup by PersonService.
@@ -207,7 +201,7 @@ public class JobsApiTest {
 
 
     @Test
-    @WithMockUser(username="me@example.com",roles={"USER","ADMIN"})
+    @WithMockUser(username="Title1",roles={"USER","ADMIN"})
     public void testDeleteJobsById() throws Exception {
     	// Setup the expectations.
     	when(jobService.delete(4)).thenReturn(true);
@@ -221,9 +215,6 @@ public class JobsApiTest {
     	verify(jobService).delete(4);
     }
     
-    
-    
-   
     
     @Test
     @WithMockUser(username="me@example.com",roles={"USER"})
@@ -248,4 +239,3 @@ public class JobsApiTest {
         return mapper.writeValueAsBytes(object);
     }    
 }
-
