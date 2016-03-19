@@ -80,20 +80,4 @@ public class ServerApplication extends WebMvcConfigurerAdapter {
 		}
 	}
 	
-    public static class NoRedirectAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
-        @Override
-        public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
-                Authentication authentication) throws ServletException, IOException {
-        }
-    }
-
-	static class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
-
-		@Override
-		public void commence(HttpServletRequest request, HttpServletResponse response,
-				AuthenticationException ex) throws IOException, ServletException {
-			response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
-
-		}
-	}
 }
