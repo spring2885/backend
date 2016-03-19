@@ -57,18 +57,9 @@ public class ServerApplication extends WebMvcConfigurerAdapter {
 					.antMatchers("/api/**").fullyAuthenticated()
 					.antMatchers("/user").fullyAuthenticated()
 					.antMatchers("/").permitAll()
-				// Enable form login at /formlogin.  POST with "username" and "password"
-				// as the form parameters needed.
 				.and()
-				.exceptionHandling().authenticationEntryPoint(new RestAuthenticationEntryPoint())
+				.httpBasic()
 				.and()
-				.formLogin()
-				.loginPage("/formlogin").successHandler(new NoRedirectAuthenticationSuccessHandler()).permitAll()
-				.and()
-				.logout().logoutUrl("/logout").deleteCookies().invalidateHttpSession(true).logoutSuccessUrl("/")
-				.and()
-				// This makes the /logout URL work.
-				// See https://github.com/spring-projects/spring-webflow-samples/issues/28
 				.csrf().disable();
 		}
 
