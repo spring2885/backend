@@ -392,8 +392,94 @@ paths:
           description: Deletes News
         500:
           description: Error with deleting News by id. 
-      
-
+       
+  /api/v1/socialservice:
+    get:
+      tags: ["SocialService"]
+      description: |
+        Gets `Social_Service` objects.
+        Optional querry param of **size** determines
+        size of return array
+      parameters:
+        - name: size
+          in: query
+          description: Size of array
+          required: false
+          type: string
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/SocialService'
+    post:
+      tags: ["SocialService"]
+      description: |
+      parameters:
+        - name : Social_Service
+          in: body
+          description: The Social_Service you want to post
+          schema:
+            $ref: '#/definitions/SocialService'
+          required: true
+      responses:
+        200:
+          description: Makes a new Social Service
+          
+  /api/v1/socialservice/{id}:
+    get:
+      tags: ["SocialService"]
+      description: |
+        Retrives a SocialService entry
+      parameters:
+        - name: id
+          in: path
+          description: a single Social Service entry
+          required: true
+          type: string
+      responses:
+        200:
+          description: Sucussful deletion 
+          schema:
+            $ref: '#/definitions/SocialService'
+    delete:
+      tags: ["SocialService"]
+      summary: |
+        The Social Service to delete
+      parameters:
+        - name: id
+          in: path
+          description: The Social Service to be deleted.
+          required: true
+          type: string
+      responses:
+        200:
+          description: Deletes Social Service
+        500:
+          description: Error with deleting Social Service by id. 
+    put:
+      tags: ["SocialService"]
+      summary: |
+        The Social Service to update
+      parameters:
+        - name: id
+          in: path
+          description: The id of the Social Service to be update.
+          required: true
+          type: string
+        - name: social_service
+          in: body
+          description: The Social Service item you want to update
+          required: true
+          schema:
+            $ref: '#/definitions/SocialService'
+          required: true
+      responses:
+        200:
+          description: Updates Social Service
+        500:
+          description: Error with updating Social Service by id.
 
 definitions:
   SocialConnection:
@@ -515,6 +601,15 @@ definitions:
         type: string
       new_password:
         type: string
+        
+  SocialService:
+    type: object
+    properties:
+      id: 
+        type: string
+      url:
+        type: string
+      
 tags:
   - name: User
     description: Everything to do with User
@@ -526,3 +621,6 @@ tags:
     description: Everything to do with Jobs
   - name: News
     description: Everything to do with News
+  - name: SocialService
+    description: Everything to do with Social Service
+    

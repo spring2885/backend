@@ -33,6 +33,7 @@ public interface NewsService {
 	 */
 	List<DbNews> findByTitle(String title);
 	
+	
 	/**
 	 * Deletes a news post by primary key.
 	 * 

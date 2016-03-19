@@ -6,9 +6,11 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.spring2885.model.Job;
 import org.spring2885.model.News;
 import org.spring2885.model.Person;
 import org.spring2885.server.api.exceptions.NotFoundException;
+import org.spring2885.server.db.model.DbJob;
 import org.spring2885.server.db.model.DbNews;
 import org.spring2885.server.db.model.DbPerson;
 import org.spring2885.server.db.model.NewsConverters;
@@ -40,18 +42,17 @@ public class NewsApi {
     
     @Autowired
     private PersonService personService;
+    
     @Autowired
-<<<<<<< HEAD
-    NewsConverters.JsonToDbConverter jsonToDbConverter;
+    private NewsConverters.JsonToDbConverter newsJsonToDb;
+    
     @Autowired
-    NewsConverters.FromDbToJson dbToJsonConverter;
+    private NewsConverters.NewsFromDbToJson dbToJsonConverter;
+    
     @Autowired
     private SearchParser searchParser;
-=======
-    NewsConverters.NewsFromDbToJson newsFromDbToJson;
-    @Autowired
-    NewsConverters.JsonToDbConverter newsFromJsonToDb;
->>>>>>> 6c0cc30d17e4d92cbc47cadc4d10288c6f10bbff
+    
+
     
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public ResponseEntity<News> get(
@@ -62,11 +63,8 @@ public class NewsApi {
 			// here, so needed to add this.
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-<<<<<<< HEAD
 		return new ResponseEntity<>(dbToJsonConverter.apply(o), HttpStatus.OK);
-=======
-		return new ResponseEntity<>(newsFromDbToJson.apply(o), HttpStatus.OK);
->>>>>>> 6c0cc30d17e4d92cbc47cadc4d10288c6f10bbff
+
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
@@ -105,7 +103,7 @@ public class NewsApi {
 	        all = newsService.findAll();
 	    }
 		
-<<<<<<< HEAD
+
 		FluentIterable<News> iterable = FluentIterable.from(all)
 				.transform(dbToJsonConverter);
 		// Support size parameter, but only if it's set (and not 0)
@@ -113,13 +111,6 @@ public class NewsApi {
 		    iterable.limit(size);
 		}
 		return new ResponseEntity<>(iterable.toList(), HttpStatus.OK);
-=======
-		List<News> news = FluentIterable.from(newsService.findAll())
-				.transform(newsFromDbToJson)
-				.toList();
-		
-		return new ResponseEntity<>(news, HttpStatus.OK);
->>>>>>> 6c0cc30d17e4d92cbc47cadc4d10288c6f10bbff
 	}
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
@@ -139,32 +130,28 @@ public class NewsApi {
 		if (db == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-<<<<<<< HEAD
-		DbNews updatedDbNews = jsonToDbConverter
-=======
-		DbNews updatedDbNews = newsFromJsonToDb
->>>>>>> 6c0cc30d17e4d92cbc47cadc4d10288c6f10bbff
-				.withDbNews(db)
-				.apply(news);
+		newsJsonToDb.withDbNews(db);
+		DbNews updatedDbNews = newsJsonToDb.apply(news);
 		newsService.save(updatedDbNews);
 		
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
-    @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<Void> put(@RequestBody News news) throws NotFoundException {
-        
-<<<<<<< HEAD
-        DbNews updatedDbNews = jsonToDbConverter
-=======
-        DbNews updatedDbNews = newsFromJsonToDb
->>>>>>> 6c0cc30d17e4d92cbc47cadc4d10288c6f10bbff
-                .withDbNews(new DbNews())
-                .apply(news);
-        newsService.save(updatedDbNews);
-        
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
+	@RequestMapping(method = RequestMethod.POST)
+	public ResponseEntity<Void> newsPost(
+			
+			
+			@RequestBody News news
+			
+			) throws NotFoundException {
+		
+		DbNews db = new DbNews();
+		
+		DbNews updatedDbNews = newsJsonToDb.apply(news);
+		newsService.save(updatedDbNews);
+		
+		return new ResponseEntity<Void>(HttpStatus.OK);
+	}
     
    	private boolean checkAdminRequestIfNeeded(int requestId, SecurityContextHolderAwareRequestWrapper request) {
 		if (!request.isUserInRole("ROLE_ADMIN")) {

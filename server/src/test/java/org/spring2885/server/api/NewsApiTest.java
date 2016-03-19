@@ -1,5 +1,6 @@
 package org.spring2885.server.api;
 
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verify;
@@ -16,6 +17,7 @@ import java.io.IOException;
 import java.util.Collections;
 
 import org.hamcrest.Matchers;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,6 +25,8 @@ import org.mockito.Mockito;
 import org.spring2885.model.News;
 import org.spring2885.server.db.model.DbNews;
 import org.spring2885.server.db.service.NewsService;
+import org.spring2885.server.db.service.search.SearchCriteria;
+import org.spring2885.server.db.service.search.SearchOperator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -36,6 +40,7 @@ import org.springframework.web.context.WebApplicationContext;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableList;
 
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = { TestConfig.class })
 @WebAppConfiguration
@@ -48,12 +53,18 @@ public class NewsApiTest {
     
     private DbNews dbMe;
     private News me;
+    
+    @After
+    public void after() {
+        Mockito.reset(newsService);
+    }
    
     @Before
     public void setup() {
         reset(newsService);
         mockMvc = webAppContextSetup(webappContext)
         		.apply(SecurityMockMvcConfigurers.springSecurity())
+        		.dispatchOptions(true)
         		.build();
         
         dbMe = createDbNews(1, "TitleNews1");
@@ -75,6 +86,10 @@ public class NewsApiTest {
     	return n;
     }
     
+    void makeMeFound() {
+    	when(newsService.findById(1)).thenReturn(dbMe);
+    }
+    
     @Test
     @WithMockUser
     public void testNews() throws Exception {
@@ -90,6 +105,47 @@ public class NewsApiTest {
     			.andExpect(content().contentType(MediaType.APPLICATION_JSON))
     			.andExpect(jsonPath("$[0].title", Matchers.is("Title")))
     			.andExpect(jsonPath("$[1].title", Matchers.is("Title2")));
+    }
+    
+    @Test
+    @WithMockUser
+    public void testNews_q() throws Exception {
+        // Setup the expectations.
+        when(newsService.findAll())
+            .thenReturn(ImmutableList.of(
+                createDbNews(5,  "title1"),
+                createDbNews(5,  "title2")));
+        when(newsService.findAll(eq("title2")))
+            .thenReturn(ImmutableList.of(
+                createDbNews(5,  "title2")));
+        
+        mockMvc.perform(get("/api/v1/news?q=title2")
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$[0].title", Matchers.is("title2")));
+    }
+    
+    @SuppressWarnings("unchecked")
+    @Test
+    @WithMockUser
+    public void testPersons_aq() throws Exception {
+        // Setup the expectations.
+        when(newsService.findAll())
+            .thenReturn(ImmutableList.of(
+                createDbNews(5,  "title1"),
+                createDbNews(5,  "title2")));
+        SearchCriteria expected = new SearchCriteria("title", SearchOperator.EQ, "title2*");
+        
+        when(newsService.findAll(Collections.singletonList(expected)))
+            .thenReturn(ImmutableList.of(
+                createDbNews(5,  "title2")));
+        
+        mockMvc.perform(get("/api/v1/news?aq=title:title2*")
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$[0].title", Matchers.is("title2")));
     }
 
 
@@ -146,7 +202,6 @@ public class NewsApiTest {
     	verify(newsService).delete(4);
     }
     
-
     
     @Test
     @WithMockUser(username="Title",roles={"USER"})
