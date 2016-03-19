@@ -140,6 +140,119 @@
         }
       }
     },
+    "/api/v1/jobtype" : {
+      "get" : {
+        "tags" : [ "JobType" ],
+        "description" : "Gets `JobType` objects.\nOptional querry param of **size** determines\nsize of return array\n",
+        "parameters" : [ {
+          "name" : "size",
+          "in" : "query",
+          "description" : "Size of array",
+          "required" : false,
+          "type" : "number",
+          "format" : "int32"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful response",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/JobType"
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "JobType" ],
+        "description" : "",
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "JobType",
+          "description" : "The JobType you want to post",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/JobType"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Makes a new JobType"
+          }
+        }
+      }
+    },
+    "/api/v1/jobtype/{id}" : {
+      "get" : {
+        "tags" : [ "JobType" ],
+        "description" : "Retrives a jobtype entry\n",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "a single jobtype entry",
+          "required" : true,
+          "type" : "number",
+          "format" : "int64"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Sucussful deletion",
+            "schema" : {
+              "$ref" : "#/definitions/JobType"
+            }
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "JobType" ],
+        "summary" : "The jobtype to update\n",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "The id of the News to be update.",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int64"
+        }, {
+          "in" : "body",
+          "name" : "jobtype",
+          "description" : "The jobtype item you want to update",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/JobType"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Deletes jobtype"
+          },
+          "500" : {
+            "description" : "Error with deleting jobtype by id."
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "JobType" ],
+        "summary" : "The jobtype to delete\n",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "The jobtype to be deleted.",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int64"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Deletes jobtype"
+          },
+          "500" : {
+            "description" : "Error with deleting jobtype by id."
+          }
+        }
+      }
+    },
     "/api/v1/news" : {
       "get" : {
         "tags" : [ "News" ],
@@ -732,7 +845,11 @@
         }
       }
     },
+<<<<<<< HEAD
     "PersonType" : {
+=======
+    "JobType" : {
+>>>>>>> 2b5c82cb777aec55e6e92957c60bc351172e0037
       "type" : "object",
       "properties" : {
         "id" : {
