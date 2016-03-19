@@ -54,7 +54,7 @@ public class PersonTypeApi {
     @Autowired
     private PersonTypeConverter.JsonToDbConverter jsonToDbConverter;
     
-    @RequestMapping(value = "/type", method = RequestMethod.GET)
+    @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<Set<DbPersonType>> list(
             ) throws NotFoundException {
     	Set<DbPersonType> o = personTypeService.findAll();
