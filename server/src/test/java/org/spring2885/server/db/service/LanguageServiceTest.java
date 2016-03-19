@@ -14,9 +14,6 @@ import org.junit.runners.JUnit4;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.spring2885.server.db.model.DbLanguage;
-import org.spring2885.server.db.service.person.LanguageRepository;
-import org.spring2885.server.db.service.person.LanguageService;
-import org.spring2885.server.db.service.person.LanguageServiceImpl;
 
 import com.google.common.collect.Lists;
 
