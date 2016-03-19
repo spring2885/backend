@@ -43,16 +43,10 @@ public class PersonTypeApi {
 	private PersonTypeService personTypeService;
 
     @Autowired
-    private DbPersonType personType;
-
-    @Autowired
-    private SearchParser searchParser;
+    private PersonTypeConverter.FromDbToJson personTypeFromDbToJson;
     
     @Autowired
-    private PersonTypeConverter.FromDbToJson dbToJsonConverter;
-    
-    @Autowired
-    private PersonTypeConverter.JsonToDbConverter jsonToDbConverter;
+    private PersonTypeConverter.JsonToDbConverter personTypeJsonToDb;
     
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<Set<DbPersonType>> list(
@@ -74,7 +68,7 @@ public class PersonTypeApi {
     	if (o != null) {
     	  for (DbPersonType p : o) {
     	    // Note to Matt: You want to return the JSON model of a personType, NOT the DbPersonType
-    	    if (id == p.getId()) { return new ResponseEntity<>(dbToJsonConverter.apply(p), HttpStatus.OK); }
+    	    if (id == p.getId()) { return new ResponseEntity<>(personTypeFromDbToJson.apply(p), HttpStatus.OK); }
     	  }
     	}
     	return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -110,8 +104,8 @@ public class PersonTypeApi {
     	if (db == null){
     		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     	}
-    	jsonToDbConverter.withDbPersonType(db);
-    	DbPersonType updatedDbPersonType = jsonToDbConverter.apply(personType);
+    	personTypeJsonToDb.withDbPersonType(db);
+    	DbPersonType updatedDbPersonType = personTypeJsonToDb.apply(personType);
     	personTypeService.save(updatedDbPersonType);
     	
     	return new ResponseEntity<>(HttpStatus.OK);

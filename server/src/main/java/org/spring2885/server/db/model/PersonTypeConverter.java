@@ -1,8 +1,6 @@
 package org.spring2885.server.db.model;
 
 import org.spring2885.model.PersonType;
-import org.spring2885.server.db.service.person.PersonTypeService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
@@ -12,12 +10,8 @@ import com.google.common.base.Suppliers;
 
 @Component
 public class PersonTypeConverter {
-
-	@Autowired
-	private PersonTypeService personTypeService;
-	
 	@Bean
-	public FromDbToJson personFromDbToJson() {
+	public FromDbToJson personTypeFromDbToJson() {
 		return new FromDbToJson();
 	}
 	 

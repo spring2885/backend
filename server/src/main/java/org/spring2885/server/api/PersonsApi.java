@@ -39,7 +39,7 @@ public class PersonsApi {
     private PersonConverters.JsonToDbConverter personJsonToDb;
 
     @Autowired
-    private PersonConverters.FromDbToJson dbToJsonConverter;
+    private PersonConverters.FromDbToJson personDbToJsonConverter;
     
     @Autowired
     private SearchParser searchParser;
@@ -53,7 +53,7 @@ public class PersonsApi {
             // here, so needed to add this.
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(dbToJsonConverter.apply(o), HttpStatus.OK);
+        return new ResponseEntity<>(personDbToJsonConverter.apply(o), HttpStatus.OK);
     }
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
@@ -93,7 +93,7 @@ public class PersonsApi {
 	    }
 		
 		FluentIterable<Person> iterable = FluentIterable.from(all)
-				.transform(dbToJsonConverter);
+				.transform(personDbToJsonConverter);
 		// Support size parameter, but only if it's set (and not 0)
 		if (size != null && size.intValue() > 0) {
 		    iterable.limit(size);
