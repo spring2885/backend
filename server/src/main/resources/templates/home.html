@@ -19,8 +19,7 @@ body { padding-top: 70px; }
       <div class="container">
         <div class="navbar-header">
           <a class="navbar-brand" href="/">Spring2885 API Server</a>
-  		  <a  sec:authorize="${#authorization.expression('isAuthenticated()')}" class="navbar-brand" href="/logout">Logout</a>
-  		  <a  sec:authorize="${#authorization.expression('isAnonymous()')}" class="navbar-brand" href="/formlogin">Login</a>
+  		  <a  sec:authorize="${#authorization.expression('isAnonymous()')}" class="navbar-brand" href="/user">Login</a>
         </div>
       </div>
     </nav>
@@ -39,12 +38,11 @@ body { padding-top: 70px; }
 		<br />
 		Roles: <span sec:authentication="principal.authorities">[ROLE_NONE]</span>
          </div>
-   		<p class="lead">Since you are here, you may:
+   		<p class="lead">Since you are here, you may wish toy:
    		<ul>
    		<li><a href="/api-docs/index.html">View API Documentation</a></li>
    		<li><a href="/newuser">Create a New Account.</a></li>
-   		<li sec:authorize="${#authorization.expression('isAnonymous()')}"><a href="/formlogin">Log in to the API Server.</a></li>
-   		<li sec:authorize="${#authorization.expression('isAuthenticated()')}"><a href="/logout">Log out of the API Server.</a></li>
+   		<li sec:authorize="${#authorization.expression('isAnonymous()')}"><a href="/user">Log in to the API Server.</a></li>
    		<li><a href="https://github.com/spring2885/backend/issues/">View GitHub Issue List.</a></li>
    		<li><a href="https://github.com/spring2885/artifacts/">View GitHub/Tools Documentation</a></li>
    		<li><a href="http://mail.spring-2885.org/">Check Spring 2885 Email Account</a></li>
