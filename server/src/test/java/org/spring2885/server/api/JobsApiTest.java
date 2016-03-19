@@ -28,7 +28,7 @@ import org.spring2885.server.db.model.DbJobType;
 import org.spring2885.server.db.model.DbLanguage;
 import org.spring2885.server.db.service.JobService;
 import org.spring2885.server.db.service.JobTypeService;
-import org.spring2885.server.db.service.person.LanguageService;
+import org.spring2885.server.db.service.LanguageService;
 import org.spring2885.server.db.service.search.SearchCriteria;
 import org.spring2885.server.db.service.search.SearchOperator;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -14,7 +14,6 @@ import org.spring2885.server.db.model.DbJob;
 import org.spring2885.server.db.model.DbJobType;
 import org.spring2885.server.db.model.DbLanguage;
 import org.spring2885.server.db.model.JobConverters;
-import org.spring2885.server.db.service.person.LanguageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
