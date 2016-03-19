@@ -1,4 +1,4 @@
-package org.spring2885.server.db.service.person;
+package org.spring2885.server.db.service;
 
 import org.spring2885.server.db.model.DbLanguage;
 import org.springframework.data.repository.CrudRepository;
