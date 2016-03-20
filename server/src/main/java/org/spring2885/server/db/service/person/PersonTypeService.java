@@ -12,6 +12,16 @@ public interface PersonTypeService {
 	 * Returns all {@link DbPersonType} instances.
 	 */
 	Set<DbPersonType> findAll();
+	 
+    /**
+     * Returns all {@code DbPersonType} instances with search string {code q}.
+     */
+	Iterable<DbPersonType> findAll(String q);
+    
+    /**
+     * Returns all {@code DbPersonType} instances with search string {code q}.
+     */
+	Iterable<DbPersonType> findAll(List<SearchCriteria> criterias);
 	
 	/** Gets the default person type (student). */
 	DbPersonType defaultType();
@@ -26,17 +36,7 @@ public interface PersonTypeService {
 	 * or an empty {@link Iterator} if none exist.
 	 */
 	DbPersonType findByName(String name);
-    
-    /**
-     * Returns all {@code DbPersonType} instances with search string {code q}.
-     */
-    Iterable<DbPersonType> findAll(String q);
-    
-    /**
-     * Returns all {@code DbPersonType} instances with search string {code q}.
-     */
-    Iterable<DbPersonType> findAll(List<SearchCriteria> criterias);
-	
+   
 	/**
 	 * Deletes a personType by primary key.
 	 * 

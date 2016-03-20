@@ -1,5 +1,6 @@
 package org.spring2885.server.db.model;
 
+import java.util.Collection;
 import java.util.Map;
 import java.util.stream.Collectors;
 

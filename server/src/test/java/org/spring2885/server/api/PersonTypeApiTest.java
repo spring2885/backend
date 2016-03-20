@@ -1,8 +1,10 @@
 package org.spring2885.server.api;
 
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -22,6 +24,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.spring2885.model.PersonType;
+import org.spring2885.server.db.model.DbPerson;
 import org.spring2885.server.db.model.DbPersonType;
 import org.spring2885.server.db.service.person.PersonTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +51,8 @@ public class PersonTypeApiTest {
     
     private DbPersonType dbPersonType;
     private PersonType personType;
+    private DbPersonType otherDbPersonType;
+    private PersonType otherPersonType;
     
     @Before
     public void set() {
@@ -57,7 +62,9 @@ public class PersonTypeApiTest {
     			.build();
     	
     	dbPersonType = createDbPersonType(1, "PersonType1");
-        personType = createPersonType(4, "PersonType2");
+        personType = createPersonType(1, "PersonType1");
+        otherDbPersonType = createDbPersonType(21, "PersonType2");
+        otherPersonType = createPersonType(21, "PersonType2");
     }
     
     static DbPersonType createDbPersonType(long id, String name){
@@ -74,21 +81,35 @@ public class PersonTypeApiTest {
     	return pT;
     }
     
-    @Test
+    void makeMeFound(){
+    	when(personTypeService.findById(1)).thenReturn(dbPersonType);
+    	when(personTypeService.findById(21)).thenReturn(otherDbPersonType);
+    	when(personTypeService.findByName("PersonType1"))
+    		.thenReturn(dbPersonType);
+    }
+    
+	@Test
     @WithMockUser
     public void testPersonType() throws Exception {
     	// Setup the expectations.
+    	//TODO: Fix stubbing error
+		/*The method thenReturn(Set<DbPersonType>) in the type
+		 * OngoingStubbing<Set<DbPersonType>> is not applicable for the arguments
+		 * (ImmutableList<DbPersonType>)
+		 */
+		//Cannot convert from ImmutableList<DbPersonType> to Set<DbPersonType>
     	when(personTypeService.findAll())
-    		.thenReturn((Set<DbPersonType>) ImmutableList.of(
-    			createDbPersonType(5,  "Title"),
-    			createDbPersonType(5,  "Title2")));
+    		.thenReturn(ImmutableList.of(
+    			createDbPersonType(5,  "PersonType"),
+    			createDbPersonType(5,  "PersonType2")));
+    	verifyNoMoreInteractions(personTypeService);
     	
     	mockMvc.perform(get("/api/v1/persontype")
     			.accept(MediaType.APPLICATION_JSON))
     			.andExpect(status().isOk())
     			.andExpect(content().contentType(MediaType.APPLICATION_JSON))
-    			.andExpect(jsonPath("$[0].title", Matchers.is("Title")))
-    			.andExpect(jsonPath("$[1].title", Matchers.is("Title2")));
+    			.andExpect(jsonPath("$[0].name", Matchers.is("PersonType")))
+    			.andExpect(jsonPath("$[1].name", Matchers.is("PersonType2")));
     }
     
     /**
@@ -101,12 +122,15 @@ public class PersonTypeApiTest {
     	DbPersonType p = new DbPersonType();
     	p.setName("ThisTitle");
     	when(personTypeService.findById(21)).thenReturn(p);
+    	verifyNoMoreInteractions(personTypeService);
     	
     	mockMvc.perform(get("/api/v1/persontype/21")
     			.accept(MediaType.APPLICATION_JSON))
     			.andExpect(status().isOk())
     			.andExpect(content().contentType(MediaType.APPLICATION_JSON))
-    			.andExpect(jsonPath("$.title", Matchers.is("ThisTitle")));
+    			.andExpect(jsonPath("$.name", Matchers.is("ThisTitle")));
+    	//TODO:
+    	//Status expected:<200> but was:<404>
     	
     	// N.B: We don't have to verify anything here since we're asserting
     	// the results that were setup by PersonService.
@@ -120,6 +144,7 @@ public class PersonTypeApiTest {
     public void testNewsById_notFound() throws Exception {
     	// Setup the expectations.
     	when(personTypeService.findById(21)).thenReturn(null);
+    	verifyNoMoreInteractions(personTypeService);
     	
     	mockMvc.perform(get("/api/v1/persontype/21")
     			.accept(MediaType.APPLICATION_JSON))
@@ -130,17 +155,55 @@ public class PersonTypeApiTest {
     }
     
     @Test
-    @WithMockUser(username="Title",roles={"USER","ADMIN"})
+    @WithMockUser(username="me@example.com",roles={"USER","ADMIN"})
     public void testDeletePersonTypeById() throws Exception {
     	// Setup the expectations.
+    	when(personTypeService.findById(eq(4)))
+			.thenReturn(dbPersonType);
     	when(personTypeService.delete(4)).thenReturn(true);
-    	//my mock is going to do this
+	
     	mockMvc.perform(delete("/api/v1/persontype/4")
-    			.accept(MediaType.APPLICATION_JSON))
-    			.andExpect(status().isOk());
-    	// Ensure PersonService#delete method was called since the result of our
+			.accept(MediaType.APPLICATION_JSON))
+			.andExpect(status().isOk());
+	
+    	// Ensure PersonTypeService#delete method was called since the result of our
     	// method is the same no matter what.
     	verify(personTypeService).delete(4);
+    }
+    
+    @Test
+    @WithMockUser(username="me@example.com",roles={"USER"})
+    public void testDelete_anotherPersons_notAdminUser() throws Exception {
+    	// Setup the expectations.
+    	when(personTypeService.findById(eq(21)))
+    		.thenReturn(dbPersonType);
+    	
+    	mockMvc.perform(delete("/api/v1/persontype/21")
+    			.accept(MediaType.APPLICATION_JSON))
+    			.andExpect(status().isForbidden());
+    	//TODO:
+    	//Status expected:<403> but was:<200>
+    	
+    	// Ensure PersonTypeService#delete method was called since the result of our
+    	// method is the same no matter what.
+    	verify(personTypeService, never()).delete(Mockito.anyInt());
+    }
+    
+    @Test
+    @WithMockUser(username="me@example.com",roles={"USER"})
+    public void testPut() throws Exception {
+    	// Setup the expectations.
+    	makeMeFound();
+    	
+    	mockMvc.perform(put("/api/v1/persontype/4")
+    			.contentType(MediaType.APPLICATION_JSON)
+    			.content(new ObjectMapper().writeValueAsBytes(personType))
+    			.accept(MediaType.APPLICATION_JSON))
+    			.andExpect(status().isForbidden());
+    	//TODO:
+    	//Status expected:<403> but was:<400>
+    	
+    	verify(personTypeService, never()).save(Mockito.any(DbPersonType.class));
     }
     
     @Test
@@ -149,16 +212,65 @@ public class PersonTypeApiTest {
     	// Setup the expectations.
     	when(personTypeService.findById(4)).thenReturn(dbPersonType);
     	when(personTypeService.findByName("Title"))
-    		.thenReturn((DbPersonType) Collections.emptyList());
+    		.thenReturn(null);
     	
     	mockMvc.perform(put("/api/v1/persontype/4")
     			.contentType(MediaType.APPLICATION_JSON)
-    			.content(convertObjectToJsonBytes(personType))
+    			.content(new ObjectMapper().writeValueAsBytes(dbPersonType))
     			.accept(MediaType.APPLICATION_JSON))
     			.andExpect(status().isForbidden());
+    	//TODO:
+    	//Status expected:<403> but was:<400>
+    
+    	verify(personTypeService, never()).save(Mockito.any(DbPersonType.class));
+    }
+    
+    @Test
+    @WithMockUser(username="me@example.com", roles={"USER"})
+    public void testPut_tryToPutAnother_notAdminUser() throws Exception {
+    	// Setup the expectations.
+    	makeMeFound();
+    	
+    	mockMvc.perform(put("/api/v1/persontype/21")
+    			.contentType(MediaType.APPLICATION_JSON)
+    			.content(new ObjectMapper().writeValueAsBytes(otherDbPersonType))
+    			.accept(MediaType.APPLICATION_JSON))
+    			.andExpect(status().isForbidden());
+    	//TODO:
+    	//Status expected:<403> but was:<200>
     	
     	verify(personTypeService, never()).save(Mockito.any(DbPersonType.class));
     }
+    
+    @Test
+    @WithMockUser(username="me@example.com",roles={"USER", "ADMIN"})
+    public void testPut_updateAnother_adminUser() throws Exception {
+    	// Setup the expectations.
+    	makeMeFound();
+    	
+    	mockMvc.perform(put("/api/v1/persontype/21")
+    			.contentType(MediaType.APPLICATION_JSON)
+    			.content(new ObjectMapper().writeValueAsBytes(otherPersonType))
+    			.accept(MediaType.APPLICATION_JSON))
+    			.andExpect(status().isOk());
+    	
+    	verify(personTypeService).save(Mockito.any(DbPersonType.class));
+    }
+    
+    @Test
+    @WithMockUser(username="me@example.com",roles={"USER", "ADMIN"})
+    public void testPut_documentNotMatchURL() throws Exception {
+    	// Setup the expectations.
+    	makeMeFound();
+    	
+    	mockMvc.perform(put("/api/v1/persontype/21")
+    			.contentType(MediaType.APPLICATION_JSON)
+    			.content(new ObjectMapper().writeValueAsBytes(createPersonType(22, "PersonType1234")))
+    			.accept(MediaType.APPLICATION_JSON))
+    			.andExpect(status().isBadRequest());
+    	
+    	verify(personTypeService, never()).save(Mockito.any(DbPersonType.class));
+    } 
     
     public static byte[] convertObjectToJsonBytes(Object object) throws IOException  {
         ObjectMapper mapper = new ObjectMapper();

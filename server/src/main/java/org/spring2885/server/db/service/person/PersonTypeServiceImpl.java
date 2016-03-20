@@ -63,7 +63,7 @@ public class PersonTypeServiceImpl implements PersonTypeService {
             }
         });
 	}
-
+	
 	@Override
 	public Iterable<DbPersonType> findAll(List<SearchCriteria> criterias) {
 		if (criterias.isEmpty()) {
@@ -76,7 +76,7 @@ public class PersonTypeServiceImpl implements PersonTypeService {
         }
         return repository.findAll(specs);
 	}
-
+	
 	@Override
 	public boolean delete(long id) {
 		DbPersonType pT = findById(id);

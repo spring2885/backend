@@ -7,16 +7,10 @@ import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.spring2885.model.News;
-import org.spring2885.model.Person;
 import org.spring2885.model.PersonType;
 import org.spring2885.server.api.exceptions.NotFoundException;
-import org.spring2885.server.db.model.DbNews;
-import org.spring2885.server.db.model.DbPerson;
 import org.spring2885.server.db.model.DbPersonType;
-import org.spring2885.server.db.model.PersonConverters;
 import org.spring2885.server.db.model.PersonTypeConverter;
-import org.spring2885.server.db.service.person.PersonService;
 import org.spring2885.server.db.service.person.PersonTypeService;
 import org.spring2885.server.db.service.search.SearchCriteria;
 import org.spring2885.server.db.service.search.SearchParser;
@@ -49,9 +43,9 @@ public class PersonTypeApi {
     private PersonTypeConverter.JsonToDbConverter personTypeJsonToDb;
     
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<Set<DbPersonType>> list(
+    public ResponseEntity<Iterable<DbPersonType>> list(
             ) throws NotFoundException {
-    	Set<DbPersonType> o = personTypeService.findAll();
+    	Iterable<DbPersonType> o = personTypeService.findAll();
         
         if (o == null) {
             // When adding test testPersonsById_notFound, was getting a NullPointerException
@@ -64,7 +58,7 @@ public class PersonTypeApi {
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ResponseEntity<PersonType> get(
             @PathVariable("id") int id) throws NotFoundException {
-    	Set<DbPersonType> o = personTypeService.findAll();
+    	Iterable<DbPersonType> o = personTypeService.findAll();
     	if (o != null) {
     	  for (DbPersonType p : o) {
     	    // Note to Matt: You want to return the JSON model of a personType, NOT the DbPersonType
