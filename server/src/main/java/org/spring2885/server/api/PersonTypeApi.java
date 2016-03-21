@@ -105,7 +105,7 @@ public class PersonTypeApi {
     	return new ResponseEntity<>(HttpStatus.OK);
     }
     
-    @RequestMapping(value = "/new", method = RequestMethod.POST)
+    @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<Void> personTypePost(
     		@RequestParam("id") Integer id,
     		@RequestParam("name") String name
