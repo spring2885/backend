@@ -392,7 +392,7 @@ paths:
           description: Deletes News
         500:
           description: Error with deleting News by id. 
-<<<<<<< HEAD
+
   /api/v1/persontype:
     get:
       tags: ["PersonType"]
@@ -405,30 +405,12 @@ paths:
         - name: size
           in: query
           description: The maximum number of persontypes to fetch
-=======
-  /api/v1/jobtype:
-    get:
-      tags: ["JobType"]
-      description: |
-        Gets `JobType` objects.
-        Optional querry param of **size** determines
-        size of return array
-      parameters:
-        - name: size
-          in: query
-          description: Size of array
->>>>>>> 2b5c82cb777aec55e6e92957c60bc351172e0037
           required: false
           type: number
           format: int32
       responses:
         200:
-<<<<<<< HEAD
           description: Gets persontypes
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/PersonType'
         500:
           description: Error getting persontypes
     post:
@@ -446,7 +428,6 @@ paths:
         500:
           description: Error creating persontype.
         
-  
   /api/v1/persontype/{id}:
     get:
       tags: ["PersonType"]
@@ -505,12 +486,28 @@ paths:
             $ref: '#/definitions/PersonType'
         500:
           description: Error deleting the persontype "ID".
-=======
+  
+  /api/v1/jobtype:
+    get:
+      tags: ["JobType"]
+      description: |
+        Gets `JobType` objects.
+        Optional querry param of **size** determines
+        size of return array
+      parameters:
+        - name: size
+          in: query
+          description: Size of array
+          required: false
+          type: number
+          format: int32
+      responses:
+        200:
           description: Successful response
           schema:
             type: array
             items:
-              $ref: '#/definitions/JobType'
+              $ref: '#/definitions/JobType'  
     post:
       tags: ["JobType"]
       description: |
@@ -524,6 +521,7 @@ paths:
       responses:
         200:
           description: Makes a new JobType 
+  
   /api/v1/jobtype/{id}:
     get:
       tags: ["JobType"]
@@ -581,10 +579,6 @@ paths:
         500:
           description: Error with deleting jobtype by id. 
           
-      
-
->>>>>>> 2b5c82cb777aec55e6e92957c60bc351172e0037
-
 definitions:
   SocialConnection:
     type: object
@@ -705,16 +699,19 @@ definitions:
         type: string
       new_password:
         type: string
-<<<<<<< HEAD
+
   PersonType:
     type: object
     properties:
-=======
+      id:
+        type: integer
+        format: int64
+      name:
+        type: string
   
   JobType:
     type: object
     properties: 
->>>>>>> 2b5c82cb777aec55e6e92957c60bc351172e0037
       id:
         type: integer
         format: int64
@@ -730,10 +727,6 @@ tags:
   - name: Jobs
     description: Everything to do with Jobs
   - name: News
-<<<<<<< HEAD
     description: Everything to do with News
   - name: PersonType
     description: Everything to do with Person Type
-=======
-    description: Everything to do with News
->>>>>>> 2b5c82cb777aec55e6e92957c60bc351172e0037
