@@ -845,11 +845,19 @@
         }
       }
     },
-<<<<<<< HEAD
     "PersonType" : {
-=======
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "name" : {
+          "type" : "string"
+        }
+      }
+    },
     "JobType" : {
->>>>>>> 2b5c82cb777aec55e6e92957c60bc351172e0037
       "type" : "object",
       "properties" : {
         "id" : {
