@@ -1,10 +1,5 @@
 package org.spring2885.server;
 
-import java.io.IOException;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,12 +14,8 @@ import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.AuthenticationEntryPoint;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
@@ -57,18 +48,9 @@ public class ServerApplication extends WebMvcConfigurerAdapter {
 					.antMatchers("/api/**").fullyAuthenticated()
 					.antMatchers("/user").fullyAuthenticated()
 					.antMatchers("/").permitAll()
-				// Enable form login at /formlogin.  POST with "username" and "password"
-				// as the form parameters needed.
 				.and()
-				.exceptionHandling().authenticationEntryPoint(new RestAuthenticationEntryPoint())
+				.httpBasic()
 				.and()
-				.formLogin()
-				.loginPage("/formlogin").successHandler(new NoRedirectAuthenticationSuccessHandler()).permitAll()
-				.and()
-				.logout().logoutUrl("/logout").deleteCookies().invalidateHttpSession(true).logoutSuccessUrl("/")
-				.and()
-				// This makes the /logout URL work.
-				// See https://github.com/spring-projects/spring-webflow-samples/issues/28
 				.csrf().disable();
 		}
 
@@ -89,20 +71,4 @@ public class ServerApplication extends WebMvcConfigurerAdapter {
 		}
 	}
 	
-    public static class NoRedirectAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
-        @Override
-        public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
-                Authentication authentication) throws ServletException, IOException {
-        }
-    }
-
-	static class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
-
-		@Override
-		public void commence(HttpServletRequest request, HttpServletResponse response,
-				AuthenticationException ex) throws IOException, ServletException {
-			response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
-
-		}
-	}
 }
