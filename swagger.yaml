@@ -302,11 +302,12 @@ paths:
         500:
           description: Error deleting the profile "ID".
 
-  /api/v1/news:
+  
+  /api/v1/socialservice:
     get:
-      tags: ["News"]
+      tags: ["SocialService"]
       description: |
-        Gets `News` objects.
+        Gets `SocailService` objects.
         Optional querry param of **size** determines
         size of return array
       parameters:
@@ -314,8 +315,7 @@ paths:
           in: query
           description: Size of array
           required: false
-          type: number
-          format: int32
+          type: string
       responses:
         200:
           description: Successful response
@@ -324,123 +324,18 @@ paths:
             items:
               $ref: '#/definitions/News'
     post:
-      tags: ["News"]
-      description: |
-      parameters:
-        - name : News
-          in: body
-          description: The News you want to post
-          schema:
-            $ref: '#/definitions/News'
-          required: true
-      responses:
-        200:
-          description: Makes a new News 
-  /api/v1/news/{id}:
-    get:
-      tags: ["News"]
-      description: |
-        Retrives a News entry
-      parameters:
-        - name: id
-          in: path
-          description: a single News entry
-          required: true
-          type: number
-          format: int64
-      responses:
-        200:
-          description: Sucussful deletion 
-          schema:
-            $ref: '#/definitions/News'
-    delete:
-      tags: ["News"]
-      summary: |
-        The News to delete
-      parameters:
-        - name: id
-          in: path
-          description: The News to be deleted.
-          required: true
-          type: integer
-          format: int64
-      responses:
-        200:
-          description: Deletes News
-        500:
-          description: Error with deleting News by id. 
-    put:
-      tags: ["News"]
-      summary: |
-        The News to update
-      parameters:
-        - name: id
-          in: path
-          description: The id of the News to be update.
-          required: true
-          type: integer
-          format: int64
-        - name: news
-          in: body
-          description: The News item you want to update
-          required: true
-          schema:
-            $ref: '#/definitions/News'
-          required: true
-      responses:
-        200:
-          description: Deletes News
-        500:
-          description: Error with deleting News by id. 
-<<<<<<< HEAD
-       
-  /api/v1/socialservice:
-    get:
-      tags: ["SocialService"]
-      description: |
-        Gets `Social_Service` objects.
-=======
-  /api/v1/jobtype:
-    get:
-      tags: ["JobType"]
-      description: |
-        Gets `JobType` objects.
->>>>>>> 2b5c82cb777aec55e6e92957c60bc351172e0037
-        Optional querry param of **size** determines
-        size of return array
-      parameters:
-        - name: size
-          in: query
-          description: Size of array
-          required: false
-<<<<<<< HEAD
-          type: string
-=======
-          type: number
-          format: int32
->>>>>>> 2b5c82cb777aec55e6e92957c60bc351172e0037
-      responses:
-        200:
-          description: Successful response
-          schema:
-            type: array
-            items:
-<<<<<<< HEAD
-              $ref: '#/definitions/SocialService'
-    post:
       tags: ["SocialService"]
       description: |
       parameters:
-        - name : Social_Service
+        - name : SocialService
           in: body
-          description: The Social_Service you want to post
+          description: The SocialService you want to post
           schema:
             $ref: '#/definitions/SocialService'
           required: true
       responses:
         200:
-          description: Makes a new Social Service
-          
+          description: Makes a new SocialService
   /api/v1/socialservice/{id}:
     get:
       tags: ["SocialService"]
@@ -449,10 +344,71 @@ paths:
       parameters:
         - name: id
           in: path
-          description: a single Social Service entry
+          description: a single SocialService entry
           required: true
           type: string
-=======
+      responses:
+        200:
+          description: Sucussful deletion 
+          schema:
+            $ref: '#/definitions/SocialService'
+    delete:
+      tags: ["SocialService"]
+      summary: |
+        The SocialService to delete
+      parameters:
+        - name: id
+          in: path
+          description: The SocialService to be deleted.
+          required: true
+          type: string
+      responses:
+        200:
+          description: Deletes SocialService
+        500:
+          description: Error with deleting SocialService by id. 
+    put:
+      tags: ["SocialService"]
+      summary: |
+        The SocialService to update
+      parameters:
+        - name: id
+          in: path
+          description: The id of the News to be update.
+          required: true
+          type: string
+        - name: socialservice
+          in: body
+          description: The SocialService item you want to update
+          required: true
+          schema:
+            $ref: '#/definitions/SocialService'
+          required: true
+      responses:
+        200:
+          description: Deletes SocialService
+        500:
+          description: Error with deleting SocialService by id.
+  /api/v1/jobtype:
+    get:
+      tags: ["JobType"]
+      description: |
+        Gets `JobType` objects.
+        Optional querry param of **size** determines
+        size of return array
+      parameters:
+        - name: size
+          in: query
+          description: Size of array
+          required: false
+          type: number
+          format: int32
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: array
+            items:
               $ref: '#/definitions/JobType'
     post:
       tags: ["JobType"]
@@ -479,51 +435,10 @@ paths:
           required: true
           type: number
           format: int64
->>>>>>> 2b5c82cb777aec55e6e92957c60bc351172e0037
       responses:
         200:
           description: Sucussful deletion 
           schema:
-<<<<<<< HEAD
-            $ref: '#/definitions/SocialService'
-    delete:
-      tags: ["SocialService"]
-      summary: |
-        The Social Service to delete
-      parameters:
-        - name: id
-          in: path
-          description: The Social Service to be deleted.
-          required: true
-          type: string
-      responses:
-        200:
-          description: Deletes Social Service
-        500:
-          description: Error with deleting Social Service by id. 
-    put:
-      tags: ["SocialService"]
-      summary: |
-        The Social Service to update
-      parameters:
-        - name: id
-          in: path
-          description: The id of the Social Service to be update.
-          required: true
-          type: string
-        - name: social_service
-          in: body
-          description: The Social Service item you want to update
-          required: true
-          schema:
-            $ref: '#/definitions/SocialService'
-          required: true
-      responses:
-        200:
-          description: Updates Social Service
-        500:
-          description: Error with updating Social Service by id.
-=======
             $ref: '#/definitions/JobType'
     delete:
       tags: ["JobType"]
@@ -567,7 +482,6 @@ paths:
           
       
 
->>>>>>> 2b5c82cb777aec55e6e92957c60bc351172e0037
 
 definitions:
   SocialConnection:
@@ -689,18 +603,6 @@ definitions:
         type: string
       new_password:
         type: string
-<<<<<<< HEAD
-        
-  SocialService:
-    type: object
-    properties:
-      id: 
-        type: string
-      url:
-        type: string
-      
-=======
-  
   JobType:
     type: object
     properties: 
@@ -709,7 +611,13 @@ definitions:
         format: int64
       name:
         type: string
->>>>>>> 2b5c82cb777aec55e6e92957c60bc351172e0037
+  SocialService:
+    type: object
+    properties:
+      id: 
+        type: string
+      url:
+        type: string 
 tags:
   - name: User
     description: Everything to do with User
@@ -720,11 +628,6 @@ tags:
   - name: Jobs
     description: Everything to do with Jobs
   - name: News
-<<<<<<< HEAD
     description: Everything to do with News
   - name: SocialService
-    description: Everything to do with Social Service
-    
-=======
-    description: Everything to do with News
->>>>>>> 2b5c82cb777aec55e6e92957c60bc351172e0037
+    description: Everything to do with SocialService

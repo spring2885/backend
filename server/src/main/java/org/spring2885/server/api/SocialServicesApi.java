@@ -5,17 +5,18 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.spring2885.model.Job;
 import org.spring2885.model.News;
 import org.spring2885.model.SocialService;
 import org.spring2885.server.api.exceptions.NotFoundException;
 import org.spring2885.server.db.model.DbSocialService;
+import org.spring2885.server.db.model.DbJob;
 import org.spring2885.server.db.model.DbNews;
 import org.spring2885.server.db.model.DbPerson;
 import org.spring2885.server.db.model.NewsConverters;
 import org.spring2885.server.db.model.SocialServiceConverters;
 import org.spring2885.server.db.service.NewsService;
-import org.spring2885.server.db.service.person.PersonService;
-import org.spring2885.server.db.service.SocialServiceService;
+import org.spring2885.server.db.service.person.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +33,7 @@ import com.google.common.collect.FluentIterable;
 @RestController
 @RequestMapping(value = "/api/v1/socialservice", produces = { APPLICATION_JSON_VALUE })
 public class SocialServicesApi {
-	private static final Logger logger = LoggerFactory.getLogger(NewsApi.class);
+	private static final Logger logger = LoggerFactory.getLogger(SocialServicesApi.class);
 	
 	@Autowired
 	private SocialServiceService socialServiceService;
@@ -42,6 +43,108 @@ public class SocialServicesApi {
 	
 	@Autowired
 	private SocialServiceConverters.SocialServiceFromDbToJson dbToJsonConverter;
+	
+	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
+	public ResponseEntity<SocialService> get(
+			@PathVariable("id") String id) throws NotFoundException {
+		DbSocialService o = socialServiceService.findById(id);
+		if (o == null) {
+			// When adding test testJobsById_notFound, was getting a NullPointerException
+			// here, so needed to add this.
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+		return new ResponseEntity<>(dbToJsonConverter.apply(o), HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+	public ResponseEntity<String> delete(
+			@PathVariable("id") String id,
+			SecurityContextHolderAwareRequestWrapper request)
+			throws NotFoundException {
+		
+		if (!checkAdminRequestIfNeeded(id, request)) {
+			String error = 
+					"Only admin's can change others... Read this: "
+					+ "God, grant me the serenity to accept the things I cannot change,"
+					+ "Courage to change the things I can,"
+					+ "And wisdom to know the difference.";
+			return new ResponseEntity<>(error, HttpStatus.FORBIDDEN);
+		}
+
+		socialServiceService.delete(id);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+
+	@RequestMapping(method = RequestMethod.GET)
+	public ResponseEntity<List<SocialService>> list(@RequestParam(value = "size", required = false) Double size)
+			throws NotFoundException {
+		
+		List<SocialService> ss = FluentIterable.from(socialServiceService.findAll())
+				.transform(dbToJsonConverter)
+				.toList();
+		
+		return new ResponseEntity<>(ss, HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+	public ResponseEntity<Void> put(
+			@PathVariable("id") String id,
+			@RequestBody SocialService ss,
+			SecurityContextHolderAwareRequestWrapper request) throws NotFoundException {
+		
+		if (!checkAdminRequestIfNeeded(id, request)) {
+			return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+		}
+
+		if (!id.equals(ss.getId())) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		DbSocialService db = socialServiceService.findById(id);
+		if (db == null) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+		socialServiceJsonToDb.withDbSocialService(db);
+		DbSocialService updatedDbSocialService = socialServiceJsonToDb.apply(ss);
+		socialServiceService.save(updatedDbSocialService);
+		
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
+	@RequestMapping(method = RequestMethod.POST)
+	public ResponseEntity<Void> newsPost(
+			
+			
+			@RequestBody SocialService ss
+			
+			) throws NotFoundException {
+		
+		DbSocialService db = new DbSocialService();
+		
+		DbSocialService updatedDbSocialService = socialServiceJsonToDb.apply(ss);
+		socialServiceService.save(updatedDbSocialService);
+		
+		return new ResponseEntity<Void>(HttpStatus.OK);
+	}
+    
+	
+	
+	private boolean checkAdminRequestIfNeeded(String requestId, SecurityContextHolderAwareRequestWrapper request) {
+		if (!request.isUserInRole("ROLE_ADMIN")) {
+			// Only admin's can change other profiles.
+			String name = request.getUserPrincipal().getName();
+			DbSocialService me = socialServiceService.findById(name);
+			if (me == null) {
+				// I can't find myself... need more zen.
+				return false;
+			}
+			
+			if (!me.getName().equals(requestId)) {
+				// Someone is being naughty...
+				return false;
+			}
+		}
+		return true;
+	}
 	
 	
 
