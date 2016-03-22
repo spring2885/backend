@@ -39,6 +39,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = { TestConfig.class })
@@ -99,7 +100,7 @@ public class PersonTypeApiTest {
 		 */
 		//Cannot convert from ImmutableList<DbPersonType> to Set<DbPersonType>
     	when(personTypeService.findAll())
-    		.thenReturn(ImmutableList.of(
+    		.thenReturn(ImmutableSet.of(
     			createDbPersonType(5,  "PersonType"),
     			createDbPersonType(5,  "PersonType2")));
     	verifyNoMoreInteractions(personTypeService);

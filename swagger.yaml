@@ -411,6 +411,10 @@ paths:
       responses:
         200:
           description: Gets persontypes
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/PersonType'  
         500:
           description: Error getting persontypes
     post:
