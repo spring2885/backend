@@ -25,6 +25,9 @@
   }, {
     "name" : "News",
     "description" : "Everything to do with News"
+  }, {
+    "name" : "PersonType",
+    "description" : "Everything to do with Person Type"
   } ],
   "paths" : {
     "/api/v1/jobs" : {
@@ -359,6 +362,129 @@
           },
           "500" : {
             "description" : "Error with deleting News by id."
+          }
+        }
+      }
+    },
+    "/api/v1/persontype" : {
+      "get" : {
+        "tags" : [ "PersonType" ],
+        "summary" : "Fetches all 'persontype' objects\n",
+        "description" : "Fetches all 'person type' objects. up to a 'size' if specified,\notherwise fetches all objects.\n",
+        "parameters" : [ {
+          "name" : "size",
+          "in" : "query",
+          "description" : "The maximum number of persontypes to fetch",
+          "required" : false,
+          "type" : "number",
+          "format" : "int32"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Gets persontypes",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/PersonType"
+              }
+            }
+          },
+          "500" : {
+            "description" : "Error getting persontypes"
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "PersonType" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "PersonType",
+          "description" : "The persontype you want to post",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/PersonType"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Creates a new persontype in the system"
+          },
+          "500" : {
+            "description" : "Error creating persontype."
+          }
+        }
+      }
+    },
+    "/api/v1/persontype/{id}" : {
+      "get" : {
+        "tags" : [ "PersonType" ],
+        "summary" : "Fetches the 'person type' for id 'id'.\n",
+        "description" : "",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "The id of the person type to fetch",
+          "required" : true,
+          "type" : "number",
+          "format" : "int32"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful response",
+            "schema" : {
+              "$ref" : "#/definitions/PersonType"
+            }
+          },
+          "500" : {
+            "description" : "error getting persontype with id 'id'"
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "PersonType" ],
+        "summary" : "The persontype to update\n",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "the id of the persontype to fetch.",
+          "required" : true,
+          "type" : "number",
+          "format" : "int32"
+        }, {
+          "in" : "body",
+          "name" : "name",
+          "description" : "The type to update.",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/PersonType"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Updates the persontype."
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "PersonType" ],
+        "summary" : "The persontype to delete.\n",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "The persontype to delete.",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int64"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Deletes the persontype.",
+            "schema" : {
+              "$ref" : "#/definitions/PersonType"
+            }
+          },
+          "500" : {
+            "description" : "Error deleting the persontype \"ID\"."
           }
         }
       }
@@ -719,7 +845,11 @@
         }
       }
     },
+<<<<<<< HEAD
+    "PersonType" : {
+=======
     "JobType" : {
+>>>>>>> 2b5c82cb777aec55e6e92957c60bc351172e0037
       "type" : "object",
       "properties" : {
         "id" : {
