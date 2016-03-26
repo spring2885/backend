@@ -4,10 +4,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.spring2885.server.db.model.DbNews;
-import org.spring2885.server.db.model.DbPerson;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 import org.spring2885.server.db.service.search.SearchCriteria;
 import org.spring2885.server.db.service.search.SearchCriteriaSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,10 +32,15 @@ public class NewsServiceImpl implements NewsService {
 	}
 	
 	@Override
-	public Iterable<DbNews> findAll() {
+	public Iterable<DbNews> findAllAdmin() {
 		return repository.findAll();
 	}
 	
+    @Override
+    public Iterable<DbNews> findAll() {
+        return repository.findAllByActiveAndAbuse('Y', 'N');
+    }
+    
 	@Override
     public Iterable<DbNews> findAll(String q) {
         // TODO(rob): Push this filter into the DB.

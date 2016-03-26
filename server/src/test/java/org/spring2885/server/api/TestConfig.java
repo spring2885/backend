@@ -2,6 +2,8 @@ package org.spring2885.server.api;
 
 import static org.mockito.Mockito.mock;
 
+import org.spring2885.server.api.utils.RequestHelper;
+import org.spring2885.server.api.utils.RequestHelperImpl;
 import org.spring2885.server.db.model.JobConverters;
 import org.spring2885.server.db.model.JobTypeConverters;
 import org.spring2885.server.db.model.NewsConverters;
@@ -98,6 +100,11 @@ public class TestConfig {
     @Bean
     SearchParser searchParser() {
         return new SearchParser();
+    }
+    
+    @Bean
+    RequestHelper requestHelper() {
+        return new RequestHelperImpl();
     }
 	
 	@Configuration

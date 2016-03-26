@@ -17,11 +17,17 @@ public interface NewsService {
      * Returns all {@code DbNews} instances with search string {code q}.
      */
     Iterable<DbNews> findAll(String q);
-	/**
-	 * Returns all {@code DbNews} instances.
-	 */
-	Iterable<DbNews> findAll();
-	
+
+    /**
+     * Returns all non-deleted and non-abuse {@code DbNews} instances.
+     */
+    Iterable<DbNews> findAll();
+    
+    /**
+     * Returns all {@code DbNews} instances.
+     */
+    Iterable<DbNews> findAllAdmin();
+    
 	/**
      * Returns all {@code DbNews} instances with search string {code q}.
      */

@@ -10,6 +10,7 @@ import org.spring2885.model.Job;
 import org.spring2885.model.JobType;
 import org.spring2885.model.News;
 import org.spring2885.server.api.exceptions.NotFoundException;
+import org.spring2885.server.api.utils.RequestHelper;
 import org.spring2885.server.db.model.DbJob;
 import org.spring2885.server.db.model.DbJobType;
 import org.spring2885.server.db.model.DbNews;
@@ -35,22 +36,19 @@ import com.google.common.collect.FluentIterable;
 @RestController
 @RequestMapping(value = "/api/v1/jobtype", produces = { APPLICATION_JSON_VALUE })
 public class JobTypeApi {
-	private static final Logger logger = LoggerFactory.getLogger(JobsApi.class);
+    private static final Logger logger = LoggerFactory.getLogger(JobTypeApi.class);
 	
 	@Autowired
 	private JobTypeService jobTypeService;
 	
 	@Autowired
-    private PersonService personService;
-
-	 @Autowired
-	 private JobTypeConverters.FromDbToJson jobTypeFromDbToJson; 
-	 //dbToJsonConverter
+    private JobTypeConverters.FromDbToJson jobTypeFromDbToJson; 
+     
+    @Autowired
+    private JobTypeConverters.JsonToDbConverter jobTypeJsonToDb;
 	 
-	 @Autowired
-	 private JobTypeConverters.JsonToDbConverter jobTypeJsonToDb;
-	 
-	 //jsonToDbConverter;
+    @Autowired
+    private RequestHelper requestHelper;
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public ResponseEntity<JobType> get(
@@ -71,8 +69,6 @@ public class JobTypeApi {
 			
 			) throws NotFoundException {
 		
-		DbJobType db = new DbJobType();
-		
 		DbJobType updatedDbJob = jobTypeJsonToDb.apply(job);
 		jobTypeService.save(updatedDbJob);
 		
@@ -85,7 +81,7 @@ public class JobTypeApi {
 			SecurityContextHolderAwareRequestWrapper request)
 			throws NotFoundException {
 		
-		if (!checkAdminRequestIfNeeded(id, request)) {
+		if (!requestHelper.checkAdminRequestIfNeeded(id, request)) {
 			String error = 
 					"Only admin's can change others... Read this: "
 					+ "God, grant me the serenity to accept the things I cannot change,"
@@ -115,7 +111,7 @@ public class JobTypeApi {
 			@RequestBody JobType jobType,
 			SecurityContextHolderAwareRequestWrapper request) throws NotFoundException {
 		
-		if (!checkAdminRequestIfNeeded(id, request)) {
+		if (!requestHelper.checkAdminRequestIfNeeded(id, request)) {
 			return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 		}
 
@@ -133,23 +129,4 @@ public class JobTypeApi {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
-	
-	private boolean checkAdminRequestIfNeeded(int requestId, SecurityContextHolderAwareRequestWrapper request) {
-		if (!request.isUserInRole("ROLE_ADMIN")) {
-			// Only admin's can change other profiles.
-			String email = request.getUserPrincipal().getName();
-			DbPerson me = personService.findByEmail(email);
-			if (me == null) {
-				// I can't find myself... need more zen.
-				return false;
-			}
-			
-			if (me.getId() != requestId) {
-				// Someone is being naughty...
-				return false;
-			}
-		}
-		return true;
-	}
-
 }

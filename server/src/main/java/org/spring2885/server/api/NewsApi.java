@@ -6,16 +6,12 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.spring2885.model.Job;
 import org.spring2885.model.News;
-import org.spring2885.model.Person;
 import org.spring2885.server.api.exceptions.NotFoundException;
-import org.spring2885.server.db.model.DbJob;
+import org.spring2885.server.api.utils.RequestHelper;
 import org.spring2885.server.db.model.DbNews;
-import org.spring2885.server.db.model.DbPerson;
 import org.spring2885.server.db.model.NewsConverters;
 import org.spring2885.server.db.service.NewsService;
-import org.spring2885.server.db.service.person.PersonService;
 import org.spring2885.server.db.service.search.SearchCriteria;
 import org.spring2885.server.db.service.search.SearchParser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,9 +37,6 @@ public class NewsApi {
     private NewsService newsService;
     
     @Autowired
-    private PersonService personService;
-    
-    @Autowired
     private NewsConverters.JsonToDbConverter newsJsonToDb;
     
     @Autowired
@@ -52,7 +45,8 @@ public class NewsApi {
     @Autowired
     private SearchParser searchParser;
     
-
+    @Autowired
+    private RequestHelper requestHelper;
     
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public ResponseEntity<News> get(
@@ -73,7 +67,7 @@ public class NewsApi {
 			SecurityContextHolderAwareRequestWrapper request)
 			throws NotFoundException {
 		
-		if (!checkAdminRequestIfNeeded(id, request)) {
+		if (!requestHelper.checkAdminRequestIfNeeded(id, request)) {
 			String error = 
 					"Only admin's can change others... Read this: "
 					+ "God, grant me the serenity to accept the things I cannot change,"
@@ -119,7 +113,7 @@ public class NewsApi {
 			@RequestBody News news,
 			SecurityContextHolderAwareRequestWrapper request) throws NotFoundException {
 		
-		if (!checkAdminRequestIfNeeded(id, request)) {
+		if (!requestHelper.checkAdminRequestIfNeeded(id, request)) {
 			return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 		}
 
@@ -138,37 +132,14 @@ public class NewsApi {
 	}
 	
 	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<Void> newsPost(
-			
-			
+	public ResponseEntity<Void> post(
 			@RequestBody News news
-			
 			) throws NotFoundException {
-		
-		DbNews db = new DbNews();
 		
 		DbNews updatedDbNews = newsJsonToDb.apply(news);
 		newsService.save(updatedDbNews);
 		
 		return new ResponseEntity<Void>(HttpStatus.OK);
-	}
-    
-   	private boolean checkAdminRequestIfNeeded(int requestId, SecurityContextHolderAwareRequestWrapper request) {
-		if (!request.isUserInRole("ROLE_ADMIN")) {
-			// Only admin's can change other profiles.
-			String email = request.getUserPrincipal().getName();
-			DbPerson me = personService.findByEmail(email);
-			if (me == null) {
-				// I can't find myself... need more zen.
-				return false;
-			}
-			
-			if (me.getId() != requestId) {
-				// Someone is being naughty...
-				return false;
-			}
-		}
-		return true;
 	}
 
 }
