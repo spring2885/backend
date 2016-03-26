@@ -35,7 +35,14 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
         "org.spring2885.server.api",
         "org.spring2885.server.model"
 })
-@Import({ PersonConverters.class, NewsConverters.class, JobConverters.class, PersonTypeConverter.class, SocialServiceConverters.class })
+
+@Import({ 
+    NewsConverters.class, 
+    JobConverters.class, 
+    PersonConverters.class, 
+    PersonTypeConverter.class,
+    SocialServiceConverters.class
+   })
 public class TestConfig {
 	@Bean
 	public PersonService personServiceMock() {
