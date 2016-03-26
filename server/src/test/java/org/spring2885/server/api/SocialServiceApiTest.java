@@ -165,7 +165,7 @@ protected MockMvc mockMvc;
         // Setup the expectations.
         makeMeFound();
         
-        mockMvc.perform(put("/api/v1/socialservice/id")
+        mockMvc.perform(put("/api/v1/socialservice/id2")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsBytes(ss))
                 .accept(MediaType.APPLICATION_JSON))
@@ -173,10 +173,7 @@ protected MockMvc mockMvc;
         
         verify(socialServiceService, never()).save(Mockito.any(DbSocialService.class));
     }
-    
-    
-    
-	
+
     @Test
     @WithMockUser(username="id",roles={"USER"})
     public void testPut_canNotFindMe() throws Exception {
