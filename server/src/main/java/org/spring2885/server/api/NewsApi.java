@@ -136,6 +136,9 @@ public class NewsApi {
 			@RequestBody News news
 			) throws NotFoundException {
 		
+	    // Since we are doing a post, the ID should be empty. 
+	    // Clear it if one exists.
+	    news.setId(null);
 		DbNews updatedDbNews = newsJsonToDb.apply(news);
 		newsService.save(updatedDbNews);
 		

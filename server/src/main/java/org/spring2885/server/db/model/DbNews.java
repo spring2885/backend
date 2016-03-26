@@ -26,9 +26,12 @@ public class DbNews {
     @JoinColumn(name="person_id")
     private DbPerson person;
 	private Long views;
-	@Column(nullable = false, columnDefinition = "TINYINT", length = 1)
-	private boolean active;
-	private boolean abuse;
+	// Mark this as not insertable so the default database value will be used.
+	@Column(nullable = false, insertable=false, columnDefinition = "TINYINT", length = 1)
+	private Boolean active;
+    // Mark this as not insertable so the default database value will be used.
+    @Column(nullable = false, insertable=false, columnDefinition = "TINYINT", length = 1)
+	private Boolean abuse;
 	
 	public Long getId() {
 		return id;
@@ -86,19 +89,19 @@ public class DbNews {
         this.views = views;
     }
 
-    public boolean isActive() {
+    public Boolean isActive() {
         return active;
     }
 
-    public void setActive(boolean active) {
+    public void setActive(Boolean active) {
         this.active = active;
     }
 
-    public boolean isAbuse() {
+    public Boolean isAbuse() {
         return abuse;
     }
 
-    public void setAbuse(boolean abuse) {
+    public void setAbuse(Boolean abuse) {
         this.abuse = abuse;
     }
 
