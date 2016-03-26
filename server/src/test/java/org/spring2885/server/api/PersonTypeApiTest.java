@@ -209,9 +209,8 @@ public class PersonTypeApiTest {
     	when(personTypeService.findById(4)).thenReturn(dbPersonType);
     	when(personTypeService.findByName("PersonType1"))
     		.thenReturn(null);
-    	//when(personTypeService.findById(3)).thenReturn(dbPersonType);
     	
-    	mockMvc.perform(put("/api/v1/persontype/3")
+    	mockMvc.perform(put("/api/v1/persontype/4")
     			.contentType(MediaType.APPLICATION_JSON)
     			.content(new ObjectMapper().writeValueAsBytes(dbPersonType))
     			.accept(MediaType.APPLICATION_JSON))
