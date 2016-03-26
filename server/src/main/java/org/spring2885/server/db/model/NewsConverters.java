@@ -1,16 +1,13 @@
 package org.spring2885.server.db.model;
 
-import java.util.Map;
-import java.util.stream.Collectors;
-
 import org.spring2885.model.News;
 import org.spring2885.server.db.service.person.PersonService;
-import org.spring2885.server.db.service.NewsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 import com.google.common.base.Function;
+import com.google.common.base.Strings;
 import com.google.common.base.Supplier;
 import com.google.common.base.Suppliers;
 
@@ -54,12 +51,18 @@ public final class NewsConverters {
 		public DbNews apply(News p) {
 			DbNews db = dbSupplier.get();
 			db.setId(p.getId());
-			db.setTitle(p.getTitle());
-			db.setDescription(p.getDescription());
+			if (!Strings.isNullOrEmpty(p.getTitle())) {
+	            db.setTitle(p.getTitle());
+			}
+			if (!Strings.isNullOrEmpty(p.getDescription())) {
+			    db.setDescription(p.getDescription());
+			}
 			db.setExpired(asSqlDate(p.getExpired()));
-			db.setPersonId(personService.findByEmail(p.getPostedBy()));
+			if (!Strings.isNullOrEmpty(p.getPostedBy()) && db.getPerson() == null) {
+			    // Only update the person if it hadn't been set already.
+			    db.setPersonId(personService.findByEmail(p.getPostedBy()));
+			}
 			db.setPosted(asSqlDate(p.getPosted()));
-			db.setTitle(db.getTitle());
 			db.setViews(p.getViews());
 			return db;
 		}

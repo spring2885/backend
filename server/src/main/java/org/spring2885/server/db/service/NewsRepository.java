@@ -14,7 +14,7 @@ public interface NewsRepository extends
 
 	List<DbNews> findByTitle(String Title);
 	
-	Iterable<DbNews> findAllByActiveAndAbuse(char active, char abuse);
+	Iterable<DbNews> findAllByActiveAndAbuse(boolean active, boolean abuse);
 	
 }
 

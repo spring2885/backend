@@ -5,6 +5,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.spring2885.server.utils.TestUtils.convertObjectToJsonBytes;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -13,18 +14,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
-import java.io.IOException;
 import java.util.Collections;
 
 import org.hamcrest.Matchers;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.spring2885.model.News;
 import org.spring2885.server.db.model.DbNews;
+import org.spring2885.server.db.model.DbPerson;
 import org.spring2885.server.db.service.NewsService;
+import org.spring2885.server.db.service.person.PersonService;
 import org.spring2885.server.db.service.search.SearchCriteria;
 import org.spring2885.server.db.service.search.SearchOperator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,27 +50,31 @@ public class NewsApiTest {
     
     @Autowired protected WebApplicationContext webappContext;
     @Autowired private NewsService newsService;
+    @Autowired private PersonService personService;
   
+    private DbPerson me;
+    private DbNews dbNews;
+    private News news;
     
-    private DbNews dbMe;
-    private News me;
-    
-    @After
-    public void after() {
-        Mockito.reset(newsService);
-    }
-   
     @Before
     public void setup() {
         reset(newsService);
+        reset(personService);
         mockMvc = webAppContextSetup(webappContext)
         		.apply(SecurityMockMvcConfigurers.springSecurity())
         		.dispatchOptions(true)
         		.build();
         
-        dbMe = createDbNews(1, "TitleNews1");
-        me = createNews(4, "TitleNews2");
-       
+        dbNews = createDbNews(4, "TitleNews1");
+        news = createNews(4, "TitleNews2");
+        me = new DbPerson();
+        me.setId(1L);
+        me.setEmail("me@");
+        dbNews.setPersonId(me);
+
+        // Make the email address "me@" found for user #1.
+        when(personService.findById(1)).thenReturn(me);
+        when(personService.findByEmail(eq("me@"))).thenReturn(me);
     }
     
     static DbNews createDbNews(long id, String newsTitle) {
@@ -84,10 +89,6 @@ public class NewsApiTest {
     	n.setId(id);
     	n.setTitle(newsTitle);
     	return n;
-    }
-    
-    void makeMeFound() {
-    	when(newsService.findById(1)).thenReturn(dbMe);
     }
     
     @Test
@@ -126,7 +127,6 @@ public class NewsApiTest {
                 .andExpect(jsonPath("$[0].title", Matchers.is("title2")));
     }
     
-    @SuppressWarnings("unchecked")
     @Test
     @WithMockUser
     public void testNews_aq() throws Exception {
@@ -147,7 +147,6 @@ public class NewsApiTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$[0].title", Matchers.is("title2")));
     }
-
 
     /**
      * Tests a {@code /news/:id} where {@code id} is found.
@@ -187,13 +186,13 @@ public class NewsApiTest {
     	// the results that were setup by PersonService.
     }
 
-
     @Test
     @WithMockUser(username="Title",roles={"USER","ADMIN"})
     public void testDeleteNewsById() throws Exception {
     	// Setup the expectations.
+        when(newsService.findById(4)).thenReturn(dbNews);
     	when(newsService.delete(4)).thenReturn(true);
-    	//my mock is goiing to do thiss
+
     	mockMvc.perform(delete("/api/v1/news/4")
     			.accept(MediaType.APPLICATION_JSON))
     			.andExpect(status().isOk());
@@ -206,38 +205,30 @@ public class NewsApiTest {
     @WithMockUser(username="Title",roles={"USER"})
     public void testPut() throws Exception {
         // Setup the expectations.
-        makeMeFound();
+        when(newsService.findById(4)).thenReturn(dbNews);
         
         mockMvc.perform(put("/api/v1/news/4")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(new ObjectMapper().writeValueAsBytes(me))
+                .content(new ObjectMapper().writeValueAsBytes(news))
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden());
         
         verify(newsService, never()).save(Mockito.any(DbNews.class));
     }
-    
-    
+
     @Test
-    @WithMockUser(username="Title",roles={"USER"})
+    @WithMockUser(username="other@",roles={"USER"})
     public void testPut_canNotFindMe() throws Exception {
     	// Setup the expectations.
-    	when(newsService.findById(4)).thenReturn(dbMe);
-    	when(newsService.findByTitle("Title"))
-    		.thenReturn(Collections.emptyList());
+        when(newsService.findById(4)).thenReturn(dbNews);
     	
     	mockMvc.perform(put("/api/v1/news/4")
     			.contentType(MediaType.APPLICATION_JSON)
-    			.content(convertObjectToJsonBytes(me))
+    			.content(convertObjectToJsonBytes(news))
     			.accept(MediaType.APPLICATION_JSON))
     			.andExpect(status().isForbidden());
     	
     	verify(newsService, never()).save(Mockito.any(DbNews.class));
     }
-    
    
-    public static byte[] convertObjectToJsonBytes(Object object) throws IOException  {
-        ObjectMapper mapper = new ObjectMapper();
-        return mapper.writeValueAsBytes(object);
-    }    
 }

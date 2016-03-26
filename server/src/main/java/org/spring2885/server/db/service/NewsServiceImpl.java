@@ -38,7 +38,7 @@ public class NewsServiceImpl implements NewsService {
 	
     @Override
     public Iterable<DbNews> findAll() {
-        return repository.findAllByActiveAndAbuse('Y', 'N');
+        return repository.findAllByActiveAndAbuse(true, false);
     }
     
 	@Override

@@ -107,8 +107,8 @@ posted DATE,
 expired DATE,
 person_id INT,
 views INT,
-active CHAR(1) DEFAULT 'Y',
-abuse CHAR(1) DEFAULT 'N',
+active TINYINT(1) DEFAULT 1,
+abuse TINYINT(1) DEFAULT 0,
 PRIMARY KEY(id),
 FOREIGN KEY(person_id) REFERENCES person(id)
 );

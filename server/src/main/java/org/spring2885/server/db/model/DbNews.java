@@ -18,17 +18,27 @@ public class DbNews {
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Long id;
+	
 	private String title;
 	private String description;
+	
+	@Column(nullable=false, updatable=false)
 	private Date posted;
 	private Date expired;
-    @ManyToOne(fetch=FetchType.EAGER)
+
     @JoinColumn(name="person_id")
+    @ManyToOne(fetch=FetchType.EAGER)
     private DbPerson person;
+	
 	private Long views;
-	@Column(nullable = false, columnDefinition = "TINYINT", length = 1)
-	private boolean active;
-	private boolean abuse;
+	
+	// Mark this as not insertable so the default database value will be used.
+	@Column(nullable = false, insertable=false, columnDefinition = "TINYINT", length = 1)
+	private Boolean active;
+    
+	// Mark this as not insertable so the default database value will be used.
+    @Column(nullable = false, insertable=false, columnDefinition = "TINYINT", length = 1)
+	private Boolean abuse;
 	
 	public Long getId() {
 		return id;
@@ -86,19 +96,19 @@ public class DbNews {
         this.views = views;
     }
 
-    public boolean isActive() {
+    public Boolean isActive() {
         return active;
     }
 
-    public void setActive(boolean active) {
+    public void setActive(Boolean active) {
         this.active = active;
     }
 
-    public boolean isAbuse() {
+    public Boolean isAbuse() {
         return abuse;
     }
 
-    public void setAbuse(boolean abuse) {
+    public void setAbuse(Boolean abuse) {
         this.abuse = abuse;
     }
 
