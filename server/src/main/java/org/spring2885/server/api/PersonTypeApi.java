@@ -71,8 +71,6 @@ public class PersonTypeApi {
 			SecurityContextHolderAwareRequestWrapper request)
 			throws NotFoundException {
 
-    	//TODO: verify admin request
-    	//if they are not an admin, return HttpStatus.FORBIDDEN;
     	if (!request.isUserInRole("ROLE_ADMIN")) {
     		return new ResponseEntity<>(HttpStatus.FORBIDDEN);
     	}

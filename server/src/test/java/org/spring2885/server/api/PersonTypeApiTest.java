@@ -176,8 +176,6 @@ public class PersonTypeApiTest {
     	mockMvc.perform(delete("/api/v1/persontype/21")
     			.accept(MediaType.APPLICATION_JSON))
     			.andExpect(status().isForbidden());
-    	//TODO:
-    	//Status expected:<403> but was:<200>
     	
     	// Ensure PersonTypeService#delete method was called since the result of our
     	// method is the same no matter what.
@@ -212,8 +210,6 @@ public class PersonTypeApiTest {
     			.content(new ObjectMapper().writeValueAsBytes(dbPersonType))
     			.accept(MediaType.APPLICATION_JSON))
     			.andExpect(status().isForbidden());
-    	//TODO:
-    	//Status expected:<403> but was:<400>
     
     	verify(personTypeService, never()).save(Mockito.any(DbPersonType.class));
     }
@@ -229,8 +225,6 @@ public class PersonTypeApiTest {
     			.content(new ObjectMapper().writeValueAsBytes(otherDbPersonType))
     			.accept(MediaType.APPLICATION_JSON))
     			.andExpect(status().isForbidden());
-    	//TODO:
-    	//Status expected:<403> but was:<200>
     	
     	verify(personTypeService, never()).save(Mockito.any(DbPersonType.class));
     }
