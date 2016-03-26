@@ -761,6 +761,14 @@ definitions:
         format: int64
       hours:
         format: int64
+
+  Language:
+    type: object
+    properties:
+      code:
+        type: string
+      description:
+        type: string
   News:
     type: object
     properties:
