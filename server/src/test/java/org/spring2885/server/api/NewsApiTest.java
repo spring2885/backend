@@ -129,7 +129,7 @@ public class NewsApiTest {
     @SuppressWarnings("unchecked")
     @Test
     @WithMockUser
-    public void testPersons_aq() throws Exception {
+    public void testNews_aq() throws Exception {
         // Setup the expectations.
         when(newsService.findAll())
             .thenReturn(ImmutableList.of(
@@ -200,6 +200,21 @@ public class NewsApiTest {
     	// Ensure PersonService#delete method was called since the result of our
     	// method is the same no matter what.
     	verify(newsService).delete(4);
+    }
+    
+    @Test
+    @WithMockUser(username="Title",roles={"USER"})
+    public void testPut() throws Exception {
+        // Setup the expectations.
+        makeMeFound();
+        
+        mockMvc.perform(put("/api/v1/news/4")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsBytes(me))
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden());
+        
+        verify(newsService, never()).save(Mockito.any(DbNews.class));
     }
     
     

@@ -3,9 +3,11 @@ package org.spring2885.server.api;
 import static org.mockito.Mockito.mock;
 
 import org.spring2885.server.db.model.JobConverters;
+import org.spring2885.server.db.model.JobTypeConverters;
 import org.spring2885.server.db.model.NewsConverters;
 import org.spring2885.server.db.model.PersonConverters;
 import org.spring2885.server.db.model.PersonTypeConverter;
+import org.spring2885.server.db.model.SocialServiceConverters;
 import org.spring2885.server.db.service.JobService;
 import org.spring2885.server.db.service.JobTypeService;
 import org.spring2885.server.db.service.LanguageService;
@@ -34,7 +36,15 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
         "org.spring2885.server.api",
         "org.spring2885.server.model"
 })
-@Import({ PersonConverters.class, NewsConverters.class, JobConverters.class, PersonTypeConverter.class })
+
+@Import({ 
+    NewsConverters.class, 
+    JobConverters.class,
+    JobTypeConverters.class,
+    PersonConverters.class, 
+    PersonTypeConverter.class,
+    SocialServiceConverters.class
+   })
 public class TestConfig {
 	@Bean
 	public PersonService personServiceMock() {

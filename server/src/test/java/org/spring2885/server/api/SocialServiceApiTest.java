@@ -4,6 +4,7 @@ import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -43,6 +44,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = { TestConfig.class })
@@ -98,9 +100,10 @@ protected MockMvc mockMvc;
     public void testSocialService() throws Exception {
     	// Setup the expectations.
     	when(socialServiceService.findAll())
-    		.thenReturn((Set<DbSocialService>) ImmutableList.of(
+    		.thenReturn(ImmutableSet.of(
     			createDbSocialService("id",  "Test.com"),
     			createDbSocialService("id2",  "Test2.com")));
+    	verifyNoMoreInteractions(socialServiceService);
     	
     	mockMvc.perform(get("/api/v1/socialservice")
     			.accept(MediaType.APPLICATION_JSON))
@@ -134,7 +137,7 @@ protected MockMvc mockMvc;
     	// Setup the expectations.
     	when(socialServiceService.findById("id")).thenReturn(null);
     	
-    	mockMvc.perform(get("/api/v1/news/id")
+    	mockMvc.perform(get("/api/v1/socialservice/id")
     			.accept(MediaType.APPLICATION_JSON))
     			.andExpect(status().isNotFound());
     	
@@ -148,7 +151,7 @@ protected MockMvc mockMvc;
     	// Setup the expectations.
     	when(socialServiceService.delete("id2")).thenReturn(true);
     	//my mock is goiing to do thiss
-    	mockMvc.perform(delete("/api/v1/news/id2")
+    	mockMvc.perform(delete("/api/v1/socialservice/id2")
     			.accept(MediaType.APPLICATION_JSON))
     			.andExpect(status().isOk());
     	// Ensure PersonService#delete method was called since the result of our
@@ -156,7 +159,21 @@ protected MockMvc mockMvc;
     	verify(socialServiceService).delete("id2");
     }
     
-	
+    @Test
+    @WithMockUser(username="id",roles={"USER"})
+    public void testPut() throws Exception {
+        // Setup the expectations.
+        makeMeFound();
+        
+        mockMvc.perform(put("/api/v1/socialservice/id2")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsBytes(ss))
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden());
+        
+        verify(socialServiceService, never()).save(Mockito.any(DbSocialService.class));
+    }
+
     @Test
     @WithMockUser(username="id",roles={"USER"})
     public void testPut_canNotFindMe() throws Exception {
@@ -166,7 +183,7 @@ protected MockMvc mockMvc;
     	/*when(socialServiceService.findByUrl("id"))
     		.thenReturn(Collections.emptyList());*/
     	
-    	mockMvc.perform(put("/api/v1/news/id2")
+    	mockMvc.perform(put("/api/v1/socialservice/id2")
     			.contentType(MediaType.APPLICATION_JSON)
     			.content(convertObjectToJsonBytes(ss))
     			.accept(MediaType.APPLICATION_JSON))
