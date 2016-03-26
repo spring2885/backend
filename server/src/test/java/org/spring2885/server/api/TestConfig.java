@@ -35,6 +35,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
         "org.spring2885.server.api",
         "org.spring2885.server.model"
 })
+
 @Import({ 
     NewsConverters.class, 
     JobConverters.class, 
