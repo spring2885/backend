@@ -58,12 +58,9 @@ public class PersonTypeApi {
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ResponseEntity<PersonType> get(
             @PathVariable("id") int id) throws NotFoundException {
-    	Iterable<DbPersonType> o = personTypeService.findAll();
+    	DbPersonType o = personTypeService.findById(id);
     	if (o != null) {
-    	  for (DbPersonType p : o) {
-    	    // Note to Matt: You want to return the JSON model of a personType, NOT the DbPersonType
-    	    if (id == p.getId()) { return new ResponseEntity<>(personTypeFromDbToJson.apply(p), HttpStatus.OK); }
-    	  }
+    	  return new ResponseEntity<>(personTypeFromDbToJson.apply(o), HttpStatus.OK);
     	}
     	return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
@@ -76,7 +73,9 @@ public class PersonTypeApi {
 
     	//TODO: verify admin request
     	//if they are not an admin, return HttpStatus.FORBIDDEN;
- 
+    	if (!request.isUserInRole("ROLE_ADMIN")) {
+    		return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+    	}
 		personTypeService.delete(id);
 		if (personTypeService.findById(id) == null){
 			return new ResponseEntity<>(HttpStatus.OK);
@@ -87,10 +86,12 @@ public class PersonTypeApi {
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     public ResponseEntity<Void> put(
     		@PathVariable("id") Integer id,
+    		SecurityContextHolderAwareRequestWrapper request,
     		@RequestBody PersonType personType) throws NotFoundException{
     	
-    	//TODO: verify admin request
-    	//if they are not an admin, return HttpStatus.FORBIDDEN;
+    	if (!request.isUserInRole("ROLE_ADMIN")) {
+    		return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+    	}
     	if (id.intValue() != personType.getId().intValue()) {
     		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     	}

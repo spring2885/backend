@@ -115,18 +115,17 @@ public class PersonTypeApiTest {
     public void testPersonTypeById() throws Exception {
     	// Setup the expectations.
     	DbPersonType p = new DbPersonType();
+    	p.setId(21);
     	p.setName("PersonType2");
     	when(personTypeService.findById(21)).thenReturn(p);
     	//when(personTypeService.findAll()).thenReturn(Collections.singletonSet(p));
-    	verifyNoMoreInteractions(personTypeService);
     	
     	mockMvc.perform(get("/api/v1/persontype/21")
     			.accept(MediaType.APPLICATION_JSON))
     			.andExpect(status().isOk())
     			.andExpect(content().contentType(MediaType.APPLICATION_JSON))
-    			.andExpect(jsonPath("$.id", Matchers.is("21")));
-    	//TODO:
-    	//Status expected:<200> but was:<404>
+    			.andExpect(jsonPath("$.id", Matchers.is(21)));
+    
     	
     	// N.B: We don't have to verify anything here since we're asserting
     	// the results that were setup by PersonService.
@@ -196,8 +195,6 @@ public class PersonTypeApiTest {
     			.content(new ObjectMapper().writeValueAsBytes(personType))
     			.accept(MediaType.APPLICATION_JSON))
     			.andExpect(status().isForbidden());
-    	//TODO:
-    	//Status expected:<403> but was:<400>
     	
     	verify(personTypeService, never()).save(Mockito.any(DbPersonType.class));
     }
