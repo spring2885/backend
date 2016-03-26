@@ -4,10 +4,12 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.spring2885.server.db.model.DbLanguage;
+import org.spring2885.server.db.model.DbNews;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 
 @Component("languageService")
@@ -15,7 +17,7 @@ import com.google.common.collect.Iterables;
 public class LanguageServiceImpl implements LanguageService {
     private final LanguageRepository repository;
     
-    @Autowired
+    
     public LanguageServiceImpl(LanguageRepository repository) {
         this.repository = repository;
     }
@@ -34,5 +36,10 @@ public class LanguageServiceImpl implements LanguageService {
     public DbLanguage defaultLanguage() {
         return repository.findOne("en");
     }
+
+	@Override
+	public DbLanguage findById(String code) {
+		return null;
+	}
 
 }
