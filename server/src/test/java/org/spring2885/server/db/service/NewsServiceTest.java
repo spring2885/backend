@@ -5,6 +5,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.anyChar;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.same;
 import static org.mockito.Mockito.never;
@@ -39,17 +40,28 @@ public class NewsServiceTest {
     
     @Test
     public void testFindAll() {
-    	DbNews p = new DbNews();
-    	when(repository.findAll()).thenReturn(Collections.singleton(p));
+        DbNews p = new DbNews();
+        when(repository.findAllByActiveAndAbuse(anyChar(), anyChar())).thenReturn(Collections.singleton(p));
 
-    	List<DbNews> news = Lists.newArrayList(service.findAll());
-    	assertEquals(1, news.size());
-    	assertSame(p, news.get(0));
+        List<DbNews> news = Lists.newArrayList(service.findAll());
+        assertEquals(1, news.size());
+        assertSame(p, news.get(0));
+    }
+
+    @Test
+    public void testFindAllAdmin() {
+        DbNews p = new DbNews();
+        when(repository.findAll()).thenReturn(Collections.singleton(p));
+        when(repository.findAllByActiveAndAbuse(anyChar(), anyChar())).thenReturn(Collections.singleton(p));
+
+        List<DbNews> news = Lists.newArrayList(service.findAllAdmin());
+        assertEquals(1, news.size());
+        assertSame(p, news.get(0));
     }
 
     @Test
     public void testFindAll_none() {
-    	when(repository.findAll()).thenReturn(Collections.emptyList());
+    	when(repository.findAllByActiveAndAbuse(anyChar(), anyChar())).thenReturn(Collections.emptyList());
 
     	List<DbNews> persons = Lists.newArrayList(service.findAll());
     	assertEquals(0, persons.size());

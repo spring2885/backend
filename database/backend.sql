@@ -108,6 +108,7 @@ expired DATE,
 person_id INT,
 views INT,
 active CHAR(1) DEFAULT 'Y',
+abuse CHAR(1) DEFAULT 'N',
 PRIMARY KEY(id),
 FOREIGN KEY(person_id) REFERENCES person(id)
 );

@@ -28,6 +28,7 @@ public class DbNews {
 	private Long views;
 	@Column(nullable = false, columnDefinition = "TINYINT", length = 1)
 	private boolean active;
+	private boolean abuse;
 	
 	public Long getId() {
 		return id;
@@ -92,7 +93,16 @@ public class DbNews {
     public void setActive(boolean active) {
         this.active = active;
     }
- // Since we won't have this object outside without the ID, we're ok
+
+    public boolean isAbuse() {
+        return abuse;
+    }
+
+    public void setAbuse(boolean abuse) {
+        this.abuse = abuse;
+    }
+
+    // Since we won't have this object outside without the ID, we're ok
  	// See https://developer.jboss.org/wiki/EqualsandHashCode
  	@Override
  	public int hashCode() {
