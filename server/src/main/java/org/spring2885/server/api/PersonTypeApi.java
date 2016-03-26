@@ -76,6 +76,7 @@ public class PersonTypeApi {
 
     	//TODO: verify admin request
     	//if they are not an admin, return HttpStatus.FORBIDDEN;
+ 
 		personTypeService.delete(id);
 		if (personTypeService.findById(id) == null){
 			return new ResponseEntity<>(HttpStatus.OK);

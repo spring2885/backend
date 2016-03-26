@@ -93,12 +93,6 @@ public class PersonTypeApiTest {
     @WithMockUser
     public void testPersonType() throws Exception {
     	// Setup the expectations.
-    	//TODO: Fix stubbing error
-		/*The method thenReturn(Set<DbPersonType>) in the type
-		 * OngoingStubbing<Set<DbPersonType>> is not applicable for the arguments
-		 * (ImmutableList<DbPersonType>)
-		 */
-		//Cannot convert from ImmutableList<DbPersonType> to Set<DbPersonType>
     	when(personTypeService.findAll())
     		.thenReturn(ImmutableSet.of(
     			createDbPersonType(5,  "PersonType"),
@@ -121,15 +115,16 @@ public class PersonTypeApiTest {
     public void testPersonTypeById() throws Exception {
     	// Setup the expectations.
     	DbPersonType p = new DbPersonType();
-    	p.setName("ThisTitle");
+    	p.setName("PersonType2");
     	when(personTypeService.findById(21)).thenReturn(p);
+    	//when(personTypeService.findAll()).thenReturn(Collections.singletonSet(p));
     	verifyNoMoreInteractions(personTypeService);
     	
     	mockMvc.perform(get("/api/v1/persontype/21")
     			.accept(MediaType.APPLICATION_JSON))
     			.andExpect(status().isOk())
     			.andExpect(content().contentType(MediaType.APPLICATION_JSON))
-    			.andExpect(jsonPath("$.name", Matchers.is("ThisTitle")));
+    			.andExpect(jsonPath("$.id", Matchers.is("21")));
     	//TODO:
     	//Status expected:<200> but was:<404>
     	
@@ -142,7 +137,7 @@ public class PersonTypeApiTest {
      */
     @Test
     @WithMockUser
-    public void testNewsById_notFound() throws Exception {
+    public void testPersonTypeById_notFound() throws Exception {
     	// Setup the expectations.
     	when(personTypeService.findById(21)).thenReturn(null);
     	verifyNoMoreInteractions(personTypeService);
@@ -212,10 +207,11 @@ public class PersonTypeApiTest {
     public void testPut_canNotFindMe() throws Exception {
     	// Setup the expectations.
     	when(personTypeService.findById(4)).thenReturn(dbPersonType);
-    	when(personTypeService.findByName("Title"))
+    	when(personTypeService.findByName("PersonType1"))
     		.thenReturn(null);
+    	//when(personTypeService.findById(3)).thenReturn(dbPersonType);
     	
-    	mockMvc.perform(put("/api/v1/persontype/4")
+    	mockMvc.perform(put("/api/v1/persontype/3")
     			.contentType(MediaType.APPLICATION_JSON)
     			.content(new ObjectMapper().writeValueAsBytes(dbPersonType))
     			.accept(MediaType.APPLICATION_JSON))
