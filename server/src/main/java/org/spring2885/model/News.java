@@ -13,9 +13,7 @@ import java.util.Objects;
 
 
 @ApiModel(description = "")
-
-@javax.annotation.Generated(value = "class io.swagger.codegen.languages.SpringMVCServerCodegen", date = "2016-03-18T17:17:53.394-07:00")
-
+@javax.annotation.Generated(value = "class io.swagger.codegen.languages.SpringMVCServerCodegen", date = "2016-03-25T17:32:14.614-07:00")
 public class News  {
   
   private Long id = null;

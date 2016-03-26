@@ -389,6 +389,105 @@ paths:
           description: Deletes SocialService
         500:
           description: Error with deleting SocialService by id.
+
+  /api/v1/persontype:
+    get:
+      tags: ["PersonType"]
+      summary: |
+        Fetches all 'persontype' objects
+      description: |
+        Fetches all 'person type' objects. up to a 'size' if specified,
+        otherwise fetches all objects.
+      parameters:
+        - name: size
+          in: query
+          description: The maximum number of persontypes to fetch
+          required: false
+          type: number
+          format: int32
+      responses:
+        200:
+          description: Gets persontypes
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/PersonType'  
+        500:
+          description: Error getting persontypes
+    post:
+      tags: ["PersonType"]
+      parameters:
+        - name: PersonType
+          in: body
+          description: The persontype you want to post
+          schema:
+            $ref: '#/definitions/PersonType'
+          required: true
+      responses:
+        200:
+          description: Creates a new persontype in the system
+        500:
+          description: Error creating persontype.
+        
+  /api/v1/persontype/{id}:
+    get:
+      tags: ["PersonType"]
+      summary: |
+        Fetches the 'person type' for id 'id'.
+      description: |
+      parameters:
+        - name: id
+          in: path
+          description: The id of the person type to fetch
+          required: true
+          type: number
+          format: int32
+      responses:
+        200:
+          description: Successful response
+          schema:
+            $ref: '#/definitions/PersonType'
+        500:
+          description: error getting persontype with id 'id'
+    put:
+      tags: ["PersonType"]
+      summary: |
+        The persontype to update
+      parameters:
+        - name: id
+          in: path
+          description: the id of the persontype to fetch.
+          required: true
+          type: number
+          format: int32
+        - name: name
+          in: body
+          description: The type to update.
+          schema:
+            $ref: '#/definitions/PersonType'
+          required: true
+      responses:
+        200:
+          description: Updates the persontype.
+    delete:
+      tags: ["PersonType"]
+      summary: |
+        The persontype to delete.
+      parameters:
+        - name: id
+          in: path
+          description: The persontype to delete.
+          required: true
+          type: integer
+          format: int64
+      responses:
+        200:
+          description: Deletes the persontype.
+          schema:
+            $ref: '#/definitions/PersonType'
+        500:
+          description: Error deleting the persontype "ID".
+  
   /api/v1/jobtype:
     get:
       tags: ["JobType"]
@@ -409,7 +508,7 @@ paths:
           schema:
             type: array
             items:
-              $ref: '#/definitions/JobType'
+              $ref: '#/definitions/JobType'  
     post:
       tags: ["JobType"]
       description: |
@@ -423,6 +522,7 @@ paths:
       responses:
         200:
           description: Makes a new JobType 
+  
   /api/v1/jobtype/{id}:
     get:
       tags: ["JobType"]
@@ -480,9 +580,6 @@ paths:
         500:
           description: Error with deleting jobtype by id. 
           
-      
-
-
 definitions:
   SocialConnection:
     type: object
@@ -603,6 +700,16 @@ definitions:
         type: string
       new_password:
         type: string
+
+  PersonType:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+      name:
+        type: string
+  
   JobType:
     type: object
     properties: 
@@ -611,6 +718,7 @@ definitions:
         format: int64
       name:
         type: string
+
   SocialService:
     type: object
     properties:
@@ -631,3 +739,5 @@ tags:
     description: Everything to do with News
   - name: SocialService
     description: Everything to do with SocialService
+  - name: PersonType
+    description: Everything to do with Person Type

@@ -172,6 +172,7 @@ public class PersonsApiTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$[0].email", Matchers.is("me2@example.com")));
     }
+    
     /**
      * Tests a {@code /profiles/:id} where {@code id} is found.
      */
