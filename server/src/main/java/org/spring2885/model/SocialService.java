@@ -13,21 +13,21 @@ import java.util.Objects;
 
 @ApiModel(description = "")
 @javax.annotation.Generated(value = "class io.swagger.codegen.languages.SpringMVCServerCodegen", date = "2016-03-25T18:34:21.047-07:00")
-public class SocialConnection  {
+public class SocialService  {
   
-  private String name = null;
+  private String id = null;
   private String url = null;
 
   
   /**
    **/
   @ApiModelProperty(value = "")
-  @JsonProperty("name")
-  public String getName() {
-    return name;
+  @JsonProperty("id")
+  public String getId() {
+    return id;
   }
-  public void setName(String name) {
-    this.name = name;
+  public void setId(String id) {
+    this.id = id;
   }
 
   
@@ -52,22 +52,22 @@ public class SocialConnection  {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    SocialConnection socialConnection = (SocialConnection) o;
-    return Objects.equals(name, socialConnection.name) &&
-        Objects.equals(url, socialConnection.url);
+    SocialService socialService = (SocialService) o;
+    return Objects.equals(id, socialService.id) &&
+        Objects.equals(url, socialService.url);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(name, url);
+    return Objects.hash(id, url);
   }
 
   @Override
   public String toString()  {
     StringBuilder sb = new StringBuilder();
-    sb.append("class SocialConnection {\n");
+    sb.append("class SocialService {\n");
     
-    sb.append("  name: ").append(name).append("\n");
+    sb.append("  id: ").append(id).append("\n");
     sb.append("  url: ").append(url).append("\n");
     sb.append("}\n");
     return sb.toString();

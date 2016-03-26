@@ -6,7 +6,7 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.when;
 
 import java.util.Collections;
-import java.util.Set;
+import java.util.*;
 
 import org.junit.Before;
 import org.junit.Test;
