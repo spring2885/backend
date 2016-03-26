@@ -1,7 +1,11 @@
 package org.spring2885.server.db.model;
 
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import org.spring2885.model.News;
 import org.spring2885.server.db.service.person.PersonService;
+import org.spring2885.server.db.service.NewsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;

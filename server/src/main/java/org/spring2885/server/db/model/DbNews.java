@@ -92,6 +92,24 @@ public class DbNews {
     public void setActive(boolean active) {
         this.active = active;
     }
+ // Since we won't have this object outside without the ID, we're ok
+ 	// See https://developer.jboss.org/wiki/EqualsandHashCode
+ 	@Override
+ 	public int hashCode() {
+ 		return id.hashCode();
+ 	}
+
+ 	@Override
+ 	public boolean equals(Object obj) {
+ 		if (this == obj) {
+ 			return true;
+ 		}
+ 		if (!(obj instanceof DbNews)) {
+ 			return false;
+ 		}
+ 		DbNews that = (DbNews) obj;
+ 		return this.id.equals(that.id);
+ 	}
 
     @Override
     public String toString() {

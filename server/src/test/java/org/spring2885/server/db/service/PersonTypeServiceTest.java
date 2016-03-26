@@ -4,6 +4,7 @@ import static org.mockito.Mockito.*;
 import static org.hamcrest.Matchers.*;
 
 import java.util.Collections;
+import java.util.List;
 
 import org.junit.Before;
 import static org.junit.Assert.*;
@@ -12,13 +13,14 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.mockito.internal.matchers.Contains;
 import org.spring2885.server.db.model.DbPersonType;
 import org.spring2885.server.db.service.person.PersonTypeRepository;
 import org.spring2885.server.db.service.person.PersonTypeService;
 import org.spring2885.server.db.service.person.PersonTypeServiceImpl;
+import org.spring2885.server.db.service.search.SearchCriteria;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 
 @RunWith(JUnit4.class)
 public class PersonTypeServiceTest {
@@ -47,4 +49,51 @@ public class PersonTypeServiceTest {
         assertEquals(student, service.defaultType());
     }
 
+    @Test
+    public void findById(){
+    	DbPersonType expected = new DbPersonType();
+    	expected.setName("student");
+    	when(repository.findOne(Long.valueOf(1234))).thenReturn(expected);
+    	
+    	DbPersonType actual = service.findById(1234);
+    	assertSame(expected, actual);
+    }
+    
+    @Test
+    public void findByName() {
+    	DbPersonType pt = new DbPersonType(0, "student");
+    	when(repository.findByName("student")).thenReturn(Collections.singletonList(pt));
+    	
+    	List<DbPersonType> personTypes = Lists.newArrayList(service.findByName("student"));
+    	assertEquals(1, personTypes.size());
+    	assertSame(pt, personTypes.get(0));
+    }
+    
+    @Test
+    public void delete() {
+    	DbPersonType pt = new DbPersonType();
+    	when(repository.findOne(Long.valueOf(21))).thenReturn(pt);
+    	
+    	assertTrue(service.delete(21));
+    	verify(repository).delete(Long.valueOf(21));
+    }
+    
+    @Test
+    public void save() {
+    	DbPersonType pt = new DbPersonType();
+    	DbPersonType expected = new DbPersonType();
+    	when(repository.save(same(pt))).thenReturn(expected);
+    	
+    	DbPersonType actual = service.save(pt);
+    	assertSame(expected, actual);
+    }
+    
+    @Test
+    public void existsByName() {
+    	DbPersonType pt = new DbPersonType();
+    	pt.setName("student");
+    	when(repository.findByName("student")).thenReturn(Collections.singletonList(pt));
+    	
+    	assertTrue(service.existsByName("student"));
+    }
 }

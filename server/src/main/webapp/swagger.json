@@ -25,6 +25,12 @@
   }, {
     "name" : "News",
     "description" : "Everything to do with News"
+  }, {
+    "name" : "SocialService",
+    "description" : "Everything to do with SocialService"
+  }, {
+    "name" : "PersonType",
+    "description" : "Everything to do with Person Type"
   } ],
   "paths" : {
     "/api/v1/jobs" : {
@@ -250,15 +256,65 @@
         }
       }
     },
-    "/api/v1/news" : {
+    "/api/v1/persontype" : {
       "get" : {
-        "tags" : [ "News" ],
-        "description" : "Gets `News` objects.\nOptional querry param of **size** determines\nsize of return array\n",
+        "tags" : [ "PersonType" ],
+        "summary" : "Fetches all 'persontype' objects\n",
+        "description" : "Fetches all 'person type' objects. up to a 'size' if specified,\notherwise fetches all objects.\n",
         "parameters" : [ {
           "name" : "size",
           "in" : "query",
-          "description" : "Size of array",
+          "description" : "The maximum number of persontypes to fetch",
           "required" : false,
+          "type" : "number",
+          "format" : "int32"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Gets persontypes",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/PersonType"
+              }
+            }
+          },
+          "500" : {
+            "description" : "Error getting persontypes"
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "PersonType" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "PersonType",
+          "description" : "The persontype you want to post",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/PersonType"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Creates a new persontype in the system"
+          },
+          "500" : {
+            "description" : "Error creating persontype."
+          }
+        }
+      }
+    },
+    "/api/v1/persontype/{id}" : {
+      "get" : {
+        "tags" : [ "PersonType" ],
+        "summary" : "Fetches the 'person type' for id 'id'.\n",
+        "description" : "",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "The id of the person type to fetch",
+          "required" : true,
           "type" : "number",
           "format" : "int32"
         } ],
@@ -266,99 +322,59 @@
           "200" : {
             "description" : "Successful response",
             "schema" : {
-              "type" : "array",
-              "items" : {
-                "$ref" : "#/definitions/News"
-              }
+              "$ref" : "#/definitions/PersonType"
             }
-          }
-        }
-      },
-      "post" : {
-        "tags" : [ "News" ],
-        "description" : "",
-        "parameters" : [ {
-          "in" : "body",
-          "name" : "News",
-          "description" : "The News you want to post",
-          "required" : true,
-          "schema" : {
-            "$ref" : "#/definitions/News"
-          }
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "Makes a new News"
-          }
-        }
-      }
-    },
-    "/api/v1/news/{id}" : {
-      "get" : {
-        "tags" : [ "News" ],
-        "description" : "Retrives a News entry\n",
-        "parameters" : [ {
-          "name" : "id",
-          "in" : "path",
-          "description" : "a single News entry",
-          "required" : true,
-          "type" : "number",
-          "format" : "int64"
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "Sucussful deletion",
-            "schema" : {
-              "$ref" : "#/definitions/News"
-            }
+          },
+          "500" : {
+            "description" : "error getting persontype with id 'id'"
           }
         }
       },
       "put" : {
-        "tags" : [ "News" ],
-        "summary" : "The News to update\n",
+        "tags" : [ "PersonType" ],
+        "summary" : "The persontype to update\n",
         "parameters" : [ {
           "name" : "id",
           "in" : "path",
-          "description" : "The id of the News to be update.",
+          "description" : "the id of the persontype to fetch.",
           "required" : true,
-          "type" : "integer",
-          "format" : "int64"
+          "type" : "number",
+          "format" : "int32"
         }, {
           "in" : "body",
-          "name" : "news",
-          "description" : "The News item you want to update",
+          "name" : "name",
+          "description" : "The type to update.",
           "required" : true,
           "schema" : {
-            "$ref" : "#/definitions/News"
+            "$ref" : "#/definitions/PersonType"
           }
         } ],
         "responses" : {
           "200" : {
-            "description" : "Deletes News"
-          },
-          "500" : {
-            "description" : "Error with deleting News by id."
+            "description" : "Updates the persontype."
           }
         }
       },
       "delete" : {
-        "tags" : [ "News" ],
-        "summary" : "The News to delete\n",
+        "tags" : [ "PersonType" ],
+        "summary" : "The persontype to delete.\n",
         "parameters" : [ {
           "name" : "id",
           "in" : "path",
-          "description" : "The News to be deleted.",
+          "description" : "The persontype to delete.",
           "required" : true,
           "type" : "integer",
           "format" : "int64"
         } ],
         "responses" : {
           "200" : {
-            "description" : "Deletes News"
+            "description" : "Deletes the persontype.",
+            "schema" : {
+              "$ref" : "#/definitions/PersonType"
+            }
           },
           "500" : {
-            "description" : "Error with deleting News by id."
+            "description" : "Error deleting the persontype \"ID\"."
           }
         }
       }
@@ -465,6 +481,115 @@
           },
           "500" : {
             "description" : "Error deleting the profile \"ID\"."
+          }
+        }
+      }
+    },
+    "/api/v1/socialservice" : {
+      "get" : {
+        "tags" : [ "SocialService" ],
+        "description" : "Gets `SocailService` objects.\nOptional querry param of **size** determines\nsize of return array\n",
+        "parameters" : [ {
+          "name" : "size",
+          "in" : "query",
+          "description" : "Size of array",
+          "required" : false,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful response",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/News"
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "SocialService" ],
+        "description" : "",
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "SocialService",
+          "description" : "The SocialService you want to post",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/SocialService"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Makes a new SocialService"
+          }
+        }
+      }
+    },
+    "/api/v1/socialservice/{id}" : {
+      "get" : {
+        "tags" : [ "SocialService" ],
+        "description" : "Retrives a SocialService entry\n",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "a single SocialService entry",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Sucussful deletion",
+            "schema" : {
+              "$ref" : "#/definitions/SocialService"
+            }
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "SocialService" ],
+        "summary" : "The SocialService to update\n",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "The id of the News to be update.",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "in" : "body",
+          "name" : "socialservice",
+          "description" : "The SocialService item you want to update",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/SocialService"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Deletes SocialService"
+          },
+          "500" : {
+            "description" : "Error with deleting SocialService by id."
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "SocialService" ],
+        "summary" : "The SocialService to delete\n",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "The SocialService to be deleted.",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Deletes SocialService"
+          },
+          "500" : {
+            "description" : "Error with deleting SocialService by id."
           }
         }
       }
@@ -719,6 +844,18 @@
         }
       }
     },
+    "PersonType" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "name" : {
+          "type" : "string"
+        }
+      }
+    },
     "JobType" : {
       "type" : "object",
       "properties" : {
@@ -727,6 +864,17 @@
           "format" : "int64"
         },
         "name" : {
+          "type" : "string"
+        }
+      }
+    },
+    "SocialService" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "type" : "string"
+        },
+        "url" : {
           "type" : "string"
         }
       }

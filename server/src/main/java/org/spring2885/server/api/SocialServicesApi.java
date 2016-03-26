@@ -1,5 +1,4 @@
 package org.spring2885.server.api;
-
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import java.util.List;
@@ -8,16 +7,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.spring2885.model.Job;
 import org.spring2885.model.News;
-import org.spring2885.model.Person;
+import org.spring2885.model.SocialService;
 import org.spring2885.server.api.exceptions.NotFoundException;
+import org.spring2885.server.db.model.DbSocialService;
 import org.spring2885.server.db.model.DbJob;
 import org.spring2885.server.db.model.DbNews;
 import org.spring2885.server.db.model.DbPerson;
 import org.spring2885.server.db.model.NewsConverters;
+import org.spring2885.server.db.model.SocialServiceConverters;
 import org.spring2885.server.db.service.NewsService;
-import org.spring2885.server.db.service.person.PersonService;
-import org.spring2885.server.db.service.search.SearchCriteria;
-import org.spring2885.server.db.service.search.SearchParser;
+import org.spring2885.server.db.service.person.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,47 +28,37 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.google.common.base.Strings;
 import com.google.common.collect.FluentIterable;
 
 @RestController
-@RequestMapping(value = "/api/v1/news", produces = { APPLICATION_JSON_VALUE })
-public class NewsApi {
-	private static final Logger logger = LoggerFactory.getLogger(NewsApi.class);
+@RequestMapping(value = "/api/v1/socialservice", produces = { APPLICATION_JSON_VALUE })
+public class SocialServicesApi {
+	private static final Logger logger = LoggerFactory.getLogger(SocialServicesApi.class);
 	
-    @Autowired
-    private NewsService newsService;
-    
-    @Autowired
-    private PersonService personService;
-    
-    @Autowired
-    private NewsConverters.JsonToDbConverter newsJsonToDb;
-    
-    @Autowired
-    private NewsConverters.NewsFromDbToJson dbToJsonConverter;
-    
-    @Autowired
-    private SearchParser searchParser;
-    
-
-    
+	@Autowired
+	private SocialServiceService socialServiceService;
+	
+	@Autowired
+	private SocialServiceConverters.JsonToDbConverter socialServiceJsonToDb;
+	
+	@Autowired
+	private SocialServiceConverters.SocialServiceFromDbToJson dbToJsonConverter;
+	
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
-	public ResponseEntity<News> get(
-			@PathVariable("id") int id) throws NotFoundException {
-		DbNews o = newsService.findById(id);
+	public ResponseEntity<SocialService> get(
+			@PathVariable("id") String id) throws NotFoundException {
+		DbSocialService o = socialServiceService.findById(id);
 		if (o == null) {
-			// When adding test testPersonsById_notFound, was getting a NullPointerException
+			// When adding test testJobsById_notFound, was getting a NullPointerException
 			// here, so needed to add this.
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity<>(dbToJsonConverter.apply(o), HttpStatus.OK);
-
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<String> delete(
-			@PathVariable("id") Integer id,
+			@PathVariable("id") String id,
 			SecurityContextHolderAwareRequestWrapper request)
 			throws NotFoundException {
 		
@@ -82,57 +71,41 @@ public class NewsApi {
 			return new ResponseEntity<>(error, HttpStatus.FORBIDDEN);
 		}
 
-		newsService.delete(id);
+		socialServiceService.delete(id);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
-	public ResponseEntity<List<News>> list(
-			@RequestParam(value = "aq", required = false) String aq,
-            @RequestParam(value = "q", required = false) String q,
-	        @RequestParam(value = "size", required = false) Integer size)
+	public ResponseEntity<List<SocialService>> list(@RequestParam(value = "size", required = false) Double size)
 			throws NotFoundException {
-		logger.info("NewsApi GET: q={}, aq={}, size={}", q, aq, size);
-	    Iterable<DbNews> all;
-	    if (!Strings.isNullOrEmpty(q)) {
-	        all = newsService.findAll(q);
-	    } else if (!Strings.isNullOrEmpty(aq)) {
-	        List<SearchCriteria> criterias = searchParser.parse(aq);
-            all = newsService.findAll(criterias);
-	    } else {
-	        all = newsService.findAll();
-	    }
 		
-
-		FluentIterable<News> iterable = FluentIterable.from(all)
-				.transform(dbToJsonConverter);
-		// Support size parameter, but only if it's set (and not 0)
-		if (size != null && size.intValue() > 0) {
-		    iterable.limit(size);
-		}
-		return new ResponseEntity<>(iterable.toList(), HttpStatus.OK);
+		List<SocialService> ss = FluentIterable.from(socialServiceService.findAll())
+				.transform(dbToJsonConverter)
+				.toList();
+		
+		return new ResponseEntity<>(ss, HttpStatus.OK);
 	}
-	
+
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<Void> put(
-			@PathVariable("id") Integer id,
-			@RequestBody News news,
+			@PathVariable("id") String id,
+			@RequestBody SocialService ss,
 			SecurityContextHolderAwareRequestWrapper request) throws NotFoundException {
 		
 		if (!checkAdminRequestIfNeeded(id, request)) {
 			return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 		}
 
-		if (id.intValue() != news.getId().intValue()) {
+		if (!id.equals(ss.getId())) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
-		DbNews db = newsService.findById(id);
+		DbSocialService db = socialServiceService.findById(id);
 		if (db == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-		newsJsonToDb.withDbNews(db);
-		DbNews updatedDbNews = newsJsonToDb.apply(news);
-		newsService.save(updatedDbNews);
+		socialServiceJsonToDb.withDbSocialService(db);
+		DbSocialService updatedDbSocialService = socialServiceJsonToDb.apply(ss);
+		socialServiceService.save(updatedDbSocialService);
 		
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
@@ -141,34 +114,38 @@ public class NewsApi {
 	public ResponseEntity<Void> newsPost(
 			
 			
-			@RequestBody News news
+			@RequestBody SocialService ss
 			
 			) throws NotFoundException {
 		
-		DbNews db = new DbNews();
+		DbSocialService db = new DbSocialService();
 		
-		DbNews updatedDbNews = newsJsonToDb.apply(news);
-		newsService.save(updatedDbNews);
+		DbSocialService updatedDbSocialService = socialServiceJsonToDb.apply(ss);
+		socialServiceService.save(updatedDbSocialService);
 		
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
     
-   	private boolean checkAdminRequestIfNeeded(int requestId, SecurityContextHolderAwareRequestWrapper request) {
+	
+	
+	private boolean checkAdminRequestIfNeeded(String requestId, SecurityContextHolderAwareRequestWrapper request) {
 		if (!request.isUserInRole("ROLE_ADMIN")) {
 			// Only admin's can change other profiles.
-			String email = request.getUserPrincipal().getName();
-			DbPerson me = personService.findByEmail(email);
+			String name = request.getUserPrincipal().getName();
+			DbSocialService me = socialServiceService.findById(name);
 			if (me == null) {
 				// I can't find myself... need more zen.
 				return false;
 			}
 			
-			if (me.getId() != requestId) {
+			if (!me.getName().equals(requestId)) {
 				// Someone is being naughty...
 				return false;
 			}
 		}
 		return true;
 	}
+	
+	
 
 }
