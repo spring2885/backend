@@ -3,6 +3,7 @@ package org.spring2885.server.api;
 import static org.mockito.Mockito.mock;
 
 import org.spring2885.server.db.model.JobConverters;
+import org.spring2885.server.db.model.JobTypeConverters;
 import org.spring2885.server.db.model.NewsConverters;
 import org.spring2885.server.db.model.PersonConverters;
 import org.spring2885.server.db.model.PersonTypeConverter;
@@ -35,9 +36,11 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
         "org.spring2885.server.api",
         "org.spring2885.server.model"
 })
+
 @Import({ 
     NewsConverters.class, 
-    JobConverters.class, 
+    JobConverters.class,
+    JobTypeConverters.class,
     PersonConverters.class, 
     PersonTypeConverter.class,
     SocialServiceConverters.class
