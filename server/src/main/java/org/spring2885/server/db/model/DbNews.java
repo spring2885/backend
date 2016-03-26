@@ -18,18 +18,25 @@ public class DbNews {
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Long id;
+	
 	private String title;
 	private String description;
+	
+	@Column(nullable=false, updatable=false)
 	private Date posted;
 	private Date expired;
-    @ManyToOne(fetch=FetchType.EAGER)
+
     @JoinColumn(name="person_id")
+    @ManyToOne(fetch=FetchType.EAGER)
     private DbPerson person;
+	
 	private Long views;
+	
 	// Mark this as not insertable so the default database value will be used.
 	@Column(nullable = false, insertable=false, columnDefinition = "TINYINT", length = 1)
 	private Boolean active;
-    // Mark this as not insertable so the default database value will be used.
+    
+	// Mark this as not insertable so the default database value will be used.
     @Column(nullable = false, insertable=false, columnDefinition = "TINYINT", length = 1)
 	private Boolean abuse;
 	

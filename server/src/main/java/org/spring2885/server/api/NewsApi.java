@@ -2,6 +2,7 @@ package org.spring2885.server.api;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
+import java.sql.Date;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -10,6 +11,7 @@ import org.spring2885.model.News;
 import org.spring2885.server.api.exceptions.NotFoundException;
 import org.spring2885.server.api.utils.RequestHelper;
 import org.spring2885.server.db.model.DbNews;
+import org.spring2885.server.db.model.DbPerson;
 import org.spring2885.server.db.model.NewsConverters;
 import org.spring2885.server.db.service.NewsService;
 import org.spring2885.server.db.service.search.SearchCriteria;
@@ -25,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import static com.google.common.base.Preconditions.*;
 import com.google.common.base.Strings;
 import com.google.common.collect.FluentIterable;
 
@@ -67,14 +70,14 @@ public class NewsApi {
 			SecurityContextHolderAwareRequestWrapper request)
 			throws NotFoundException {
 		
-		if (!requestHelper.checkAdminRequestIfNeeded(id, request)) {
-			String error = 
-					"Only admin's can change others... Read this: "
-					+ "God, grant me the serenity to accept the things I cannot change,"
-					+ "Courage to change the things I can,"
-					+ "And wisdom to know the difference.";
-			return new ResponseEntity<>(error, HttpStatus.FORBIDDEN);
-		}
+        DbNews db = newsService.findById(id);
+        if (db == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        if (!requestHelper.checkAdminRequestIfNeeded(db.getPerson().getId(), request)) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
 
 		newsService.delete(id);
 		return new ResponseEntity<>(HttpStatus.OK);
@@ -113,19 +116,22 @@ public class NewsApi {
 			@RequestBody News news,
 			SecurityContextHolderAwareRequestWrapper request) throws NotFoundException {
 		
-		if (!requestHelper.checkAdminRequestIfNeeded(id, request)) {
-			return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-		}
-
-		if (id.intValue() != news.getId().intValue()) {
+		if (id.longValue() != news.getId().longValue()) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
-		DbNews db = newsService.findById(id);
-		if (db == null) {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
+
+        DbNews db = newsService.findById(id);
+        if (db == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        if (!requestHelper.checkAdminRequestIfNeeded(db.getPerson().getId(), request)) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+		
 		newsJsonToDb.withDbNews(db);
 		DbNews updatedDbNews = newsJsonToDb.apply(news);
+		
 		newsService.save(updatedDbNews);
 		
 		return new ResponseEntity<>(HttpStatus.OK);
@@ -133,14 +139,20 @@ public class NewsApi {
 	
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<Void> post(
-			@RequestBody News news
-			) throws NotFoundException {
-		
-	    // Since we are doing a post, the ID should be empty. 
-	    // Clear it if one exists.
-	    news.setId(null);
-		DbNews updatedDbNews = newsJsonToDb.apply(news);
-		newsService.save(updatedDbNews);
+			@RequestBody News news,
+			SecurityContextHolderAwareRequestWrapper request) throws NotFoundException {
+
+	    // Look up the currently logged in user
+        DbPerson me = requestHelper.loggedInUser(request);
+        checkState(me != null);
+
+	    // Create our DbNews version
+	    DbNews db = newsJsonToDb.apply(news);
+        // Since we are doing a post, set defaults.
+	    db.setId(null);
+	    db.setPersonId(me);
+	    db.setPosted(new Date(System.currentTimeMillis()));
+		newsService.save(db);
 		
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}

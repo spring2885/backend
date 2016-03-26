@@ -14,28 +14,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
-import java.io.IOException;
-import java.util.Collections;
-
 import org.hamcrest.Matchers;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
-import org.spring2885.model.Job;
 import org.spring2885.model.JobType;
-import org.spring2885.model.PersonType;
-import org.spring2885.server.db.model.DbJob;
 import org.spring2885.server.db.model.DbJobType;
-import org.spring2885.server.db.model.DbLanguage;
-import org.spring2885.server.db.model.DbPersonType;
-import org.spring2885.server.db.service.JobService;
 import org.spring2885.server.db.service.JobTypeService;
-import org.spring2885.server.db.service.LanguageService;
-import org.spring2885.server.db.service.person.PersonTypeService;
-import org.spring2885.server.db.service.search.SearchCriteria;
-import org.spring2885.server.db.service.search.SearchOperator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -47,7 +33,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -272,8 +257,4 @@ protected MockMvc mockMvc;
     	verify(jobTypeService, never()).save(Mockito.any(DbJobType.class));
     } 
     
-    public static byte[] convertObjectToJsonBytes(Object object) throws IOException  {
-        ObjectMapper mapper = new ObjectMapper();
-        return mapper.writeValueAsBytes(object);
-    }
 }
