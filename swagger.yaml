@@ -302,11 +302,12 @@ paths:
         500:
           description: Error deleting the profile "ID".
 
-  /api/v1/news:
+  
+  /api/v1/socialservice:
     get:
-      tags: ["News"]
+      tags: ["SocialService"]
       description: |
-        Gets `News` objects.
+        Gets `SocailService` objects.
         Optional querry param of **size** determines
         size of return array
       parameters:
@@ -314,8 +315,7 @@ paths:
           in: query
           description: Size of array
           required: false
-          type: number
-          format: int32
+          type: string
       responses:
         200:
           description: Successful response
@@ -324,74 +324,71 @@ paths:
             items:
               $ref: '#/definitions/News'
     post:
-      tags: ["News"]
+      tags: ["SocialService"]
       description: |
       parameters:
-        - name : News
+        - name : SocialService
           in: body
-          description: The News you want to post
+          description: The SocialService you want to post
           schema:
-            $ref: '#/definitions/News'
+            $ref: '#/definitions/SocialService'
           required: true
       responses:
         200:
-          description: Makes a new News 
-  /api/v1/news/{id}:
+          description: Makes a new SocialService
+  /api/v1/socialservice/{id}:
     get:
-      tags: ["News"]
+      tags: ["SocialService"]
       description: |
-        Retrives a News entry
+        Retrives a SocialService entry
       parameters:
         - name: id
           in: path
-          description: a single News entry
+          description: a single SocialService entry
           required: true
-          type: number
-          format: int64
+          type: string
       responses:
         200:
           description: Sucussful deletion 
           schema:
-            $ref: '#/definitions/News'
+            $ref: '#/definitions/SocialService'
     delete:
-      tags: ["News"]
+      tags: ["SocialService"]
       summary: |
-        The News to delete
+        The SocialService to delete
       parameters:
         - name: id
           in: path
-          description: The News to be deleted.
+          description: The SocialService to be deleted.
           required: true
-          type: integer
-          format: int64
+          type: string
       responses:
         200:
-          description: Deletes News
+          description: Deletes SocialService
         500:
-          description: Error with deleting News by id. 
+          description: Error with deleting SocialService by id. 
     put:
-      tags: ["News"]
+      tags: ["SocialService"]
       summary: |
-        The News to update
+        The SocialService to update
       parameters:
         - name: id
           in: path
           description: The id of the News to be update.
           required: true
-          type: integer
-          format: int64
-        - name: news
+          type: string
+        - name: socialservice
           in: body
-          description: The News item you want to update
+          description: The SocialService item you want to update
           required: true
           schema:
-            $ref: '#/definitions/News'
+            $ref: '#/definitions/SocialService'
           required: true
       responses:
         200:
-          description: Deletes News
+          description: Deletes SocialService
         500:
-          description: Error with deleting News by id. 
+          description: Error with deleting SocialService by id.
 
   /api/v1/persontype:
     get:
@@ -721,6 +718,14 @@ definitions:
         format: int64
       name:
         type: string
+
+  SocialService:
+    type: object
+    properties:
+      id: 
+        type: string
+      url:
+        type: string 
 tags:
   - name: User
     description: Everything to do with User
@@ -732,5 +737,7 @@ tags:
     description: Everything to do with Jobs
   - name: News
     description: Everything to do with News
+  - name: SocialService
+    description: Everything to do with SocialService
   - name: PersonType
     description: Everything to do with Person Type

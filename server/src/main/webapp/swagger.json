@@ -26,6 +26,9 @@
     "name" : "News",
     "description" : "Everything to do with News"
   }, {
+    "name" : "SocialService",
+    "description" : "Everything to do with SocialService"
+  }, {
     "name" : "PersonType",
     "description" : "Everything to do with Person Type"
   } ],
@@ -249,119 +252,6 @@
           },
           "500" : {
             "description" : "Error with deleting jobtype by id."
-          }
-        }
-      }
-    },
-    "/api/v1/news" : {
-      "get" : {
-        "tags" : [ "News" ],
-        "description" : "Gets `News` objects.\nOptional querry param of **size** determines\nsize of return array\n",
-        "parameters" : [ {
-          "name" : "size",
-          "in" : "query",
-          "description" : "Size of array",
-          "required" : false,
-          "type" : "number",
-          "format" : "int32"
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "Successful response",
-            "schema" : {
-              "type" : "array",
-              "items" : {
-                "$ref" : "#/definitions/News"
-              }
-            }
-          }
-        }
-      },
-      "post" : {
-        "tags" : [ "News" ],
-        "description" : "",
-        "parameters" : [ {
-          "in" : "body",
-          "name" : "News",
-          "description" : "The News you want to post",
-          "required" : true,
-          "schema" : {
-            "$ref" : "#/definitions/News"
-          }
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "Makes a new News"
-          }
-        }
-      }
-    },
-    "/api/v1/news/{id}" : {
-      "get" : {
-        "tags" : [ "News" ],
-        "description" : "Retrives a News entry\n",
-        "parameters" : [ {
-          "name" : "id",
-          "in" : "path",
-          "description" : "a single News entry",
-          "required" : true,
-          "type" : "number",
-          "format" : "int64"
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "Sucussful deletion",
-            "schema" : {
-              "$ref" : "#/definitions/News"
-            }
-          }
-        }
-      },
-      "put" : {
-        "tags" : [ "News" ],
-        "summary" : "The News to update\n",
-        "parameters" : [ {
-          "name" : "id",
-          "in" : "path",
-          "description" : "The id of the News to be update.",
-          "required" : true,
-          "type" : "integer",
-          "format" : "int64"
-        }, {
-          "in" : "body",
-          "name" : "news",
-          "description" : "The News item you want to update",
-          "required" : true,
-          "schema" : {
-            "$ref" : "#/definitions/News"
-          }
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "Deletes News"
-          },
-          "500" : {
-            "description" : "Error with deleting News by id."
-          }
-        }
-      },
-      "delete" : {
-        "tags" : [ "News" ],
-        "summary" : "The News to delete\n",
-        "parameters" : [ {
-          "name" : "id",
-          "in" : "path",
-          "description" : "The News to be deleted.",
-          "required" : true,
-          "type" : "integer",
-          "format" : "int64"
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "Deletes News"
-          },
-          "500" : {
-            "description" : "Error with deleting News by id."
           }
         }
       }
@@ -591,6 +481,115 @@
           },
           "500" : {
             "description" : "Error deleting the profile \"ID\"."
+          }
+        }
+      }
+    },
+    "/api/v1/socialservice" : {
+      "get" : {
+        "tags" : [ "SocialService" ],
+        "description" : "Gets `SocailService` objects.\nOptional querry param of **size** determines\nsize of return array\n",
+        "parameters" : [ {
+          "name" : "size",
+          "in" : "query",
+          "description" : "Size of array",
+          "required" : false,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful response",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/News"
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "SocialService" ],
+        "description" : "",
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "SocialService",
+          "description" : "The SocialService you want to post",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/SocialService"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Makes a new SocialService"
+          }
+        }
+      }
+    },
+    "/api/v1/socialservice/{id}" : {
+      "get" : {
+        "tags" : [ "SocialService" ],
+        "description" : "Retrives a SocialService entry\n",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "a single SocialService entry",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Sucussful deletion",
+            "schema" : {
+              "$ref" : "#/definitions/SocialService"
+            }
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "SocialService" ],
+        "summary" : "The SocialService to update\n",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "The id of the News to be update.",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "in" : "body",
+          "name" : "socialservice",
+          "description" : "The SocialService item you want to update",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/SocialService"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Deletes SocialService"
+          },
+          "500" : {
+            "description" : "Error with deleting SocialService by id."
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "SocialService" ],
+        "summary" : "The SocialService to delete\n",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "The SocialService to be deleted.",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Deletes SocialService"
+          },
+          "500" : {
+            "description" : "Error with deleting SocialService by id."
           }
         }
       }
@@ -865,6 +864,17 @@
           "format" : "int64"
         },
         "name" : {
+          "type" : "string"
+        }
+      }
+    },
+    "SocialService" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "type" : "string"
+        },
+        "url" : {
           "type" : "string"
         }
       }
