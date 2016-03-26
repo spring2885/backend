@@ -51,5 +51,5 @@ public class PersonTypeConverter {
 		 
 	}
 	 
-	 private PersonTypeConverter() {}
+	private PersonTypeConverter() {}
 }

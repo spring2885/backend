@@ -93,12 +93,6 @@ public class PersonTypeApiTest {
     @WithMockUser
     public void testPersonType() throws Exception {
     	// Setup the expectations.
-    	//TODO: Fix stubbing error
-		/*The method thenReturn(Set<DbPersonType>) in the type
-		 * OngoingStubbing<Set<DbPersonType>> is not applicable for the arguments
-		 * (ImmutableList<DbPersonType>)
-		 */
-		//Cannot convert from ImmutableList<DbPersonType> to Set<DbPersonType>
     	when(personTypeService.findAll())
     		.thenReturn(ImmutableSet.of(
     			createDbPersonType(5,  "PersonType"),
@@ -121,17 +115,17 @@ public class PersonTypeApiTest {
     public void testPersonTypeById() throws Exception {
     	// Setup the expectations.
     	DbPersonType p = new DbPersonType();
-    	p.setName("ThisTitle");
+    	p.setId(21);
+    	p.setName("PersonType2");
     	when(personTypeService.findById(21)).thenReturn(p);
-    	verifyNoMoreInteractions(personTypeService);
+    	//when(personTypeService.findAll()).thenReturn(Collections.singletonSet(p));
     	
     	mockMvc.perform(get("/api/v1/persontype/21")
     			.accept(MediaType.APPLICATION_JSON))
     			.andExpect(status().isOk())
     			.andExpect(content().contentType(MediaType.APPLICATION_JSON))
-    			.andExpect(jsonPath("$.name", Matchers.is("ThisTitle")));
-    	//TODO:
-    	//Status expected:<200> but was:<404>
+    			.andExpect(jsonPath("$.id", Matchers.is(21)));
+    
     	
     	// N.B: We don't have to verify anything here since we're asserting
     	// the results that were setup by PersonService.
@@ -142,7 +136,7 @@ public class PersonTypeApiTest {
      */
     @Test
     @WithMockUser
-    public void testNewsById_notFound() throws Exception {
+    public void testPersonTypeById_notFound() throws Exception {
     	// Setup the expectations.
     	when(personTypeService.findById(21)).thenReturn(null);
     	verifyNoMoreInteractions(personTypeService);
@@ -201,8 +195,6 @@ public class PersonTypeApiTest {
     			.content(new ObjectMapper().writeValueAsBytes(personType))
     			.accept(MediaType.APPLICATION_JSON))
     			.andExpect(status().isForbidden());
-    	//TODO:
-    	//Status expected:<403> but was:<400>
     	
     	verify(personTypeService, never()).save(Mockito.any(DbPersonType.class));
     }
@@ -212,7 +204,7 @@ public class PersonTypeApiTest {
     public void testPut_canNotFindMe() throws Exception {
     	// Setup the expectations.
     	when(personTypeService.findById(4)).thenReturn(dbPersonType);
-    	when(personTypeService.findByName("Title"))
+    	when(personTypeService.findByName("PersonType1"))
     		.thenReturn(null);
     	
     	mockMvc.perform(put("/api/v1/persontype/4")
