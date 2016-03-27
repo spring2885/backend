@@ -267,6 +267,24 @@
           "required" : false,
           "type" : "number",
           "format" : "int32"
+        }, {
+          "name" : "admin",
+          "in" : "query",
+          "description" : "True if this is an admin request. \nAdmin requests are only allowed to be specified\nby admin users.  If a non-admin attempts to specifify\none then a 403 will be returned.\n",
+          "required" : false,
+          "type" : "boolean"
+        }, {
+          "name" : "q",
+          "in" : "query",
+          "description" : "## Basic query string.\n### Format:\n  ```?q=search terms```\n\n### Example:\n  ```?q=Oracle```\n",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "aq",
+          "in" : "query",
+          "description" : "## Advanced query string.\n### Format:\n  ```?aq=(attribute OP term),...```\n\n### Example:\n  ```?aq=graduation_year>2000,occupation:manager```\n\n### Available OPs:\n  * ':' for equality\n  * '!' for not\n  * '>' greater than\n  * '<' less than\n",
+          "required" : false,
+          "type" : "string"
         } ],
         "responses" : {
           "200" : {
@@ -951,6 +969,12 @@
         "views" : {
           "type" : "integer",
           "format" : "int64"
+        },
+        "visible_to" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string"
+          }
         }
       }
     },

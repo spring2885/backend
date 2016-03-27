@@ -113,6 +113,16 @@ PRIMARY KEY(id),
 FOREIGN KEY(person_id) REFERENCES person(id)
 );
 
+DROP TABLE IF EXISTS news_visibility;
+CREATE TABLE news_visibility
+(
+person_type INT,
+news INT,
+PRIMARY KEY(person_type, news),
+FOREIGN KEY(person_type) REFERENCES person_type(id),
+FOREIGN KEY(news) REFERENCES news(id),
+);
+
 DROP TABLE IF EXISTS comment;
 CREATE TABLE comment
 (
@@ -120,15 +130,6 @@ id INT,
 news_id INT,
 comment_text TEXT(65535),
 comment_timestamp DATE,
-PRIMARY KEY(id),
-FOREIGN KEY(news_id) REFERENCES news(id)
-);
-
-DROP TABLE IF EXISTS news_visibility_scope;
-CREATE TABLE news_visibility_scope
-(
-id INT,
-news_id INT,
 PRIMARY KEY(id),
 FOREIGN KEY(news_id) REFERENCES news(id)
 );

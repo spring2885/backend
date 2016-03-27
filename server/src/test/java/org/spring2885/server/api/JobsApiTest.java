@@ -133,7 +133,6 @@ public class JobsApiTest {
        
     }
 
-	@SuppressWarnings("unchecked")
     @Test
     @WithMockUser
     public void testJobs_aq() throws Exception {

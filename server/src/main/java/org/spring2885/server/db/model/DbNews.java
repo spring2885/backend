@@ -1,6 +1,7 @@
 package org.spring2885.server.db.model;
 
 import java.sql.Date;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,8 +10,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import com.google.common.collect.ImmutableSet;
 
 @Entity
 @Table(name="news")
@@ -31,6 +36,13 @@ public class DbNews {
     private DbPerson person;
 	
 	private Long views;
+	
+	@ManyToMany
+	@JoinTable(name = "news_visibility",
+	    joinColumns = @JoinColumn(name="news", referencedColumnName="id"),
+	    inverseJoinColumns = @JoinColumn(name="person_type", referencedColumnName="id"))
+	Set<DbPersonType> visibleToPersonTypes;
+	
 	
 	// Mark this as not insertable so the default database value will be used.
 	@Column(nullable = false, insertable=false, columnDefinition = "TINYINT", length = 1)
@@ -111,6 +123,18 @@ public class DbNews {
     public void setAbuse(Boolean abuse) {
         this.abuse = abuse;
     }
+    
+    public Set<DbPersonType> getVisibleToPersonTypes() {
+        return visibleToPersonTypes;
+    }
+
+    public void setVisibleToPersonTypes(Set<DbPersonType> visibleToPersonTypes) {
+        this.visibleToPersonTypes = visibleToPersonTypes;
+    }
+
+    public void setVisibleToPersonType(DbPersonType visibleToPersonType) {
+        this.visibleToPersonTypes = ImmutableSet.of(visibleToPersonType);
+    }
 
     // Since we won't have this object outside without the ID, we're ok
  	// See https://developer.jboss.org/wiki/EqualsandHashCode
@@ -134,7 +158,9 @@ public class DbNews {
     @Override
     public String toString() {
         return "DbNews [id=" + id + ", title=" + title + ", description=" + description + ", posted=" + posted
-                + ", expired=" + expired + ", personId=" + person + ", views=" + views + "]";
+                + ", expired=" + expired + ", personId=" + person + ", views=" + views
+                + " visibleTo=" + visibleToPersonTypes.toString()
+                + "]";
     }
 
 }
