@@ -1,5 +1,6 @@
 package org.spring2885.server.api;
 
+import static com.google.common.base.Preconditions.checkState;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import java.sql.Date;
@@ -28,11 +29,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import static com.google.common.base.Preconditions.*;
 import com.google.common.base.Strings;
 import com.google.common.collect.FluentIterable;
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Sets;
 
 @RestController
 @RequestMapping(value = "/api/v1/news", produces = { APPLICATION_JSON_VALUE })
@@ -53,9 +51,6 @@ public class NewsApi {
     
     @Autowired
     private RequestHelper requestHelper;
-    
-    @Autowired
-    private PersonTypeService personTypeService;
     
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public ResponseEntity<News> get(
@@ -171,8 +166,11 @@ public class NewsApi {
 	    db.setPersonId(me);
 	    db.setPosted(new Date(System.currentTimeMillis()));
 	    
-	    // HACK
-	    db.setVisibleToPersonType(me.getType());
+	    if (db.getVisibleToPersonTypes().isEmpty()) {
+	        // If it's not visible to anyone, make it visible to
+	        // the same group we are in.
+	        db.setVisibleToPersonType(me.getType());
+	    }
 	    
 		newsService.save(db);
 		

@@ -1,5 +1,11 @@
 package org.spring2885.server.db.model;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import org.spring2885.model.News;
 import org.spring2885.server.db.service.person.PersonService;
 import org.spring2885.server.db.service.person.PersonTypeService;
@@ -34,6 +40,12 @@ public final class NewsConverters {
 			n.setPosted(db.getPosted());
 			n.setTitle(db.getTitle());
 			n.setViews(db.getViews());
+
+			List<String> visibleTo = new ArrayList<>();
+			for (DbPersonType t : db.getVisibleToPersonTypes()) {
+			    visibleTo.add(t.getName());
+			}
+            n.setVisibleTo(visibleTo);
 			
 			return n;
 		}
@@ -66,7 +78,19 @@ public final class NewsConverters {
 			    db.setPersonId(personService.findByEmail(p.getPostedBy()));
 			}
 			db.setPosted(asSqlDate(p.getPosted()));
-			db.setViews(p.getViews());
+            db.setViews(p.getViews());
+
+            List<String> visibleToNames = p.getVisibleTo();
+			if (visibleToNames == null) { 
+			    visibleToNames = Collections.emptyList();
+			}
+			Set<DbPersonType> visibleToTypes = new HashSet<>();
+			for (String name : visibleToNames) {
+			    DbPersonType t = personTypeService.findByName(name);
+			    if (t == null) continue;
+			    visibleToTypes.add(t);
+			}
+			db.setVisibleToPersonTypes(visibleToTypes);
 			return db;
 		}
 	}
