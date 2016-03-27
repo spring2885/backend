@@ -120,7 +120,7 @@ person_type INT,
 news INT,
 PRIMARY KEY(person_type, news),
 FOREIGN KEY(person_type) REFERENCES person_type(id),
-FOREIGN KEY(news) REFERENCES news(id),
+FOREIGN KEY(news) REFERENCES news(id)
 );
 
 DROP TABLE IF EXISTS comment;
