@@ -829,6 +829,10 @@ definitions:
       views:
         type: integer
         format: int64
+      visible_to:
+        type: array
+        items:
+          type: string
   Reset:
     type: object
     properties:
