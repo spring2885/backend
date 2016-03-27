@@ -42,8 +42,11 @@ public final class NewsConverters {
 			n.setViews(db.getViews());
 
 			List<String> visibleTo = new ArrayList<>();
-			for (DbPersonType t : db.getVisibleToPersonTypes()) {
-			    visibleTo.add(t.getName());
+			Set<DbPersonType> visibleToPersonTypes = db.getVisibleToPersonTypes();
+			if (visibleToPersonTypes != null) {
+	            for (DbPersonType t : visibleToPersonTypes) {
+	                visibleTo.add(t.getName());
+	            }
 			}
             n.setVisibleTo(visibleTo);
 			

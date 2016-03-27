@@ -1,5 +1,6 @@
 package org.spring2885.server.api;
 
+import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.reset;
@@ -24,6 +25,7 @@ import org.mockito.Mockito;
 import org.spring2885.model.News;
 import org.spring2885.server.db.model.DbNews;
 import org.spring2885.server.db.model.DbPerson;
+import org.spring2885.server.db.model.DbPersonType;
 import org.spring2885.server.db.service.NewsService;
 import org.spring2885.server.db.service.person.PersonService;
 import org.spring2885.server.db.service.search.SearchCriteria;
@@ -65,29 +67,34 @@ public class NewsApiTest {
         		.dispatchOptions(true)
         		.build();
         
-        dbNews = createDbNews(4, "TitleNews1");
-        news = createNews(4, "TitleNews2");
         me = new DbPerson();
         me.setId(1L);
         me.setEmail("me@");
+        DbPersonType student = new DbPersonType(0, "student");
+        me.setType(student);
+        
+        dbNews = createDbNews(4, "TitleNews1");
         dbNews.setPersonId(me);
+        news = createNews(4, "TitleNews2");
 
         // Make the email address "me@" found for user #1.
         when(personService.findById(1)).thenReturn(me);
         when(personService.findByEmail(eq("me@"))).thenReturn(me);
     }
     
-    static DbNews createDbNews(long id, String newsTitle) {
+    DbNews createDbNews(long id, String newsTitle) {
     	DbNews n = new DbNews();
     	n.setId(id);
     	n.setTitle(newsTitle);
+    	n.setVisibleToPersonType(me.getType());
     	return n;
     }
     
-    static News createNews(long id, String newsTitle) {
+    News createNews(long id, String newsTitle) {
     	News n = new News();
     	n.setId(id);
     	n.setTitle(newsTitle);
+    	n.setVisibleTo(ImmutableList.of("student"));
     	return n;
     }
     
@@ -95,7 +102,7 @@ public class NewsApiTest {
     @WithMockUser
     public void testNews() throws Exception {
     	// Setup the expectations.
-    	when(newsService.findAll(me, true))
+    	when(newsService.findAll(any(DbPerson.class), eq(false)))
     		.thenReturn(ImmutableList.of(
     			createDbNews(5,  "Title"),
     			createDbNews(5,  "Title2")));
@@ -112,11 +119,7 @@ public class NewsApiTest {
     @WithMockUser
     public void testNews_q() throws Exception {
         // Setup the expectations.
-        when(newsService.findAll(me, true))
-            .thenReturn(ImmutableList.of(
-                createDbNews(5,  "title1"),
-                createDbNews(5,  "title2")));
-        when(newsService.findAll(me, true, eq("title2")))
+        when(newsService.findAll(any(DbPerson.class), eq(false), eq("title2")))
             .thenReturn(ImmutableList.of(
                 createDbNews(5,  "title2")));
         
@@ -131,13 +134,8 @@ public class NewsApiTest {
     @WithMockUser
     public void testNews_aq() throws Exception {
         // Setup the expectations.
-        when(newsService.findAll(me, true))
-            .thenReturn(ImmutableList.of(
-                createDbNews(5,  "title1"),
-                createDbNews(5,  "title2")));
         SearchCriteria expected = new SearchCriteria("title", SearchOperator.EQ, "title2*");
-        
-        when(newsService.findAll(me, true, Collections.singletonList(expected)))
+        when(newsService.findAll(any(DbPerson.class), eq(false), eq(Collections.singletonList(expected))))
             .thenReturn(ImmutableList.of(
                 createDbNews(5,  "title2")));
         

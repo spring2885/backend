@@ -15,7 +15,6 @@ import org.spring2885.server.db.model.DbNews;
 import org.spring2885.server.db.model.DbPerson;
 import org.spring2885.server.db.model.NewsConverters;
 import org.spring2885.server.db.service.NewsService;
-import org.spring2885.server.db.service.person.PersonTypeService;
 import org.spring2885.server.db.service.search.SearchCriteria;
 import org.spring2885.server.db.service.search.SearchParser;
 import org.springframework.beans.factory.annotation.Autowired;
