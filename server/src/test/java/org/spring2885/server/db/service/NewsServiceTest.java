@@ -22,6 +22,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.spring2885.server.db.model.DbNews;
 import org.spring2885.server.db.model.DbPerson;
+import org.spring2885.server.db.model.DbPersonType;
 
 import com.google.common.collect.Lists;
 
@@ -38,11 +39,14 @@ public class NewsServiceTest {
         me = new DbPerson();
         me.setId(1L);
         me.setEmail("me@");
+        DbPersonType student = new DbPersonType(0, "student");
+        me.setType(student);
     }
     
     @Test
     public void testFindAll() {
         DbNews p = new DbNews();
+        p.setVisibleToPersonType(me.getType());
         when(repository.findAllByActiveAndAbuse(anyBoolean(), anyBoolean())).thenReturn(Collections.singleton(p));
 
         List<DbNews> news = Lists.newArrayList(service.findAll(me, false));
@@ -54,7 +58,6 @@ public class NewsServiceTest {
     public void testFindAllAdmin() {
         DbNews p = new DbNews();
         when(repository.findAll()).thenReturn(Collections.singleton(p));
-        when(repository.findAllByActiveAndAbuse(anyBoolean(), anyBoolean())).thenReturn(Collections.singleton(p));
 
         List<DbNews> news = Lists.newArrayList(service.findAll(me, true));
         assertEquals(1, news.size());
@@ -65,7 +68,7 @@ public class NewsServiceTest {
     public void testFindAll_none() {
     	when(repository.findAllByActiveAndAbuse(anyBoolean(), anyBoolean())).thenReturn(Collections.emptyList());
 
-    	List<DbNews> persons = Lists.newArrayList(service.findAll(me, true));
+    	List<DbNews> persons = Lists.newArrayList(service.findAll(me, false));
     	assertEquals(0, persons.size());
     }
     

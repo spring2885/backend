@@ -159,7 +159,7 @@ public class DbNews {
     public String toString() {
         return "DbNews [id=" + id + ", title=" + title + ", description=" + description + ", posted=" + posted
                 + ", expired=" + expired + ", personId=" + person + ", views=" + views
-                + " visibleTo=" + visibleToPersonTypes.toString()
+                + " visibleTo=" + visibleToPersonTypes
                 + "]";
     }
 
