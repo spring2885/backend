@@ -1,6 +1,6 @@
 package org.spring2885.server.api;
 
-import static org.mockito.Matchers.*;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verify;
@@ -15,7 +15,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
 import java.util.Collections;
-import java.util.List;
 
 import org.hamcrest.Matchers;
 import org.junit.After;
@@ -151,7 +150,6 @@ public class PersonsApiTest {
                 .andExpect(jsonPath("$[0].email", Matchers.is("me2@example.com")));
     }
 
-    @SuppressWarnings("unchecked")
     @Test
     @WithMockUser
     public void testPersons_aq() throws Exception {

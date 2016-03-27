@@ -95,7 +95,7 @@ public class NewsApiTest {
     @WithMockUser
     public void testNews() throws Exception {
     	// Setup the expectations.
-    	when(newsService.findAll())
+    	when(newsService.findAll(me, true))
     		.thenReturn(ImmutableList.of(
     			createDbNews(5,  "Title"),
     			createDbNews(5,  "Title2")));
@@ -112,11 +112,11 @@ public class NewsApiTest {
     @WithMockUser
     public void testNews_q() throws Exception {
         // Setup the expectations.
-        when(newsService.findAll())
+        when(newsService.findAll(me, true))
             .thenReturn(ImmutableList.of(
                 createDbNews(5,  "title1"),
                 createDbNews(5,  "title2")));
-        when(newsService.findAll(eq("title2")))
+        when(newsService.findAll(me, true, eq("title2")))
             .thenReturn(ImmutableList.of(
                 createDbNews(5,  "title2")));
         
@@ -131,13 +131,13 @@ public class NewsApiTest {
     @WithMockUser
     public void testNews_aq() throws Exception {
         // Setup the expectations.
-        when(newsService.findAll())
+        when(newsService.findAll(me, true))
             .thenReturn(ImmutableList.of(
                 createDbNews(5,  "title1"),
                 createDbNews(5,  "title2")));
         SearchCriteria expected = new SearchCriteria("title", SearchOperator.EQ, "title2*");
         
-        when(newsService.findAll(Collections.singletonList(expected)))
+        when(newsService.findAll(me, true, Collections.singletonList(expected)))
             .thenReturn(ImmutableList.of(
                 createDbNews(5,  "title2")));
         

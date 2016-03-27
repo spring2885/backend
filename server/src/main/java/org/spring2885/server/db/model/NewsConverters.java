@@ -2,6 +2,7 @@ package org.spring2885.server.db.model;
 
 import org.spring2885.model.News;
 import org.spring2885.server.db.service.person.PersonService;
+import org.spring2885.server.db.service.person.PersonTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
@@ -15,6 +16,8 @@ import com.google.common.base.Suppliers;
 public final class NewsConverters {
     @Autowired
     private PersonService personService;
+    @Autowired
+    private PersonTypeService personTypeService;
 
     public class NewsFromDbToJson implements Function<DbNews, News> {
 		

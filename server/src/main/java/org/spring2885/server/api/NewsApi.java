@@ -14,6 +14,7 @@ import org.spring2885.server.db.model.DbNews;
 import org.spring2885.server.db.model.DbPerson;
 import org.spring2885.server.db.model.NewsConverters;
 import org.spring2885.server.db.service.NewsService;
+import org.spring2885.server.db.service.person.PersonTypeService;
 import org.spring2885.server.db.service.search.SearchCriteria;
 import org.spring2885.server.db.service.search.SearchParser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,8 @@ import org.springframework.web.bind.annotation.RestController;
 import static com.google.common.base.Preconditions.*;
 import com.google.common.base.Strings;
 import com.google.common.collect.FluentIterable;
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Sets;
 
 @RestController
 @RequestMapping(value = "/api/v1/news", produces = { APPLICATION_JSON_VALUE })
@@ -50,6 +53,9 @@ public class NewsApi {
     
     @Autowired
     private RequestHelper requestHelper;
+    
+    @Autowired
+    private PersonTypeService personTypeService;
     
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public ResponseEntity<News> get(
@@ -87,20 +93,32 @@ public class NewsApi {
 	public ResponseEntity<List<News>> list(
 			@RequestParam(value = "aq", required = false) String aq,
             @RequestParam(value = "q", required = false) String q,
-	        @RequestParam(value = "size", required = false) Integer size)
+            @RequestParam(value = "admin", required = false, defaultValue="false") boolean adminRequest,
+	        @RequestParam(value = "size", required = false) Integer size,
+	        SecurityContextHolderAwareRequestWrapper request)
 			throws NotFoundException {
 		logger.info("NewsApi GET: q={}, aq={}, size={}", q, aq, size);
+		
+		if (adminRequest && !requestHelper.isAdminRequest(request)) {
+	        return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+		}
+		
+		DbPerson me = requestHelper.loggedInUser(request);
+		
 	    Iterable<DbNews> all;
 	    if (!Strings.isNullOrEmpty(q)) {
-	        all = newsService.findAll(q);
+	        all = newsService.findAll(me, adminRequest, q);
 	    } else if (!Strings.isNullOrEmpty(aq)) {
 	        List<SearchCriteria> criterias = searchParser.parse(aq);
-            all = newsService.findAll(criterias);
+            all = newsService.findAll(me, adminRequest, criterias);
 	    } else {
-	        all = newsService.findAll();
+	        all = newsService.findAll(me, adminRequest);
 	    }
 		
-
+	    for (DbNews n : all) {
+	        logger.info("news={}", n.toString());
+	    }
+	    
 		FluentIterable<News> iterable = FluentIterable.from(all)
 				.transform(dbToJsonConverter);
 		// Support size parameter, but only if it's set (and not 0)
@@ -152,6 +170,10 @@ public class NewsApi {
 	    db.setId(null);
 	    db.setPersonId(me);
 	    db.setPosted(new Date(System.currentTimeMillis()));
+	    
+	    // HACK
+	    db.setVisibleToPersonType(me.getType());
+	    
 		newsService.save(db);
 		
 		return new ResponseEntity<Void>(HttpStatus.OK);
