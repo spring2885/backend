@@ -118,7 +118,6 @@ public class PersonTypeApiTest {
     	p.setId(21);
     	p.setName("PersonType2");
     	when(personTypeService.findById(21)).thenReturn(p);
-    	//when(personTypeService.findAll()).thenReturn(Collections.singletonSet(p));
     	
     	mockMvc.perform(get("/api/v1/persontype/21")
     			.accept(MediaType.APPLICATION_JSON))

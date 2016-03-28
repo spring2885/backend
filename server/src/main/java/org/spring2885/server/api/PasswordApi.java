@@ -19,6 +19,8 @@ import org.spring2885.server.db.service.person.PersonService;
 import org.spring2885.server.mail.Mailer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -40,7 +42,8 @@ public class PasswordApi {
     @Value("${app.forgot.reset.url}") private String resetUrl;
 	
 	@RequestMapping(value = "/forgot",method = RequestMethod.POST)
-    public UUID personsResetToken(@RequestParam("email") String email) throws NotFoundException {
+    public ResponseEntity<Void> personsResetToken(
+    		@RequestParam("email") String email) throws NotFoundException {
 		
         DbPerson p = personService.findByEmail(email);
         if (p == null || !email.equals(p.getEmail()) ) {
@@ -73,29 +76,34 @@ public class PasswordApi {
             throw new RuntimeException(e);
         }
 
-		return uuid;
+		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 	
 	@RequestMapping(value = "/reset", method = RequestMethod.POST)
-	public void resetPassword(
+	public ResponseEntity<Void> resetPassword(
 			@RequestParam("email") String email,
 			@RequestParam("token") String tokenString,
 			@RequestParam("newPassword") String newPassword) throws Exception {
+		
+		ResponseEntity<Void> response = null;
 		if (tokenService.existsByEmail(email)){
 			List<DbToken> tokens = tokenService.findByEmail(email);
 			
 			DbToken savedToken = findToken(tokens, tokenString);
 			if (savedToken == null) {
+				response = new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
 				throw new RuntimeException("token not found: " + tokenString);
 			} 
             DbPerson person = personService.findByEmail(email);
             if (person == null) {
+                response = new ResponseEntity<>(HttpStatus.NOT_FOUND);
                 throw new RuntimeException("Person not found for email address: " + email);
             }
             
             // At this point we looked up the saved token from the database and found one.
             if (!savedToken.getEmail().equals(email)) {
                 // Our saved token was for someone else.
+                response = new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
                 throw new RuntimeException("token does not match email address: " + tokenString);
             }
             
@@ -108,7 +116,10 @@ public class PasswordApi {
             tokenService.delete(savedToken.getUuid());
             
             logger.info("Updated password for " + person.getEmail());
+			response = new ResponseEntity<Void>(HttpStatus.OK);
+
 		}
+		return response;
 	}
 	
     private DbToken findToken(Iterable<DbToken> tokens, String uuid) {
