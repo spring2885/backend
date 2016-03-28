@@ -13,33 +13,33 @@ import java.util.Objects;
 
 @ApiModel(description = "")
 @javax.annotation.Generated(value = "class io.swagger.codegen.languages.SpringMVCServerCodegen", date = "2016-03-26T17:33:48.856-07:00")
-public class SocialConnection  {
+public class Language  {
   
-  private String name = null;
-  private String url = null;
+  private String code = null;
+  private String description = null;
 
   
   /**
    **/
   @ApiModelProperty(value = "")
-  @JsonProperty("name")
-  public String getName() {
-    return name;
+  @JsonProperty("code")
+  public String getCode() {
+    return code;
   }
-  public void setName(String name) {
-    this.name = name;
+  public void setCode(String code) {
+    this.code = code;
   }
 
   
   /**
    **/
   @ApiModelProperty(value = "")
-  @JsonProperty("url")
-  public String getUrl() {
-    return url;
+  @JsonProperty("description")
+  public String getDescription() {
+    return description;
   }
-  public void setUrl(String url) {
-    this.url = url;
+  public void setDescription(String description) {
+    this.description = description;
   }
 
   
@@ -52,23 +52,23 @@ public class SocialConnection  {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    SocialConnection socialConnection = (SocialConnection) o;
-    return Objects.equals(name, socialConnection.name) &&
-        Objects.equals(url, socialConnection.url);
+    Language language = (Language) o;
+    return Objects.equals(code, language.code) &&
+        Objects.equals(description, language.description);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(name, url);
+    return Objects.hash(code, description);
   }
 
   @Override
   public String toString()  {
     StringBuilder sb = new StringBuilder();
-    sb.append("class SocialConnection {\n");
+    sb.append("class Language {\n");
     
-    sb.append("  name: ").append(name).append("\n");
-    sb.append("  url: ").append(url).append("\n");
+    sb.append("  code: ").append(code).append("\n");
+    sb.append("  description: ").append(description).append("\n");
     sb.append("}\n");
     return sb.toString();
   }

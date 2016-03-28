@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import java.util.*;
 import java.util.Date;
 
 import io.swagger.annotations.*;
@@ -13,7 +14,7 @@ import java.util.Objects;
 
 
 @ApiModel(description = "")
-@javax.annotation.Generated(value = "class io.swagger.codegen.languages.SpringMVCServerCodegen", date = "2016-03-25T18:34:21.047-07:00")
+@javax.annotation.Generated(value = "class io.swagger.codegen.languages.SpringMVCServerCodegen", date = "2016-03-26T17:33:48.856-07:00")
 public class News  {
   
   private Long id = null;
@@ -23,6 +24,7 @@ public class News  {
   private Date expired = null;
   private String postedBy = null;
   private Long views = null;
+  private List<String> visibleTo = new ArrayList<String>();
 
   
   /**
@@ -109,6 +111,18 @@ public class News  {
   }
 
   
+  /**
+   **/
+  @ApiModelProperty(value = "")
+  @JsonProperty("visible_to")
+  public List<String> getVisibleTo() {
+    return visibleTo;
+  }
+  public void setVisibleTo(List<String> visibleTo) {
+    this.visibleTo = visibleTo;
+  }
+
+  
 
   @Override
   public boolean equals(Object o) {
@@ -125,12 +139,13 @@ public class News  {
         Objects.equals(posted, news.posted) &&
         Objects.equals(expired, news.expired) &&
         Objects.equals(postedBy, news.postedBy) &&
-        Objects.equals(views, news.views);
+        Objects.equals(views, news.views) &&
+        Objects.equals(visibleTo, news.visibleTo);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, title, description, posted, expired, postedBy, views);
+    return Objects.hash(id, title, description, posted, expired, postedBy, views, visibleTo);
   }
 
   @Override
@@ -145,6 +160,7 @@ public class News  {
     sb.append("  expired: ").append(expired).append("\n");
     sb.append("  postedBy: ").append(postedBy).append("\n");
     sb.append("  views: ").append(views).append("\n");
+    sb.append("  visibleTo: ").append(visibleTo).append("\n");
     sb.append("}\n");
     return sb.toString();
   }

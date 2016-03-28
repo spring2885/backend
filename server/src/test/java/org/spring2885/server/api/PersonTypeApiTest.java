@@ -14,17 +14,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
-import java.io.IOException;
-import java.util.Collections;
-import java.util.Set;
-
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.spring2885.model.PersonType;
-import org.spring2885.server.db.model.DbPerson;
 import org.spring2885.server.db.model.DbPersonType;
 import org.spring2885.server.db.service.person.PersonTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +33,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -257,9 +251,5 @@ public class PersonTypeApiTest {
     	
     	verify(personTypeService, never()).save(Mockito.any(DbPersonType.class));
     } 
-    
-    public static byte[] convertObjectToJsonBytes(Object object) throws IOException  {
-        ObjectMapper mapper = new ObjectMapper();
-        return mapper.writeValueAsBytes(object);
-    }
+
 }

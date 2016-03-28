@@ -5,18 +5,12 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.spring2885.model.Job;
-import org.spring2885.model.News;
 import org.spring2885.model.SocialService;
 import org.spring2885.server.api.exceptions.NotFoundException;
+import org.spring2885.server.api.utils.RequestHelper;
 import org.spring2885.server.db.model.DbSocialService;
-import org.spring2885.server.db.model.DbJob;
-import org.spring2885.server.db.model.DbNews;
-import org.spring2885.server.db.model.DbPerson;
-import org.spring2885.server.db.model.NewsConverters;
 import org.spring2885.server.db.model.SocialServiceConverters;
-import org.spring2885.server.db.service.NewsService;
-import org.spring2885.server.db.service.person.*;
+import org.spring2885.server.db.service.person.SocialServiceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -44,7 +38,10 @@ public class SocialServicesApi {
 	@Autowired
 	private SocialServiceConverters.SocialServiceFromDbToJson dbToJsonConverter;
 	
-	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    @Autowired
+    private RequestHelper requestHelper;
+
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public ResponseEntity<SocialService> get(
 			@PathVariable("id") String id) throws NotFoundException {
 		DbSocialService o = socialServiceService.findById(id);
@@ -62,7 +59,7 @@ public class SocialServicesApi {
 			SecurityContextHolderAwareRequestWrapper request)
 			throws NotFoundException {
 		
-		if (!checkAdminRequestIfNeeded(id, request)) {
+		if (!requestHelper.isAdminRequest(request)) {
 			String error = 
 					"Only admin's can change others... Read this: "
 					+ "God, grant me the serenity to accept the things I cannot change,"

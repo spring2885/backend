@@ -217,6 +217,44 @@ paths:
           required: false
           type: number
           format: int32
+        - name: admin
+          in: query
+          description: |
+            True if this is an admin request. 
+            Admin requests are only allowed to be specified
+            by admin users.  If a non-admin attempts to specifify
+            one then a 403 will be returned.
+          required: false
+          type: boolean
+        - name: q
+          in: query
+          description: |
+            ## Basic query string.
+            ### Format:
+              ```?q=search terms```
+
+            ### Example:
+              ```?q=Oracle```
+
+          required: false
+          type: string
+        - name: aq
+          in: query
+          description: |
+            ## Advanced query string.
+            ### Format:
+              ```?aq=(attribute OP term),...```
+
+            ### Example:
+              ```?aq=graduation_year>2000,occupation:manager```
+
+            ### Available OPs:
+              * ':' for equality
+              * '!' for not
+              * '>' greater than
+              * '<' less than
+          required: false
+          type: string
       responses:
         200:
           description: Successful response
@@ -761,6 +799,14 @@ definitions:
         format: int64
       hours:
         format: int64
+
+  Language:
+    type: object
+    properties:
+      code:
+        type: string
+      description:
+        type: string
   News:
     type: object
     properties:
@@ -783,6 +829,10 @@ definitions:
       views:
         type: integer
         format: int64
+      visible_to:
+        type: array
+        items:
+          type: string
   Reset:
     type: object
     properties:
