@@ -42,7 +42,7 @@ public class PasswordApi {
     @Value("${app.forgot.reset.url}") private String resetUrl;
 	
 	@RequestMapping(value = "/forgot",method = RequestMethod.POST)
-    public ResponseEntity<Void> personsResetToken(
+    public ResponseEntity<Void> forgot(
     		@RequestParam("email") String email) throws NotFoundException {
 		
         DbPerson p = personService.findByEmail(email);
@@ -80,7 +80,7 @@ public class PasswordApi {
 	}
 	
 	@RequestMapping(value = "/reset", method = RequestMethod.POST)
-	public ResponseEntity<Void> resetPassword(
+	public ResponseEntity<Void> reset(
 			@RequestParam("email") String email,
 			@RequestParam("token") String tokenString,
 			@RequestParam("newPassword") String newPassword) throws Exception {

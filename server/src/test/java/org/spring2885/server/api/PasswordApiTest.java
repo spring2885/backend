@@ -1,56 +1,37 @@
 package org.spring2885.server.api;
 
-import static org.mockito.Matchers.*;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
 import java.util.Collections;
-import java.util.List;
 import java.util.UUID;
 
-import org.hamcrest.Matchers;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
-import org.spring2885.model.Person;
 import org.spring2885.model.Reset;
-import org.spring2885.server.api.exceptions.NotFoundException;
 import org.spring2885.server.db.model.DbPerson;
-import org.spring2885.server.db.model.DbPersonType;
 import org.spring2885.server.db.model.DbToken;
 import org.spring2885.server.db.service.TokenService;
-import org.spring2885.server.db.service.search.SearchCriteria;
-import org.spring2885.server.db.service.search.SearchOperator;
+import org.spring2885.server.db.service.person.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.WebApplicationContext;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = { TestConfig.class })
@@ -59,8 +40,10 @@ public class PasswordApiTest {
 	protected MockMvc mockMvc;
 	
 	@Autowired protected WebApplicationContext webappContext;
-	@Autowired private TokenService tokenService;
+	@Autowired private PersonService personService;
+    @Autowired private TokenService tokenService;
 	
+    private DbPerson me;
 	private DbToken dbToken;
 	private Reset resetToken;
 	private DbToken otherDbToken;
@@ -81,7 +64,10 @@ public class PasswordApiTest {
 		otherDbToken = createDbToken("matt@example.com");
 		otherResetToken = createReset("matt@example.com", globalUUID2, "newPass");
 		
-		
+		me = new DbPerson();
+		me.setId(1234L);
+		me.setEmail("me@example.com");
+		me.setName("Me Ra");
 	}
 	
 	static DbToken createDbToken(String email){
@@ -102,7 +88,9 @@ public class PasswordApiTest {
 	}
 	
 	void makeMeFound(){
-		when(tokenService.findByEmail("me@example.com")).thenReturn(Collections.singletonList(dbToken));
+        when(personService.findByEmail("me@example.com")).thenReturn(me);
+
+        when(tokenService.findByEmail("me@example.com")).thenReturn(Collections.singletonList(dbToken));
 		when(tokenService.findByEmail("matt@example.com")).thenReturn(Collections.singletonList(otherDbToken));
 		when(tokenService.findById(globalUUID.toString())).thenReturn(dbToken);
 		when(tokenService.findById(globalUUID2.toString())).thenReturn(otherDbToken);
@@ -115,12 +103,16 @@ public class PasswordApiTest {
 		makeMeFound();
 		
 		mockMvc.perform(post("/auth/forgot")
-				.contentType(MediaType.APPLICATION_JSON)
-				.content(new ObjectMapper().writeValueAsBytes(createDbToken("me@example.com")))
-				.accept(MediaType.APPLICATION_JSON))
+				.contentType(MediaType.APPLICATION_FORM_URLENCODED)
+				.param("email", "me@example.com"))
+		        .andDo(print())
 				.andExpect(status().isOk());
 		
-		verify(tokenService, never()).save(Mockito.any(DbToken.class));
+		final ArgumentCaptor<DbToken> captor = ArgumentCaptor.forClass(DbToken.class);
+		verify(tokenService).save(captor.capture());
+		
+		final DbToken actualToken = captor.getValue();
+		assertEquals("me@example.com", actualToken.getEmail());
 	}
 	
 	@Test
@@ -130,9 +122,11 @@ public class PasswordApiTest {
 		makeMeFound();
 		
 		mockMvc.perform(post("/auth/reset")
-				.contentType(MediaType.APPLICATION_JSON)
-				.content(new ObjectMapper().writeValueAsBytes(createReset("me@example.com", globalUUID, "newPass")))
-				.accept(MediaType.APPLICATION_JSON))
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .param("email", "me@example.com")
+                .param("token", dbToken.getUuid())
+                .param("newPassword", "welcome"))
+		        .andDo(print())
 				.andExpect(status().isOk());
 	
 		verify(tokenService, never()).save(Mockito.any(DbToken.class));
