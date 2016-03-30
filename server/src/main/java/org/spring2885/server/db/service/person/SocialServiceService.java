@@ -8,8 +8,6 @@ import org.spring2885.server.db.model.DbSocialService;
 public interface SocialServiceService {
 	
 	DbSocialService findById(String q);
-	
-	//Iterable<DbSocialService> findAll(String q);
 	/**
 	 * Returns all {@link DbSocialService} instances.
 	 */
