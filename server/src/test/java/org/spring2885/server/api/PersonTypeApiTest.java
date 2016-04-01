@@ -8,6 +8,7 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -18,9 +19,11 @@ import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 import org.spring2885.model.PersonType;
 import org.spring2885.server.db.model.DbPersonType;
+import org.spring2885.server.db.model.DbToken;
 import org.spring2885.server.db.service.person.PersonTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -112,7 +115,6 @@ public class PersonTypeApiTest {
     	p.setId(21);
     	p.setName("PersonType2");
     	when(personTypeService.findById(21)).thenReturn(p);
-    	//when(personTypeService.findAll()).thenReturn(Collections.singletonSet(p));
     	
     	mockMvc.perform(get("/api/v1/persontype/21")
     			.accept(MediaType.APPLICATION_JSON))
@@ -170,8 +172,6 @@ public class PersonTypeApiTest {
     	mockMvc.perform(delete("/api/v1/persontype/21")
     			.accept(MediaType.APPLICATION_JSON))
     			.andExpect(status().isForbidden());
-    	//TODO:
-    	//Status expected:<403> but was:<200>
     	
     	// Ensure PersonTypeService#delete method was called since the result of our
     	// method is the same no matter what.
@@ -206,8 +206,6 @@ public class PersonTypeApiTest {
     			.content(new ObjectMapper().writeValueAsBytes(dbPersonType))
     			.accept(MediaType.APPLICATION_JSON))
     			.andExpect(status().isForbidden());
-    	//TODO:
-    	//Status expected:<403> but was:<400>
     
     	verify(personTypeService, never()).save(Mockito.any(DbPersonType.class));
     }
@@ -223,8 +221,6 @@ public class PersonTypeApiTest {
     			.content(new ObjectMapper().writeValueAsBytes(otherDbPersonType))
     			.accept(MediaType.APPLICATION_JSON))
     			.andExpect(status().isForbidden());
-    	//TODO:
-    	//Status expected:<403> but was:<200>
     	
     	verify(personTypeService, never()).save(Mockito.any(DbPersonType.class));
     }
@@ -258,5 +254,21 @@ public class PersonTypeApiTest {
     	
     	verify(personTypeService, never()).save(Mockito.any(DbPersonType.class));
     } 
+    
+    @Test
+    @WithMockUser(username="me@example.com", roles = {"ADMIN"})
+    public void testPersonTypePost() throws Exception {
+    	// set up expectations
+    	makeMeFound();
+    	
+    	mockMvc.perform(post("/api/v1/persontype")
+    			.contentType(MediaType.APPLICATION_FORM_URLENCODED)
+    			.param("id", "1")
+    			.param("name", "student"))
+    			.andExpect(status().isOk());
+
+    	final ArgumentCaptor<DbPersonType> captor = ArgumentCaptor.forClass(DbPersonType.class);
+		verify(personTypeService).save(captor.capture());
+    }
 
 }
