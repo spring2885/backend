@@ -1,6 +1,6 @@
 package org.spring2885.server.api;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verify;
@@ -113,6 +113,33 @@ public class PasswordApiTest {
 		
 		final DbToken actualToken = captor.getValue();
 		assertEquals("me@example.com", actualToken.getEmail());
+	}
+	
+	//TODO:
+	//Error: line 124. Ran it as a JUnit Test. 
+	//"Actually, there were zero interactions with this mock."
+	@Test
+	@WithMockUser(username="me@example.com", roles = {"USER", "ADMIN"})
+	public void testPostForgot_Email_Not_Found() throws Exception {
+		// Setup expectations
+		makeMeFound();
+		
+		mockMvc.perform(post("/auth/forgot")
+				.contentType(MediaType.APPLICATION_FORM_URLENCODED)
+				.param("email", "moo@example.com"))
+		        .andDo(print())
+				.andExpect(status().isNotFound());
+		
+		//TODO
+		//not sure if i did this right
+		//this is where is "Actually, there were zero interactions with this mock"
+		final ArgumentCaptor<DbToken> captor = ArgumentCaptor.forClass(DbToken.class);
+		verify(tokenService).save(captor.capture());
+		
+		final DbToken actualToken = captor.getValue();
+		//assertEquals("me@example.com", actualToken.getEmail());
+		assertNotSame("moo@example.com", actualToken.getEmail());
+		
 	}
 	
 	@Test

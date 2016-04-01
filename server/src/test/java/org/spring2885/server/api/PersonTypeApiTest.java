@@ -8,6 +8,7 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -18,9 +19,11 @@ import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 import org.spring2885.model.PersonType;
 import org.spring2885.server.db.model.DbPersonType;
+import org.spring2885.server.db.model.DbToken;
 import org.spring2885.server.db.service.person.PersonTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -251,5 +254,21 @@ public class PersonTypeApiTest {
     	
     	verify(personTypeService, never()).save(Mockito.any(DbPersonType.class));
     } 
+    
+    @Test
+    @WithMockUser(username="me@example.com", roles = {"ADMIN"})
+    public void testPersonTypePost() throws Exception {
+    	// set up expectations
+    	makeMeFound();
+    	
+    	mockMvc.perform(post("/api/v1/persontype")
+    			.contentType(MediaType.APPLICATION_FORM_URLENCODED)
+    			.param("id", "1")
+    			.param("name", "student"))
+    			.andExpect(status().isOk());
+
+    	final ArgumentCaptor<DbPersonType> captor = ArgumentCaptor.forClass(DbPersonType.class);
+		verify(personTypeService).save(captor.capture());
+    }
 
 }
