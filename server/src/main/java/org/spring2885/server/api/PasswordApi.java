@@ -46,34 +46,28 @@ public class PasswordApi {
     		@RequestParam("email") String email) throws NotFoundException {
 		
         DbPerson p = personService.findByEmail(email);
-        ResponseEntity<Void> response = null;
-		Map<String, String> data = null;
 
         if (p == null || !email.equals(p.getEmail()) ) {
-            response = new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
-        	//throw new RuntimeException("email not found: " + email);
-        } else {
-        
-        	// Delete the old tokens.
-        	tokenService.deleteByEmail(email);
-        
-        	// Add a new token.
-        	UUID uuid = UUID.randomUUID();
-        	DbToken tokenData = new DbToken();
-        	tokenData.setEmail(email);
-        	tokenData.setUuid(uuid.toString());
-        	tokenData.setDateCreated(new java.sql.Date(System.currentTimeMillis()));
-        	tokenService.save(tokenData);
-		
-        	logger.info("Send Email to {} with token: {}", email, uuid);
-        	data = new HashMap<>();
-        	data.put("name", p.getName());
-        	data.put("app_name", appName);
-        	data.put("reset_url", resetUrl);
-        	data.put("from_name", fromName);
-		
-        	response = new ResponseEntity<Void>(HttpStatus.OK);
+            return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
         }
+    	// Delete the old tokens.
+    	tokenService.deleteByEmail(email);
+    
+    	// Add a new token.
+    	UUID uuid = UUID.randomUUID();
+    	DbToken tokenData = new DbToken();
+    	tokenData.setEmail(email);
+    	tokenData.setUuid(uuid.toString());
+    	tokenData.setDateCreated(new java.sql.Date(System.currentTimeMillis()));
+    	tokenService.save(tokenData);
+	
+    	logger.info("Sending email to {} with token: {}", email, uuid);
+        Map<String, String> data = new HashMap<>();
+    	data.put("name", p.getName());
+    	data.put("app_name", appName);
+    	data.put("reset_url", resetUrl);
+    	data.put("from_name", fromName);
+
 		try {
             mailer.send(email, "forgot.txt", "Forgot Password.", data);
         } catch (IOException | URISyntaxException e) {
@@ -82,7 +76,7 @@ public class PasswordApi {
             throw new RuntimeException(e);
         }
 
-		return response;
+		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 	
 	@RequestMapping(value = "/reset", method = RequestMethod.POST)
@@ -91,43 +85,40 @@ public class PasswordApi {
 			@RequestParam("token") String tokenString,
 			@RequestParam("newPassword") String newPassword) throws Exception {
 		
-		ResponseEntity<Void> response = null;
-		if (tokenService.existsByEmail(email)){
-			//TODO: This if statement, along with those below it
-			// are ever visited
-			List<DbToken> tokens = tokenService.findByEmail(email);
-			
-			DbToken savedToken = findToken(tokens, tokenString);
-			if (savedToken == null) {
-				response = new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
-				throw new RuntimeException("token not found: " + tokenString);
-			} 
-            DbPerson person = personService.findByEmail(email);
-            if (person == null) {
-                response = new ResponseEntity<>(HttpStatus.NOT_FOUND);
-                throw new RuntimeException("Person not found for email address: " + email);
-            }
-            
-            // At this point we looked up the saved token from the database and found one.
-            if (!savedToken.getEmail().equals(email)) {
-                // Our saved token was for someone else.
-                response = new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
-                throw new RuntimeException("token does not match email address: " + tokenString);
-            } 
-            
-            // All good from here on out.  Update the password and save the person.
-            // Ideally these two would be transactional.
-            String hashedPassword = passwordEncoder.encode(newPassword);
-            person.setPassword(hashedPassword);
-            personService.save(person);
-            
-            tokenService.delete(savedToken.getUuid());
-            
-            logger.info("Updated password for " + person.getEmail());
-			response = new ResponseEntity<Void>(HttpStatus.OK);
-	
+		if (!tokenService.existsByEmail(email)) {
+		    return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
 		}
-		return response;
+		
+		List<DbToken> tokens = tokenService.findByEmail(email);
+		DbToken savedToken = findToken(tokens, tokenString);
+		if (savedToken == null) {
+            logger.info("token not found: " + tokenString);
+			return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
+		} 
+
+		DbPerson person = personService.findByEmail(email);
+        if (person == null) {
+            logger.info("Person not found for email address: " + email);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        
+        // At this point we looked up the saved token from the database and found one.
+        if (!savedToken.getEmail().equals(email)) {
+            // Our saved token was for someone else.
+            logger.info("token does not match email address: " + tokenString);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } 
+        
+        // All good from here on out.  Update the password and save the person.
+        // Ideally these two would be transactional.
+        String hashedPassword = passwordEncoder.encode(newPassword);
+        person.setPassword(hashedPassword);
+        personService.save(person);
+        
+        tokenService.delete(savedToken.getUuid());
+        
+        logger.info("Updated password for " + person.getEmail());
+		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 	
 	//TODO: this is never visited either

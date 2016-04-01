@@ -1,6 +1,7 @@
 package org.spring2885.server.api;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verify;
@@ -45,9 +46,7 @@ public class PasswordApiTest {
 	
     private DbPerson me;
 	private DbToken dbToken;
-	private Reset resetToken;
 	private DbToken otherDbToken;
-	private Reset otherResetToken;
 	
 	private UUID globalUUID = UUID.randomUUID();
 	private UUID globalUUID2 = UUID.randomUUID();
@@ -60,9 +59,7 @@ public class PasswordApiTest {
 				.build();
 		
 		dbToken = createDbToken("me@example.com");
-		resetToken = createReset("me@example.com", globalUUID, "newPass");
 		otherDbToken = createDbToken("matt@example.com");
-		otherResetToken = createReset("matt@example.com", globalUUID2, "newPass");
 		
 		me = new DbPerson();
 		me.setId(1234L);
@@ -90,8 +87,11 @@ public class PasswordApiTest {
 	void makeMeFound(){
         when(personService.findByEmail("me@example.com")).thenReturn(me);
 
+        when(tokenService.existsByEmail("me@example.com")).thenReturn(true);
+        when(tokenService.existsByEmail("matt@example.com")).thenReturn(true);
         when(tokenService.findByEmail("me@example.com")).thenReturn(Collections.singletonList(dbToken));
 		when(tokenService.findByEmail("matt@example.com")).thenReturn(Collections.singletonList(otherDbToken));
+		
 		when(tokenService.findById(globalUUID.toString())).thenReturn(dbToken);
 		when(tokenService.findById(globalUUID2.toString())).thenReturn(otherDbToken);
 	}
@@ -115,31 +115,19 @@ public class PasswordApiTest {
 		assertEquals("me@example.com", actualToken.getEmail());
 	}
 	
-	//TODO:
-	//Error: line 124. Ran it as a JUnit Test. 
-	//"Actually, there were zero interactions with this mock."
 	@Test
-	@WithMockUser(username="me@example.com", roles = {"USER", "ADMIN"})
+	@WithMockUser(username="me@example.com", roles = {"USER"})
 	public void testPostForgot_Email_Not_Found() throws Exception {
 		// Setup expectations
 		makeMeFound();
 		
 		mockMvc.perform(post("/auth/forgot")
 				.contentType(MediaType.APPLICATION_FORM_URLENCODED)
+				// Note: moo@example.com is not found.
 				.param("email", "moo@example.com"))
 		        .andDo(print())
 				.andExpect(status().isNotFound());
-		
-		//TODO
-		//not sure if i did this right
-		//this is where is "Actually, there were zero interactions with this mock"
-		final ArgumentCaptor<DbToken> captor = ArgumentCaptor.forClass(DbToken.class);
-		verify(tokenService).save(captor.capture());
-		
-		final DbToken actualToken = captor.getValue();
-		//assertEquals("me@example.com", actualToken.getEmail());
-		assertNotSame("moo@example.com", actualToken.getEmail());
-		
+        verify(tokenService, never()).save(Mockito.any(DbToken.class));
 	}
 	
 	@Test
@@ -156,6 +144,6 @@ public class PasswordApiTest {
 		        .andDo(print())
 				.andExpect(status().isOk());
 	
-		verify(tokenService, never()).save(Mockito.any(DbToken.class));
+		verify(tokenService).delete(anyString());
 	}
 }
