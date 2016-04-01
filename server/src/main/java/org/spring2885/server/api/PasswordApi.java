@@ -46,28 +46,34 @@ public class PasswordApi {
     		@RequestParam("email") String email) throws NotFoundException {
 		
         DbPerson p = personService.findByEmail(email);
+        ResponseEntity<Void> response = null;
+		Map<String, String> data = null;
+
         if (p == null || !email.equals(p.getEmail()) ) {
-            throw new RuntimeException("email not found: " + email);
+            response = new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
+        	//throw new RuntimeException("email not found: " + email);
+        } else {
+        
+        	// Delete the old tokens.
+        	tokenService.deleteByEmail(email);
+        
+        	// Add a new token.
+        	UUID uuid = UUID.randomUUID();
+        	DbToken tokenData = new DbToken();
+        	tokenData.setEmail(email);
+        	tokenData.setUuid(uuid.toString());
+        	tokenData.setDateCreated(new java.sql.Date(System.currentTimeMillis()));
+        	tokenService.save(tokenData);
+		
+        	logger.info("Send Email to {} with token: {}", email, uuid);
+        	data = new HashMap<>();
+        	data.put("name", p.getName());
+        	data.put("app_name", appName);
+        	data.put("reset_url", resetUrl);
+        	data.put("from_name", fromName);
+		
+        	response = new ResponseEntity<Void>(HttpStatus.OK);
         }
-        
-        // Delete the old tokens.
-        tokenService.deleteByEmail(email);
-        
-        // Add a new token.
-        UUID uuid = UUID.randomUUID();
-		DbToken tokenData = new DbToken();
-		tokenData.setEmail(email);
-		tokenData.setUuid(uuid.toString());
-		tokenData.setDateCreated(new java.sql.Date(System.currentTimeMillis()));
-		tokenService.save(tokenData);
-		
-		logger.info("Send Email to {} with token: {}", email, uuid);
-		Map<String, String> data = new HashMap<>();
-		data.put("name", p.getName());
-		data.put("app_name", appName);
-		data.put("reset_url", resetUrl);
-		data.put("from_name", fromName);
-		
 		try {
             mailer.send(email, "forgot.txt", "Forgot Password.", data);
         } catch (IOException | URISyntaxException e) {
@@ -76,7 +82,7 @@ public class PasswordApi {
             throw new RuntimeException(e);
         }
 
-		return new ResponseEntity<Void>(HttpStatus.OK);
+		return response;
 	}
 	
 	@RequestMapping(value = "/reset", method = RequestMethod.POST)
@@ -87,6 +93,8 @@ public class PasswordApi {
 		
 		ResponseEntity<Void> response = null;
 		if (tokenService.existsByEmail(email)){
+			//TODO: This if statement, along with those below it
+			// are ever visited
 			List<DbToken> tokens = tokenService.findByEmail(email);
 			
 			DbToken savedToken = findToken(tokens, tokenString);
@@ -105,7 +113,7 @@ public class PasswordApi {
                 // Our saved token was for someone else.
                 response = new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
                 throw new RuntimeException("token does not match email address: " + tokenString);
-            }
+            } 
             
             // All good from here on out.  Update the password and save the person.
             // Ideally these two would be transactional.
@@ -117,11 +125,12 @@ public class PasswordApi {
             
             logger.info("Updated password for " + person.getEmail());
 			response = new ResponseEntity<Void>(HttpStatus.OK);
-
+	
 		}
 		return response;
 	}
 	
+	//TODO: this is never visited either
     private DbToken findToken(Iterable<DbToken> tokens, String uuid) {
         for (DbToken t : tokens) {
             if (uuid.equals(t.getUuid())) {
