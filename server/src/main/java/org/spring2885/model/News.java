@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.util.*;
 import java.util.Date;
+import org.spring2885.model.Person;
 
 import io.swagger.annotations.*;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -14,7 +15,7 @@ import java.util.Objects;
 
 
 @ApiModel(description = "")
-@javax.annotation.Generated(value = "class io.swagger.codegen.languages.SpringMVCServerCodegen", date = "2016-03-26T17:33:48.856-07:00")
+@javax.annotation.Generated(value = "class io.swagger.codegen.languages.SpringMVCServerCodegen", date = "2016-04-01T19:35:46.021-07:00")
 public class News  {
   
   private Long id = null;
@@ -22,7 +23,7 @@ public class News  {
   private String description = null;
   private Date posted = null;
   private Date expired = null;
-  private String postedBy = null;
+  private Person postedBy = null;
   private Long views = null;
   private List<String> visibleTo = new ArrayList<String>();
 
@@ -91,10 +92,10 @@ public class News  {
    **/
   @ApiModelProperty(value = "")
   @JsonProperty("posted_by")
-  public String getPostedBy() {
+  public Person getPostedBy() {
     return postedBy;
   }
-  public void setPostedBy(String postedBy) {
+  public void setPostedBy(Person postedBy) {
     this.postedBy = postedBy;
   }
 

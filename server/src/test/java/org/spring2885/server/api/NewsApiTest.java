@@ -87,6 +87,7 @@ public class NewsApiTest {
     	n.setId(id);
     	n.setTitle(newsTitle);
     	n.setVisibleToPersonType(me.getType());
+    	n.setPersonId(me);
     	return n;
     }
     
@@ -155,6 +156,7 @@ public class NewsApiTest {
     	// Setup the expectations.
     	DbNews p = new DbNews();
     	p.setTitle("ThisTitle");
+    	p.setPersonId(me);
     	when(newsService.findById(21)).thenReturn(p);
     	
     	mockMvc.perform(get("/api/v1/news/21")

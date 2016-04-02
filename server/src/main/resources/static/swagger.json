@@ -963,8 +963,7 @@
           "format" : "date"
         },
         "posted_by" : {
-          "type" : "string",
-          "format" : "email"
+          "$ref" : "#/definitions/Person"
         },
         "views" : {
           "type" : "integer",
