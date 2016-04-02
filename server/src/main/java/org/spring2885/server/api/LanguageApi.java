@@ -30,20 +30,20 @@ public class LanguageApi {
     @Autowired
     private LanguageConverters.LanguageFromDbToJson dbToJsonConverter;
 	
-	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
+	@RequestMapping(value = "/{code}", method = RequestMethod.GET)
 	public ResponseEntity<Language> get(
-			@PathVariable("id") String id) throws NotFoundException {
-		DbLanguage o = LanguageService.findById(id);
+			@PathVariable("code") String code) throws NotFoundException {
+		DbLanguage o = LanguageService.findById(code);
 		if (o == null) {
-			// When adding test testPersonsById_notFound, was getting a NullPointerException
+			// When adding test testLanguagesByCode_notFound, was getting a NullPointerException
 			// here, so needed to add this.
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity<>(dbToJsonConverter.apply(o), HttpStatus.OK);
 
 	}
-	@RequestMapping(method = RequestMethod.PUT)
-	@RequestMapping(method = RequestMethod.POST)
-	@RequestMapping(method = RequestMethod.DELETE)
-	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
+//	@RequestMapping(method = RequestMethod.PUT)
+//	@RequestMapping(method = RequestMethod.POST)
+//	@RequestMapping(method = RequestMethod.DELETE)
+//	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 }
