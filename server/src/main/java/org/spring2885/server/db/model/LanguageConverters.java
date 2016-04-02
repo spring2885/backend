@@ -16,11 +16,11 @@ public class LanguageConverters {
 
 		@Override
 		public Language apply(DbLanguage db) {
-			Language L = new Language();
-			L.setCode(db.getCode());
-			L.setDescription(db.getDescription());
+			Language l = new Language();
+			l.setCode(db.getCode());
+			l.setDescription(db.getDescription());
 			
-			return L;
+			return l;
 		}
 }
 	 public class JsonToDbConverter implements Function<Language, DbLanguage> {
