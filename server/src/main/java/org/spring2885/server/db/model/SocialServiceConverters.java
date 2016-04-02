@@ -1,15 +1,6 @@
 package org.spring2885.server.db.model;
 
-import java.util.Map;
-import java.util.stream.Collectors;
-
-import org.spring2885.model.News;
 import org.spring2885.model.SocialService;
-import org.spring2885.server.db.service.person.PersonService;
-import org.spring2885.server.db.model.NewsConverters.JsonToDbConverter;
-import org.spring2885.server.db.model.NewsConverters.NewsFromDbToJson;
-import org.spring2885.server.db.service.person.SocialServiceService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
