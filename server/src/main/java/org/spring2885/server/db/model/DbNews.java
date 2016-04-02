@@ -1,6 +1,7 @@
 package org.spring2885.server.db.model;
 
 import java.sql.Date;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -13,6 +14,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.google.common.collect.ImmutableSet;
@@ -51,7 +53,10 @@ public class DbNews {
 	// Mark this as not insertable so the default database value will be used.
     @Column(nullable = false, insertable=false, columnDefinition = "TINYINT", length = 1)
 	private Boolean abuse;
-	
+    
+    @OneToMany(mappedBy="news", fetch=FetchType.EAGER)
+    private List<DbNewsComment> comments;
+    
 	public Long getId() {
 		return id;
 	}
@@ -161,6 +166,10 @@ public class DbNews {
                 + ", expired=" + expired + ", personId=" + person + ", views=" + views
                 + " visibleTo=" + visibleToPersonTypes
                 + "]";
+    }
+
+    public List<DbNewsComment> getComments() {
+        return comments;
     }
 
 }
