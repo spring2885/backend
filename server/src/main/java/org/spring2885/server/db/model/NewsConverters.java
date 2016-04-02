@@ -56,11 +56,14 @@ public final class NewsConverters {
 			}
             n.setVisibleTo(visibleTo);
 			
-            List<NewsComment> comments = new ArrayList<>();
-            for (DbNewsComment dbnc : db.getComments()) {
-                comments.add(newsCommentFromDbToJson.apply(dbnc));
+            List<DbNewsComment> dbNewsComments = db.getComments();
+            if (dbNewsComments != null) {
+                List<NewsComment> comments = new ArrayList<>();
+                for (DbNewsComment dbnc : dbNewsComments) {
+                    comments.add(newsCommentFromDbToJson.apply(dbnc));
+                }
+                n.setComments(comments);
             }
-            n.setComments(comments);
 			return n;
 		}
 	}

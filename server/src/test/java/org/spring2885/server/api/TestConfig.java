@@ -14,6 +14,7 @@ import org.spring2885.server.db.model.SocialServiceConverters;
 import org.spring2885.server.db.service.JobService;
 import org.spring2885.server.db.service.JobTypeService;
 import org.spring2885.server.db.service.LanguageService;
+import org.spring2885.server.db.service.NewsCommentService;
 import org.spring2885.server.db.service.NewsService;
 import org.spring2885.server.db.service.TokenService;
 import org.spring2885.server.db.service.person.PersonService;
@@ -90,6 +91,11 @@ public class TestConfig {
 	    return mock(TokenService.class);
 	}
 	
+    @Bean
+    public NewsCommentService newsCommentServiceMock() {
+        return mock(NewsCommentService.class);
+    }
+    
     @Bean
     public NewsService newsServiceMock() {
         return mock(NewsService.class);
