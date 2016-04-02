@@ -15,12 +15,12 @@ public class LanguageConverters {
 	public class LanguageFromDbToJson implements Function<DbLanguage, Language> {
 
 		@Override
-		public Language apply(DbLanguage arg0) {
+		public Language apply(DbLanguage db) {
 			Language L = new Language();
-			s.setId(db.getName());
-			s.setUrl(db.getUrl());
+			L.setCode(db.getCode());
+			L.setDescription(db.getDescription());
 			
-			return s;
+			return L;
 		}
 }
 	 public class JsonToDbConverter implements Function<Language, DbLanguage> {
