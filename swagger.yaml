@@ -972,6 +972,8 @@ tags:
     description: Everything used for resetting password
   - name: Jobs
     description: Everything to do with Jobs
+  - name: JobType
+    description: Everything to do with JobTypes
   - name: News
     description: Everything to do with News
   - name: SocialService
