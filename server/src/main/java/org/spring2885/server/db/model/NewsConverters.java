@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.spring2885.model.News;
+import org.spring2885.model.Person;
 import org.spring2885.server.db.service.person.PersonService;
 import org.spring2885.server.db.service.person.PersonTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,8 @@ public final class NewsConverters {
     private PersonService personService;
     @Autowired
     private PersonTypeService personTypeService;
+    @Autowired
+    private PersonConverters.FromDbToJson personFromDbToJson;
 
     public class NewsFromDbToJson implements Function<DbNews, News> {
 		
@@ -34,10 +37,9 @@ public final class NewsConverters {
 			n.setDescription(db.getDescription());
 			n.setExpired(db.getExpired());
 			DbPerson person = db.getPerson();
-			if (person != null) {
-	            n.setPostedBy(person.getEmail());
-			}
+			n.setPostedBy(personFromDbToJson.apply(person));
 			n.setPosted(db.getPosted());
+
 			n.setTitle(db.getTitle());
 			n.setViews(db.getViews());
 
@@ -76,9 +78,12 @@ public final class NewsConverters {
 			    db.setDescription(p.getDescription());
 			}
 			db.setExpired(asSqlDate(p.getExpired()));
-			if (!Strings.isNullOrEmpty(p.getPostedBy()) && db.getPerson() == null) {
+			Person postedBy = p.getPostedBy();
+			if (postedBy != null 
+			    && !Strings.isNullOrEmpty(postedBy.getEmail()) 
+			    && db.getPerson() == null) {
 			    // Only update the person if it hadn't been set already.
-			    db.setPersonId(personService.findByEmail(p.getPostedBy()));
+			    db.setPersonId(personService.findByEmail(postedBy.getEmail()));
 			}
 			db.setPosted(asSqlDate(p.getPosted()));
             db.setViews(p.getViews());

@@ -824,8 +824,8 @@ definitions:
         type: string
         format: date
       posted_by:
-        type: string
-        format: email
+        type: object
+        $ref: '#/definitions/Person'
       views:
         type: integer
         format: int64
