@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(value = "/api/v1/Language", produces = { APPLICATION_JSON_VALUE })
+@RequestMapping(value = "/api/v1/language", produces = { APPLICATION_JSON_VALUE })
 public class LanguageApi {
 
     @Autowired
