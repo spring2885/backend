@@ -1,5 +1,6 @@
 package org.spring2885.server.api;
 
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -8,9 +9,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import org.hamcrest.Matchers;
 import org.junit.Test;
+import org.spring2885.model.Language;
 import org.spring2885.model.News;
 import org.spring2885.server.db.model.DbLanguage;
 import org.spring2885.server.db.model.DbNews;
+import org.spring2885.server.db.model.DbPerson;
+import org.spring2885.server.db.service.LanguageService;
+import org.spring2885.server.db.service.LanguageServiceTest;
+import org.spring2885.server.db.service.person.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -23,18 +29,19 @@ public class LanguageApiTest {
 	protected MockMvc mockMvc;
 	
 	@Autowired protected WebApplicationContext webappContext;
+	@Autowired private PersonService LanguageService;
 	
-	 private DbLanguage dbMy;
-	 private Lang my;
+	// private DbLanguage dbMy;
+	 //private Language my;
 	
 	  @Test
-	  @WithMockLang
-	    public void testNews() throws Exception {
+	  //@WithMockLang
+	    public void testLangauge() throws Exception {
 	    	// Setup the expectations.
-	    	when(LanguageServiceTest.findAll())
+	    	when(LanguageServiceTest.testFindAll())
 	    		.thenReturn(ImmutableList.of(
-	    			createDbLang(5,  "Language #1"),
-	    			createDbLang(5,  "Langauge #2")));
+	    			createDbLang("EX2",  "Language #1"),
+	    			createDbLang("EX2",  "Langauge #2")));
 	    	
 	    	mockMvc.perform(get("/api/v1/Language")
 	    			.accept(MediaType.APPLICATION_JSON))
@@ -49,5 +56,21 @@ public class LanguageApiTest {
     	n.setCode(code);
     	n.setDescription(description);
     	return n;
+    }
+	public void testLanguagesByCode() throws Exception {
+    	// Setup the expectations.
+    	DbLanguage l = new DbLanguage();
+    	l.setDescription("EXL");
+    	when(LanguageService.findByCode("EXL")).thenReturn(l);
+    	verifyNoMoreInteractions(LanguageService);
+    	
+    	mockMvc.perform(get("/api/v1/profiles/EXL")
+    			.accept(MediaType.APPLICATION_JSON))
+    			.andExpect(status().isOk())
+    			.andExpect(content().contentType(MediaType.APPLICATION_JSON))
+    			.andExpect(jsonPath("$.code", Matchers.is("EXL")));
+    	
+    	// N.B: We don't have to verify anything here since we're asserting
+    	// the results that were setup by PersonService.
     }
 }
