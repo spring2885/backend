@@ -33,7 +33,7 @@ public class LanguageApi {
 	@RequestMapping(value = "/{code}", method = RequestMethod.GET)
 	public ResponseEntity<Language> get(
 			@PathVariable("code") String code) throws NotFoundException {
-		DbLanguage o = LanguageService.findById(code);
+		DbLanguage o = LanguageService.findByCode(code);
 		if (o == null) {
 			// When adding test testLanguagesByCode_notFound, was getting a NullPointerException
 			// here, so needed to add this.
