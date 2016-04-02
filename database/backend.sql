@@ -127,11 +127,13 @@ DROP TABLE IF EXISTS comment;
 DROP TABLE IF EXISTS news_comment;
 CREATE TABLE news_comment
 (
-    id INT,
+    id INT NOT NULL AUTO_INCREMENT,
     news_id INT,
     comment_text TEXT(65535),
-    comment_timestamp DATE,
+    comment_timestamp DATETIME,
     person_id INT,
+    active TINYINT(1) DEFAULT 1,
+    abuse TINYINT(1) DEFAULT 0,
     PRIMARY KEY(id),
     FOREIGN KEY(news_id) REFERENCES news(id),
     FOREIGN KEY(person_id) REFERENCES person(id)

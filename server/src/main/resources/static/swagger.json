@@ -359,10 +359,10 @@
         } ],
         "responses" : {
           "200" : {
-            "description" : "Deletes News"
+            "description" : "Updates News"
           },
           "500" : {
-            "description" : "Error with deleting News by id."
+            "description" : "Error with updating News by id."
           }
         }
       },
@@ -383,6 +383,96 @@
           },
           "500" : {
             "description" : "Error with deleting News by id."
+          }
+        }
+      }
+    },
+    "/api/v1/news_comment" : {
+      "post" : {
+        "tags" : [ "News" ],
+        "description" : "",
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "news_Comment",
+          "description" : "The news comment you want to post",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/NewsComment"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Makes a new NewsComment"
+          }
+        }
+      }
+    },
+    "/api/v1/news_comment/{id}" : {
+      "get" : {
+        "tags" : [ "News" ],
+        "description" : "Retrives the comments by id.\n",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "a single News entry",
+          "required" : true,
+          "type" : "number",
+          "format" : "int64"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful response",
+            "schema" : {
+              "$ref" : "#/definitions/NewsComment"
+            }
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "News" ],
+        "summary" : "The News Comment to update\n",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "The id of the News Comment to be update.",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int64"
+        }, {
+          "in" : "body",
+          "name" : "news_comment",
+          "description" : "The News comment you want to update",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/NewsComment"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Updates the News Coment"
+          },
+          "500" : {
+            "description" : "Error with updating News Comment by id."
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "News" ],
+        "summary" : "The News Comment to delete\n",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "The News to be deleted.",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int64"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Deletes News Comment"
+          },
+          "500" : {
+            "description" : "Error with deleting News comment by id."
           }
         }
       }
@@ -974,6 +1064,35 @@
           "items" : {
             "type" : "string"
           }
+        },
+        "comments" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/NewsComment"
+          }
+        }
+      }
+    },
+    "NewsComment" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "news_id" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "text" : {
+          "type" : "string"
+        },
+        "posted" : {
+          "type" : "string",
+          "format" : "date"
+        },
+        "posted_by" : {
+          "$ref" : "#/definitions/Person"
         }
       }
     },

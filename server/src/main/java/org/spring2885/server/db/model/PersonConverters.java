@@ -1,6 +1,5 @@
 package org.spring2885.server.db.model;
 
-import java.util.Collection;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -117,7 +116,7 @@ public final class PersonConverters {
 			db.setPhone(p.getPhone());
 			db.setOccupation(p.getOccupation());
 			db.setCompanyName(p.getCompanyName());
-			db.setBirthdate(asSqlDate(p.getBirthdate()));
+			db.setBirthdate(ConverterUtils.asSqlDate(p.getBirthdate()));
 			String personType = p.getVariety();
 			if (personType != null && personTypes.containsKey(personType)) {
 				db.setType(personTypes.get(personType));
@@ -130,7 +129,7 @@ public final class PersonConverters {
 			} else {
 			    db.setLanguage(languageService.defaultLanguage());
 			}
-			db.setLastLogon(asSqlDate(p.getLastLoginDate()));
+			db.setLastLogon(ConverterUtils.asSqlDate(p.getLastLoginDate()));
 
 			// Add all social connections
 			for (SocialConnection social : p.getSocialConnections()) {
@@ -156,13 +155,6 @@ public final class PersonConverters {
 
 			return db;
 		}
-	}
-
-	private static java.sql.Date asSqlDate(java.util.Date d) {
-		if (d == null) {
-			return null;
-		}
-		return new java.sql.Date(d.getTime());
 	}
 
 	private PersonConverters() {}
