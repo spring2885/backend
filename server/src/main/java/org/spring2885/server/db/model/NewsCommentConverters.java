@@ -8,8 +8,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 import com.google.common.base.Function;
-import com.google.common.base.Supplier;
-import com.google.common.base.Suppliers;
 
 @Component
 public class NewsCommentConverters {
@@ -37,20 +35,12 @@ public class NewsCommentConverters {
         }
     }
     
-    public class NewsCommentJsonToDbConverter implements Function<NewsComment, DbNewsComment> {
-        private Supplier<DbNewsComment> dbSupplier = Suppliers.ofInstance(new DbNewsComment());
-        
+    public class NewsCommentJsonToDbConverter {
+
         NewsCommentJsonToDbConverter() {
         }
         
-        public NewsCommentJsonToDbConverter withDbNewsComment(DbNewsComment db) {
-            this.dbSupplier = Suppliers.ofInstance(db);
-            return this;
-        }
-        
-        @Override
-        public DbNewsComment apply(NewsComment p) {
-            DbNewsComment db = dbSupplier.get();
+        public DbNewsComment apply(DbNewsComment db, NewsComment p) {
             db.setId(p.getId());
             db.setCommentText(p.getText());
             db.setCommentTimestamp(ConverterUtils.asSqlDate(p.getPosted()));

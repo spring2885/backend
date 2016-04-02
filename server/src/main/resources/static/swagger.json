@@ -23,6 +23,9 @@
     "name" : "Jobs",
     "description" : "Everything to do with Jobs"
   }, {
+    "name" : "JobType",
+    "description" : "Everything to do with JobTypes"
+  }, {
     "name" : "News",
     "description" : "Everything to do with News"
   }, {
@@ -393,7 +396,7 @@
         "description" : "",
         "parameters" : [ {
           "in" : "body",
-          "name" : "news_Comment",
+          "name" : "news_comment",
           "description" : "The news comment you want to post",
           "required" : true,
           "schema" : {

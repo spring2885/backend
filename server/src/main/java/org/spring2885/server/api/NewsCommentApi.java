@@ -63,7 +63,7 @@ public class NewsCommentApi {
         }
 
         // Create our DbNews version
-        DbNewsComment db = newsCommentJsonToDb.withDbNewsComment(new DbNewsComment()).apply(news_comment);
+        DbNewsComment db = newsCommentJsonToDb.apply(new DbNewsComment(), news_comment);
         // Since we are doing a post, set defaults.
         db.setId(null);
         db.setPerson(me);
@@ -127,7 +127,7 @@ public class NewsCommentApi {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
         
-        DbNewsComment updated = newsCommentJsonToDb.withDbNewsComment(db).apply(news);
+        DbNewsComment updated = newsCommentJsonToDb.apply(db, news);
         newsCommentService.save(updated);
         
         return new ResponseEntity<>(HttpStatus.OK);

@@ -106,9 +106,7 @@ public class NewsConverterTest {
         p.setTitle("This is a title");
         p.setViews(200L);
         
-		DbNews d = new DbNews();
-		newsFromJsonToDb.withDbNews(d);
-		d = newsFromJsonToDb.apply(p);
+		DbNews d = newsFromJsonToDb.apply(new DbNews(), p);
 		
         assertEquals(d.getDescription(), p.getDescription());
         assertEquals(d.getExpired().toString(), p.getExpired().toString());

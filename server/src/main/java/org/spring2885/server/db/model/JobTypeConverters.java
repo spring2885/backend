@@ -5,8 +5,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 import com.google.common.base.Function;
-import com.google.common.base.Supplier;
-import com.google.common.base.Suppliers;
 
 @Component
 public final class JobTypeConverters {
@@ -30,23 +28,15 @@ public final class JobTypeConverters {
 		return new JsonToDbConverter();
 	}
 
-	public class JsonToDbConverter implements Function<JobType, DbJobType> {
+	public class JsonToDbConverter {
 		 
-		private Supplier<DbJobType> dbSupplier = Suppliers.ofInstance(new DbJobType());
-		 
-		public JsonToDbConverter() {
+		JsonToDbConverter() {
 		}
 		 
-		public void withDbPersonType(DbJobType db){
-			this.dbSupplier = Suppliers.ofInstance(db);
-		}
-		 
-		@Override
-		public DbJobType apply(JobType p) {
-			DbJobType pT = dbSupplier.get();
-			pT.setId(p.getId());
-			pT.setName(p.getName());
-			return pT;
+		public DbJobType apply(DbJobType db, JobType p) {
+			db.setId(p.getId());
+			db.setName(p.getName());
+			return db;
 		}
 		 
 	}
