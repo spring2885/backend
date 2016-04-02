@@ -12,24 +12,16 @@ This application is using Apache Maven and the Spring Boot libraries to bootstra
 Make sure you have MySQL 5.7 installed.  You'll need to create the backend user. For test/dev, we just
 use the username of ```backend``` with the password of ```backend```.
 
-Log into MySQL using the mysql command line tool as the ```root``` user and execute these
-commands to create the backend user.
-
-```sql
-CREATE USER 'backend'@'localhost'  IDENTIFIED BY 'backend';
-GRANT ALL PRIVILEGES ON backend.* TO 'backend'@'localhost';
-```
-
-Now you must create the schemas.  Run the following two commands (note, if you do not
-have a password on your root user in MySQL, just remove the -p from the commandline, with
--p in place, mysql will prompt you for the password on the terminal window.)
+Use the following commands to create your backend user and also
+the schema with some sample data.
 
 N.B. This assumes you are in the backend project directory.
 
 ```bash
 cd database
-mysql -uroot -p < backend.sql
-mysql -uroot -p < backend-static-data.sql
+mysql -uroot -p < create-backend-user.sql
+mysql -ubackend -pbackend < backend.sql
+mysql -ubackend -pbackend < backend-test-data.sql
 ```
 
 ## Eclipse IDE Instructions

@@ -118,14 +118,18 @@ INSERT INTO news_comment VALUES(
     1,
     'This is a job I would like to apply for!',
     '2016-04-01',
-    1);
+    1,
+    1,
+    0);
     
 INSERT INTO news_comment VALUES(
     2,
     1,
     'How can I forward my resume?',
     '2016-04-01',
-    3);
+    3,
+    1,
+    0);
 
 /*News Visibility Scope*/
 INSERT INTO news_visibility VALUES (
