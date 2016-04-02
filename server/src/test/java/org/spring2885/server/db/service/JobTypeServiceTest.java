@@ -1,23 +1,17 @@
 package org.spring2885.server.db.service;
 
-import static org.mockito.Mockito.*;
-import static org.hamcrest.Matchers.*;
-
-import java.util.Collections;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.when;
 
 import org.junit.Before;
-import static org.junit.Assert.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.mockito.internal.matchers.Contains;
 import org.spring2885.server.db.model.DbJobType;
-import org.spring2885.server.db.model.DbPersonType;
-import org.spring2885.server.db.service.person.PersonTypeRepository;
-import org.spring2885.server.db.service.person.PersonTypeService;
-import org.spring2885.server.db.service.person.PersonTypeServiceImpl;
 
 import com.google.common.collect.ImmutableList;
 

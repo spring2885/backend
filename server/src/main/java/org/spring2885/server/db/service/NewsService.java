@@ -1,9 +1,9 @@
 package org.spring2885.server.db.service;
 
 import java.util.List;
+
 import org.spring2885.server.db.model.DbNews;
 import org.spring2885.server.db.model.DbPerson;
-import org.spring2885.server.db.service.*;
 import org.spring2885.server.db.service.search.SearchCriteria;
 
 public interface NewsService {
@@ -13,26 +13,20 @@ public interface NewsService {
 	 */
 	DbNews findById(long id);
 	
-	  /**
-     * Returns all {@code DbNews} instances with search string {code q}.
-     */
-    Iterable<DbNews> findAll(String q);
-	/**
-	 * Returns all {@code DbNews} instances.
-	 */
-	Iterable<DbNews> findAll();
-	
 	/**
      * Returns all {@code DbNews} instances with search string {code q}.
      */
-    Iterable<DbNews> findAll(List<SearchCriteria> criterias);
-	
+    Iterable<DbNews> findAll(DbPerson me, boolean all, String q);
+
+    /**
+     * Returns all non-deleted and non-abuse {@code DbNews} instances.
+     */
+    Iterable<DbNews> findAll(DbPerson me, boolean all);
+    
 	/**
-	 * Returns all {@code DbNews} instances with news title of {@code title}
-	 * or an empty {@link Iterator} if none exist.
-	 */
-	List<DbNews> findByTitle(String title);
-	
+     * Returns all {@code DbNews} instances with search string {code q}.
+     */
+    Iterable<DbNews> findAll(DbPerson me, boolean all, List<SearchCriteria> criterias);
 	
 	/**
 	 * Deletes a news post by primary key.
@@ -41,10 +35,9 @@ public interface NewsService {
 	 */
 	boolean delete(long id);
 	
-	/** Returns {@code true} if a user exists for a news post. */
-	boolean existsByTitle(String title);
-	
-	/** Saves (Inserts) the {@code news} into the database. */
+	/**
+	 * Saves (Inserts) the {@code news} into the database.
+	 */
 	DbNews save(DbNews news);
 	
 }

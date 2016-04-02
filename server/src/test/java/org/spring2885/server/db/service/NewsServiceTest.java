@@ -5,7 +5,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.anyBoolean;
 import static org.mockito.Matchers.same;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -21,6 +21,8 @@ import org.junit.runners.JUnit4;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.spring2885.server.db.model.DbNews;
+import org.spring2885.server.db.model.DbPerson;
+import org.spring2885.server.db.model.DbPersonType;
 
 import com.google.common.collect.Lists;
 
@@ -28,50 +30,48 @@ import com.google.common.collect.Lists;
 public class NewsServiceTest {
 	@Mock NewsRepository repository;
 	private NewsService service;
+	private DbPerson me;
 
     @Before public void initMocks() {
         MockitoAnnotations.initMocks(this);
         service = new NewsServiceImpl(repository);
 
-    	// return empty list by default
-    	when(repository.findByTitle(anyString())).thenReturn(Collections.emptyList());
+        me = new DbPerson();
+        me.setId(1L);
+        me.setEmail("me@");
+        DbPersonType student = new DbPersonType(0, "student");
+        me.setType(student);
     }
     
     @Test
     public void testFindAll() {
-    	DbNews p = new DbNews();
-    	when(repository.findAll()).thenReturn(Collections.singleton(p));
+        DbNews p = new DbNews();
+        p.setVisibleToPersonType(me.getType());
+        when(repository.findAllByActiveAndAbuse(anyBoolean(), anyBoolean())).thenReturn(Collections.singleton(p));
 
-    	List<DbNews> news = Lists.newArrayList(service.findAll());
-    	assertEquals(1, news.size());
-    	assertSame(p, news.get(0));
+        List<DbNews> news = Lists.newArrayList(service.findAll(me, false));
+        assertEquals(1, news.size());
+        assertSame(p, news.get(0));
+    }
+
+    @Test
+    public void testFindAllAdmin() {
+        DbNews p = new DbNews();
+        when(repository.findAll()).thenReturn(Collections.singleton(p));
+
+        List<DbNews> news = Lists.newArrayList(service.findAll(me, true));
+        assertEquals(1, news.size());
+        assertSame(p, news.get(0));
     }
 
     @Test
     public void testFindAll_none() {
-    	when(repository.findAll()).thenReturn(Collections.emptyList());
+    	when(repository.findAllByActiveAndAbuse(anyBoolean(), anyBoolean())).thenReturn(Collections.emptyList());
 
-    	List<DbNews> persons = Lists.newArrayList(service.findAll());
+    	List<DbNews> persons = Lists.newArrayList(service.findAll(me, false));
     	assertEquals(0, persons.size());
     }
     
-    @Test
-    public void testFindByEmail() {
-    	DbNews p = new DbNews();
-    	p.setTitle("Title");
-    	when(repository.findByTitle("Title")).thenReturn(Collections.singletonList(p));
-    	
-    	List<DbNews> persons = Lists.newArrayList(service.findByTitle("Title"));
-    	assertEquals(1, persons.size());
-    	assertSame(p, persons.get(0));
-    }
-
-    @Test
-    public void testFindByEmail_None() {
-    	List<DbNews> news = Lists.newArrayList(service.findByTitle("BadTitle"));
-    	assertEquals(0, news.size());
-    }
-
     @Test
     public void testFindById() {
     	DbNews expected = new DbNews();
@@ -86,20 +86,6 @@ public class NewsServiceTest {
     public void testFindById_notFound() {
     	DbNews actual = service.findById(1234);
     	assertNull(actual);
-    }
-    
-    @Test
-    public void testExistsByEmail() {
-    	DbNews p = new DbNews();
-    	p.setTitle("Title");
-    	when(repository.findByTitle("Title")).thenReturn(Collections.singletonList(p));
-
-    	assertTrue(service.existsByTitle("Title"));
-    }
-    
-    @Test
-    public void testExistsByEmail_doesNotExist() {
-    	assertFalse(service.existsByTitle("Title"));
     }
     
     @Test

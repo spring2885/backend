@@ -7,13 +7,11 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.spring2885.model.Job;
-import org.spring2885.model.Person;
 import org.spring2885.server.api.exceptions.NotFoundException;
+import org.spring2885.server.api.utils.RequestHelper;
 import org.spring2885.server.db.model.DbJob;
-import org.spring2885.server.db.model.DbPerson;
 import org.spring2885.server.db.model.JobConverters;
 import org.spring2885.server.db.service.JobService;
-import org.spring2885.server.db.service.person.PersonService;
 import org.spring2885.server.db.service.search.SearchCriteria;
 import org.spring2885.server.db.service.search.SearchParser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +27,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.google.common.base.Strings;
 import com.google.common.collect.FluentIterable;
-import com.google.common.collect.Iterables;
 
 @RestController
 @RequestMapping(value = "/api/v1/jobs", produces = { APPLICATION_JSON_VALUE })
@@ -40,9 +37,6 @@ public class JobsApi {
 	private JobService jobService;
 	
 	@Autowired
-    private PersonService personService;
-	
-	@Autowired
 	private JobConverters.JsonToDbConverter jsonToDbConverter;
 
     @Autowired
@@ -51,7 +45,10 @@ public class JobsApi {
     @Autowired
     private SearchParser searchParser;
 
-	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    @Autowired
+    private RequestHelper requestHelper;
+
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public ResponseEntity<Job> get(
 			@PathVariable("id") int id) throws NotFoundException {
 		DbJob o = jobService.findById(id);
@@ -70,8 +67,6 @@ public class JobsApi {
 			
 			) throws NotFoundException {
 		
-		DbJob db = new DbJob();
-		
 		DbJob updatedDbJob = jsonToDbConverter.apply(job);
 		jobService.save(updatedDbJob);
 		
@@ -84,7 +79,7 @@ public class JobsApi {
 			SecurityContextHolderAwareRequestWrapper request)
 			throws NotFoundException {
 		
-		if (!checkAdminRequestIfNeeded(id, request)) {
+		if (!requestHelper.checkAdminRequestIfNeeded(id, request)) {
 			String error = 
 					"Only admin's can change others... Read this: "
 					+ "God, grant me the serenity to accept the things I cannot change,"
@@ -130,7 +125,7 @@ public class JobsApi {
 			@RequestBody Job job,
 			SecurityContextHolderAwareRequestWrapper request) throws NotFoundException {
 		
-		if (!checkAdminRequestIfNeeded(id, request)) {
+		if (!requestHelper.checkAdminRequestIfNeeded(id, request)) {
 			return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 		}
 
@@ -148,22 +143,4 @@ public class JobsApi {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
-	
-	private boolean checkAdminRequestIfNeeded(int requestId, SecurityContextHolderAwareRequestWrapper request) {
-		if (!request.isUserInRole("ROLE_ADMIN")) {
-			// Only admin's can change other profiles.
-			String email = request.getUserPrincipal().getName();
-			DbPerson me = personService.findByEmail(email);
-			if (me == null) {
-				// I can't find myself... need more zen.
-				return false;
-			}
-			
-			if (me.getId() != requestId) {
-				// Someone is being naughty...
-				return false;
-			}
-		}
-		return true;
-	}
 }
