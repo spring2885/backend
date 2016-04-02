@@ -4,8 +4,6 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.spring2885.model.JobType;
 import org.spring2885.server.api.exceptions.NotFoundException;
 import org.spring2885.server.api.utils.RequestHelper;
@@ -27,9 +25,7 @@ import com.google.common.collect.FluentIterable;
 
 @RestController
 @RequestMapping(value = "/api/v1/jobtype", produces = { APPLICATION_JSON_VALUE })
-public class JobTypeApi {
-    private static final Logger logger = LoggerFactory.getLogger(JobTypeApi.class);
-	
+public class JobTypeApi {	
 	@Autowired
 	private JobTypeService jobTypeService;
 	
@@ -55,13 +51,9 @@ public class JobTypeApi {
 	}
 	
 	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<Void> jobsPost(
-			
-			@RequestBody JobType job
-			
-			) throws NotFoundException {
+    public ResponseEntity<Void> jobsPost(@RequestBody JobType job) throws NotFoundException {
 		
-		DbJobType updatedDbJob = jobTypeJsonToDb.apply(job);
+		DbJobType updatedDbJob = jobTypeJsonToDb.apply(new DbJobType(), job);
 		jobTypeService.save(updatedDbJob);
 		
 		return new ResponseEntity<Void>(HttpStatus.OK);
@@ -114,8 +106,7 @@ public class JobTypeApi {
 		if (db == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-		jobTypeJsonToDb.withDbPersonType(db);
-		DbJobType updatedDbJob = jobTypeJsonToDb.apply(jobType);
+		DbJobType updatedDbJob = jobTypeJsonToDb.apply(db, jobType);
 		jobTypeService.save(updatedDbJob);
 		
 		return new ResponseEntity<>(HttpStatus.OK);

@@ -18,8 +18,6 @@ import org.springframework.stereotype.Component;
 
 import com.google.common.base.Function;
 import com.google.common.base.Strings;
-import com.google.common.base.Supplier;
-import com.google.common.base.Suppliers;
 
 @Component
 public final class NewsConverters {
@@ -68,20 +66,11 @@ public final class NewsConverters {
 		}
 	}
 	
-    public class JsonToDbConverter implements Function<News, DbNews> {
-		private Supplier<DbNews> dbSupplier = Suppliers.ofInstance(new DbNews());
-		
+    public class JsonToDbConverter {
 		JsonToDbConverter() {
 		}
 		
-		public JsonToDbConverter withDbNews(DbNews db) {
-			this.dbSupplier = Suppliers.ofInstance(db);
-			return this;
-		}
-		
-		@Override
-		public DbNews apply(News p) {
-			DbNews db = dbSupplier.get();
+		public DbNews apply(DbNews db, News p) {
 			db.setId(p.getId());
 			if (!Strings.isNullOrEmpty(p.getTitle())) {
 	            db.setTitle(p.getTitle());

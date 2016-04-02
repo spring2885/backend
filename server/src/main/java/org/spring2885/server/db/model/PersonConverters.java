@@ -13,8 +13,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 import com.google.common.base.Function;
-import com.google.common.base.Supplier;
-import com.google.common.base.Suppliers;
 
 @Component
 public final class PersonConverters {
@@ -81,19 +79,12 @@ public final class PersonConverters {
         return new JsonToDbConverter();
     }
     
-	public class JsonToDbConverter implements Function<Person, DbPerson> {
+	public class JsonToDbConverter {
 
-		private Supplier<DbPerson> dbSupplier = Suppliers.ofInstance(new DbPerson());
-
-		public JsonToDbConverter() {
+		JsonToDbConverter() {
 		}
 
-		public void withDbPerson(DbPerson db) {
-			this.dbSupplier = Suppliers.ofInstance(db);
-		}
-
-		@Override
-		public DbPerson apply(Person p) {
+		public DbPerson apply(DbPerson db, Person p) {
 	        Map<String, DbSocialService> socialServices = 
 	                socialServiceService.findAll().stream()
                     .collect(Collectors.toMap(DbSocialService::getName, (s) -> s));
@@ -104,7 +95,6 @@ public final class PersonConverters {
 	                languageService.findAll().stream()
                     .collect(Collectors.toMap(DbLanguage::getCode, (s) -> s));
 
-            DbPerson db = dbSupplier.get();
 			// Leave the ID null since we're updating an existing person.
 			db.setName(p.getName());
 			db.setStudentId(p.getStudentId());

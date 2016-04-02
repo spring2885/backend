@@ -44,8 +44,6 @@ public class PersonConverterTest {
         DbPersonType t2 = new DbPersonType(1, "faculty");
         when(personTypeService.findAll()).thenReturn(ImmutableSet.of(t1, t2));
         when(personTypeService.defaultType()).thenReturn(t1);
-        
-        personJsonToDb.withDbPerson(new DbPerson());
     }
 	
 	@Test
@@ -122,7 +120,7 @@ public class PersonConverterTest {
         p.setTitle("Master of time and space");
         p.setVariety("student");
         
-		DbPerson dbp = personJsonToDb.apply(p);
+		DbPerson dbp = personJsonToDb.apply(new DbPerson(), p);
 		
         assertEquals(dbp.getAboutMe(), p.getAboutMe());
         assertEquals(bday.toString(), p.getBirthdate().toString());

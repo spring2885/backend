@@ -122,8 +122,7 @@ public class PersonsApi {
 		if (db == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-		personJsonToDb.withDbPerson(db);
-		DbPerson updatedDbPerson = personJsonToDb.apply(person);
+		DbPerson updatedDbPerson = personJsonToDb.apply(db, person);
 		personService.save(updatedDbPerson);
 		
 		return new ResponseEntity<>(HttpStatus.OK);
