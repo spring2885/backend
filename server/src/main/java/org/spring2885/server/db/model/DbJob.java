@@ -1,12 +1,23 @@
 package org.spring2885.server.db.model;
 
 import java.sql.Date;
+import java.util.List;
+import java.util.Set;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import com.google.common.collect.ImmutableSet;
 
 @Entity
 @Table(name="job")
@@ -17,22 +28,43 @@ public class DbJob {
 	private Long id;
 	
 	private String title;
-	
 	private Integer industry;
-	
 	private String location;
-	
 	private String description;
-	
 	private Integer jobType;
-
-	private Date startDate;
+	private Integer postedByPersonId;
+	private Integer hours;
 	
+
+	@Column(nullable=false, updatable=false)
+	private Date startDate;
 	private Date endDate;
 	
-	private Integer postedByPersonId;
+	@JoinColumn(name="person_id")
+    @ManyToOne(fetch=FetchType.EAGER)
+    private DbPerson person;
 	
-	private Integer hours;
+private Long views;
+	
+	@ManyToMany
+	@JoinTable(name = "news_visibility",
+	    joinColumns = @JoinColumn(name="job", referencedColumnName="id"),
+	    inverseJoinColumns = @JoinColumn(name="person_type", referencedColumnName="id"))
+	Set<DbPersonType> visibleToPersonTypes;
+	
+	
+	// Mark this as not insertable so the default database value will be used.
+	@Column(nullable = false, insertable=false, columnDefinition = "TINYINT", length = 1)
+	private Boolean active;
+    
+	// Mark this as not insertable so the default database value will be used.
+    @Column(nullable = false, insertable=false, columnDefinition = "TINYINT", length = 1)
+	private Boolean abuse;
+    
+    @OneToMany(mappedBy="job", fetch=FetchType.EAGER)
+    private List<DbNewsComment> comments;
+	
+	
 	
 	public Long getId() {
 		return id;
@@ -97,6 +129,52 @@ public class DbJob {
 	public void setHours(int hours) {
 		this.hours = hours;
 	}
+	
+	
+	
+	 public DbPerson getPerson() {
+	        return person;
+	    }
+
+	    public void setPersonId(DbPerson personId) {
+	        this.person = personId;
+	    }
+
+	    public Long getViews() {
+	        return views;
+	    }
+
+	    public void setViews(Long views) {
+	        this.views = views;
+	    }
+
+	    public Boolean isActive() {
+	        return active;
+	    }
+
+	    public void setActive(Boolean active) {
+	        this.active = active;
+	    }
+
+	    public Boolean isAbuse() {
+	        return abuse;
+	    }
+
+	    public void setAbuse(Boolean abuse) {
+	        this.abuse = abuse;
+	    }
+	    
+	    public Set<DbPersonType> getVisibleToPersonTypes() {
+	        return visibleToPersonTypes;
+	    }
+
+	    public void setVisibleToPersonTypes(Set<DbPersonType> visibleToPersonTypes) {
+	        this.visibleToPersonTypes = visibleToPersonTypes;
+	    }
+
+	    public void setVisibleToPersonType(DbPersonType visibleToPersonType) {
+	        this.visibleToPersonTypes = ImmutableSet.of(visibleToPersonType);
+	    }
 	
 	@Override
 	public int hashCode() {
@@ -172,4 +250,6 @@ public class DbJob {
 				.append(" }\n")
 				.toString();
 	}
+
+	
 }
