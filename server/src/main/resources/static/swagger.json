@@ -684,7 +684,7 @@
         "parameters" : [ {
           "name" : "size",
           "in" : "query",
-          "description" : "The maxinum number of profiles to fetch.",
+          "description" : "Size of array",
           "required" : false,
           "type" : "number",
           "format" : "int32"
@@ -921,7 +921,8 @@
     "/auth/forgot" : {
       "post" : {
         "tags" : [ "Reset" ],
-        "description" : "sends a request for a new password\n",
+        "summary" : "Sends a request for a new password\n",
+        "description" : "Sends a request for a new password\n",
         "parameters" : [ {
           "name" : "email",
           "in" : "formData",
@@ -946,7 +947,8 @@
     "/auth/reset" : {
       "post" : {
         "tags" : [ "Reset" ],
-        "description" : "setting new password for users email\n",
+        "summary" : "Resets a password.\n",
+        "description" : "Resets a password.\n",
         "parameters" : [ {
           "name" : "email",
           "in" : "formData",
@@ -968,7 +970,7 @@
         } ],
         "responses" : {
           "200" : {
-            "description" : "new password set.",
+            "description" : "Successful resetting of the password.",
             "schema" : {
               "$ref" : "#/definitions/Reset"
             }
@@ -1253,6 +1255,37 @@
           "type" : "string"
         }
       }
+    }
+  },
+  "parameters" : {
+    "size" : {
+      "name" : "size",
+      "in" : "query",
+      "description" : "Size of array",
+      "required" : false,
+      "type" : "number",
+      "format" : "int32"
+    },
+    "admin" : {
+      "name" : "admin",
+      "in" : "query",
+      "description" : "True if this is an admin request. \nAdmin requests are only allowed to be specified\nby admin users.  If a non-admin attempts to specifify\none then a 403 will be returned.\n",
+      "required" : false,
+      "type" : "boolean"
+    },
+    "q" : {
+      "name" : "q",
+      "in" : "query",
+      "description" : "## Basic query string.\n### Format:\n  ```?q=search terms```\n\n### Example:\n  ```?q=Oracle```\n",
+      "required" : false,
+      "type" : "string"
+    },
+    "aq" : {
+      "name" : "aq",
+      "in" : "query",
+      "description" : "## Advanced query string.\n### Format:\n  ```?aq=(attribute OP term),...```\n\n### Example:\n  ```?aq=graduation_year>2000,occupation:manager```\n\n### Available OPs:\n  * ':' for equality\n  * '!' for not\n  * '>' greater than\n  * '<' less than\n",
+      "required" : false,
+      "type" : "string"
     }
   }
 }

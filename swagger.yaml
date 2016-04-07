@@ -20,6 +20,56 @@ securityDefinitions:
     type: basic
     description: HTTP Basic Authentication. Works over `HTTP` and `HTTPS`
 
+parameters:
+  size:
+    name: size
+    in: query
+    description: Size of array
+    required: false
+    type: number
+    format: int32
+  admin:
+    name: admin
+    in: query
+    description: |
+      True if this is an admin request. 
+      Admin requests are only allowed to be specified
+      by admin users.  If a non-admin attempts to specifify
+      one then a 403 will be returned.
+    required: false
+    type: boolean
+  q:
+    name: q
+    in: query
+    description: |
+      ## Basic query string.
+      ### Format:
+        ```?q=search terms```
+
+      ### Example:
+        ```?q=Oracle```
+
+    required: false
+    type: string
+  aq:
+    name: aq
+    in: query
+    description: |
+      ## Advanced query string.
+      ### Format:
+        ```?aq=(attribute OP term),...```
+
+      ### Example:
+        ```?aq=graduation_year>2000,occupation:manager```
+
+      ### Available OPs:
+        * ':' for equality
+        * '!' for not
+        * '>' greater than
+        * '<' less than
+    required: false
+    type: string
+
 paths:
   /newuser:
     post:
@@ -49,8 +99,10 @@ paths:
   /auth/forgot:
     post:
       tags: ["Reset"]
+      summary: |
+        Sends a request for a new password
       description: |
-        sends a request for a new password
+        Sends a request for a new password
       parameters:
         - name: email
           in: formData
@@ -68,8 +120,10 @@ paths:
   /auth/reset:
     post:
       tags: ["Reset"]
+      summary: |
+        Resets a password.
       description: |
-        setting new password for users email
+        Resets a password.
       parameters:
         - name: email
           in: formData
@@ -88,7 +142,7 @@ paths:
           type: string
       responses:
         200:
-          description: new password set.
+          description: Successful resetting of the password.
           schema:
             $ref: '#/definitions/Reset'
         500:
@@ -107,42 +161,9 @@ paths:
         Fetches all `profile` objects. up to `size` if specified,
         otherwise fetches all objects.
       parameters:
-        - name: size
-          in: query
-          description: The maxinum number of profiles to fetch.
-          required: false
-          type: number
-          format: int32
-        - name: q
-          in: query
-          description: |
-            ## Basic query string.
-            ### Format:
-              ```?q=search terms```
-
-            ### Example:
-              ```?q=Oracle```
-
-          required: false
-          type: string
-        - name: aq
-          in: query
-          description: |
-            ## Advanced query string.
-            ### Format:
-              ```?aq=(attribute OP term),...```
-
-            ### Example:
-              ```?aq=graduation_year>2000,occupation:manager```
-
-            ### Available OPs:
-              * ':' for equality
-              * '!' for not
-              * '>' greater than
-              * '<' less than
-          required: false
-          type: string
-      # Expected responses for this operation:
+        - $ref: '#/parameters/size'
+        - $ref: '#/parameters/q'
+        - $ref: '#/parameters/aq'
       responses:
         # Response code
         200:
