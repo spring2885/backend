@@ -12,7 +12,14 @@ info:
     url: https://github.com/spring2885/backend
   
 
-# Describe your paths here
+schemes:
+  - http
+  - https
+securityDefinitions:
+  basicAuth:
+    type: basic
+    description: HTTP Basic Authentication. Works over `HTTP` and `HTTPS`
+
 paths:
   /newuser:
     post:
@@ -92,6 +99,8 @@ paths:
     # This is a HTTP operation
     get:
       tags: ["Profiles"]
+      security:
+       - basicAuth: []
       summary: |
         Fetches all `profile` objects
       description: |
@@ -148,6 +157,8 @@ paths:
   /api/v1/profiles/{id}:
     get:
       tags: ["Profiles"]
+      security:
+       - basicAuth: []
       summary: |
         Fetches the `profile` for id `id`.
       description: |
@@ -168,6 +179,8 @@ paths:
             $ref: '#/definitions/Person'
     put:
       tags: ["Profiles"]
+      security:
+       - basicAuth: []
       summary: |
           The profile to update.
       parameters:
@@ -188,6 +201,8 @@ paths:
           description: Updates the person
     delete:
       tags: ["Profiles"]
+      security:
+       - basicAuth: []
       summary: |
         The profile to delete.
       parameters:
@@ -206,6 +221,8 @@ paths:
   /api/v1/news:
     get:
       tags: ["News"]
+      security:
+       - basicAuth: []
       description: |
         Gets `News` objects.
         Optional querry param of **size** determines
@@ -264,6 +281,8 @@ paths:
               $ref: '#/definitions/News'
     post:
       tags: ["News"]
+      security:
+       - basicAuth: []
       description: |
       parameters:
         - name : News
@@ -278,6 +297,8 @@ paths:
   /api/v1/news/{id}:
     get:
       tags: ["News"]
+      security:
+       - basicAuth: []
       description: |
         Retrives a News entry
       parameters:
@@ -294,6 +315,8 @@ paths:
             $ref: '#/definitions/News'
     delete:
       tags: ["News"]
+      security:
+       - basicAuth: []
       summary: |
         The News to delete
       parameters:
@@ -310,6 +333,8 @@ paths:
           description: Error with deleting News by id. 
     put:
       tags: ["News"]
+      security:
+       - basicAuth: []
       summary: |
         The News to update
       parameters:
@@ -336,6 +361,8 @@ paths:
   /api/v1/news_comment:
     post:
       tags: ["News"]
+      security:
+       - basicAuth: []
       description: |
       parameters:
         - name : news_comment
@@ -351,6 +378,8 @@ paths:
   /api/v1/news_comment/{id}:
     get:
       tags: ["News"]
+      security:
+       - basicAuth: []
       description: |
         Retrives the comments by id.
       parameters:
@@ -367,6 +396,8 @@ paths:
             $ref: '#/definitions/NewsComment'
     delete:
       tags: ["News"]
+      security:
+       - basicAuth: []
       summary: |
         The News Comment to delete
       parameters:
@@ -383,6 +414,8 @@ paths:
           description: Error with deleting News comment by id. 
     put:
       tags: ["News"]
+      security:
+       - basicAuth: []
       summary: |
         The News Comment to update
       parameters:
@@ -408,6 +441,8 @@ paths:
   /api/v1/jobs:
     get:
       tags: ["Jobs"]
+      security:
+       - basicAuth: []
       description: |
         Gets `Job` objects.
         Optional query param of **size** determines
@@ -435,6 +470,8 @@ paths:
               $ref: '#/definitions/Job'
     post:
       tags: ["Jobs"]
+      security:
+       - basicAuth: []
       parameters:
         - name: Job
           in: body
@@ -449,6 +486,8 @@ paths:
   /api/v1/jobs/{id}:
     get:
       tags: ["Jobs"]
+      security:
+       - basicAuth: []
       summary: |
         Fetches the `job` for id `id`.
       description: |
@@ -469,6 +508,8 @@ paths:
             $ref: '#/definitions/Job'
     put:
       tags: ["Jobs"]
+      security:
+       - basicAuth: []
       summary: |
           The job to update.
       parameters:
@@ -490,6 +531,8 @@ paths:
           description: Updates the Job
     delete:
       tags: ["Jobs"]
+      security:
+       - basicAuth: []
       summary: |
         The job to delete.
       parameters:
@@ -509,6 +552,8 @@ paths:
   /api/v1/socialservice:
     get:
       tags: ["SocialService"]
+      security:
+       - basicAuth: []
       description: |
         Gets `SocailService` objects.
         Optional querry param of **size** determines
@@ -528,6 +573,8 @@ paths:
               $ref: '#/definitions/News'
     post:
       tags: ["SocialService"]
+      security:
+       - basicAuth: []
       description: |
       parameters:
         - name : SocialService
@@ -542,6 +589,8 @@ paths:
   /api/v1/socialservice/{id}:
     get:
       tags: ["SocialService"]
+      security:
+       - basicAuth: []
       description: |
         Retrives a SocialService entry
       parameters:
@@ -557,6 +606,8 @@ paths:
             $ref: '#/definitions/SocialService'
     delete:
       tags: ["SocialService"]
+      security:
+       - basicAuth: []
       summary: |
         The SocialService to delete
       parameters:
@@ -572,6 +623,8 @@ paths:
           description: Error with deleting SocialService by id. 
     put:
       tags: ["SocialService"]
+      security:
+       - basicAuth: []
       summary: |
         The SocialService to update
       parameters:
@@ -596,6 +649,8 @@ paths:
   /api/v1/persontype:
     get:
       tags: ["PersonType"]
+      security:
+       - basicAuth: []
       summary: |
         Fetches all 'persontype' objects
       description: |
@@ -619,6 +674,8 @@ paths:
           description: Error getting persontypes
     post:
       tags: ["PersonType"]
+      security:
+       - basicAuth: []
       parameters:
         - name: PersonType
           in: body
@@ -635,6 +692,8 @@ paths:
   /api/v1/persontype/{id}:
     get:
       tags: ["PersonType"]
+      security:
+       - basicAuth: []
       summary: |
         Fetches the 'person type' for id 'id'.
       description: |
@@ -654,6 +713,8 @@ paths:
           description: error getting persontype with id 'id'
     put:
       tags: ["PersonType"]
+      security:
+       - basicAuth: []
       summary: |
         The persontype to update
       parameters:
@@ -674,6 +735,8 @@ paths:
           description: Updates the persontype.
     delete:
       tags: ["PersonType"]
+      security:
+       - basicAuth: []
       summary: |
         The persontype to delete.
       parameters:
@@ -694,6 +757,8 @@ paths:
   /api/v1/jobtype:
     get:
       tags: ["JobType"]
+      security:
+       - basicAuth: []
       description: |
         Gets `JobType` objects.
         Optional querry param of **size** determines
@@ -714,6 +779,8 @@ paths:
               $ref: '#/definitions/JobType'  
     post:
       tags: ["JobType"]
+      security:
+       - basicAuth: []
       description: |
       parameters:
         - name : JobType
@@ -729,6 +796,8 @@ paths:
   /api/v1/jobtype/{id}:
     get:
       tags: ["JobType"]
+      security:
+       - basicAuth: []
       description: |
         Retrives a jobtype entry
       parameters:
@@ -745,6 +814,8 @@ paths:
             $ref: '#/definitions/JobType'
     delete:
       tags: ["JobType"]
+      security:
+       - basicAuth: []
       summary: |
         The jobtype to delete
       parameters:
@@ -761,6 +832,8 @@ paths:
           description: Error with deleting jobtype by id. 
     put:
       tags: ["JobType"]
+      security:
+       - basicAuth: []
       summary: |
         The jobtype to update
       parameters:
