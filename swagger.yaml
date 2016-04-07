@@ -18,21 +18,23 @@ schemes:
 securityDefinitions:
   basicAuth:
     type: basic
-    description: HTTP Basic Authentication. Works over `HTTP` and `HTTPS`
+    description: HTTP Basic Authentication. Works over `HTTP` and `HTTPS`.
 
 parameters:
   size:
     name: size
     in: query
-    description: Size of array
+    description: |
+      Maximum number of items to fetch.
+      If unset then all items are fetched.
     required: false
-    type: number
-    format: int32
+    type: integer
+    format: int64
   admin:
     name: admin
     in: query
     description: |
-      True if this is an admin request. 
+      **True** if this is an admin request. 
       Admin requests are only allowed to be specified
       by admin users.  If a non-admin attempts to specifify
       one then a 403 will be returned.
@@ -69,6 +71,13 @@ parameters:
         * '<' less than
     required: false
     type: string
+  id:
+    name: id
+    in: path
+    description: The ID of the entry.
+    required: true
+    type: integer
+    format: int64
 
 paths:
   /newuser:
@@ -185,12 +194,7 @@ paths:
         Fetches the `profile` for id `id`.
       description: |
       parameters:
-        - name: id
-          in: path
-          description: The ID of the profile to fetch
-          required: true
-          type: number
-          format: int32
+        - $ref: '#/parameters/id'
       responses:
         # Response code
         200:
@@ -205,12 +209,7 @@ paths:
        - basicAuth: []
       summary: Updates a profile
       parameters:
-        - name: id
-          in: path
-          description: The ID of the profile to fetch
-          required: true
-          type: number
-          format: int32
+        - $ref: '#/parameters/id'
         - name: person
           in: body
           description: The profile to update.
@@ -226,12 +225,7 @@ paths:
        - basicAuth: []
       summary: Deletes a profile
       parameters:
-        - name: id
-          in: path
-          description: The profile to delete.
-          required: true
-          type: integer
-          format: int64
+        - $ref: '#/parameters/id'
       responses:
         200:
           description: Updates the person.
@@ -286,12 +280,7 @@ paths:
       description: |
         Retrives a news entry by id.
       parameters:
-        - name: id
-          in: path
-          description: a single news entry
-          required: true
-          type: number
-          format: int64
+        - $ref: '#/parameters/id'
       responses:
         200:
           description: Sucussful deletion 
@@ -305,12 +294,7 @@ paths:
       summary: |
         Deletes a single news entry.
       parameters:
-        - name: id
-          in: path
-          description: The News to be deleted.
-          required: true
-          type: integer
-          format: int64
+        - $ref: '#/parameters/id'
       responses:
         200:
           description: Deletes News
@@ -324,12 +308,7 @@ paths:
       summary: |
         Updates a news entry.
       parameters:
-        - name: id
-          in: path
-          description: The id of the News to be update.
-          required: true
-          type: integer
-          format: int64
+        - $ref: '#/parameters/id'
         - name: news
           in: body
           description: The News item you want to update
@@ -371,12 +350,7 @@ paths:
       description: |
         Retrives the comments by id.
       parameters:
-        - name: id
-          in: path
-          description: a single News entry
-          required: true
-          type: number
-          format: int64
+        - $ref: '#/parameters/id'
       responses:
         200:
           description: Successful response
@@ -390,12 +364,7 @@ paths:
       summary: |
         Deletes a news comment by id.
       parameters:
-        - name: id
-          in: path
-          description: The News to be deleted.
-          required: true
-          type: integer
-          format: int64
+        - $ref: '#/parameters/id'
       responses:
         200:
           description: Deletes News Comment
@@ -409,12 +378,7 @@ paths:
       description: |
         Updates a news comment by id.
       parameters:
-        - name: id
-          in: path
-          description: The id of the News Comment to be update.
-          required: true
-          type: integer
-          format: int64
+        - $ref: '#/parameters/id'
         - name: news_comment
           in: body
           description: The News comment you want to update
@@ -473,12 +437,7 @@ paths:
       description: |
         Gets a Job entry.
       parameters:
-        - name: id
-          in: path
-          description: The ID of the job to fetch
-          required: true
-          type: number
-          format: int64
+        - $ref: '#/parameters/id'
       responses:
         200:
           description: Successful response
@@ -493,12 +452,7 @@ paths:
       summary: |
           Updates a job.
       parameters:
-        - name: id
-          in: path
-          description: The id of the Job you want to update
-          required: true
-          type: number
-          format: in64
+        - $ref: '#/parameters/id'
         - name: job
           in: body
           description: The Job you want to update
@@ -518,12 +472,7 @@ paths:
       summary: |
         Deletes a job entry.
       parameters:
-        - name: id
-          in: path
-          description: The job to delete.
-          required: true
-          type: integer
-          format: int64
+        - $ref: '#/parameters/id'
       responses:
         200:
           description: Updates the person.
@@ -578,11 +527,7 @@ paths:
       description: |
         Retrives a SocialService entry
       parameters:
-        - name: id
-          in: path
-          description: a single SocialService entry
-          required: true
-          type: string
+        - $ref: '#/parameters/id'
       responses:
         200:
           description: Sucussful deletion 
@@ -596,11 +541,7 @@ paths:
       summary: |
         The SocialService to delete
       parameters:
-        - name: id
-          in: path
-          description: The SocialService to be deleted.
-          required: true
-          type: string
+        - $ref: '#/parameters/id'
       responses:
         200:
           description: Deletes SocialService
@@ -614,11 +555,7 @@ paths:
       summary: |
         The SocialService to update
       parameters:
-        - name: id
-          in: path
-          description: The id of the News to be update.
-          required: true
-          type: string
+        - $ref: '#/parameters/id'
         - name: socialservice
           in: body
           description: The SocialService item you want to update
@@ -680,12 +617,7 @@ paths:
       summary: Gets a persontype entry.
       description:  Gets a persontype entry.
       parameters:
-        - name: id
-          in: path
-          description: The id of the person type to fetch
-          required: true
-          type: number
-          format: int32
+        - $ref: '#/parameters/id'
       responses:
         200:
           description: Successful response
@@ -701,12 +633,7 @@ paths:
         Updates a persontype entry
       description: Updates a persontype entry.
       parameters:
-        - name: id
-          in: path
-          description: the id of the persontype to fetch.
-          required: true
-          type: number
-          format: int32
+        - $ref: '#/parameters/id'
         - name: name
           in: body
           description: The type to update.
@@ -724,12 +651,7 @@ paths:
         Deletes a persontype entry.
       description: Deletes a persontype entry.
       parameters:
-        - name: id
-          in: path
-          description: The persontype to delete.
-          required: true
-          type: integer
-          format: int64
+        - $ref: '#/parameters/id'
       responses:
         200:
           description: Deletes the persontype.
@@ -783,12 +705,7 @@ paths:
         Gets a jobtype entry.
       description: Gets a jobtype entry by id.
       parameters:
-        - name: id
-          in: path
-          description: a single jobtype entry
-          required: true
-          type: number
-          format: int64
+        - $ref: '#/parameters/id'
       responses:
         200:
           description: Sucussful deletion 
@@ -802,12 +719,7 @@ paths:
         Deletes a jobtype entry.
       description: Delete a jobtype entry by id.
       parameters:
-        - name: id
-          in: path
-          description: The jobtype to be deleted.
-          required: true
-          type: integer
-          format: int64
+        - $ref: '#/parameters/id'
       responses:
         200:
           description: Deletes jobtype
@@ -820,12 +732,7 @@ paths:
       summary: Updates a jobtype entry.
       description: Updates a jobtype entry by id.
       parameters:
-        - name: id
-          in: path
-          description: The id of the News to be update.
-          required: true
-          type: integer
-          format: int64
+        - $ref: '#/parameters/id'
         - name: jobtype
           in: body
           description: The jobtype item you want to update

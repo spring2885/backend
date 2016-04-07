@@ -45,10 +45,10 @@
         "parameters" : [ {
           "name" : "size",
           "in" : "query",
-          "description" : "Size of array",
+          "description" : "Maximum number of items to fetch.\nIf unset then all items are fetched.\n",
           "required" : false,
-          "type" : "number",
-          "format" : "int32"
+          "type" : "integer",
+          "format" : "int64"
         } ],
         "responses" : {
           "200" : {
@@ -96,9 +96,9 @@
         "parameters" : [ {
           "name" : "id",
           "in" : "path",
-          "description" : "The ID of the job to fetch",
+          "description" : "The ID of the entry.",
           "required" : true,
-          "type" : "number",
+          "type" : "integer",
           "format" : "int64"
         } ],
         "responses" : {
@@ -120,10 +120,10 @@
         "parameters" : [ {
           "name" : "id",
           "in" : "path",
-          "description" : "The id of the Job you want to update",
+          "description" : "The ID of the entry.",
           "required" : true,
-          "type" : "number",
-          "format" : "in64"
+          "type" : "integer",
+          "format" : "int64"
         }, {
           "in" : "body",
           "name" : "job",
@@ -149,7 +149,7 @@
         "parameters" : [ {
           "name" : "id",
           "in" : "path",
-          "description" : "The job to delete.",
+          "description" : "The ID of the entry.",
           "required" : true,
           "type" : "integer",
           "format" : "int64"
@@ -175,10 +175,10 @@
         "parameters" : [ {
           "name" : "size",
           "in" : "query",
-          "description" : "Size of array",
+          "description" : "Maximum number of items to fetch.\nIf unset then all items are fetched.\n",
           "required" : false,
-          "type" : "number",
-          "format" : "int32"
+          "type" : "integer",
+          "format" : "int64"
         } ],
         "responses" : {
           "200" : {
@@ -226,9 +226,9 @@
         "parameters" : [ {
           "name" : "id",
           "in" : "path",
-          "description" : "a single jobtype entry",
+          "description" : "The ID of the entry.",
           "required" : true,
-          "type" : "number",
+          "type" : "integer",
           "format" : "int64"
         } ],
         "responses" : {
@@ -250,7 +250,7 @@
         "parameters" : [ {
           "name" : "id",
           "in" : "path",
-          "description" : "The id of the News to be update.",
+          "description" : "The ID of the entry.",
           "required" : true,
           "type" : "integer",
           "format" : "int64"
@@ -282,7 +282,7 @@
         "parameters" : [ {
           "name" : "id",
           "in" : "path",
-          "description" : "The jobtype to be deleted.",
+          "description" : "The ID of the entry.",
           "required" : true,
           "type" : "integer",
           "format" : "int64"
@@ -308,14 +308,14 @@
         "parameters" : [ {
           "name" : "size",
           "in" : "query",
-          "description" : "Size of array",
+          "description" : "Maximum number of items to fetch.\nIf unset then all items are fetched.\n",
           "required" : false,
-          "type" : "number",
-          "format" : "int32"
+          "type" : "integer",
+          "format" : "int64"
         }, {
           "name" : "admin",
           "in" : "query",
-          "description" : "True if this is an admin request. \nAdmin requests are only allowed to be specified\nby admin users.  If a non-admin attempts to specifify\none then a 403 will be returned.\n",
+          "description" : "**True** if this is an admin request. \nAdmin requests are only allowed to be specified\nby admin users.  If a non-admin attempts to specifify\none then a 403 will be returned.\n",
           "required" : false,
           "type" : "boolean"
         }, {
@@ -377,9 +377,9 @@
         "parameters" : [ {
           "name" : "id",
           "in" : "path",
-          "description" : "a single news entry",
+          "description" : "The ID of the entry.",
           "required" : true,
-          "type" : "number",
+          "type" : "integer",
           "format" : "int64"
         } ],
         "responses" : {
@@ -400,7 +400,7 @@
         "parameters" : [ {
           "name" : "id",
           "in" : "path",
-          "description" : "The id of the News to be update.",
+          "description" : "The ID of the entry.",
           "required" : true,
           "type" : "integer",
           "format" : "int64"
@@ -431,7 +431,7 @@
         "parameters" : [ {
           "name" : "id",
           "in" : "path",
-          "description" : "The News to be deleted.",
+          "description" : "The ID of the entry.",
           "required" : true,
           "type" : "integer",
           "format" : "int64"
@@ -481,9 +481,9 @@
         "parameters" : [ {
           "name" : "id",
           "in" : "path",
-          "description" : "a single News entry",
+          "description" : "The ID of the entry.",
           "required" : true,
-          "type" : "number",
+          "type" : "integer",
           "format" : "int64"
         } ],
         "responses" : {
@@ -505,7 +505,7 @@
         "parameters" : [ {
           "name" : "id",
           "in" : "path",
-          "description" : "The id of the News Comment to be update.",
+          "description" : "The ID of the entry.",
           "required" : true,
           "type" : "integer",
           "format" : "int64"
@@ -536,7 +536,7 @@
         "parameters" : [ {
           "name" : "id",
           "in" : "path",
-          "description" : "The News to be deleted.",
+          "description" : "The ID of the entry.",
           "required" : true,
           "type" : "integer",
           "format" : "int64"
@@ -562,10 +562,10 @@
         "parameters" : [ {
           "name" : "size",
           "in" : "query",
-          "description" : "Size of array",
+          "description" : "Maximum number of items to fetch.\nIf unset then all items are fetched.\n",
           "required" : false,
-          "type" : "number",
-          "format" : "int32"
+          "type" : "integer",
+          "format" : "int64"
         } ],
         "responses" : {
           "200" : {
@@ -619,10 +619,10 @@
         "parameters" : [ {
           "name" : "id",
           "in" : "path",
-          "description" : "The id of the person type to fetch",
+          "description" : "The ID of the entry.",
           "required" : true,
-          "type" : "number",
-          "format" : "int32"
+          "type" : "integer",
+          "format" : "int64"
         } ],
         "responses" : {
           "200" : {
@@ -646,10 +646,10 @@
         "parameters" : [ {
           "name" : "id",
           "in" : "path",
-          "description" : "the id of the persontype to fetch.",
+          "description" : "The ID of the entry.",
           "required" : true,
-          "type" : "number",
-          "format" : "int32"
+          "type" : "integer",
+          "format" : "int64"
         }, {
           "in" : "body",
           "name" : "name",
@@ -675,7 +675,7 @@
         "parameters" : [ {
           "name" : "id",
           "in" : "path",
-          "description" : "The persontype to delete.",
+          "description" : "The ID of the entry.",
           "required" : true,
           "type" : "integer",
           "format" : "int64"
@@ -704,10 +704,10 @@
         "parameters" : [ {
           "name" : "size",
           "in" : "query",
-          "description" : "Size of array",
+          "description" : "Maximum number of items to fetch.\nIf unset then all items are fetched.\n",
           "required" : false,
-          "type" : "number",
-          "format" : "int32"
+          "type" : "integer",
+          "format" : "int64"
         }, {
           "name" : "q",
           "in" : "query",
@@ -745,10 +745,10 @@
         "parameters" : [ {
           "name" : "id",
           "in" : "path",
-          "description" : "The ID of the profile to fetch",
+          "description" : "The ID of the entry.",
           "required" : true,
-          "type" : "number",
-          "format" : "int32"
+          "type" : "integer",
+          "format" : "int64"
         } ],
         "responses" : {
           "200" : {
@@ -768,10 +768,10 @@
         "parameters" : [ {
           "name" : "id",
           "in" : "path",
-          "description" : "The ID of the profile to fetch",
+          "description" : "The ID of the entry.",
           "required" : true,
-          "type" : "number",
-          "format" : "int32"
+          "type" : "integer",
+          "format" : "int64"
         }, {
           "in" : "body",
           "name" : "person",
@@ -796,7 +796,7 @@
         "parameters" : [ {
           "name" : "id",
           "in" : "path",
-          "description" : "The profile to delete.",
+          "description" : "The ID of the entry.",
           "required" : true,
           "type" : "integer",
           "format" : "int64"
@@ -822,10 +822,10 @@
         "parameters" : [ {
           "name" : "size",
           "in" : "query",
-          "description" : "Size of array",
+          "description" : "Maximum number of items to fetch.\nIf unset then all items are fetched.\n",
           "required" : false,
-          "type" : "number",
-          "format" : "int32"
+          "type" : "integer",
+          "format" : "int64"
         } ],
         "responses" : {
           "200" : {
@@ -873,9 +873,10 @@
         "parameters" : [ {
           "name" : "id",
           "in" : "path",
-          "description" : "a single SocialService entry",
+          "description" : "The ID of the entry.",
           "required" : true,
-          "type" : "string"
+          "type" : "integer",
+          "format" : "int64"
         } ],
         "responses" : {
           "200" : {
@@ -895,9 +896,10 @@
         "parameters" : [ {
           "name" : "id",
           "in" : "path",
-          "description" : "The id of the News to be update.",
+          "description" : "The ID of the entry.",
           "required" : true,
-          "type" : "string"
+          "type" : "integer",
+          "format" : "int64"
         }, {
           "in" : "body",
           "name" : "socialservice",
@@ -925,9 +927,10 @@
         "parameters" : [ {
           "name" : "id",
           "in" : "path",
-          "description" : "The SocialService to be deleted.",
+          "description" : "The ID of the entry.",
           "required" : true,
-          "type" : "string"
+          "type" : "integer",
+          "format" : "int64"
         } ],
         "responses" : {
           "200" : {
@@ -1038,7 +1041,7 @@
   },
   "securityDefinitions" : {
     "basicAuth" : {
-      "description" : "HTTP Basic Authentication. Works over `HTTP` and `HTTPS`",
+      "description" : "HTTP Basic Authentication. Works over `HTTP` and `HTTPS`.",
       "type" : "basic"
     }
   },
@@ -1286,15 +1289,15 @@
     "size" : {
       "name" : "size",
       "in" : "query",
-      "description" : "Size of array",
+      "description" : "Maximum number of items to fetch.\nIf unset then all items are fetched.\n",
       "required" : false,
-      "type" : "number",
-      "format" : "int32"
+      "type" : "integer",
+      "format" : "int64"
     },
     "admin" : {
       "name" : "admin",
       "in" : "query",
-      "description" : "True if this is an admin request. \nAdmin requests are only allowed to be specified\nby admin users.  If a non-admin attempts to specifify\none then a 403 will be returned.\n",
+      "description" : "**True** if this is an admin request. \nAdmin requests are only allowed to be specified\nby admin users.  If a non-admin attempts to specifify\none then a 403 will be returned.\n",
       "required" : false,
       "type" : "boolean"
     },
@@ -1311,6 +1314,14 @@
       "description" : "## Advanced query string.\n### Format:\n  ```?aq=(attribute OP term),...```\n\n### Example:\n  ```?aq=graduation_year>2000,occupation:manager```\n\n### Available OPs:\n  * ':' for equality\n  * '!' for not\n  * '>' greater than\n  * '<' less than\n",
       "required" : false,
       "type" : "string"
+    },
+    "id" : {
+      "name" : "id",
+      "in" : "path",
+      "description" : "The ID of the entry.",
+      "required" : true,
+      "type" : "integer",
+      "format" : "int64"
     }
   }
 }
