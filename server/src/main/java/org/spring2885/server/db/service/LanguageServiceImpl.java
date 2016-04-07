@@ -48,7 +48,7 @@ public class LanguageServiceImpl implements LanguageService {
 
 	@Override
 	public DbLanguage findByCode(String code) {
-		return null;
+		return repository.findOne(code);
 	}
 
 }
