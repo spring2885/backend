@@ -74,9 +74,10 @@ paths:
   /newuser:
     post:
       tags: ["User"]
-      description: |
+      summary: |
         Creates a new user in the system
       description: |
+        Creates a new user in the system
       parameters:
         - name: email
           in: formData
@@ -156,7 +157,7 @@ paths:
       security:
        - basicAuth: []
       summary: |
-        Fetches all `profile` objects
+        Fetches all profiles
       description: |
         Fetches all `profile` objects. up to `size` if specified,
         otherwise fetches all objects.
@@ -202,8 +203,7 @@ paths:
       tags: ["Profiles"]
       security:
        - basicAuth: []
-      summary: |
-          The profile to update.
+      summary: Updates a profile
       parameters:
         - name: id
           in: path
@@ -224,8 +224,7 @@ paths:
       tags: ["Profiles"]
       security:
        - basicAuth: []
-      summary: |
-        The profile to delete.
+      summary: Deletes a profile
       parameters:
         - name: id
           in: path
@@ -244,6 +243,7 @@ paths:
       tags: ["News"]
       security:
        - basicAuth: []
+      summary: Fetches all news.
       description: |
         Gets `News` objects.
         Optional querry param of **size** determines
@@ -264,7 +264,9 @@ paths:
       tags: ["News"]
       security:
        - basicAuth: []
+      summary: Posts new news entry.
       description: |
+        Posts a new news entry.
       parameters:
         - name : News
           in: body
@@ -280,12 +282,13 @@ paths:
       tags: ["News"]
       security:
        - basicAuth: []
+      summary: Gets a news entry.
       description: |
-        Retrives a News entry
+        Retrives a news entry by id.
       parameters:
         - name: id
           in: path
-          description: a single News entry
+          description: a single news entry
           required: true
           type: number
           format: int64
@@ -298,8 +301,9 @@ paths:
       tags: ["News"]
       security:
        - basicAuth: []
+      summary: Deletes a news entry.
       summary: |
-        The News to delete
+        Deletes a single news entry.
       parameters:
         - name: id
           in: path
@@ -316,8 +320,9 @@ paths:
       tags: ["News"]
       security:
        - basicAuth: []
+      summary: Updates a news entry.
       summary: |
-        The News to update
+        Updates a news entry.
       parameters:
         - name: id
           in: path
@@ -344,7 +349,8 @@ paths:
       tags: ["News"]
       security:
        - basicAuth: []
-      description: |
+      summary: Posts a news comment.
+      description: Posts a new news comment.
       parameters:
         - name : news_comment
           in: body
@@ -361,6 +367,7 @@ paths:
       tags: ["News"]
       security:
        - basicAuth: []
+      summary: Gets a news comment.
       description: |
         Retrives the comments by id.
       parameters:
@@ -379,8 +386,9 @@ paths:
       tags: ["News"]
       security:
        - basicAuth: []
+      summary: Deletes a news comment.
       summary: |
-        The News Comment to delete
+        Deletes a news comment by id.
       parameters:
         - name: id
           in: path
@@ -397,8 +405,9 @@ paths:
       tags: ["News"]
       security:
        - basicAuth: []
-      summary: |
-        The News Comment to update
+      summary: Updates a news comment.
+      description: |
+        Updates a news comment by id.
       parameters:
         - name: id
           in: path
@@ -424,33 +433,24 @@ paths:
       tags: ["Jobs"]
       security:
        - basicAuth: []
+      summary: Gets all job entries.
       description: |
-        Gets `Job` objects.
+        Gets `Job` entries.
         Optional query param of **size** determines
         size of returned array
-      # This is array of GET operation parameters:
       parameters:
-        # An example parameter that is in query and is required
-        -
-          name: size
-          in: query
-          description: Size of array
-          required: false
-          type: number
-          format: double
-      # Expected responses for this operation:
+        - $ref: '#/parameters/size'
       responses:
-        # Response code
         200:
           description: Successful response
-          # A schema describing your response object.
-          # Use JSON Schema format
           schema:
             type: array
             items:
               $ref: '#/definitions/Job'
     post:
       tags: ["Jobs"]
+      summary: Posts a new job entry.
+      description: Posts a new job entry.
       security:
        - basicAuth: []
       parameters:
@@ -469,12 +469,9 @@ paths:
       tags: ["Jobs"]
       security:
        - basicAuth: []
-      summary: |
-        Fetches the `job` for id `id`.
+      summary: Gets a job entry.
       description: |
-        Gets `Job` objects.
-        Optional query param of **size** determines
-        size of returned array
+        Gets a Job entry.
       parameters:
         - name: id
           in: path
@@ -491,8 +488,10 @@ paths:
       tags: ["Jobs"]
       security:
        - basicAuth: []
+      description: |
+          Updates a job.
       summary: |
-          The job to update.
+          Updates a job.
       parameters:
         - name: id
           in: path
@@ -514,8 +513,10 @@ paths:
       tags: ["Jobs"]
       security:
        - basicAuth: []
+      description: |
+        Deletes a job entry.
       summary: |
-        The job to delete.
+        Deletes a job entry.
       parameters:
         - name: id
           in: path
@@ -535,16 +536,14 @@ paths:
       tags: ["SocialService"]
       security:
        - basicAuth: []
+      summary: |
+        Gets all SocailService entries.
       description: |
-        Gets `SocailService` objects.
+        Gets all SocailService entries.
         Optional querry param of **size** determines
         size of return array
       parameters:
-        - name: size
-          in: query
-          description: Size of array
-          required: false
-          type: string
+        - $ref: '#/parameters/size'
       responses:
         200:
           description: Successful response
@@ -556,7 +555,10 @@ paths:
       tags: ["SocialService"]
       security:
        - basicAuth: []
+      summary: |
+        Posts a new social service entry.
       description: |
+        Posts a new social service entry.
       parameters:
         - name : SocialService
           in: body
@@ -572,6 +574,7 @@ paths:
       tags: ["SocialService"]
       security:
        - basicAuth: []
+      summary: Gets a social service entry.
       description: |
         Retrives a SocialService entry
       parameters:
@@ -589,6 +592,7 @@ paths:
       tags: ["SocialService"]
       security:
        - basicAuth: []
+      summary: Deletes a social service entry.
       summary: |
         The SocialService to delete
       parameters:
@@ -606,6 +610,7 @@ paths:
       tags: ["SocialService"]
       security:
        - basicAuth: []
+      summary: Updates a social service entry.
       summary: |
         The SocialService to update
       parameters:
@@ -633,17 +638,12 @@ paths:
       security:
        - basicAuth: []
       summary: |
-        Fetches all 'persontype' objects
+        Fetches all persontype entries.
       description: |
         Fetches all 'person type' objects. up to a 'size' if specified,
         otherwise fetches all objects.
       parameters:
-        - name: size
-          in: query
-          description: The maximum number of persontypes to fetch
-          required: false
-          type: number
-          format: int32
+        - $ref: '#/parameters/size'
       responses:
         200:
           description: Gets persontypes
@@ -655,6 +655,8 @@ paths:
           description: Error getting persontypes
     post:
       tags: ["PersonType"]
+      summary: Creates a new persontype.
+      description: Creates a new persontype entry.
       security:
        - basicAuth: []
       parameters:
@@ -675,9 +677,8 @@ paths:
       tags: ["PersonType"]
       security:
        - basicAuth: []
-      summary: |
-        Fetches the 'person type' for id 'id'.
-      description: |
+      summary: Gets a persontype entry.
+      description:  Gets a persontype entry.
       parameters:
         - name: id
           in: path
@@ -697,7 +698,8 @@ paths:
       security:
        - basicAuth: []
       summary: |
-        The persontype to update
+        Updates a persontype entry
+      description: Updates a persontype entry.
       parameters:
         - name: id
           in: path
@@ -719,7 +721,8 @@ paths:
       security:
        - basicAuth: []
       summary: |
-        The persontype to delete.
+        Deletes a persontype entry.
+      description: Deletes a persontype entry.
       parameters:
         - name: id
           in: path
@@ -740,17 +743,13 @@ paths:
       tags: ["JobType"]
       security:
        - basicAuth: []
+      summary: Gets all jobtype entries.
       description: |
-        Gets `JobType` objects.
+        Gets all JobType entries.
         Optional querry param of **size** determines
         size of return array
       parameters:
-        - name: size
-          in: query
-          description: Size of array
-          required: false
-          type: number
-          format: int32
+        - $ref: '#/parameters/size'
       responses:
         200:
           description: Successful response
@@ -762,7 +761,8 @@ paths:
       tags: ["JobType"]
       security:
        - basicAuth: []
-      description: |
+      summary: Creates a new jobtype.
+      description: Creates a new JobType entry.
       parameters:
         - name : JobType
           in: body
@@ -779,8 +779,9 @@ paths:
       tags: ["JobType"]
       security:
        - basicAuth: []
-      description: |
-        Retrives a jobtype entry
+      summary: |
+        Gets a jobtype entry.
+      description: Gets a jobtype entry by id.
       parameters:
         - name: id
           in: path
@@ -798,7 +799,8 @@ paths:
       security:
        - basicAuth: []
       summary: |
-        The jobtype to delete
+        Deletes a jobtype entry.
+      description: Delete a jobtype entry by id.
       parameters:
         - name: id
           in: path
@@ -815,8 +817,8 @@ paths:
       tags: ["JobType"]
       security:
        - basicAuth: []
-      summary: |
-        The jobtype to update
+      summary: Updates a jobtype entry.
+      description: Updates a jobtype entry by id.
       parameters:
         - name: id
           in: path
@@ -1019,18 +1021,18 @@ definitions:
         type: string 
 tags:
   - name: User
-    description: Everything to do with User
+    description: User API (internal)
   - name: Profiles
-    description: Fetch, Delete, and update Profiles
+    description: Profiles API.
   - name: Reset
-    description: Everything used for resetting password
+    description: Password reset API.
   - name: Jobs
-    description: Everything to do with Jobs
+    description: Jobs API.
   - name: JobType
-    description: Everything to do with JobTypes
+    description: JobType API (Admin).
   - name: News
-    description: Everything to do with News
+    description: News API.
   - name: SocialService
-    description: Everything to do with SocialService
+    description: SocialService API (Admin).
   - name: PersonType
-    description: Everything to do with Person Type
+    description: Person Type API (Admin).

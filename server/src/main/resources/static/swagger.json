@@ -12,42 +12,43 @@
   },
   "tags" : [ {
     "name" : "User",
-    "description" : "Everything to do with User"
+    "description" : "User API (internal)"
   }, {
     "name" : "Profiles",
-    "description" : "Fetch, Delete, and update Profiles"
+    "description" : "Profiles API."
   }, {
     "name" : "Reset",
-    "description" : "Everything used for resetting password"
+    "description" : "Password reset API."
   }, {
     "name" : "Jobs",
-    "description" : "Everything to do with Jobs"
+    "description" : "Jobs API."
   }, {
     "name" : "JobType",
-    "description" : "Everything to do with JobTypes"
+    "description" : "JobType API (Admin)."
   }, {
     "name" : "News",
-    "description" : "Everything to do with News"
+    "description" : "News API."
   }, {
     "name" : "SocialService",
-    "description" : "Everything to do with SocialService"
+    "description" : "SocialService API (Admin)."
   }, {
     "name" : "PersonType",
-    "description" : "Everything to do with Person Type"
+    "description" : "Person Type API (Admin)."
   } ],
   "schemes" : [ "http", "https" ],
   "paths" : {
     "/api/v1/jobs" : {
       "get" : {
         "tags" : [ "Jobs" ],
-        "description" : "Gets `Job` objects.\nOptional query param of **size** determines\nsize of returned array\n",
+        "summary" : "Gets all job entries.",
+        "description" : "Gets `Job` entries.\nOptional query param of **size** determines\nsize of returned array\n",
         "parameters" : [ {
           "name" : "size",
           "in" : "query",
           "description" : "Size of array",
           "required" : false,
           "type" : "number",
-          "format" : "double"
+          "format" : "int32"
         } ],
         "responses" : {
           "200" : {
@@ -66,6 +67,8 @@
       },
       "post" : {
         "tags" : [ "Jobs" ],
+        "summary" : "Posts a new job entry.",
+        "description" : "Posts a new job entry.",
         "parameters" : [ {
           "in" : "body",
           "name" : "Job",
@@ -88,8 +91,8 @@
     "/api/v1/jobs/{id}" : {
       "get" : {
         "tags" : [ "Jobs" ],
-        "summary" : "Fetches the `job` for id `id`.\n",
-        "description" : "Gets `Job` objects.\nOptional query param of **size** determines\nsize of returned array\n",
+        "summary" : "Gets a job entry.",
+        "description" : "Gets a Job entry.\n",
         "parameters" : [ {
           "name" : "id",
           "in" : "path",
@@ -112,7 +115,8 @@
       },
       "put" : {
         "tags" : [ "Jobs" ],
-        "summary" : "The job to update.\n",
+        "summary" : "Updates a job.\n",
+        "description" : "Updates a job.\n",
         "parameters" : [ {
           "name" : "id",
           "in" : "path",
@@ -140,7 +144,8 @@
       },
       "delete" : {
         "tags" : [ "Jobs" ],
-        "summary" : "The job to delete.\n",
+        "summary" : "Deletes a job entry.\n",
+        "description" : "Deletes a job entry.\n",
         "parameters" : [ {
           "name" : "id",
           "in" : "path",
@@ -165,7 +170,8 @@
     "/api/v1/jobtype" : {
       "get" : {
         "tags" : [ "JobType" ],
-        "description" : "Gets `JobType` objects.\nOptional querry param of **size** determines\nsize of return array\n",
+        "summary" : "Gets all jobtype entries.",
+        "description" : "Gets all JobType entries.\nOptional querry param of **size** determines\nsize of return array\n",
         "parameters" : [ {
           "name" : "size",
           "in" : "query",
@@ -191,7 +197,8 @@
       },
       "post" : {
         "tags" : [ "JobType" ],
-        "description" : "",
+        "summary" : "Creates a new jobtype.",
+        "description" : "Creates a new JobType entry.",
         "parameters" : [ {
           "in" : "body",
           "name" : "JobType",
@@ -214,7 +221,8 @@
     "/api/v1/jobtype/{id}" : {
       "get" : {
         "tags" : [ "JobType" ],
-        "description" : "Retrives a jobtype entry\n",
+        "summary" : "Gets a jobtype entry.\n",
+        "description" : "Gets a jobtype entry by id.",
         "parameters" : [ {
           "name" : "id",
           "in" : "path",
@@ -237,7 +245,8 @@
       },
       "put" : {
         "tags" : [ "JobType" ],
-        "summary" : "The jobtype to update\n",
+        "summary" : "Updates a jobtype entry.",
+        "description" : "Updates a jobtype entry by id.",
         "parameters" : [ {
           "name" : "id",
           "in" : "path",
@@ -268,7 +277,8 @@
       },
       "delete" : {
         "tags" : [ "JobType" ],
-        "summary" : "The jobtype to delete\n",
+        "summary" : "Deletes a jobtype entry.\n",
+        "description" : "Delete a jobtype entry by id.",
         "parameters" : [ {
           "name" : "id",
           "in" : "path",
@@ -293,6 +303,7 @@
     "/api/v1/news" : {
       "get" : {
         "tags" : [ "News" ],
+        "summary" : "Fetches all news.",
         "description" : "Gets `News` objects.\nOptional querry param of **size** determines\nsize of return array\n",
         "parameters" : [ {
           "name" : "size",
@@ -337,7 +348,8 @@
       },
       "post" : {
         "tags" : [ "News" ],
-        "description" : "",
+        "summary" : "Posts new news entry.",
+        "description" : "Posts a new news entry.\n",
         "parameters" : [ {
           "in" : "body",
           "name" : "News",
@@ -360,11 +372,12 @@
     "/api/v1/news/{id}" : {
       "get" : {
         "tags" : [ "News" ],
-        "description" : "Retrives a News entry\n",
+        "summary" : "Gets a news entry.",
+        "description" : "Retrives a news entry by id.\n",
         "parameters" : [ {
           "name" : "id",
           "in" : "path",
-          "description" : "a single News entry",
+          "description" : "a single news entry",
           "required" : true,
           "type" : "number",
           "format" : "int64"
@@ -383,7 +396,7 @@
       },
       "put" : {
         "tags" : [ "News" ],
-        "summary" : "The News to update\n",
+        "summary" : "Updates a news entry.\n",
         "parameters" : [ {
           "name" : "id",
           "in" : "path",
@@ -414,7 +427,7 @@
       },
       "delete" : {
         "tags" : [ "News" ],
-        "summary" : "The News to delete\n",
+        "summary" : "Deletes a single news entry.\n",
         "parameters" : [ {
           "name" : "id",
           "in" : "path",
@@ -439,7 +452,8 @@
     "/api/v1/news_comment" : {
       "post" : {
         "tags" : [ "News" ],
-        "description" : "",
+        "summary" : "Posts a news comment.",
+        "description" : "Posts a new news comment.",
         "parameters" : [ {
           "in" : "body",
           "name" : "news_comment",
@@ -462,6 +476,7 @@
     "/api/v1/news_comment/{id}" : {
       "get" : {
         "tags" : [ "News" ],
+        "summary" : "Gets a news comment.",
         "description" : "Retrives the comments by id.\n",
         "parameters" : [ {
           "name" : "id",
@@ -485,7 +500,8 @@
       },
       "put" : {
         "tags" : [ "News" ],
-        "summary" : "The News Comment to update\n",
+        "summary" : "Updates a news comment.",
+        "description" : "Updates a news comment by id.\n",
         "parameters" : [ {
           "name" : "id",
           "in" : "path",
@@ -516,7 +532,7 @@
       },
       "delete" : {
         "tags" : [ "News" ],
-        "summary" : "The News Comment to delete\n",
+        "summary" : "Deletes a news comment by id.\n",
         "parameters" : [ {
           "name" : "id",
           "in" : "path",
@@ -541,12 +557,12 @@
     "/api/v1/persontype" : {
       "get" : {
         "tags" : [ "PersonType" ],
-        "summary" : "Fetches all 'persontype' objects\n",
+        "summary" : "Fetches all persontype entries.\n",
         "description" : "Fetches all 'person type' objects. up to a 'size' if specified,\notherwise fetches all objects.\n",
         "parameters" : [ {
           "name" : "size",
           "in" : "query",
-          "description" : "The maximum number of persontypes to fetch",
+          "description" : "Size of array",
           "required" : false,
           "type" : "number",
           "format" : "int32"
@@ -571,6 +587,8 @@
       },
       "post" : {
         "tags" : [ "PersonType" ],
+        "summary" : "Creates a new persontype.",
+        "description" : "Creates a new persontype entry.",
         "parameters" : [ {
           "in" : "body",
           "name" : "PersonType",
@@ -596,8 +614,8 @@
     "/api/v1/persontype/{id}" : {
       "get" : {
         "tags" : [ "PersonType" ],
-        "summary" : "Fetches the 'person type' for id 'id'.\n",
-        "description" : "",
+        "summary" : "Gets a persontype entry.",
+        "description" : "Gets a persontype entry.",
         "parameters" : [ {
           "name" : "id",
           "in" : "path",
@@ -623,7 +641,8 @@
       },
       "put" : {
         "tags" : [ "PersonType" ],
-        "summary" : "The persontype to update\n",
+        "summary" : "Updates a persontype entry\n",
+        "description" : "Updates a persontype entry.",
         "parameters" : [ {
           "name" : "id",
           "in" : "path",
@@ -651,7 +670,8 @@
       },
       "delete" : {
         "tags" : [ "PersonType" ],
-        "summary" : "The persontype to delete.\n",
+        "summary" : "Deletes a persontype entry.\n",
+        "description" : "Deletes a persontype entry.",
         "parameters" : [ {
           "name" : "id",
           "in" : "path",
@@ -679,7 +699,7 @@
     "/api/v1/profiles" : {
       "get" : {
         "tags" : [ "Profiles" ],
-        "summary" : "Fetches all `profile` objects\n",
+        "summary" : "Fetches all profiles\n",
         "description" : "Fetches all `profile` objects. up to `size` if specified,\notherwise fetches all objects.\n",
         "parameters" : [ {
           "name" : "size",
@@ -744,7 +764,7 @@
       },
       "put" : {
         "tags" : [ "Profiles" ],
-        "summary" : "The profile to update.\n",
+        "summary" : "Updates a profile",
         "parameters" : [ {
           "name" : "id",
           "in" : "path",
@@ -772,7 +792,7 @@
       },
       "delete" : {
         "tags" : [ "Profiles" ],
-        "summary" : "The profile to delete.\n",
+        "summary" : "Deletes a profile",
         "parameters" : [ {
           "name" : "id",
           "in" : "path",
@@ -797,13 +817,15 @@
     "/api/v1/socialservice" : {
       "get" : {
         "tags" : [ "SocialService" ],
-        "description" : "Gets `SocailService` objects.\nOptional querry param of **size** determines\nsize of return array\n",
+        "summary" : "Gets all SocailService entries.\n",
+        "description" : "Gets all SocailService entries.\nOptional querry param of **size** determines\nsize of return array\n",
         "parameters" : [ {
           "name" : "size",
           "in" : "query",
           "description" : "Size of array",
           "required" : false,
-          "type" : "string"
+          "type" : "number",
+          "format" : "int32"
         } ],
         "responses" : {
           "200" : {
@@ -822,7 +844,8 @@
       },
       "post" : {
         "tags" : [ "SocialService" ],
-        "description" : "",
+        "summary" : "Posts a new social service entry.\n",
+        "description" : "Posts a new social service entry.\n",
         "parameters" : [ {
           "in" : "body",
           "name" : "SocialService",
@@ -845,6 +868,7 @@
     "/api/v1/socialservice/{id}" : {
       "get" : {
         "tags" : [ "SocialService" ],
+        "summary" : "Gets a social service entry.",
         "description" : "Retrives a SocialService entry\n",
         "parameters" : [ {
           "name" : "id",
@@ -984,7 +1008,8 @@
     "/newuser" : {
       "post" : {
         "tags" : [ "User" ],
-        "description" : "",
+        "summary" : "Creates a new user in the system\n",
+        "description" : "Creates a new user in the system\n",
         "parameters" : [ {
           "name" : "email",
           "in" : "formData",
