@@ -1,6 +1,33 @@
 use backend;
 
 /*Person*/
+/* Dummy Template for Person
+INSERT INTO person VALUES (
+    id,
+    name,
+    student_id,
+    title,
+    about_me,
+    resume_url,
+    image_url,
+    email,
+    phone,
+    occupation,
+    company_name,
+    birthdate,
+    type,
+    lang,
+    last_logon,
+    password,
+    degree_major,
+    degree_minor,
+    graduation_year,
+    degree_type,
+    faculty_department,
+    active,
+    roles_id);
+
+*/
 /*Student*/
 INSERT INTO person VALUES (
     1,
@@ -24,7 +51,8 @@ INSERT INTO person VALUES (
     2016,
     'BS',
     null,
-    1);
+    1,
+    0);
     
 /*Alumni*/
 INSERT INTO person VALUES (
@@ -49,20 +77,21 @@ INSERT INTO person VALUES (
     2014,
     'BS',
     null,
-    1);
+    1,
+    0);
     
 INSERT INTO person VALUES (
-    4,
+    1234,
     'Bruce Wayne',
-    789123,
-    'Alumni',
-    'My name is Bruce Wayne and I am not Batman',
-    'Bruce Wayne resume',
+    1,
+    'CEO',
+    'Im rich and my parents are dead.',
+    null,
     'http://images2.fanpop.com/image/photos/9000000/Bruce-Wayne-the-dark-knight-9041631-367-500.jpg',
-    'wayne@example.com',
+    'bruce@wayneenterprises.com',
     '6508984567',
-    'Not a vigilante',
-    'Justice League',
+    'Playboy',
+    'Wayne Enterprises',
     '2016-02-19',
     1,
     'en',
@@ -73,7 +102,8 @@ INSERT INTO person VALUES (
     1960,
     'PhD',
     null,
-    1);
+    1,
+    0);
 
 /*Faculty*/
 INSERT INTO person VALUES (
@@ -98,8 +128,215 @@ INSERT INTO person VALUES (
     null,
     null,
     'Computer and Information Science',
+    1,
     1);
     
+/*person - other examples*/
+INSERT INTO person VALUES (
+    5678,
+    'Khan',
+    2,
+    'Human Augmented',
+    'I am a superiod being from the 1990s that is better in every way.',
+    'resume url',
+    'http://www.wired.com/images_blogs/underwire/images/2009/01/14/st2khan.gif',
+    'khan@reliant.net',
+    null,
+    'Evil Genius',
+    'Genesis',
+    null,
+    1,
+    'en',
+    '2016-02-19',
+    'password',
+    null,
+    null,
+    null,
+    null,
+    null,
+    0,
+    0);
+    
+INSERT INTO person VALUES (
+    6789,
+    'Lando Calrissian',
+    3,
+    'General',
+    'Have you ever been to cloud city? Yeah, thats me.',
+    'resume url',
+    'http://media.comicbook.com/wp-content/uploads/2012/11/lando-calrissian.jpg',
+    'lando@heyubaby.net',
+    null,
+    'General',
+    'Rebel Alliance',
+    null,
+    1,
+    'en',
+    '2016-02-19',
+    'password',
+    null,
+    null,
+    null,
+    null,
+    null,
+    0, 
+    0);
+
+INSERT INTO person VALUES (
+    1945,
+    'Steve Rogers',
+    4,
+    'Captain America',
+    'Avengers Assemble!',
+    null,
+    'http://vignette3.wikia.nocookie.net/marvel-cinematic/images/3/32/Steve_Rogers_2.jpg/revision/latest?cb=20131025030358',
+    null,
+    null,
+    'Captain',
+    'The Avengers',
+    null,
+    0,
+    'en',
+    '2016-02-19',
+    'password',
+    null,
+    null,
+    null,
+    null,
+    null,
+    1,
+    0);
+    
+INSERT INTO person VALUES (
+    30,
+    'Stephen Curry',
+    5,
+    'Babyface Assassin/Chef Curry',
+    'Shimmy',
+    null,
+    null,
+    'warriors30@gsw.org',
+    null,
+    'Basketball Player',
+    'Golden State Warriors',
+    null,
+    0,
+    'en',
+    '2016-02-19',
+    'password',
+    null,
+    null,
+    null,
+    null,
+    null,
+    1,
+    0);
+
+
+/*person - student*/
+INSERT INTO person VALUES (
+    4,
+    'student',
+    000000,
+    'student',
+    'I am a student',
+    'student resume',
+    'student image',
+    'student@ndnu.com',
+    '6500000000',
+    'Student',
+    'NDNU',
+    '2016-4-6',
+    2,
+    'en',
+    '2016-4-6',
+    'Student',
+    null,
+    null,
+    null,
+    null,
+    null,
+    1,
+    0);
+
+/*person - teacher*/
+INSERT INTO person VALUES (
+    5,
+    'teacher',
+    000002,
+    'teacher',
+    'I am a teacher',
+    'teacher resume',
+    'teacher image',
+    'teacher@ndnu.com',
+    '6500000002',
+    'Teacher',
+    'NDNU',
+    '2016-4-6',
+    2,
+    'en',
+    '2016-4-6',
+    'Teacher',
+    null,
+    null,
+    null,
+    null,
+    null,
+    1,
+    1);
+
+/*person - alumni*/
+INSERT INTO person VALUES (
+    6,
+    'alumni',
+    000001,
+    'alumni',
+    'I am a alumni',
+    'alumni resume',
+    'alumni image',
+    'alumni@ndnu.com',
+    '6500000001',
+    'Alumni',
+    'NDNU',
+    '2016-4-6',
+    1,
+    'en',
+    '2016-4-6',
+    'Alumni',
+    null,
+    null,
+    null,
+    null,
+    null,
+    1,
+    0);
+
+/*person - admin*/
+INSERT INTO person VALUES (
+    7,
+    'admin',
+    000003,
+    'admin',
+    'I am an admin',
+    'admin resume',
+    'admin image',
+    'admin@ndnu.com',
+    '6500000003',
+    'Admin',
+    'NDNU',
+    '2016-4-6',
+    2,
+    'en',
+    '2016-4-6',
+    'Admin',
+    null,
+    null,
+    null,
+    null,
+    null,
+    1,
+    1);
+
 /*News*/
 INSERT INTO news VALUES (
     1,
@@ -149,7 +386,26 @@ INSERT INTO industry VALUES (
     2,
     'Vigilante');
     
+INSERT INTO industry VALUES (
+    3,
+    'Other');
+    
 /*Job*/
+/* Dummy template for jobs
+
+INSERT INTO job VALUES (
+    id,
+    title,
+    industry,
+    location,
+    description,
+    job_type,
+    start_date,
+    end_date,
+    posted_by_person_id,
+    hours,
+    active);
+*/
 INSERT INTO job VALUES (
     1,
     'IT Intern',
@@ -174,4 +430,155 @@ INSERT INTO job VALUES (
     '2017-04-01',
     4,
     40,
-    1)
+    1);
+    
+INSERT INTO job VALUES (
+    66334,
+    'Hate the Empire? Click here.',
+    3,
+    'Endor Moon',
+    'We hate the Empire too, but we also are doing something about it. We are looking for all types of people to come join the fight. Dont worry you dont have to be a jedi to help.',
+    2,
+    '2016-04-05',
+    '2017-04-05',
+    6789,
+    null,
+    1);
+
+INSERT INTO job VALUES (
+    7734,
+    'Looking for temp work?',
+    3,
+    'Mutara Nebula',
+    'Do you like to travel to far off places? Have adventure and work with driven smart, loyal people? Then this is the position for you. You must be a fast learner and willing to die.',
+    2,
+    '2016-04-07',
+    '2017-04-07',
+    5678,
+    40,
+    1);
+    
+INSERT INTO job VALUES (
+    888222,
+    'Looking for Planetary Science Expert',
+    3,
+    'Mutara Nebula',
+    'We are looking for qualified people with a background in science and ideally planatery formation.  Must be able to take orders and be comfortable around a startship.',
+    2,
+    '2016-04-07',
+    '2017-04-07',
+    5678,
+    40,
+    1);
+    
+/*News Feed*/
+/* Dummy Template for News
+INSERT INTO news VALUES (
+    id,
+    title,
+    description,
+    posted,
+    expired,
+    person_id,
+    views,
+    active,
+    abuse);
+*/
+
+INSERT INTO news VALUES (
+    999999,
+    'Im Drunk...',
+    'I just wanted you to know. That is all.',
+    '2016-02-18',
+    null,
+    1234,
+    1,
+    1,
+    1);
+    
+INSERT INTO news VALUES (
+    444444,
+    'Who is this Batman',
+    'He is a menace to us all. One cannot just take justice out of the hands of the law and bring it to the street in his pajamas.',
+    '2016-02-12',
+    null,
+    1234,
+    1,
+    1,
+    1);
+    
+INSERT INTO news VALUES (
+    7878787,
+    'Im looking for the guys that peed on my rug',
+    'It really tied the room together',
+    '2016-02-12',
+    null,
+    1945,
+    1,
+    1,
+    1);
+    
+INSERT INTO news VALUES (
+    9832,
+    'Long post',
+    'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?',
+    '2016-02-18',
+    null,
+    6789,
+    0,
+    1,
+    1);
+    
+INSERT INTO news VALUES (
+    37892,
+    'Looking for help',
+    'Top secret, but I have a mission envoling a forest moon, teddy bears, and what rhymes with Seth Mahr...hit me back if you dont fear death
+',
+    '2016-02-18',
+    null,
+    6789,
+    0,
+    1,
+    1);
+
+/* News Comment*/
+/* Dummy Template for News Comment
+INSERT INTO news_comment VALUES (
+    id,
+    news_id,
+    comment_text,
+    comment_timestamp,
+    person_id,
+    active,
+    abuse);
+*/
+
+INSERT INTO news_comment VALUES (
+    01010101,
+    999999,
+    'Impressive, for a normal human.',
+    '2016-02-18',
+    5678,
+    1,
+    1);
+    
+INSERT INTO news_comment VALUES (
+    01010102,
+    444444,
+    'Dont insult my intelligence',
+    '2016-02-13',
+    5678,
+    1,
+    1);
+
+INSERT INTO news_comment VALUES (
+    01010103,
+    7878787,
+    'The rug is not the issue here dude',
+    '2016-02-13',
+    5678,
+    1,
+    1);
+
+
+

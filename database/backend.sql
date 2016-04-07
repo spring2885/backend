@@ -53,9 +53,11 @@ CREATE TABLE person
 # faculty field
     faculty_department VARCHAR(200),
     active TINYINT(1) DEFAULT 1,
+    roles_id INT,
     PRIMARY KEY (id),
     FOREIGN KEY (type) REFERENCES person_type(id),
     FOREIGN KEY (lang) REFERENCES language(code),
+    #FOREIGN KEY (roles_id) REFERENCES roles(id),
     UNIQUE KEY (email)
 );
 
@@ -202,6 +204,14 @@ INSERT INTO job_type VALUES (
 INSERT INTO job_type VALUES (
     2,
     "part-time");
+    
+INSERT INTO roles VALUES (
+    0,
+    'user');
+    
+INSERT INTO roles VALUES (
+    1,
+    'admin');
 
 INSERT INTO social_service VALUES(
     'LinkedIn', 'http://www.linkedin.com/');
