@@ -35,6 +35,7 @@
     "name" : "PersonType",
     "description" : "Everything to do with Person Type"
   } ],
+  "schemes" : [ "http", "https" ],
   "paths" : {
     "/api/v1/jobs" : {
       "get" : {
@@ -58,7 +59,10 @@
               }
             }
           }
-        }
+        },
+        "security" : [ {
+          "basicAuth" : [ ]
+        } ]
       },
       "post" : {
         "tags" : [ "Jobs" ],
@@ -75,7 +79,10 @@
           "200" : {
             "description" : "Make a new Job"
           }
-        }
+        },
+        "security" : [ {
+          "basicAuth" : [ ]
+        } ]
       }
     },
     "/api/v1/jobs/{id}" : {
@@ -98,7 +105,10 @@
               "$ref" : "#/definitions/Job"
             }
           }
-        }
+        },
+        "security" : [ {
+          "basicAuth" : [ ]
+        } ]
       },
       "put" : {
         "tags" : [ "Jobs" ],
@@ -123,7 +133,10 @@
           "200" : {
             "description" : "Updates the Job"
           }
-        }
+        },
+        "security" : [ {
+          "basicAuth" : [ ]
+        } ]
       },
       "delete" : {
         "tags" : [ "Jobs" ],
@@ -143,7 +156,10 @@
           "500" : {
             "description" : "Error deleting the profile \"ID\"."
           }
-        }
+        },
+        "security" : [ {
+          "basicAuth" : [ ]
+        } ]
       }
     },
     "/api/v1/jobtype" : {
@@ -168,7 +184,10 @@
               }
             }
           }
-        }
+        },
+        "security" : [ {
+          "basicAuth" : [ ]
+        } ]
       },
       "post" : {
         "tags" : [ "JobType" ],
@@ -186,7 +205,10 @@
           "200" : {
             "description" : "Makes a new JobType"
           }
-        }
+        },
+        "security" : [ {
+          "basicAuth" : [ ]
+        } ]
       }
     },
     "/api/v1/jobtype/{id}" : {
@@ -208,7 +230,10 @@
               "$ref" : "#/definitions/JobType"
             }
           }
-        }
+        },
+        "security" : [ {
+          "basicAuth" : [ ]
+        } ]
       },
       "put" : {
         "tags" : [ "JobType" ],
@@ -236,7 +261,10 @@
           "500" : {
             "description" : "Error with deleting jobtype by id."
           }
-        }
+        },
+        "security" : [ {
+          "basicAuth" : [ ]
+        } ]
       },
       "delete" : {
         "tags" : [ "JobType" ],
@@ -256,7 +284,10 @@
           "500" : {
             "description" : "Error with deleting jobtype by id."
           }
-        }
+        },
+        "security" : [ {
+          "basicAuth" : [ ]
+        } ]
       }
     },
     "/api/v1/news" : {
@@ -299,7 +330,10 @@
               }
             }
           }
-        }
+        },
+        "security" : [ {
+          "basicAuth" : [ ]
+        } ]
       },
       "post" : {
         "tags" : [ "News" ],
@@ -317,7 +351,10 @@
           "200" : {
             "description" : "Makes a new News"
           }
-        }
+        },
+        "security" : [ {
+          "basicAuth" : [ ]
+        } ]
       }
     },
     "/api/v1/news/{id}" : {
@@ -339,7 +376,10 @@
               "$ref" : "#/definitions/News"
             }
           }
-        }
+        },
+        "security" : [ {
+          "basicAuth" : [ ]
+        } ]
       },
       "put" : {
         "tags" : [ "News" ],
@@ -367,7 +407,10 @@
           "500" : {
             "description" : "Error with updating News by id."
           }
-        }
+        },
+        "security" : [ {
+          "basicAuth" : [ ]
+        } ]
       },
       "delete" : {
         "tags" : [ "News" ],
@@ -387,7 +430,10 @@
           "500" : {
             "description" : "Error with deleting News by id."
           }
-        }
+        },
+        "security" : [ {
+          "basicAuth" : [ ]
+        } ]
       }
     },
     "/api/v1/news_comment" : {
@@ -407,7 +453,10 @@
           "200" : {
             "description" : "Makes a new NewsComment"
           }
-        }
+        },
+        "security" : [ {
+          "basicAuth" : [ ]
+        } ]
       }
     },
     "/api/v1/news_comment/{id}" : {
@@ -429,7 +478,10 @@
               "$ref" : "#/definitions/NewsComment"
             }
           }
-        }
+        },
+        "security" : [ {
+          "basicAuth" : [ ]
+        } ]
       },
       "put" : {
         "tags" : [ "News" ],
@@ -457,7 +509,10 @@
           "500" : {
             "description" : "Error with updating News Comment by id."
           }
-        }
+        },
+        "security" : [ {
+          "basicAuth" : [ ]
+        } ]
       },
       "delete" : {
         "tags" : [ "News" ],
@@ -477,7 +532,10 @@
           "500" : {
             "description" : "Error with deleting News comment by id."
           }
-        }
+        },
+        "security" : [ {
+          "basicAuth" : [ ]
+        } ]
       }
     },
     "/api/v1/persontype" : {
@@ -506,7 +564,10 @@
           "500" : {
             "description" : "Error getting persontypes"
           }
-        }
+        },
+        "security" : [ {
+          "basicAuth" : [ ]
+        } ]
       },
       "post" : {
         "tags" : [ "PersonType" ],
@@ -526,7 +587,10 @@
           "500" : {
             "description" : "Error creating persontype."
           }
-        }
+        },
+        "security" : [ {
+          "basicAuth" : [ ]
+        } ]
       }
     },
     "/api/v1/persontype/{id}" : {
@@ -552,7 +616,10 @@
           "500" : {
             "description" : "error getting persontype with id 'id'"
           }
-        }
+        },
+        "security" : [ {
+          "basicAuth" : [ ]
+        } ]
       },
       "put" : {
         "tags" : [ "PersonType" ],
@@ -577,7 +644,10 @@
           "200" : {
             "description" : "Updates the persontype."
           }
-        }
+        },
+        "security" : [ {
+          "basicAuth" : [ ]
+        } ]
       },
       "delete" : {
         "tags" : [ "PersonType" ],
@@ -600,7 +670,10 @@
           "500" : {
             "description" : "Error deleting the persontype \"ID\"."
           }
-        }
+        },
+        "security" : [ {
+          "basicAuth" : [ ]
+        } ]
       }
     },
     "/api/v1/profiles" : {
@@ -638,7 +711,10 @@
               }
             }
           }
-        }
+        },
+        "security" : [ {
+          "basicAuth" : [ ]
+        } ]
       }
     },
     "/api/v1/profiles/{id}" : {
@@ -661,7 +737,10 @@
               "$ref" : "#/definitions/Person"
             }
           }
-        }
+        },
+        "security" : [ {
+          "basicAuth" : [ ]
+        } ]
       },
       "put" : {
         "tags" : [ "Profiles" ],
@@ -686,7 +765,10 @@
           "200" : {
             "description" : "Updates the person"
           }
-        }
+        },
+        "security" : [ {
+          "basicAuth" : [ ]
+        } ]
       },
       "delete" : {
         "tags" : [ "Profiles" ],
@@ -706,7 +788,10 @@
           "500" : {
             "description" : "Error deleting the profile \"ID\"."
           }
-        }
+        },
+        "security" : [ {
+          "basicAuth" : [ ]
+        } ]
       }
     },
     "/api/v1/socialservice" : {
@@ -730,7 +815,10 @@
               }
             }
           }
-        }
+        },
+        "security" : [ {
+          "basicAuth" : [ ]
+        } ]
       },
       "post" : {
         "tags" : [ "SocialService" ],
@@ -748,7 +836,10 @@
           "200" : {
             "description" : "Makes a new SocialService"
           }
-        }
+        },
+        "security" : [ {
+          "basicAuth" : [ ]
+        } ]
       }
     },
     "/api/v1/socialservice/{id}" : {
@@ -769,7 +860,10 @@
               "$ref" : "#/definitions/SocialService"
             }
           }
-        }
+        },
+        "security" : [ {
+          "basicAuth" : [ ]
+        } ]
       },
       "put" : {
         "tags" : [ "SocialService" ],
@@ -796,7 +890,10 @@
           "500" : {
             "description" : "Error with deleting SocialService by id."
           }
-        }
+        },
+        "security" : [ {
+          "basicAuth" : [ ]
+        } ]
       },
       "delete" : {
         "tags" : [ "SocialService" ],
@@ -815,7 +912,10 @@
           "500" : {
             "description" : "Error with deleting SocialService by id."
           }
-        }
+        },
+        "security" : [ {
+          "basicAuth" : [ ]
+        } ]
       }
     },
     "/auth/forgot" : {
@@ -907,6 +1007,12 @@
           }
         }
       }
+    }
+  },
+  "securityDefinitions" : {
+    "basicAuth" : {
+      "description" : "HTTP Basic Authentication. Works over `HTTP` and `HTTPS`",
+      "type" : "basic"
     }
   },
   "definitions" : {
