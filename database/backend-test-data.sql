@@ -34,7 +34,7 @@ INSERT INTO person VALUES (
     'Alumni',
     'My name is Aaron Cruz and I work at Aurora',
     'cruz resume',
-    'cruz image',
+    '/src/assets/images/sweatshirt-full.jpg',
     'cruz@example.com',
     '6508984567',
     'Aurora Software Engineer',
@@ -58,7 +58,7 @@ INSERT INTO person VALUES (
     'Alumni',
     'My name is Bruce Wayne and I am not Batman',
     'Bruce Wayne resume',
-    'Bruce Wayne image',
+    'http://images2.fanpop.com/image/photos/9000000/Bruce-Wayne-the-dark-knight-9041631-367-500.jpg',
     'wayne@example.com',
     '6508984567',
     'Not a vigilante',
@@ -83,7 +83,7 @@ INSERT INTO person VALUES (
     'Director of Computer Science, PhD',
     'My name is John Youssefi, all you need is 2 lines of code to succeed!',
     'youssefi resume',
-    'youssefi image',
+    '/src/assets/images/sweatshirt-full.jpg',
     'jyoussefi@ndnu.edu',
     '6502223333',
     'Professor, Advisor',
@@ -133,9 +133,13 @@ INSERT INTO news_comment VALUES(
 
 /*News Visibility Scope*/
 INSERT INTO news_visibility VALUES (
+    0, 
+    1);
+
+INSERT INTO news_visibility VALUES (
     1,
     1);
-    
+
 /*Industry*/
 INSERT INTO industry VALUES (
     1,
