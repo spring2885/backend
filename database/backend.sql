@@ -84,6 +84,7 @@ CREATE TABLE job
     industry INT,
     location VARCHAR(200),
     description TEXT(65535),
+    company VARCHAR(200),
     job_type INT,
     start_date DATETIME,
     end_date DATETIME,

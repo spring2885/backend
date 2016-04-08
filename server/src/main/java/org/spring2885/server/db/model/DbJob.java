@@ -31,6 +31,7 @@ public class DbJob {
 	private Integer industry;
 	private String location;
 	private String description;
+	private String company;
 	private Integer jobType;
 	private Integer postedByPersonId;
 	private Integer hours;
@@ -97,6 +98,16 @@ private Long views;
 	public void setDescription(String description) {
 		this.description = description;
 	}
+	
+	public String getCompany() {
+		return company;
+	}
+	public void setCompany(String company) {
+		this.company = company;
+	}
+	
+	
+	
 	public int getjobType() {
 		return jobType;
 	}
