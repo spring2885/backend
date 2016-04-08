@@ -214,8 +214,8 @@ public class DbPerson {
 		return new StringBuilder("{ Person: ")
 				.append("{ Id: ").append(id)
 				.append(", name; ").append(name)
-				.append(" }\n")
-				.append(" }\n")
+				.append(" }")
+				.append(" }")
 				.toString();
 	}
 }

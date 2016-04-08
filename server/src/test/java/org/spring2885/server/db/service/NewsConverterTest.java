@@ -18,6 +18,7 @@ import org.spring2885.server.db.model.DbNews;
 import org.spring2885.server.db.model.DbPerson;
 import org.spring2885.server.db.model.DbPersonType;
 import org.spring2885.server.db.model.NewsConverters;
+import org.spring2885.server.db.model.PersonConverters;
 import org.spring2885.server.db.service.person.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -32,7 +33,11 @@ public class NewsConverterTest {
     NewsConverters.NewsFromDbToJson newsFromDbToJson;
     @Autowired
     NewsConverters.JsonToDbConverter newsFromJsonToDb;
-    @Autowired PersonService personService;
+    @Autowired
+    PersonService personService;
+    @Autowired
+    private PersonConverters.FromDbToJson personFromDbToJson;
+    
     private DbPerson dbp = new DbPerson();
 
     @Before
@@ -81,7 +86,7 @@ public class NewsConverterTest {
 		News p = newsFromDbToJson.apply(d);
 		assertEquals(d.getDescription(), p.getDescription());
 		assertEquals(d.getExpired().toString(), p.getExpired().toString());
-		assertEquals(d.getPerson().getEmail(), p.getPostedBy());
+		assertEquals(d.getPerson().getEmail(), p.getPostedBy().getEmail());
 		assertEquals(d.getPosted().toString(), p.getPosted().toString());
 		assertEquals(d.getTitle(), p.getTitle());
 		assertEquals(d.getViews(), p.getViews());
@@ -97,17 +102,15 @@ public class NewsConverterTest {
         p.setExpired(date);
         p.setPosted(date);
         p.setId(4L);
-        p.setPostedBy(dbp.getEmail());
+        p.setPostedBy(personFromDbToJson.apply(dbp));
         p.setTitle("This is a title");
         p.setViews(200L);
         
-		DbNews d = new DbNews();
-		newsFromJsonToDb.withDbNews(d);
-		d = newsFromJsonToDb.apply(p);
+		DbNews d = newsFromJsonToDb.apply(new DbNews(), p);
 		
         assertEquals(d.getDescription(), p.getDescription());
         assertEquals(d.getExpired().toString(), p.getExpired().toString());
-        assertEquals(d.getPerson().getEmail(), p.getPostedBy());
+        assertEquals(d.getPerson().getEmail(), p.getPostedBy().getEmail());
         assertEquals(d.getPosted().toString(), p.getPosted().toString());
         assertEquals(d.getTitle(), p.getTitle());
         assertEquals(d.getViews(), p.getViews());

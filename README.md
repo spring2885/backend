@@ -7,6 +7,23 @@ Make sure you have the most recent version of the source code in your repository
 
 This application is using Apache Maven and the Spring Boot libraries to bootstrap itself.  Note the maven will pull down (and cache locally) *lots* of dependencies, so the first time you run each of these commands I'd recommend being on a network with fast internet *(i.e. not the university)*.
 
+## Setting up MySQL
+
+Make sure you have MySQL 5.7 installed.  You'll need to create the backend user. For test/dev, we just
+use the username of ```backend``` with the password of ```backend```.
+
+Use the following commands to create your backend user and also
+the schema with some sample data.
+
+N.B. This assumes you are in the backend project directory.
+
+```bash
+cd database
+mysql -uroot -p < create-backend-user.sql
+mysql -ubackend -pbackend < backend.sql
+mysql -ubackend -pbackend < backend-test-data.sql
+```
+
 ## Eclipse IDE Instructions
 
 Make sure you have the latest Eclipse installed, such as the Mars release (4.5.1).  Also you must install m2e plugins.  See [M2Eclipse: Setting up Eclipse IDE](http://www.eclipse.org/m2e/documentation/m2e-extension-development.html) for instructions.

@@ -4,21 +4,12 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.spring2885.model.Job;
 import org.spring2885.model.JobType;
-import org.spring2885.model.News;
 import org.spring2885.server.api.exceptions.NotFoundException;
-import org.spring2885.server.db.model.DbJob;
+import org.spring2885.server.api.utils.RequestHelper;
 import org.spring2885.server.db.model.DbJobType;
-import org.spring2885.server.db.model.DbNews;
-import org.spring2885.server.db.model.DbPerson;
-import org.spring2885.server.db.model.JobConverters;
 import org.spring2885.server.db.model.JobTypeConverters;
-import org.spring2885.server.db.service.JobService;
 import org.spring2885.server.db.service.JobTypeService;
-import org.spring2885.server.db.service.person.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,23 +25,18 @@ import com.google.common.collect.FluentIterable;
 
 @RestController
 @RequestMapping(value = "/api/v1/jobtype", produces = { APPLICATION_JSON_VALUE })
-public class JobTypeApi {
-	private static final Logger logger = LoggerFactory.getLogger(JobsApi.class);
-	
+public class JobTypeApi {	
 	@Autowired
 	private JobTypeService jobTypeService;
 	
 	@Autowired
-    private PersonService personService;
-
-	 @Autowired
-	 private JobTypeConverters.FromDbToJson jobTypeFromDbToJson; 
-	 //dbToJsonConverter
+    private JobTypeConverters.FromDbToJson jobTypeFromDbToJson; 
+     
+    @Autowired
+    private JobTypeConverters.JsonToDbConverter jobTypeJsonToDb;
 	 
-	 @Autowired
-	 private JobTypeConverters.JsonToDbConverter jobTypeJsonToDb;
-	 
-	 //jsonToDbConverter;
+    @Autowired
+    private RequestHelper requestHelper;
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public ResponseEntity<JobType> get(
@@ -65,15 +51,9 @@ public class JobTypeApi {
 	}
 	
 	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<Void> jobsPost(
-			
-			@RequestBody JobType job
-			
-			) throws NotFoundException {
+    public ResponseEntity<Void> jobsPost(@RequestBody JobType job) throws NotFoundException {
 		
-		DbJobType db = new DbJobType();
-		
-		DbJobType updatedDbJob = jobTypeJsonToDb.apply(job);
+		DbJobType updatedDbJob = jobTypeJsonToDb.apply(new DbJobType(), job);
 		jobTypeService.save(updatedDbJob);
 		
 		return new ResponseEntity<Void>(HttpStatus.OK);
@@ -85,7 +65,7 @@ public class JobTypeApi {
 			SecurityContextHolderAwareRequestWrapper request)
 			throws NotFoundException {
 		
-		if (!checkAdminRequestIfNeeded(id, request)) {
+		if (!requestHelper.checkAdminRequestIfNeeded(id, request)) {
 			String error = 
 					"Only admin's can change others... Read this: "
 					+ "God, grant me the serenity to accept the things I cannot change,"
@@ -115,7 +95,7 @@ public class JobTypeApi {
 			@RequestBody JobType jobType,
 			SecurityContextHolderAwareRequestWrapper request) throws NotFoundException {
 		
-		if (!checkAdminRequestIfNeeded(id, request)) {
+		if (!requestHelper.checkAdminRequestIfNeeded(id, request)) {
 			return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 		}
 
@@ -126,30 +106,10 @@ public class JobTypeApi {
 		if (db == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-		jobTypeJsonToDb.withDbPersonType(db);
-		DbJobType updatedDbJob = jobTypeJsonToDb.apply(jobType);
+		DbJobType updatedDbJob = jobTypeJsonToDb.apply(db, jobType);
 		jobTypeService.save(updatedDbJob);
 		
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
-	
-	private boolean checkAdminRequestIfNeeded(int requestId, SecurityContextHolderAwareRequestWrapper request) {
-		if (!request.isUserInRole("ROLE_ADMIN")) {
-			// Only admin's can change other profiles.
-			String email = request.getUserPrincipal().getName();
-			DbPerson me = personService.findByEmail(email);
-			if (me == null) {
-				// I can't find myself... need more zen.
-				return false;
-			}
-			
-			if (me.getId() != requestId) {
-				// Someone is being naughty...
-				return false;
-			}
-		}
-		return true;
-	}
-
 }

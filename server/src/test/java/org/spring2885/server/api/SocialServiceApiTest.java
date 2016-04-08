@@ -1,11 +1,11 @@
 package org.spring2885.server.api;
 
-import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
+import static org.spring2885.server.utils.TestUtils.convertObjectToJsonBytes;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -14,24 +14,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
-import java.io.IOException;
-import java.util.Collections;
-import java.util.Set;
-
 import org.hamcrest.Matchers;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
-import org.spring2885.model.News;
 import org.spring2885.model.SocialService;
-import org.spring2885.server.db.model.DbNews;
 import org.spring2885.server.db.model.DbSocialService;
-import org.spring2885.server.db.service.NewsService;
-import org.spring2885.server.db.service.person.*;
-import org.spring2885.server.db.service.search.SearchCriteria;
-import org.spring2885.server.db.service.search.SearchOperator;
+import org.spring2885.server.db.service.person.SocialServiceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -43,7 +34,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -94,7 +84,6 @@ protected MockMvc mockMvc;
     	when(socialServiceService.findById("id")).thenReturn(dbSs);
     }
 	
-    @SuppressWarnings("unchecked")
 	@Test
     @WithMockUser
     public void testSocialService() throws Exception {
@@ -208,11 +197,4 @@ protected MockMvc mockMvc;
     	verify(socialServiceService, never()).save(Mockito.any(DbSocialService.class));
     }
     
-   
-    public static byte[] convertObjectToJsonBytes(Object object) throws IOException  {
-        ObjectMapper mapper = new ObjectMapper();
-        return mapper.writeValueAsBytes(object);
-    } 
-	
-
 }

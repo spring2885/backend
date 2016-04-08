@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.spring2885.model.Person;
 import org.spring2885.server.api.exceptions.NotFoundException;
+import org.spring2885.server.api.utils.RequestHelper;
 import org.spring2885.server.db.model.DbPerson;
 import org.spring2885.server.db.model.PersonConverters;
 import org.spring2885.server.db.service.person.PersonService;
@@ -44,6 +45,9 @@ public class PersonsApi {
     @Autowired
     private SearchParser searchParser;
 
+    @Autowired
+    private RequestHelper requestHelper;
+
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ResponseEntity<Person> get(
             @PathVariable("id") int id) throws NotFoundException {
@@ -62,7 +66,7 @@ public class PersonsApi {
 			SecurityContextHolderAwareRequestWrapper request)
 			throws NotFoundException {
 		
-		if (!checkAdminRequestIfNeeded(id, request)) {
+		if (!requestHelper.checkAdminRequestIfNeeded(id, request)) {
 			String error = 
 					"Only admin's can change others... Read this: "
 					+ "God, grant me the serenity to accept the things I cannot change,"
@@ -107,7 +111,7 @@ public class PersonsApi {
 			@RequestBody Person person,
 			SecurityContextHolderAwareRequestWrapper request) throws NotFoundException {
 		
-		if (!checkAdminRequestIfNeeded(id, request)) {
+		if (!requestHelper.checkAdminRequestIfNeeded(id, request)) {
 			return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 		}
 
@@ -118,30 +122,10 @@ public class PersonsApi {
 		if (db == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-		personJsonToDb.withDbPerson(db);
-		DbPerson updatedDbPerson = personJsonToDb.apply(person);
+		DbPerson updatedDbPerson = personJsonToDb.apply(db, person);
 		personService.save(updatedDbPerson);
 		
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
-	
-	private boolean checkAdminRequestIfNeeded(int requestId, SecurityContextHolderAwareRequestWrapper request) {
-		if (!request.isUserInRole("ROLE_ADMIN")) {
-			// Only admin's can change other profiles.
-			String name = request.getUserPrincipal().getName();
-			DbPerson me = personService.findByEmail(name);
-			if (me == null) {
-				// I can't find myself... need more zen.
-				return false;
-			}
-			
-			if (me.getId() != requestId) {
-				// Someone is being naughty...
-				return false;
-			}
-		}
-		return true;
-	}
-
 }

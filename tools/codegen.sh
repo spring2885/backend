@@ -29,7 +29,8 @@ json_codegen() {
 	generate \
 	-l swagger \
 	-i ../swagger.yaml \
-	-o ../server/src/main/webapp/
+	-o ../server/src/main/resources/static/
+    rm ../server/src/main/resources/static/README.md
 }
 
 html_codegen() {

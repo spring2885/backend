@@ -5,6 +5,7 @@ import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
+import static org.spring2885.server.utils.TestUtils.convertObjectToJsonBytes;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -13,7 +14,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
-import java.io.IOException;
 import java.util.Collections;
 
 import org.hamcrest.Matchers;
@@ -24,8 +24,6 @@ import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.spring2885.model.Job;
 import org.spring2885.server.db.model.DbJob;
-import org.spring2885.server.db.model.DbJobType;
-import org.spring2885.server.db.model.DbLanguage;
 import org.spring2885.server.db.service.JobService;
 import org.spring2885.server.db.service.JobTypeService;
 import org.spring2885.server.db.service.LanguageService;
@@ -41,9 +39,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = { TestConfig.class })
@@ -137,7 +133,6 @@ public class JobsApiTest {
        
     }
 
-	@SuppressWarnings("unchecked")
     @Test
     @WithMockUser
     public void testJobs_aq() throws Exception {
@@ -233,9 +228,4 @@ public class JobsApiTest {
     	verify(jobService, never()).save(Mockito.any(DbJob.class));
     }
     
-
-    public static byte[] convertObjectToJsonBytes(Object object) throws IOException  {
-        ObjectMapper mapper = new ObjectMapper();
-        return mapper.writeValueAsBytes(object);
-    }    
 }
