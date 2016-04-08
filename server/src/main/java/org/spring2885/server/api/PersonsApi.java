@@ -12,12 +12,16 @@ import org.spring2885.server.api.utils.RequestHelper;
 import org.spring2885.server.db.model.DbPerson;
 import org.spring2885.server.db.model.PersonConverters;
 import org.spring2885.server.db.service.person.PersonService;
+import org.spring2885.server.db.service.person.PersonValidator;
 import org.spring2885.server.db.service.search.SearchCriteria;
 import org.spring2885.server.db.service.search.SearchParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestWrapper;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -126,6 +130,38 @@ public class PersonsApi {
 		personService.save(updatedDbPerson);
 		
 		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/status/{id}", method = RequestMethod.GET)
+	public ResponseEntity<Void> checkIfTeacher(
+			@PathVariable("id") Integer id,
+			BindingResult result) {
+		PersonValidator userValidator = new PersonValidator();
+		DbPerson person = personService.findById(id);
+        userValidator.validate(person, result);
+        
+
+        if (result.hasErrors()){
+          return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/changestatus", method = RequestMethod.POST)
+	public ResponseEntity<Void> checkTeacherRequest(
+			@RequestParam("keyword") String keyword,
+			@RequestParam("email") String email, 
+			BindingResult result) {
+		PersonValidator userValidator = new PersonValidator();
+		DbPerson person = personService.findByEmail(email);
+        userValidator.validate(person, keyword, result);
+        
+        if (result.hasErrors()){
+          return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+        
+        personService.save(person);
+        return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
 }

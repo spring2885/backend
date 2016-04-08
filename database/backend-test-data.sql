@@ -24,8 +24,7 @@ INSERT INTO person VALUES (
     graduation_year,
     degree_type,
     faculty_department,
-    active,
-    roles_id);
+    active);
 
 */
 /*Student*/
@@ -51,8 +50,7 @@ INSERT INTO person VALUES (
     2016,
     'BS',
     null,
-    1,
-    0);
+    1);
     
 /*Alumni*/
 INSERT INTO person VALUES (
@@ -77,8 +75,7 @@ INSERT INTO person VALUES (
     2014,
     'BS',
     null,
-    1,
-    0);
+    1);
     
 INSERT INTO person VALUES (
     1234,
@@ -102,8 +99,7 @@ INSERT INTO person VALUES (
     1960,
     'PhD',
     null,
-    1,
-    0);
+    1);
 
 /*Faculty*/
 INSERT INTO person VALUES (
@@ -128,7 +124,6 @@ INSERT INTO person VALUES (
     null,
     null,
     'Computer and Information Science',
-    1,
     1);
     
 /*person - other examples*/
@@ -154,7 +149,6 @@ INSERT INTO person VALUES (
     null,
     null,
     null,
-    0,
     0);
     
 INSERT INTO person VALUES (
@@ -179,7 +173,6 @@ INSERT INTO person VALUES (
     null,
     null,
     null,
-    0, 
     0);
 
 INSERT INTO person VALUES (
@@ -204,8 +197,7 @@ INSERT INTO person VALUES (
     null,
     null,
     null,
-    1,
-    0);
+    1);
     
 INSERT INTO person VALUES (
     30,
@@ -229,8 +221,7 @@ INSERT INTO person VALUES (
     null,
     null,
     null,
-    1,
-    0);
+    1);
 
 
 /*person - student*/
@@ -256,8 +247,7 @@ INSERT INTO person VALUES (
     null,
     null,
     null,
-    1,
-    0);
+    1);
 
 /*person - teacher*/
 INSERT INTO person VALUES (
@@ -276,13 +266,12 @@ INSERT INTO person VALUES (
     2,
     'en',
     '2016-4-6',
-    'Teacher',
+    'teacher',
     null,
     null,
     null,
     null,
     null,
-    1,
     1);
 
 /*person - alumni*/
@@ -302,14 +291,13 @@ INSERT INTO person VALUES (
     1,
     'en',
     '2016-4-6',
-    'Alumni',
+    'alumni',
     null,
     null,
     null,
     null,
     null,
-    1,
-    0);
+    1);
 
 /*person - admin*/
 INSERT INTO person VALUES (
@@ -328,13 +316,12 @@ INSERT INTO person VALUES (
     2,
     'en',
     '2016-4-6',
-    'Admin',
+    'admin',
     null,
     null,
     null,
     null,
     null,
-    1,
     1);
 
 /*News*/

@@ -53,11 +53,9 @@ CREATE TABLE person
 # faculty field
     faculty_department VARCHAR(200),
     active TINYINT(1) DEFAULT 1,
-    roles_id INT,
     PRIMARY KEY (id),
     FOREIGN KEY (type) REFERENCES person_type(id),
     FOREIGN KEY (lang) REFERENCES language(code),
-    #FOREIGN KEY (roles_id) REFERENCES roles(id),
     UNIQUE KEY (email)
 );
 
