@@ -205,11 +205,11 @@ INSERT INTO job_type VALUES (
     
 INSERT INTO roles VALUES (
     0,
-    'user');
+    'USER');
     
 INSERT INTO roles VALUES (
     1,
-    'admin');
+    'ADMIN');
 
 INSERT INTO social_service VALUES(
     'LinkedIn', 'http://www.linkedin.com/');
