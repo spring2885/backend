@@ -817,6 +817,8 @@ definitions:
         format: int64
       description:
         type: string
+      company:
+        type: string
       job_type:
         format: int64
       title: 
