@@ -39,6 +39,10 @@ public class DbJob {
 	// Mark this as not insertable so the default database value will be used.
 		@Column(nullable = false, insertable=false, columnDefinition = "TINYINT", length = 1)
 		private Boolean active;
+		
+		// Mark this as not insertable so the default database value will be used.
+	    @Column(nullable = false, insertable=false, columnDefinition = "TINYINT", length = 1)
+		private Boolean abuse;
 	
 		
 		
@@ -110,6 +114,14 @@ public class DbJob {
 
     public void setActive(Boolean active) {
         this.active = active;
+    }
+    
+    public Boolean isAbuse() {
+        return abuse;
+    }
+
+    public void setAbuse(Boolean abuse) {
+        this.abuse = abuse;
     }
     
    

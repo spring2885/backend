@@ -91,6 +91,7 @@ CREATE TABLE job
     posted_by_person_id INT,
     hours INT,
     active TINYINT(1) DEFAULT 1,
+    abuse TINYINT(1) DEFAULT 0,
     PRIMARY KEY(id),
     FOREIGN KEY(industry) REFERENCES industry(id),
     FOREIGN KEY(job_type) REFERENCES job_type(id),
