@@ -1,12 +1,23 @@
 package org.spring2885.server.db.model;
 
 import java.sql.Date;
+import java.util.List;
+import java.util.Set;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import com.google.common.collect.ImmutableSet;
 
 @Entity
 @Table(name="job")
@@ -17,23 +28,24 @@ public class DbJob {
 	private Long id;
 	
 	private String title;
-	
 	private Integer industry;
-	
 	private String location;
-	
 	private String description;
-	
+	private String company;
 	private Integer jobType;
-
-	private Date startDate;
-	
-	private Date endDate;
-	
 	private Integer postedByPersonId;
-	
 	private Integer hours;
 	
+	// Mark this as not insertable so the default database value will be used.
+		@Column(nullable = false, insertable=false, columnDefinition = "TINYINT", length = 1)
+		private Boolean active;
+		
+		// Mark this as not insertable so the default database value will be used.
+	    @Column(nullable = false, insertable=false, columnDefinition = "TINYINT", length = 1)
+		private Boolean abuse;
+	
+		
+		
 	public Long getId() {
 		return id;
 	}
@@ -65,23 +77,21 @@ public class DbJob {
 	public void setDescription(String description) {
 		this.description = description;
 	}
+	
+	public String getCompany() {
+		return company;
+	}
+	public void setCompany(String company) {
+		this.company = company;
+	}
+	
+	
+	
 	public int getjobType() {
 		return jobType;
 	}
 	public void setjobType(int jobType) {
 		this.jobType = jobType;
-	}
-	public Date getstartDate() {
-		return startDate;
-	}
-	public void setstartDate(Date startDate) {
-		this.startDate = startDate;
-	}
-	public Date getendDate() {
-		return endDate;
-	}
-	public void setendDate(Date endDate) {
-		this.endDate = endDate;
 	}
 	
 	public int getpostedbyPersonId() {
@@ -98,6 +108,23 @@ public class DbJob {
 		this.hours = hours;
 	}
 	
+	public Boolean isActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
+    
+    public Boolean isAbuse() {
+        return abuse;
+    }
+
+    public void setAbuse(Boolean abuse) {
+        this.abuse = abuse;
+    }
+    
+   
 	@Override
 	public int hashCode() {
 		return id.hashCode();
@@ -144,16 +171,6 @@ public class DbJob {
 				return false;
 		} else if (!jobType.equals(other.jobType))
 			return false;
-		if (startDate == null) {
-			if (other.startDate != null)
-				return false;
-		} else if (!startDate.equals(other.startDate))
-			return false;
-		if (endDate == null) {
-			if (other.endDate != null)
-				return false;
-		} else if (!endDate.equals(other.endDate))
-			return false;
 		if (postedByPersonId == null) {
 			if (other.postedByPersonId != null)
 				return false;
@@ -172,4 +189,6 @@ public class DbJob {
 				.append(" }\n")
 				.toString();
 	}
+
+	
 }
