@@ -23,36 +23,36 @@ import org.springframework.web.bind.annotation.RestController;
 public class LanguageApi {
 
 	@Autowired
-	private LanguageService LanguageService;
+	private LanguageService languageService;
 
 	@Autowired
 	private LanguageConverters.JsonToDbConverter languageJsonToDb;
 
 	@Autowired
-	private LanguageConverters.LanguageFromDbToJson dbToJsonConverter;
+	private LanguageConverters.LanguageFromDbToJson languageDbToJson;
 
 	@RequestMapping(value = "/{code}", method = RequestMethod.GET)
 	public ResponseEntity<Language> get(@PathVariable("code") String code) throws NotFoundException {
-		DbLanguage o = LanguageService.findByCode(code);
+		DbLanguage o = languageService.findByCode(code);
 		if (o == null) {
 			// When adding test testLanguagesByCode_notFound, was getting a
 			// NullPointerException
 			// here, so needed to add this.
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-		return new ResponseEntity<>(dbToJsonConverter.apply(o), HttpStatus.OK);
+		return new ResponseEntity<>(languageDbToJson.apply(o), HttpStatus.OK);
 
 	}
 
 	@RequestMapping(value = "/{code}", method = RequestMethod.PUT)
 	public ResponseEntity<Void> put(@PathVariable("code") String code, @RequestBody Language lang,
 			SecurityContextHolderAwareRequestWrapper request) throws NotFoundException {
-		DbLanguage db = LanguageService.findByCode(code);
+		DbLanguage db = languageService.findByCode(code);
 		if (db == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		DbLanguage updatedDbLanguageService = languageJsonToDb.apply(db, lang);
-		LanguageService.save(updatedDbLanguageService);
+		languageService.save(updatedDbLanguageService);
 
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
@@ -60,7 +60,7 @@ public class LanguageApi {
     public ResponseEntity<Void> newsPost(@RequestBody Language lang) throws NotFoundException {
 		
         DbLanguage updatedDbLanguage = languageJsonToDb.apply(new DbLanguage(), lang);
-		LanguageService.save(updatedDbLanguage);
+        languageService.save(updatedDbLanguage);
 		
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}

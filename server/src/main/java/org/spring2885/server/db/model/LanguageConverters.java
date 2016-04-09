@@ -2,11 +2,13 @@ package org.spring2885.server.db.model;
 
 import org.spring2885.model.Language;
 import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Component;
 
 import com.google.common.base.Function;
 import com.google.common.base.Supplier;
 import com.google.common.base.Suppliers;
 
+@Component
 public class LanguageConverters {
 
 	public class LanguageFromDbToJson implements Function<DbLanguage, Language> {
@@ -20,8 +22,8 @@ public class LanguageConverters {
 			return l;
 		}
 }
-	 public class JsonToDbConverter implements Function<Language, DbLanguage> {
-		 private Supplier<DbLanguage> dbSupplier = Suppliers.ofInstance(new DbLanguage());		
+	 public class JsonToDbConverter {
+		private Supplier<DbLanguage> dbSupplier = Suppliers.ofInstance(new DbLanguage());		
 		JsonToDbConverter() {
 		}
 		
@@ -30,7 +32,6 @@ public class LanguageConverters {
 			return this;
 		}
 		
-		@Override
 		public DbLanguage apply(Language p) {
 			DbLanguage db = dbSupplier.get();
 			db.setCode(db.getCode());
@@ -47,7 +48,7 @@ public class LanguageConverters {
 	
 	
 	@Bean
-	public LanguageFromDbToJson dbToJsonConverter() {
+	public LanguageFromDbToJson languageDbToJson() {
 		return new LanguageFromDbToJson();
 	}
 	
