@@ -36,37 +36,12 @@ public class DbJob {
 	private Integer postedByPersonId;
 	private Integer hours;
 	
-
-	@Column(nullable=false, updatable=false)
-	private Date startDate;
-	private Date endDate;
-	
-	@JoinColumn(name="person_id")
-    @ManyToOne(fetch=FetchType.EAGER)
-    private DbPerson person;
-	
-private Long views;
-	
-	@ManyToMany
-	@JoinTable(name = "news_visibility",
-	    joinColumns = @JoinColumn(name="job", referencedColumnName="id"),
-	    inverseJoinColumns = @JoinColumn(name="person_type", referencedColumnName="id"))
-	Set<DbPersonType> visibleToPersonTypes;
-	
-	
 	// Mark this as not insertable so the default database value will be used.
-	@Column(nullable = false, insertable=false, columnDefinition = "TINYINT", length = 1)
-	private Boolean active;
-    
-	// Mark this as not insertable so the default database value will be used.
-    @Column(nullable = false, insertable=false, columnDefinition = "TINYINT", length = 1)
-	private Boolean abuse;
-    
-    @OneToMany(mappedBy="job", fetch=FetchType.EAGER)
-    private List<DbNewsComment> comments;
+		@Column(nullable = false, insertable=false, columnDefinition = "TINYINT", length = 1)
+		private Boolean active;
 	
-	
-	
+		
+		
 	public Long getId() {
 		return id;
 	}
@@ -114,18 +89,6 @@ private Long views;
 	public void setjobType(int jobType) {
 		this.jobType = jobType;
 	}
-	public Date getstartDate() {
-		return startDate;
-	}
-	public void setstartDate(Date startDate) {
-		this.startDate = startDate;
-	}
-	public Date getendDate() {
-		return endDate;
-	}
-	public void setendDate(Date endDate) {
-		this.endDate = endDate;
-	}
 	
 	public int getpostedbyPersonId() {
 		return postedByPersonId;
@@ -141,52 +104,15 @@ private Long views;
 		this.hours = hours;
 	}
 	
-	
-	
-	 public DbPerson getPerson() {
-	        return person;
-	    }
+	public Boolean isActive() {
+        return active;
+    }
 
-	    public void setPersonId(DbPerson personId) {
-	        this.person = personId;
-	    }
-
-	    public Long getViews() {
-	        return views;
-	    }
-
-	    public void setViews(Long views) {
-	        this.views = views;
-	    }
-
-	    public Boolean isActive() {
-	        return active;
-	    }
-
-	    public void setActive(Boolean active) {
-	        this.active = active;
-	    }
-
-	    public Boolean isAbuse() {
-	        return abuse;
-	    }
-
-	    public void setAbuse(Boolean abuse) {
-	        this.abuse = abuse;
-	    }
-	    
-	    public Set<DbPersonType> getVisibleToPersonTypes() {
-	        return visibleToPersonTypes;
-	    }
-
-	    public void setVisibleToPersonTypes(Set<DbPersonType> visibleToPersonTypes) {
-	        this.visibleToPersonTypes = visibleToPersonTypes;
-	    }
-
-	    public void setVisibleToPersonType(DbPersonType visibleToPersonType) {
-	        this.visibleToPersonTypes = ImmutableSet.of(visibleToPersonType);
-	    }
-	
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
+    
+   
 	@Override
 	public int hashCode() {
 		return id.hashCode();
@@ -232,16 +158,6 @@ private Long views;
 			if (other.jobType != null)
 				return false;
 		} else if (!jobType.equals(other.jobType))
-			return false;
-		if (startDate == null) {
-			if (other.startDate != null)
-				return false;
-		} else if (!startDate.equals(other.startDate))
-			return false;
-		if (endDate == null) {
-			if (other.endDate != null)
-				return false;
-		} else if (!endDate.equals(other.endDate))
 			return false;
 		if (postedByPersonId == null) {
 			if (other.postedByPersonId != null)

@@ -5,6 +5,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.anyBoolean;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.same;
 import static org.mockito.Mockito.never;
@@ -21,6 +22,7 @@ import org.junit.runners.JUnit4;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.spring2885.server.db.model.DbJob;
+import org.spring2885.server.db.model.DbNews;
 
 import com.google.common.collect.Lists;
 
@@ -40,7 +42,8 @@ public class JobServiceTest {
     @Test
     public void testFindAll() {
     	DbJob p = new DbJob();
-    	when(repository.findAll()).thenReturn(Collections.singleton(p));
+    	//when(repository.findAll()).thenReturn(Collections.singleton(p));
+    	when(repository.findAllByActive(anyBoolean())).thenReturn(Collections.singleton(p));
 
     	List<DbJob> persons = Lists.newArrayList(service.findAll());
     	assertEquals(1, persons.size());
@@ -49,10 +52,12 @@ public class JobServiceTest {
 
     @Test
     public void testFindAll_none() {
-    	when(repository.findAll()).thenReturn(Collections.emptyList());
+    	//when(repository.findAll()).thenReturn(Collections.emptyList());
+    	when(repository.findAllByActive(anyBoolean())).thenReturn(Collections.emptyList());
 
     	List<DbJob> persons = Lists.newArrayList(service.findAll());
     	assertEquals(0, persons.size());
+    
     }
     
     @Test
