@@ -36,13 +36,13 @@ public class LanguageApiTest {
 	protected MockMvc mockMvc;
 	
 	@Autowired protected WebApplicationContext webappContext;
-	@Autowired private LanguageService LanguageService;
+	@Autowired private LanguageService languageService;
 	
 	private DbLanguage dbMy;
 	private Language myLang;
 	
 	public void set(){
-		reset(LanguageService);
+		reset(languageService);
     	mockMvc = webAppContextSetup(webappContext)
     			.apply(SecurityMockMvcConfigurers.springSecurity())
     			.build();
@@ -62,7 +62,7 @@ public class LanguageApiTest {
 	  //@WithMockLang
 	    public void testLangauge() throws Exception {
 	    	// Setup the expectations.
-	    	when(LanguageService.findAll())
+	    	when(languageService.findAll())
 	    		.thenReturn((Set<DbLanguage>) ImmutableList.of(
 	    			createDbLang("EX2",  "Language #1"),
 	    			createDbLang("EX2",  "Langauge #2")));
@@ -84,8 +84,8 @@ public class LanguageApiTest {
 	public void testLanguagesByCode() throws Exception {
     	DbLanguage l = new DbLanguage();
     	l.setDescription("EXL");
-    	when(LanguageService.findByCode("EXL")).thenReturn(l);
-    	verifyNoMoreInteractions(LanguageService);
+    	when(languageService.findByCode("EXL")).thenReturn(l);
+    	verifyNoMoreInteractions(languageService);
     	
     	mockMvc.perform(get("/api/v1/profiles/EXL")
     			.accept(MediaType.APPLICATION_JSON))
@@ -107,7 +107,7 @@ public class LanguageApiTest {
     			.accept(MediaType.APPLICATION_JSON))
     			.andExpect(status().isForbidden());
     	
-    	verify(LanguageService, never()).save(Mockito.any(DbLanguage.class));
+    	verify(languageService, never()).save(Mockito.any(DbLanguage.class));
     }
 
 	private void makeMeFound() {
