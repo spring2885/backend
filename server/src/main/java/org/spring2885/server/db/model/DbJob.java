@@ -8,7 +8,20 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Type;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+ 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.Version;
+
+
+
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table(name="job")
 public class DbJob {
 	@Id
@@ -33,6 +46,16 @@ public class DbJob {
 	private Integer postedByPersonId;
 	
 	private Integer hours;
+	
+	@CreatedDate
+	private Date creationTime;
+	
+	@LastModifiedDate
+    private Date modificationTime;
+    
+	@Version
+	private long version;
+
 	
 	public Long getId() {
 		return id;
@@ -98,11 +121,33 @@ public class DbJob {
 		this.hours = hours;
 	}
 	
+	public void setCreationTime(Date creationTime){
+		this.creationTime = creationTime;
+	}
+	public Date getCreationTime(){
+		return creationTime;
+	}
+	
+	public void setModificationTime(Date modificationTime){
+		this.modificationTime = modificationTime;
+	}
+	public Date getModificationTime(){
+		return modificationTime;
+	}
+	
+	public void setVersion(long version){
+		this.version = version;
+	}
+	public long getVersion(){
+		return version;
+	}
+	
+	
 	@Override
 	public int hashCode() {
 		return id.hashCode();
 	}
-
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -112,64 +157,79 @@ public class DbJob {
 		if (getClass() != obj.getClass())
 			return false;
 		DbJob other = (DbJob) obj;
-		if (title == null) {
-			if (other.title != null)
+		if (creationTime == null) {
+			if (other.creationTime != null)
 				return false;
-		} else if (!title.equals(other.title))
-			return false;
-		if (industry == null) {
-			if (other.industry != null)
-				return false;
-		} else if (!industry.equals(other.industry))
-			return false;
-		if (location == null) {
-			if (other.location != null)
-				return false;
-		} else if (!location.equals(other.location))
+		} else if (!creationTime.equals(other.creationTime))
 			return false;
 		if (description == null) {
 			if (other.description != null)
 				return false;
 		} else if (!description.equals(other.description))
 			return false;
-		if (id != other.id)
+		if (endDate == null) {
+			if (other.endDate != null)
+				return false;
+		} else if (!endDate.equals(other.endDate))
 			return false;
 		if (hours == null) {
 			if (other.hours != null)
 				return false;
 		} else if (!hours.equals(other.hours))
 			return false;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		if (industry == null) {
+			if (other.industry != null)
+				return false;
+		} else if (!industry.equals(other.industry))
+			return false;
 		if (jobType == null) {
 			if (other.jobType != null)
 				return false;
 		} else if (!jobType.equals(other.jobType))
 			return false;
-		if (startDate == null) {
-			if (other.startDate != null)
+		if (location == null) {
+			if (other.location != null)
 				return false;
-		} else if (!startDate.equals(other.startDate))
+		} else if (!location.equals(other.location))
 			return false;
-		if (endDate == null) {
-			if (other.endDate != null)
+		if (modificationTime == null) {
+			if (other.modificationTime != null)
 				return false;
-		} else if (!endDate.equals(other.endDate))
+		} else if (!modificationTime.equals(other.modificationTime))
 			return false;
 		if (postedByPersonId == null) {
 			if (other.postedByPersonId != null)
 				return false;
 		} else if (!postedByPersonId.equals(other.postedByPersonId))
 			return false;
-		
+		if (startDate == null) {
+			if (other.startDate != null)
+				return false;
+		} else if (!startDate.equals(other.startDate))
+			return false;
+		if (title == null) {
+			if (other.title != null)
+				return false;
+		} else if (!title.equals(other.title))
+			return false;
+		if (version != other.version)
+			return false;
 		return true;
 	}
-	
+
 	@Override
 	public String toString() {
-		return new StringBuilder("{ Job: ")
-				.append("{ Id: ").append(id)
-				.append(", title; ").append(title)
-				.append(" }\n")
-				.append(" }\n")
-				.toString();
+		return "DbJob [id=" + id + ", title=" + title + ", industry=" + industry + ", location=" + location
+				+ ", description=" + description + ", jobType=" + jobType + ", startDate=" + startDate + ", endDate="
+				+ endDate + ", postedByPersonId=" + postedByPersonId + ", hours=" + hours + ", creationTime="
+				+ creationTime + ", modificationTime=" + modificationTime + ", version=" + version + "]";
 	}
+
+
+	
 }
