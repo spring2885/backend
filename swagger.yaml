@@ -12,14 +12,81 @@ info:
     url: https://github.com/spring2885/backend
   
 
-# Describe your paths here
+schemes:
+  - http
+  - https
+securityDefinitions:
+  basicAuth:
+    type: basic
+    description: HTTP Basic Authentication. Works over `HTTP` and `HTTPS`.
+
+parameters:
+  size:
+    name: size
+    in: query
+    description: |
+      Maximum number of items to fetch.
+      If unset then all items are fetched.
+    required: false
+    type: integer
+    format: int64
+  admin:
+    name: admin
+    in: query
+    description: |
+      **True** if this is an admin request. 
+      Admin requests are only allowed to be specified
+      by admin users.  If a non-admin attempts to specifify
+      one then a 403 will be returned.
+    required: false
+    type: boolean
+  q:
+    name: q
+    in: query
+    description: |
+      ## Basic query string.
+      ### Format:
+        ```?q=search terms```
+
+      ### Example:
+        ```?q=Oracle```
+
+    required: false
+    type: string
+  aq:
+    name: aq
+    in: query
+    description: |
+      ## Advanced query string.
+      ### Format:
+        ```?aq=(attribute OP term),...```
+
+      ### Example:
+        ```?aq=graduation_year>2000,occupation:manager```
+
+      ### Available OPs:
+        * ':' for equality
+        * '!' for not
+        * '>' greater than
+        * '<' less than
+    required: false
+    type: string
+  id:
+    name: id
+    in: path
+    description: The ID of the entry.
+    required: true
+    type: integer
+    format: int64
+
 paths:
   /newuser:
     post:
       tags: ["User"]
-      description: |
+      summary: |
         Creates a new user in the system
       description: |
+        Creates a new user in the system
       parameters:
         - name: email
           in: formData
@@ -42,8 +109,10 @@ paths:
   /auth/forgot:
     post:
       tags: ["Reset"]
+      summary: |
+        Sends a request for a new password
       description: |
-        sends a request for a new password
+        Sends a request for a new password
       parameters:
         - name: email
           in: formData
@@ -61,8 +130,10 @@ paths:
   /auth/reset:
     post:
       tags: ["Reset"]
+      summary: |
+        Resets a password.
       description: |
-        setting new password for users email
+        Resets a password.
       parameters:
         - name: email
           in: formData
@@ -81,7 +152,7 @@ paths:
           type: string
       responses:
         200:
-          description: new password set.
+          description: Successful resetting of the password.
           schema:
             $ref: '#/definitions/Reset'
         500:
@@ -92,48 +163,17 @@ paths:
     # This is a HTTP operation
     get:
       tags: ["Profiles"]
+      security:
+       - basicAuth: []
       summary: |
-        Fetches all `profile` objects
+        Fetches all profiles
       description: |
         Fetches all `profile` objects. up to `size` if specified,
         otherwise fetches all objects.
       parameters:
-        - name: size
-          in: query
-          description: The maxinum number of profiles to fetch.
-          required: false
-          type: number
-          format: int32
-        - name: q
-          in: query
-          description: |
-            ## Basic query string.
-            ### Format:
-              ```?q=search terms```
-
-            ### Example:
-              ```?q=Oracle```
-
-          required: false
-          type: string
-        - name: aq
-          in: query
-          description: |
-            ## Advanced query string.
-            ### Format:
-              ```?aq=(attribute OP term),...```
-
-            ### Example:
-              ```?aq=graduation_year>2000,occupation:manager```
-
-            ### Available OPs:
-              * ':' for equality
-              * '!' for not
-              * '>' greater than
-              * '<' less than
-          required: false
-          type: string
-      # Expected responses for this operation:
+        - $ref: '#/parameters/size'
+        - $ref: '#/parameters/q'
+        - $ref: '#/parameters/aq'
       responses:
         # Response code
         200:
@@ -148,16 +188,13 @@ paths:
   /api/v1/profiles/{id}:
     get:
       tags: ["Profiles"]
+      security:
+       - basicAuth: []
       summary: |
         Fetches the `profile` for id `id`.
       description: |
       parameters:
-        - name: id
-          in: path
-          description: The ID of the profile to fetch
-          required: true
-          type: number
-          format: int32
+        - $ref: '#/parameters/id'
       responses:
         # Response code
         200:
@@ -168,15 +205,11 @@ paths:
             $ref: '#/definitions/Person'
     put:
       tags: ["Profiles"]
-      summary: |
-          The profile to update.
+      security:
+       - basicAuth: []
+      summary: Updates a profile
       parameters:
-        - name: id
-          in: path
-          description: The ID of the profile to fetch
-          required: true
-          type: number
-          format: int32
+        - $ref: '#/parameters/id'
         - name: person
           in: body
           description: The profile to update.
@@ -188,15 +221,11 @@ paths:
           description: Updates the person
     delete:
       tags: ["Profiles"]
-      summary: |
-        The profile to delete.
+      security:
+       - basicAuth: []
+      summary: Deletes a profile
       parameters:
-        - name: id
-          in: path
-          description: The profile to delete.
-          required: true
-          type: integer
-          format: int64
+        - $ref: '#/parameters/id'
       responses:
         200:
           description: Updates the person.
@@ -206,55 +235,18 @@ paths:
   /api/v1/news:
     get:
       tags: ["News"]
+      security:
+       - basicAuth: []
+      summary: Fetches all news.
       description: |
         Gets `News` objects.
         Optional querry param of **size** determines
         size of return array
       parameters:
-        - name: size
-          in: query
-          description: Size of array
-          required: false
-          type: number
-          format: int32
-        - name: admin
-          in: query
-          description: |
-            True if this is an admin request. 
-            Admin requests are only allowed to be specified
-            by admin users.  If a non-admin attempts to specifify
-            one then a 403 will be returned.
-          required: false
-          type: boolean
-        - name: q
-          in: query
-          description: |
-            ## Basic query string.
-            ### Format:
-              ```?q=search terms```
-
-            ### Example:
-              ```?q=Oracle```
-
-          required: false
-          type: string
-        - name: aq
-          in: query
-          description: |
-            ## Advanced query string.
-            ### Format:
-              ```?aq=(attribute OP term),...```
-
-            ### Example:
-              ```?aq=graduation_year>2000,occupation:manager```
-
-            ### Available OPs:
-              * ':' for equality
-              * '!' for not
-              * '>' greater than
-              * '<' less than
-          required: false
-          type: string
+        - $ref: '#/parameters/size'
+        - $ref: '#/parameters/admin'
+        - $ref: '#/parameters/q'
+        - $ref: '#/parameters/aq'
       responses:
         200:
           description: Successful response
@@ -264,7 +256,11 @@ paths:
               $ref: '#/definitions/News'
     post:
       tags: ["News"]
+      security:
+       - basicAuth: []
+      summary: Posts new news entry.
       description: |
+        Posts a new news entry.
       parameters:
         - name : News
           in: body
@@ -278,15 +274,13 @@ paths:
   /api/v1/news/{id}:
     get:
       tags: ["News"]
+      security:
+       - basicAuth: []
+      summary: Gets a news entry.
       description: |
-        Retrives a News entry
+        Retrives a news entry by id.
       parameters:
-        - name: id
-          in: path
-          description: a single News entry
-          required: true
-          type: number
-          format: int64
+        - $ref: '#/parameters/id'
       responses:
         200:
           description: Sucussful deletion 
@@ -294,15 +288,13 @@ paths:
             $ref: '#/definitions/News'
     delete:
       tags: ["News"]
+      security:
+       - basicAuth: []
+      summary: Deletes a news entry.
       summary: |
-        The News to delete
+        Deletes a single news entry.
       parameters:
-        - name: id
-          in: path
-          description: The News to be deleted.
-          required: true
-          type: integer
-          format: int64
+        - $ref: '#/parameters/id'
       responses:
         200:
           description: Deletes News
@@ -310,15 +302,13 @@ paths:
           description: Error with deleting News by id. 
     put:
       tags: ["News"]
+      security:
+       - basicAuth: []
+      summary: Updates a news entry.
       summary: |
-        The News to update
+        Updates a news entry.
       parameters:
-        - name: id
-          in: path
-          description: The id of the News to be update.
-          required: true
-          type: integer
-          format: int64
+        - $ref: '#/parameters/id'
         - name: news
           in: body
           description: The News item you want to update
@@ -328,40 +318,105 @@ paths:
           required: true
       responses:
         200:
-          description: Deletes News
+          description: Updates News
         500:
-          description: Error with deleting News by id. 
+          description: Error with updating News by id. 
+
+
+  /api/v1/news_comment:
+    post:
+      tags: ["News"]
+      security:
+       - basicAuth: []
+      summary: Posts a news comment.
+      description: Posts a new news comment.
+      parameters:
+        - name : news_comment
+          in: body
+          description: The news comment you want to post
+          schema:
+            $ref: '#/definitions/NewsComment'
+          required: true
+      responses:
+        200:
+          description: Makes a new NewsComment 
+
+  /api/v1/news_comment/{id}:
+    get:
+      tags: ["News"]
+      security:
+       - basicAuth: []
+      summary: Gets a news comment.
+      description: |
+        Retrives the comments by id.
+      parameters:
+        - $ref: '#/parameters/id'
+      responses:
+        200:
+          description: Successful response
+          schema:
+            $ref: '#/definitions/NewsComment'
+    delete:
+      tags: ["News"]
+      security:
+       - basicAuth: []
+      summary: Deletes a news comment.
+      summary: |
+        Deletes a news comment by id.
+      parameters:
+        - $ref: '#/parameters/id'
+      responses:
+        200:
+          description: Deletes News Comment
+        500:
+          description: Error with deleting News comment by id. 
+    put:
+      tags: ["News"]
+      security:
+       - basicAuth: []
+      summary: Updates a news comment.
+      description: |
+        Updates a news comment by id.
+      parameters:
+        - $ref: '#/parameters/id'
+        - name: news_comment
+          in: body
+          description: The News comment you want to update
+          required: true
+          schema:
+            $ref: '#/definitions/NewsComment'
+          required: true
+      responses:
+        200:
+          description: Updates the News Coment
+        500:
+          description: Error with updating News Comment by id. 
 
   /api/v1/jobs:
     get:
       tags: ["Jobs"]
+      security:
+       - basicAuth: []
+      summary: Gets all job entries.
       description: |
-        Gets `Job` objects.
+        Gets `Job` entries.
         Optional query param of **size** determines
         size of returned array
-      # This is array of GET operation parameters:
       parameters:
-        # An example parameter that is in query and is required
-        -
-          name: size
-          in: query
-          description: Size of array
-          required: false
-          type: number
-          format: double
-      # Expected responses for this operation:
+        - $ref: '#/parameters/size'
       responses:
-        # Response code
         200:
           description: Successful response
-          # A schema describing your response object.
-          # Use JSON Schema format
           schema:
             type: array
             items:
               $ref: '#/definitions/Job'
     post:
       tags: ["Jobs"]
+      summary: Posts a new job entry.
+      description: Posts a new job entry.
+      security:
+       - basicAuth: []
       parameters:
         - name: Job
           in: body
@@ -376,19 +431,13 @@ paths:
   /api/v1/jobs/{id}:
     get:
       tags: ["Jobs"]
-      summary: |
-        Fetches the `job` for id `id`.
+      security:
+       - basicAuth: []
+      summary: Gets a job entry.
       description: |
-        Gets `Job` objects.
-        Optional query param of **size** determines
-        size of returned array
+        Gets a Job entry.
       parameters:
-        - name: id
-          in: path
-          description: The ID of the job to fetch
-          required: true
-          type: number
-          format: int64
+        - $ref: '#/parameters/id'
       responses:
         200:
           description: Successful response
@@ -396,15 +445,14 @@ paths:
             $ref: '#/definitions/Job'
     put:
       tags: ["Jobs"]
+      security:
+       - basicAuth: []
+      description: |
+          Updates a job.
       summary: |
-          The job to update.
+          Updates a job.
       parameters:
-        - name: id
-          in: path
-          description: The id of the Job you want to update
-          required: true
-          type: number
-          format: in64
+        - $ref: '#/parameters/id'
         - name: job
           in: body
           description: The Job you want to update
@@ -417,15 +465,14 @@ paths:
           description: Updates the Job
     delete:
       tags: ["Jobs"]
+      security:
+       - basicAuth: []
+      description: |
+        Deletes a job entry.
       summary: |
-        The job to delete.
+        Deletes a job entry.
       parameters:
-        - name: id
-          in: path
-          description: The job to delete.
-          required: true
-          type: integer
-          format: int64
+        - $ref: '#/parameters/id'
       responses:
         200:
           description: Updates the person.
@@ -436,16 +483,16 @@ paths:
   /api/v1/socialservice:
     get:
       tags: ["SocialService"]
+      security:
+       - basicAuth: []
+      summary: |
+        Gets all SocailService entries.
       description: |
-        Gets `SocailService` objects.
+        Gets all SocailService entries.
         Optional querry param of **size** determines
         size of return array
       parameters:
-        - name: size
-          in: query
-          description: Size of array
-          required: false
-          type: string
+        - $ref: '#/parameters/size'
       responses:
         200:
           description: Successful response
@@ -455,7 +502,12 @@ paths:
               $ref: '#/definitions/News'
     post:
       tags: ["SocialService"]
+      security:
+       - basicAuth: []
+      summary: |
+        Posts a new social service entry.
       description: |
+        Posts a new social service entry.
       parameters:
         - name : SocialService
           in: body
@@ -469,14 +521,13 @@ paths:
   /api/v1/socialservice/{id}:
     get:
       tags: ["SocialService"]
+      security:
+       - basicAuth: []
+      summary: Gets a social service entry.
       description: |
         Retrives a SocialService entry
       parameters:
-        - name: id
-          in: path
-          description: a single SocialService entry
-          required: true
-          type: string
+        - $ref: '#/parameters/id'
       responses:
         200:
           description: Sucussful deletion 
@@ -484,14 +535,13 @@ paths:
             $ref: '#/definitions/SocialService'
     delete:
       tags: ["SocialService"]
+      security:
+       - basicAuth: []
+      summary: Deletes a social service entry.
       summary: |
         The SocialService to delete
       parameters:
-        - name: id
-          in: path
-          description: The SocialService to be deleted.
-          required: true
-          type: string
+        - $ref: '#/parameters/id'
       responses:
         200:
           description: Deletes SocialService
@@ -499,14 +549,13 @@ paths:
           description: Error with deleting SocialService by id. 
     put:
       tags: ["SocialService"]
+      security:
+       - basicAuth: []
+      summary: Updates a social service entry.
       summary: |
         The SocialService to update
       parameters:
-        - name: id
-          in: path
-          description: The id of the News to be update.
-          required: true
-          type: string
+        - $ref: '#/parameters/id'
         - name: socialservice
           in: body
           description: The SocialService item you want to update
@@ -523,18 +572,15 @@ paths:
   /api/v1/persontype:
     get:
       tags: ["PersonType"]
+      security:
+       - basicAuth: []
       summary: |
-        Fetches all 'persontype' objects
+        Fetches all persontype entries.
       description: |
         Fetches all 'person type' objects. up to a 'size' if specified,
         otherwise fetches all objects.
       parameters:
-        - name: size
-          in: query
-          description: The maximum number of persontypes to fetch
-          required: false
-          type: number
-          format: int32
+        - $ref: '#/parameters/size'
       responses:
         200:
           description: Gets persontypes
@@ -546,6 +592,10 @@ paths:
           description: Error getting persontypes
     post:
       tags: ["PersonType"]
+      summary: Creates a new persontype.
+      description: Creates a new persontype entry.
+      security:
+       - basicAuth: []
       parameters:
         - name: PersonType
           in: body
@@ -562,16 +612,12 @@ paths:
   /api/v1/persontype/{id}:
     get:
       tags: ["PersonType"]
-      summary: |
-        Fetches the 'person type' for id 'id'.
-      description: |
+      security:
+       - basicAuth: []
+      summary: Gets a persontype entry.
+      description:  Gets a persontype entry.
       parameters:
-        - name: id
-          in: path
-          description: The id of the person type to fetch
-          required: true
-          type: number
-          format: int32
+        - $ref: '#/parameters/id'
       responses:
         200:
           description: Successful response
@@ -581,15 +627,13 @@ paths:
           description: error getting persontype with id 'id'
     put:
       tags: ["PersonType"]
+      security:
+       - basicAuth: []
       summary: |
-        The persontype to update
+        Updates a persontype entry
+      description: Updates a persontype entry.
       parameters:
-        - name: id
-          in: path
-          description: the id of the persontype to fetch.
-          required: true
-          type: number
-          format: int32
+        - $ref: '#/parameters/id'
         - name: name
           in: body
           description: The type to update.
@@ -601,15 +645,13 @@ paths:
           description: Updates the persontype.
     delete:
       tags: ["PersonType"]
+      security:
+       - basicAuth: []
       summary: |
-        The persontype to delete.
+        Deletes a persontype entry.
+      description: Deletes a persontype entry.
       parameters:
-        - name: id
-          in: path
-          description: The persontype to delete.
-          required: true
-          type: integer
-          format: int64
+        - $ref: '#/parameters/id'
       responses:
         200:
           description: Deletes the persontype.
@@ -621,17 +663,15 @@ paths:
   /api/v1/jobtype:
     get:
       tags: ["JobType"]
+      security:
+       - basicAuth: []
+      summary: Gets all jobtype entries.
       description: |
-        Gets `JobType` objects.
+        Gets all JobType entries.
         Optional querry param of **size** determines
         size of return array
       parameters:
-        - name: size
-          in: query
-          description: Size of array
-          required: false
-          type: number
-          format: int32
+        - $ref: '#/parameters/size'
       responses:
         200:
           description: Successful response
@@ -641,7 +681,10 @@ paths:
               $ref: '#/definitions/JobType'  
     post:
       tags: ["JobType"]
-      description: |
+      security:
+       - basicAuth: []
+      summary: Creates a new jobtype.
+      description: Creates a new JobType entry.
       parameters:
         - name : JobType
           in: body
@@ -656,15 +699,13 @@ paths:
   /api/v1/jobtype/{id}:
     get:
       tags: ["JobType"]
-      description: |
-        Retrives a jobtype entry
+      security:
+       - basicAuth: []
+      summary: |
+        Gets a jobtype entry.
+      description: Gets a jobtype entry by id.
       parameters:
-        - name: id
-          in: path
-          description: a single jobtype entry
-          required: true
-          type: number
-          format: int64
+        - $ref: '#/parameters/id'
       responses:
         200:
           description: Sucussful deletion 
@@ -672,15 +713,13 @@ paths:
             $ref: '#/definitions/JobType'
     delete:
       tags: ["JobType"]
+      security:
+       - basicAuth: []
       summary: |
-        The jobtype to delete
+        Deletes a jobtype entry.
+      description: Delete a jobtype entry by id.
       parameters:
-        - name: id
-          in: path
-          description: The jobtype to be deleted.
-          required: true
-          type: integer
-          format: int64
+        - $ref: '#/parameters/id'
       responses:
         200:
           description: Deletes jobtype
@@ -688,15 +727,12 @@ paths:
           description: Error with deleting jobtype by id. 
     put:
       tags: ["JobType"]
-      summary: |
-        The jobtype to update
+      security:
+       - basicAuth: []
+      summary: Updates a jobtype entry.
+      description: Updates a jobtype entry by id.
       parameters:
-        - name: id
-          in: path
-          description: The id of the News to be update.
-          required: true
-          type: integer
-          format: int64
+        - $ref: '#/parameters/id'
         - name: jobtype
           in: body
           description: The jobtype item you want to update
@@ -833,6 +869,28 @@ definitions:
         type: array
         items:
           type: string
+      comments:
+          type: array
+          items:
+            $ref: '#/definitions/NewsComment'
+
+  NewsComment:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+      news_id:
+        type: integer
+        format: int64
+      text:
+        type: string
+      posted:
+        type: string
+        format: date
+      posted_by:
+        type: object
+        $ref: '#/definitions/Person'
   Reset:
     type: object
     properties:
@@ -874,16 +932,18 @@ definitions:
 		
 tags:
   - name: User
-    description: Everything to do with User
+    description: User API (internal)
   - name: Profiles
-    description: Fetch, Delete, and update Profiles
+    description: Profiles API.
   - name: Reset
-    description: Everything used for resetting password
+    description: Password reset API.
   - name: Jobs
-    description: Everything to do with Jobs
+    description: Jobs API.
+  - name: JobType
+    description: JobType API (Admin).
   - name: News
-    description: Everything to do with News
+    description: News API.
   - name: SocialService
-    description: Everything to do with SocialService
+    description: SocialService API (Admin).
   - name: PersonType
-    description: Everything to do with Person Type
+    description: Person Type API (Admin).

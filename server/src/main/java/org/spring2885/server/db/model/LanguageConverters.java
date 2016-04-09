@@ -1,9 +1,6 @@
 package org.spring2885.server.db.model;
 
 import org.spring2885.model.Language;
-import org.spring2885.model.Language;
-import org.spring2885.server.db.model.LanguageConverters.JsonToDbConverter;
-import org.spring2885.server.db.model.LanguageConverters.LanguageFromDbToJson;
 import org.springframework.context.annotation.Bean;
 
 import com.google.common.base.Function;
@@ -38,6 +35,12 @@ public class LanguageConverters {
 			DbLanguage db = dbSupplier.get();
 			db.setCode(db.getCode());
 			db.setDescription(p.getDescription());
+			return db;
+		}
+
+		public DbLanguage apply(DbLanguage db, Language lang) {
+			db.setCode(db.getCode());
+			db.setDescription(lang.getDescription());
 			return db;
 		}
 	}

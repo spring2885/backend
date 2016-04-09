@@ -1,6 +1,5 @@
 package org.spring2885.server.db.model;
 
-import java.util.Collection;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -14,8 +13,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 import com.google.common.base.Function;
-import com.google.common.base.Supplier;
-import com.google.common.base.Suppliers;
 
 @Component
 public final class PersonConverters {
@@ -82,19 +79,12 @@ public final class PersonConverters {
         return new JsonToDbConverter();
     }
     
-	public class JsonToDbConverter implements Function<Person, DbPerson> {
+	public class JsonToDbConverter {
 
-		private Supplier<DbPerson> dbSupplier = Suppliers.ofInstance(new DbPerson());
-
-		public JsonToDbConverter() {
+		JsonToDbConverter() {
 		}
 
-		public void withDbPerson(DbPerson db) {
-			this.dbSupplier = Suppliers.ofInstance(db);
-		}
-
-		@Override
-		public DbPerson apply(Person p) {
+		public DbPerson apply(DbPerson db, Person p) {
 	        Map<String, DbSocialService> socialServices = 
 	                socialServiceService.findAll().stream()
                     .collect(Collectors.toMap(DbSocialService::getName, (s) -> s));
@@ -105,7 +95,6 @@ public final class PersonConverters {
 	                languageService.findAll().stream()
                     .collect(Collectors.toMap(DbLanguage::getCode, (s) -> s));
 
-            DbPerson db = dbSupplier.get();
 			// Leave the ID null since we're updating an existing person.
 			db.setName(p.getName());
 			db.setStudentId(p.getStudentId());
@@ -117,7 +106,7 @@ public final class PersonConverters {
 			db.setPhone(p.getPhone());
 			db.setOccupation(p.getOccupation());
 			db.setCompanyName(p.getCompanyName());
-			db.setBirthdate(asSqlDate(p.getBirthdate()));
+			db.setBirthdate(ConverterUtils.asSqlDate(p.getBirthdate()));
 			String personType = p.getVariety();
 			if (personType != null && personTypes.containsKey(personType)) {
 				db.setType(personTypes.get(personType));
@@ -130,7 +119,7 @@ public final class PersonConverters {
 			} else {
 			    db.setLanguage(languageService.defaultLanguage());
 			}
-			db.setLastLogon(asSqlDate(p.getLastLoginDate()));
+			db.setLastLogon(ConverterUtils.asSqlDate(p.getLastLoginDate()));
 
 			// Add all social connections
 			for (SocialConnection social : p.getSocialConnections()) {
@@ -156,13 +145,6 @@ public final class PersonConverters {
 
 			return db;
 		}
-	}
-
-	private static java.sql.Date asSqlDate(java.util.Date d) {
-		if (d == null) {
-			return null;
-		}
-		return new java.sql.Date(d.getTime());
 	}
 
 	private PersonConverters() {}

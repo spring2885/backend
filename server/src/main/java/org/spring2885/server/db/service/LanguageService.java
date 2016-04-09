@@ -8,4 +8,5 @@ public interface LanguageService {
     Set<DbLanguage> findAll();
     DbLanguage defaultLanguage();
 	DbLanguage findByCode(String code);
+	DbLanguage save(DbLanguage updatedDbLanguageService);
 }

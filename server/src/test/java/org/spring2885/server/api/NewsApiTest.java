@@ -74,7 +74,6 @@ public class NewsApiTest {
         me.setType(student);
         
         dbNews = createDbNews(4, "TitleNews1");
-        dbNews.setPersonId(me);
         news = createNews(4, "TitleNews2");
 
         // Make the email address "me@" found for user #1.

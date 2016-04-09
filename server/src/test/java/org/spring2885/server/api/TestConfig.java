@@ -6,6 +6,7 @@ import org.spring2885.server.api.utils.RequestHelper;
 import org.spring2885.server.api.utils.RequestHelperImpl;
 import org.spring2885.server.db.model.JobConverters;
 import org.spring2885.server.db.model.JobTypeConverters;
+import org.spring2885.server.db.model.NewsCommentConverters;
 import org.spring2885.server.db.model.NewsConverters;
 import org.spring2885.server.db.model.PersonConverters;
 import org.spring2885.server.db.model.PersonTypeConverter;
@@ -13,6 +14,7 @@ import org.spring2885.server.db.model.SocialServiceConverters;
 import org.spring2885.server.db.service.JobService;
 import org.spring2885.server.db.service.JobTypeService;
 import org.spring2885.server.db.service.LanguageService;
+import org.spring2885.server.db.service.NewsCommentService;
 import org.spring2885.server.db.service.NewsService;
 import org.spring2885.server.db.service.TokenService;
 import org.spring2885.server.db.service.person.PersonService;
@@ -41,6 +43,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @Import({ 
     NewsConverters.class, 
+    NewsCommentConverters.class, 
     JobConverters.class,
     JobTypeConverters.class,
     PersonConverters.class, 
@@ -88,6 +91,11 @@ public class TestConfig {
 	    return mock(TokenService.class);
 	}
 	
+    @Bean
+    public NewsCommentService newsCommentServiceMock() {
+        return mock(NewsCommentService.class);
+    }
+    
     @Bean
     public NewsService newsServiceMock() {
         return mock(NewsService.class);

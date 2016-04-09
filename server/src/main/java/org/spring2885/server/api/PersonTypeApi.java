@@ -2,18 +2,11 @@ package org.spring2885.server.api;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-import java.util.List;
-import java.util.Set;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.spring2885.model.PersonType;
 import org.spring2885.server.api.exceptions.NotFoundException;
 import org.spring2885.server.db.model.DbPersonType;
 import org.spring2885.server.db.model.PersonTypeConverter;
 import org.spring2885.server.db.service.person.PersonTypeService;
-import org.spring2885.server.db.service.search.SearchCriteria;
-import org.spring2885.server.db.service.search.SearchParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,14 +18,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.google.common.base.Strings;
-import com.google.common.collect.FluentIterable;
-
 @RestController
 @RequestMapping(value = "/api/v1/persontype", produces = { APPLICATION_JSON_VALUE })
 public class PersonTypeApi {
-	private static final Logger logger = LoggerFactory.getLogger(PersonsApi.class);
-	
 	@Autowired
 	private PersonTypeService personTypeService;
 
@@ -98,8 +86,7 @@ public class PersonTypeApi {
     	if (db == null){
     		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     	}
-    	personTypeJsonToDb.withDbPersonType(db);
-    	DbPersonType updatedDbPersonType = personTypeJsonToDb.apply(personType);
+    	DbPersonType updatedDbPersonType = personTypeJsonToDb.apply(db, personType);
     	personTypeService.save(updatedDbPersonType);
     	
     	return new ResponseEntity<>(HttpStatus.OK);
