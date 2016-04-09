@@ -13,6 +13,7 @@ import org.hamcrest.Matchers;
 import org.spring2885.server.db.model.DbLanguage;
 import org.spring2885.server.db.model.DbNews;
 import org.spring2885.server.db.model.DbPersonType;
+import org.spring2885.server.db.model.DbToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
@@ -49,6 +50,11 @@ public class LanguageServiceImpl implements LanguageService {
 	@Override
 	public DbLanguage findByCode(String code) {
 		return repository.findOne(code);
+	}
+
+	@Override
+	public DbLanguage save(DbLanguage Language) {
+			return repository.save(Language);
 	}
 
 }
