@@ -3,8 +3,6 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.spring2885.model.SocialService;
 import org.spring2885.server.api.exceptions.NotFoundException;
 import org.spring2885.server.api.utils.RequestHelper;
@@ -27,8 +25,6 @@ import com.google.common.collect.FluentIterable;
 @RestController
 @RequestMapping(value = "/api/v1/socialservice", produces = { APPLICATION_JSON_VALUE })
 public class SocialServicesApi {
-	private static final Logger logger = LoggerFactory.getLogger(SocialServicesApi.class);
-	
 	@Autowired
 	private SocialServiceService socialServiceService;
 	
@@ -89,7 +85,7 @@ public class SocialServicesApi {
 			@RequestBody SocialService ss,
 			SecurityContextHolderAwareRequestWrapper request) throws NotFoundException {
 		
-		if (!checkAdminRequestIfNeeded(id, request)) {
+		if (!requestHelper.checkAdminRequestIfNeeded(id, request)) {
 			return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 		}
 
@@ -100,49 +96,19 @@ public class SocialServicesApi {
 		if (db == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-		socialServiceJsonToDb.withDbSocialService(db);
-		DbSocialService updatedDbSocialService = socialServiceJsonToDb.apply(ss);
+		DbSocialService updatedDbSocialService = socialServiceJsonToDb.apply(db, ss);
 		socialServiceService.save(updatedDbSocialService);
 		
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
 	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<Void> newsPost(
-			
-			
-			@RequestBody SocialService ss
-			
-			) throws NotFoundException {
+    public ResponseEntity<Void> newsPost(@RequestBody SocialService ss) throws NotFoundException {
 		
-		DbSocialService db = new DbSocialService();
-		
-		DbSocialService updatedDbSocialService = socialServiceJsonToDb.apply(ss);
+        DbSocialService updatedDbSocialService = socialServiceJsonToDb.apply(new DbSocialService(), ss);
 		socialServiceService.save(updatedDbSocialService);
 		
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
-    
-	
-	
-	private boolean checkAdminRequestIfNeeded(String requestId, SecurityContextHolderAwareRequestWrapper request) {
-		if (!request.isUserInRole("ROLE_ADMIN")) {
-			// Only admin's can change other profiles.
-			String name = request.getUserPrincipal().getName();
-			DbSocialService me = socialServiceService.findById(name);
-			if (me == null) {
-				// I can't find myself... need more zen.
-				return false;
-			}
-			
-			if (!me.getName().equals(requestId)) {
-				// Someone is being naughty...
-				return false;
-			}
-		}
-		return true;
-	}
-	
-	
 
 }

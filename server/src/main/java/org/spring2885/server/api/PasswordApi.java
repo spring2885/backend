@@ -86,6 +86,7 @@ public class PasswordApi {
 			@RequestParam("newPassword") String newPassword) throws Exception {
 		
 		if (!tokenService.existsByEmail(email)) {
+            logger.info("token does not exist for email: {}", email);
 		    return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
 		}
 		

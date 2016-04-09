@@ -6,6 +6,8 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.util.*;
 import java.util.Date;
+import org.spring2885.model.NewsComment;
+import org.spring2885.model.Person;
 
 import io.swagger.annotations.*;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -14,7 +16,7 @@ import java.util.Objects;
 
 
 @ApiModel(description = "")
-@javax.annotation.Generated(value = "class io.swagger.codegen.languages.SpringMVCServerCodegen", date = "2016-03-26T17:33:48.856-07:00")
+@javax.annotation.Generated(value = "class io.swagger.codegen.languages.SpringMVCServerCodegen", date = "2016-04-02T12:08:13.393-07:00")
 public class News  {
   
   private Long id = null;
@@ -22,9 +24,10 @@ public class News  {
   private String description = null;
   private Date posted = null;
   private Date expired = null;
-  private String postedBy = null;
+  private Person postedBy = null;
   private Long views = null;
   private List<String> visibleTo = new ArrayList<String>();
+  private List<NewsComment> comments = new ArrayList<NewsComment>();
 
   
   /**
@@ -91,10 +94,10 @@ public class News  {
    **/
   @ApiModelProperty(value = "")
   @JsonProperty("posted_by")
-  public String getPostedBy() {
+  public Person getPostedBy() {
     return postedBy;
   }
-  public void setPostedBy(String postedBy) {
+  public void setPostedBy(Person postedBy) {
     this.postedBy = postedBy;
   }
 
@@ -123,6 +126,18 @@ public class News  {
   }
 
   
+  /**
+   **/
+  @ApiModelProperty(value = "")
+  @JsonProperty("comments")
+  public List<NewsComment> getComments() {
+    return comments;
+  }
+  public void setComments(List<NewsComment> comments) {
+    this.comments = comments;
+  }
+
+  
 
   @Override
   public boolean equals(Object o) {
@@ -140,12 +155,13 @@ public class News  {
         Objects.equals(expired, news.expired) &&
         Objects.equals(postedBy, news.postedBy) &&
         Objects.equals(views, news.views) &&
-        Objects.equals(visibleTo, news.visibleTo);
+        Objects.equals(visibleTo, news.visibleTo) &&
+        Objects.equals(comments, news.comments);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, title, description, posted, expired, postedBy, views, visibleTo);
+    return Objects.hash(id, title, description, posted, expired, postedBy, views, visibleTo, comments);
   }
 
   @Override
@@ -161,6 +177,7 @@ public class News  {
     sb.append("  postedBy: ").append(postedBy).append("\n");
     sb.append("  views: ").append(views).append("\n");
     sb.append("  visibleTo: ").append(visibleTo).append("\n");
+    sb.append("  comments: ").append(comments).append("\n");
     sb.append("}\n");
     return sb.toString();
   }

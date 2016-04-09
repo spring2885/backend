@@ -141,8 +141,7 @@ public class NewsApi {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
 		
-		newsJsonToDb.withDbNews(db);
-		DbNews updatedDbNews = newsJsonToDb.apply(news);
+		DbNews updatedDbNews = newsJsonToDb.apply(db, news);
 		
 		newsService.save(updatedDbNews);
 		
@@ -159,7 +158,7 @@ public class NewsApi {
         checkState(me != null);
 
 	    // Create our DbNews version
-	    DbNews db = newsJsonToDb.apply(news);
+	    DbNews db = newsJsonToDb.apply(new DbNews(), news);
         // Since we are doing a post, set defaults.
 	    db.setId(null);
 	    db.setPersonId(me);
