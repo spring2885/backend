@@ -1,6 +1,5 @@
 package org.spring2885.server.db.service.person;
 
-import java.util.Iterator;
 import java.util.Set;
 
 import org.spring2885.server.db.model.DbSocialService;
