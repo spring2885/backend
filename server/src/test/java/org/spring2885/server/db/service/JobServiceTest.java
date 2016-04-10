@@ -22,7 +22,6 @@ import org.junit.runners.JUnit4;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.spring2885.server.db.model.DbJob;
-import org.spring2885.server.db.model.DbNews;
 
 import com.google.common.collect.Lists;
 
