@@ -91,6 +91,10 @@ public class NewsServiceImpl implements NewsService {
                 // from the visibility table?
                 return false;
             }
+            if (visibleType == null) {
+                return false;
+            }
+            
             long visibleTypeId = visibleType.getId();
             for (DbPersonType t : newsPersonTypes) {
                 if (t.getId().longValue() == visibleTypeId) { return true; }

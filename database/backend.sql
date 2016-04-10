@@ -7,14 +7,14 @@ USE backend;
 DROP TABLE IF EXISTS person_type;
 CREATE TABLE person_type
 (
-    id INT,
+    id INT AUTO_INCREMENT,
     name VARCHAR(100),
-    PRIMARY KEY (id),
 #Auditing Columns
     version INT,
-    creation_time DATE,
-    modification_time DATE
+    creation_time DATETIME,
+    modification_time DATETIME,
     
+    PRIMARY KEY (id)
 );
 
 DROP TABLE IF EXISTS language;
@@ -26,8 +26,8 @@ CREATE TABLE language
 	PRIMARY KEY(code),
 #Auditing Columns
     version INT,
-    creation_time DATE,
-    modification_time DATE
+    creation_time DATETIME,
+    modification_time DATETIME
     
 );
 
@@ -52,7 +52,7 @@ CREATE TABLE person
     birthdate DATE,
     type INT,
     lang VARCHAR(20),
-    last_logon DATE,
+    last_logon DATETIME,
     password VARCHAR(255),
 # student only fields
     degree_major VARCHAR(200),
@@ -63,38 +63,38 @@ CREATE TABLE person
 # faculty field
     faculty_department VARCHAR(200),
     active TINYINT(1) DEFAULT 1,
+#	Auditing Columns
+    version INT,
+    creation_time DATETIME,
+    modification_time DATETIME,
     PRIMARY KEY (id),
     FOREIGN KEY (type) REFERENCES person_type(id),
     FOREIGN KEY (lang) REFERENCES language(code),
-    UNIQUE KEY (email),
-#	Auditing Columns
-    version INT,
-    creation_time DATE,
-    modification_time DATE
+    UNIQUE KEY (email)
 );
 
 DROP TABLE IF EXISTS job_type;
 CREATE TABLE job_type
 (
-    id INT,
+    id INT NOT NULL AUTO_INCREMENT,
     description VARCHAR(200),
-    PRIMARY KEY(id),
 #	Auditing Columns
     version INT,
-    creation_time DATE,
-    modification_time DATE
+    creation_time DATETIME,
+    modification_time DATETIME,
+    PRIMARY KEY(id)
 );
 
 DROP TABLE IF EXISTS industry;
 CREATE TABLE industry
 (
-    id INT,
+    id INT NOT NULL AUTO_INCREMENT,
     name VARCHAR(200),
-    PRIMARY KEY(id),
 #	Auditing Columns
     version INT,
-    creation_time DATE,
-    modification_time DATE
+    creation_time DATETIME,
+    modification_time DATETIME,
+    PRIMARY KEY(id)
 );
 
 
@@ -114,14 +114,14 @@ CREATE TABLE job
     hours INT,
     active TINYINT(1) DEFAULT 1,
     abuse TINYINT(1) DEFAULT 0,
+#   Auditing Columns
+    version INT,
+    creation_time DATETIME,
+    modification_time DATETIME,
     PRIMARY KEY(id),
     FOREIGN KEY(industry) REFERENCES industry(id),
     FOREIGN KEY(job_type) REFERENCES job_type(id),
-    FOREIGN KEY(posted_by_person_id) REFERENCES person(id),
-#	Auditing Columns
-    version INT,
-    creation_time DATE,
-    modification_time DATE
+    FOREIGN KEY(posted_by_person_id) REFERENCES person(id)
 );
 
 
@@ -131,18 +131,19 @@ CREATE TABLE news
     id INT NOT NULL AUTO_INCREMENT,
     title VARCHAR(256),
     description TEXT(65535),
-    posted DATE,
-    expired DATE,
+    posted DATETIME,
+    expired DATETIME,
     person_id INT,
     views INT,
     active TINYINT(1) DEFAULT 1,
     abuse TINYINT(1) DEFAULT 0,
-    PRIMARY KEY(id),
-    FOREIGN KEY(person_id) REFERENCES person(id),
-#	Auditing Columns
+#   Auditing Columns
     version INT,
-    creation_time DATE,
-    modification_time DATE
+    creation_time DATETIME,
+    modification_time DATETIME,
+
+    PRIMARY KEY(id),
+    FOREIGN KEY(person_id) REFERENCES person(id)
 );
 
 DROP TABLE IF EXISTS news_visibility;
@@ -150,13 +151,13 @@ CREATE TABLE news_visibility
 (
     person_type INT,
     news INT,
+#   Auditing Columns
+    version INT,
+    creation_time DATETIME,
+    modification_time DATETIME,
     PRIMARY KEY(person_type, news),
     FOREIGN KEY(person_type) REFERENCES person_type(id),
-    FOREIGN KEY(news) REFERENCES news(id),
-#	Auditing Columns
-    version INT,
-    creation_time DATE,
-    modification_time DATE
+    FOREIGN KEY(news) REFERENCES news(id)
 );
 
 DROP TABLE IF EXISTS comment;
@@ -170,13 +171,14 @@ CREATE TABLE news_comment
     person_id INT,
     active TINYINT(1) DEFAULT 1,
     abuse TINYINT(1) DEFAULT 0,
+#   Auditing Columns
+    version INT,
+    creation_time DATETIME,
+    modification_time DATETIME,
+
     PRIMARY KEY(id),
     FOREIGN KEY(news_id) REFERENCES news(id),
-    FOREIGN KEY(person_id) REFERENCES person(id),
-#	Auditing Columns
-    version INT,
-    creation_time DATE,
-    modification_time DATE
+    FOREIGN KEY(person_id) REFERENCES person(id)
 );
 
 DROP TABLE IF EXISTS social_service;
@@ -184,11 +186,12 @@ CREATE TABLE social_service
 (
     id VARCHAR(60) NOT NULL,
     url VARCHAR(200),
-    PRIMARY KEY(id),
 #	Auditing Columns
     version INT,
-    creation_time DATE,
-    modification_time DATE
+    creation_time DATETIME,
+    modification_time DATETIME,
+
+    PRIMARY KEY(id)
 );
 
 DROP TABLE IF EXISTS social_connection;
@@ -198,23 +201,20 @@ CREATE TABLE social_connection
     person_id INT,
     social_service_id VARCHAR(60),
     url VARCHAR(200),
+#   Auditing Columns
+    version INT,
+    creation_time DATETIME,
+    modification_time DATETIME,
     PRIMARY KEY(id),
     FOREIGN KEY(person_id) REFERENCES person(id),
-    FOREIGN KEY(social_service_id) REFERENCES social_service(id),
-#	Auditing Columns
-    version INT,
-    creation_time DATE,
-    modification_time DATE
+    FOREIGN KEY(social_service_id) REFERENCES social_service(id)
 );
 
 DROP TABLE IF EXISTS roles;
 CREATE TABLE roles(
     id INT NOT NULL, 
     rolename VARCHAR(60),
-#	Auditing Columns
-    version INT,
-    creation_time DATE,
-    modification_time DATE
+    PRIMARY KEY(id, rolename)
 );
 
 DROP TABLE IF EXISTS token;
@@ -222,11 +222,12 @@ CREATE TABLE token(
     uuid VARCHAR(200) NOT NULL,
     email VARCHAR(200) NOT NULL UNIQUE,
     date_created DATETIME,
-    PRIMARY KEY(uuid),
 #	Auditing Columns
     version INT,
-    creation_time DATE,
-    modification_time DATE
+    creation_time DATETIME,
+    modification_time DATETIME,
+
+    PRIMARY KEY(uuid)
 );
 
 
@@ -240,15 +241,15 @@ USE backend;
 
 /*Already in DB*/
 INSERT INTO person_type VALUES (
-    0,
+    1,
     'student',1,null,null);
 
 INSERT INTO person_type VALUES (
-    1,
+    2,
     'alumni',1,null,null);
     
 INSERT INTO person_type VALUES (
-    2,
+    3,
     'faculty',1,null,null);
     
 INSERT INTO job_type VALUES (

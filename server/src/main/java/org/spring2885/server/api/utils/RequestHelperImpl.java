@@ -23,7 +23,7 @@ public class RequestHelperImpl implements RequestHelper {
         }
         // Only admin's can change other profiles.
         String loggedInUserName = request.getUserPrincipal().getName();
-        logger.info("checkAdminRequestIfNeeded for object owned by: {}, loggedInUser={}", ownerId);
+        logger.info("checkAdminRequestIfNeeded for object owned by: {}, loggedInUser={}", ownerId, loggedInUserName);
         DbPerson me = personService.findByEmail(loggedInUserName);
         if (me == null) {
             // I can't find myself... need more zen.

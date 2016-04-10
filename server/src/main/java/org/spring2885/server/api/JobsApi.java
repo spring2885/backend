@@ -124,18 +124,23 @@ public class JobsApi {
 			@PathVariable("id") Integer id,
 			@RequestBody Job job,
 			SecurityContextHolderAwareRequestWrapper request) throws NotFoundException {
+	    
+	    logger.info("PUT /jobs/{}", id);
 		
-		if (!requestHelper.checkAdminRequestIfNeeded(id, request)) {
-			return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-		}
-
 		if (id.intValue() != job.getId().intValue()) {
+            logger.info("PUT /jobs/{}: Id doesn't match ", id);
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 		DbJob db = jobService.findById(id);
 		if (db == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
+
+        if (!requestHelper.checkAdminRequestIfNeeded(db.getpostedbyPersonId(), request)) {
+            logger.info("PUT /jobs/{}: Forbidden: (not admin and not yours) ", id);
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+
 		jsonToDbConverter.withDbJob(db);
 		DbJob updatedDbJob = jsonToDbConverter.apply(job);
 		jobService.save(updatedDbJob);
