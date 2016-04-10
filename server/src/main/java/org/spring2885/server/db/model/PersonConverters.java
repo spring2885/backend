@@ -70,6 +70,7 @@ public final class PersonConverters {
 			}
 
             p.setFacultyDepartment(db.getFacultyDepartment());
+            p.setAdmin(db.isAdmin());
 			return p;
 		}
 	}
@@ -142,6 +143,10 @@ public final class PersonConverters {
 			db.setDegreeType(p.getDegreeType());
 			// faculty fields
 			db.setFacultyDepartment(p.getFacultyDepartment());
+			
+			// N.B. We never set the admin attribute back on
+			// the database object from the JSON object so that
+			// someone can not make themselves an admin.
 
 			return db;
 		}

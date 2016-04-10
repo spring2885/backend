@@ -50,6 +50,13 @@ public class DbPerson {
 
     @OneToMany(orphanRemoval = true, mappedBy="person")
     private Set<DbRole> roles = new HashSet<>();
+    
+    public DbPerson() {}
+    public DbPerson(long id, String email, String name) {
+        this.id = Long.valueOf(id);
+        this.email = email;
+        this.name = name;
+    }
 
 	public Long getId() {
 		return id;
@@ -193,11 +200,19 @@ public class DbPerson {
 		this.facultyDepartment = facultyDepartment;
 	}
 
+	public void addRoleForTesting(String rolename) {
+	    roles.add(new DbRole(this, rolename));
+	}
+	
     public Set<DbRole> roles() {
         if (roles.isEmpty()) {
             roles.add(new DbRole(this, "USER"));
         }
         return roles;
+    }
+    
+    public boolean isAdmin() {
+        return roles.stream().anyMatch((t) -> t.rolename().equalsIgnoreCase("ADMIN"));
     }
     
     // Since we won't have this object outside without the ID, we're ok

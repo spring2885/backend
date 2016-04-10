@@ -15,7 +15,7 @@ import java.util.Objects;
 
 
 @ApiModel(description = "")
-@javax.annotation.Generated(value = "class io.swagger.codegen.languages.SpringMVCServerCodegen", date = "2016-04-02T12:08:13.393-07:00")
+@javax.annotation.Generated(value = "class io.swagger.codegen.languages.SpringMVCServerCodegen", date = "2016-04-10T11:17:48.867+02:00")
 public class Person  {
   
   private Long id = null;
@@ -34,6 +34,7 @@ public class Person  {
   private Date lastLoginDate = null;
   private List<SocialConnection> socialConnections = new ArrayList<SocialConnection>();
   private String lang = null;
+  private Boolean admin = null;
   private String degreeMajor = null;
   private String degreeMinor = null;
   private Integer graduationYear = null;
@@ -236,6 +237,18 @@ public class Person  {
   /**
    **/
   @ApiModelProperty(value = "")
+  @JsonProperty("admin")
+  public Boolean getAdmin() {
+    return admin;
+  }
+  public void setAdmin(Boolean admin) {
+    this.admin = admin;
+  }
+
+  
+  /**
+   **/
+  @ApiModelProperty(value = "")
   @JsonProperty("degree_major")
   public String getDegreeMajor() {
     return degreeMajor;
@@ -319,6 +332,7 @@ public class Person  {
         Objects.equals(lastLoginDate, person.lastLoginDate) &&
         Objects.equals(socialConnections, person.socialConnections) &&
         Objects.equals(lang, person.lang) &&
+        Objects.equals(admin, person.admin) &&
         Objects.equals(degreeMajor, person.degreeMajor) &&
         Objects.equals(degreeMinor, person.degreeMinor) &&
         Objects.equals(graduationYear, person.graduationYear) &&
@@ -328,7 +342,7 @@ public class Person  {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, name, studentId, title, aboutMe, resumeUrl, imageUrl, email, phone, occupation, companyName, birthdate, variety, lastLoginDate, socialConnections, lang, degreeMajor, degreeMinor, graduationYear, degreeType, facultyDepartment);
+    return Objects.hash(id, name, studentId, title, aboutMe, resumeUrl, imageUrl, email, phone, occupation, companyName, birthdate, variety, lastLoginDate, socialConnections, lang, admin, degreeMajor, degreeMinor, graduationYear, degreeType, facultyDepartment);
   }
 
   @Override
@@ -352,6 +366,7 @@ public class Person  {
     sb.append("  lastLoginDate: ").append(lastLoginDate).append("\n");
     sb.append("  socialConnections: ").append(socialConnections).append("\n");
     sb.append("  lang: ").append(lang).append("\n");
+    sb.append("  admin: ").append(admin).append("\n");
     sb.append("  degreeMajor: ").append(degreeMajor).append("\n");
     sb.append("  degreeMinor: ").append(degreeMinor).append("\n");
     sb.append("  graduationYear: ").append(graduationYear).append("\n");

@@ -59,8 +59,6 @@ public class PersonsApi {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         
-        logger.info(o.roles().toString());
-                
         return new ResponseEntity<>(personDbToJsonConverter.apply(o), HttpStatus.OK);
     }
 
@@ -71,12 +69,7 @@ public class PersonsApi {
 			throws NotFoundException {
 		
 		if (!requestHelper.checkAdminRequestIfNeeded(id, request)) {
-			String error = 
-					"Only admin's can change others... Read this: "
-					+ "God, grant me the serenity to accept the things I cannot change,"
-					+ "Courage to change the things I can,"
-					+ "And wisdom to know the difference.";
-			return new ResponseEntity<>(error, HttpStatus.FORBIDDEN);
+			return new ResponseEntity<>("Only admin's can change others... ", HttpStatus.FORBIDDEN);
 		}
 
 		personService.delete(id);
