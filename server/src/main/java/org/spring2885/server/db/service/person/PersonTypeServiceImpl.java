@@ -21,6 +21,7 @@ import com.google.common.collect.Iterables;
 @Transactional(readOnly=true)
 public class PersonTypeServiceImpl implements PersonTypeService {
 	private final PersonTypeRepository repository;
+	private static final Long STUDENT_TYPE_ID = 1L;
 	
 	@Autowired
     public
@@ -40,7 +41,7 @@ public class PersonTypeServiceImpl implements PersonTypeService {
 
 	@Override
 	public DbPersonType defaultType() {
-		return repository.findOne(Long.valueOf(0));
+		return repository.findOne(STUDENT_TYPE_ID);
 	}
 
 	@Override
