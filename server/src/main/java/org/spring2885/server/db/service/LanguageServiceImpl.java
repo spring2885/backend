@@ -35,4 +35,14 @@ public class LanguageServiceImpl implements LanguageService {
         return repository.findOne("en");
     }
 
+	@Override
+	public DbLanguage findByCode(String code) {
+		return repository.findOne(code);
+	}
+
+	@Override
+	public DbLanguage save(DbLanguage Language) {
+			return repository.save(Language);
+	}
+
 }

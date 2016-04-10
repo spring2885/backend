@@ -6,6 +6,7 @@ import org.spring2885.server.api.utils.RequestHelper;
 import org.spring2885.server.api.utils.RequestHelperImpl;
 import org.spring2885.server.db.model.JobConverters;
 import org.spring2885.server.db.model.JobTypeConverters;
+import org.spring2885.server.db.model.LanguageConverters;
 import org.spring2885.server.db.model.NewsCommentConverters;
 import org.spring2885.server.db.model.NewsConverters;
 import org.spring2885.server.db.model.PersonConverters;
@@ -46,6 +47,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
     NewsCommentConverters.class, 
     JobConverters.class,
     JobTypeConverters.class,
+    LanguageConverters.class,
     PersonConverters.class, 
     PersonTypeConverter.class,
     SocialServiceConverters.class
