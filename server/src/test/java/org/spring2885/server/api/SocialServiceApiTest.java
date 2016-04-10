@@ -150,6 +150,22 @@ protected MockMvc mockMvc;
     
     @Test
     @WithMockUser(username="id",roles={"USER"})
+    public void testDelete_anotherSocialService_notAdminUser() throws Exception {
+    	// Setup the expectations.
+    	when(socialServiceService.findById("id2"))
+    		.thenReturn(dbSs);
+    	
+    	mockMvc.perform(delete("/api/v1/socialservice/id2")
+    			.accept(MediaType.APPLICATION_JSON))
+    			.andExpect(status().isForbidden());
+    	
+    	// Ensure SocialService#delete method was called since the result of our
+    	// method is the same no matter what.
+    	verify(socialServiceService, never()).delete(Mockito.anyString());
+    }
+    
+    @Test
+    @WithMockUser(username="id",roles={"USER"})
     public void testPut() throws Exception {
         // Setup the expectations.
         makeMeFound();

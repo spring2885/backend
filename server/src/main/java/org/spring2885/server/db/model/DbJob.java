@@ -9,7 +9,20 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Type;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+ 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.Version;
+
+
+
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table(name="job")
 public class DbJob {
 	@Id
@@ -34,6 +47,16 @@ public class DbJob {
 	// Mark this as not insertable so the default database value will be used.
     @Column(nullable = false, insertable=false, columnDefinition = "TINYINT", length = 1)
 	private Boolean abuse;
+	
+	@CreatedDate
+	private Date creationTime;
+	
+	@LastModifiedDate
+    private Date modificationTime;
+    
+	@Version
+	private long version;
+
 	
 	public Long getId() {
 		return id;
@@ -95,6 +118,7 @@ public class DbJob {
 		this.hours = hours;
 	}
 	
+<<<<<<< HEAD
 	public Date getStartDate() {
 		return startDate;
 	}
@@ -127,11 +151,34 @@ public class DbJob {
         this.abuse = abuse;
     }
    
+=======
+	public void setCreationTime(Date creationTime){
+		this.creationTime = creationTime;
+	}
+	public Date getCreationTime(){
+		return creationTime;
+	}
+	
+	public void setModificationTime(Date modificationTime){
+		this.modificationTime = modificationTime;
+	}
+	public Date getModificationTime(){
+		return modificationTime;
+	}
+	
+	public void setVersion(long version){
+		this.version = version;
+	}
+	public long getVersion(){
+		return version;
+	}
+	
+	
 	@Override
 	public int hashCode() {
 		return id.hashCode();
 	}
-
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -143,14 +190,15 @@ public class DbJob {
 		DbJob other = (DbJob) obj;
 		return id.equals(other.id);
 	}
-	
+
 	@Override
 	public String toString() {
-		return new StringBuilder("{ Job: ")
-				.append("{ Id: ").append(id)
-				.append(", title; ").append(title)
-				.append(" }\n")
-				.append(" }\n")
-				.toString();
+		return "DbJob [id=" + id + ", title=" + title + ", industry=" + industry + ", location=" + location
+				+ ", description=" + description + ", jobType=" + jobType + ", startDate=" + startDate + ", endDate="
+				+ endDate + ", postedByPersonId=" + postedByPersonId + ", hours=" + hours + ", creationTime="
+				+ creationTime + ", modificationTime=" + modificationTime + ", version=" + version + "]";
 	}
+
+
+	
 }

@@ -9,7 +9,12 @@ CREATE TABLE person_type
 (
     id INT,
     name VARCHAR(100),
-    PRIMARY KEY (id)
+    PRIMARY KEY (id),
+#Auditing Columns
+    version INT,
+    creation_time DATE,
+    modification_time DATE
+    
 );
 
 DROP TABLE IF EXISTS language;
@@ -18,7 +23,12 @@ CREATE TABLE language
 	# IANA RFC 3066 language tags (ka ISO-639 + ISO-3166)
 	code VARCHAR(20) NOT NULL,
 	description VARCHAR(80) NOT NULL,
-	PRIMARY KEY(code)
+	PRIMARY KEY(code),
+#Auditing Columns
+    version INT,
+    creation_time DATE,
+    modification_time DATE
+    
 );
 
 #
@@ -56,7 +66,11 @@ CREATE TABLE person
     PRIMARY KEY (id),
     FOREIGN KEY (type) REFERENCES person_type(id),
     FOREIGN KEY (lang) REFERENCES language(code),
-    UNIQUE KEY (email)
+    UNIQUE KEY (email),
+#	Auditing Columns
+    version INT,
+    creation_time DATE,
+    modification_time DATE
 );
 
 DROP TABLE IF EXISTS job_type;
@@ -64,7 +78,11 @@ CREATE TABLE job_type
 (
     id INT,
     description VARCHAR(200),
-    PRIMARY KEY(id)
+    PRIMARY KEY(id),
+#	Auditing Columns
+    version INT,
+    creation_time DATE,
+    modification_time DATE
 );
 
 DROP TABLE IF EXISTS industry;
@@ -72,7 +90,11 @@ CREATE TABLE industry
 (
     id INT,
     name VARCHAR(200),
-    PRIMARY KEY(id)
+    PRIMARY KEY(id),
+#	Auditing Columns
+    version INT,
+    creation_time DATE,
+    modification_time DATE
 );
 
 
@@ -95,7 +117,11 @@ CREATE TABLE job
     PRIMARY KEY(id),
     FOREIGN KEY(industry) REFERENCES industry(id),
     FOREIGN KEY(job_type) REFERENCES job_type(id),
-    FOREIGN KEY(posted_by_person_id) REFERENCES person(id)
+    FOREIGN KEY(posted_by_person_id) REFERENCES person(id),
+#	Auditing Columns
+    version INT,
+    creation_time DATE,
+    modification_time DATE
 );
 
 
@@ -112,7 +138,11 @@ CREATE TABLE news
     active TINYINT(1) DEFAULT 1,
     abuse TINYINT(1) DEFAULT 0,
     PRIMARY KEY(id),
-    FOREIGN KEY(person_id) REFERENCES person(id)
+    FOREIGN KEY(person_id) REFERENCES person(id),
+#	Auditing Columns
+    version INT,
+    creation_time DATE,
+    modification_time DATE
 );
 
 DROP TABLE IF EXISTS news_visibility;
@@ -122,7 +152,11 @@ CREATE TABLE news_visibility
     news INT,
     PRIMARY KEY(person_type, news),
     FOREIGN KEY(person_type) REFERENCES person_type(id),
-    FOREIGN KEY(news) REFERENCES news(id)
+    FOREIGN KEY(news) REFERENCES news(id),
+#	Auditing Columns
+    version INT,
+    creation_time DATE,
+    modification_time DATE
 );
 
 DROP TABLE IF EXISTS comment;
@@ -138,7 +172,11 @@ CREATE TABLE news_comment
     abuse TINYINT(1) DEFAULT 0,
     PRIMARY KEY(id),
     FOREIGN KEY(news_id) REFERENCES news(id),
-    FOREIGN KEY(person_id) REFERENCES person(id)
+    FOREIGN KEY(person_id) REFERENCES person(id),
+#	Auditing Columns
+    version INT,
+    creation_time DATE,
+    modification_time DATE
 );
 
 DROP TABLE IF EXISTS social_service;
@@ -146,7 +184,11 @@ CREATE TABLE social_service
 (
     id VARCHAR(60) NOT NULL,
     url VARCHAR(200),
-    PRIMARY KEY(id)
+    PRIMARY KEY(id),
+#	Auditing Columns
+    version INT,
+    creation_time DATE,
+    modification_time DATE
 );
 
 DROP TABLE IF EXISTS social_connection;
@@ -158,13 +200,21 @@ CREATE TABLE social_connection
     url VARCHAR(200),
     PRIMARY KEY(id),
     FOREIGN KEY(person_id) REFERENCES person(id),
-    FOREIGN KEY(social_service_id) REFERENCES social_service(id)
+    FOREIGN KEY(social_service_id) REFERENCES social_service(id),
+#	Auditing Columns
+    version INT,
+    creation_time DATE,
+    modification_time DATE
 );
 
 DROP TABLE IF EXISTS roles;
 CREATE TABLE roles(
     id INT NOT NULL, 
-    rolename VARCHAR(60)
+    rolename VARCHAR(60),
+#	Auditing Columns
+    version INT,
+    creation_time DATE,
+    modification_time DATE
 );
 
 DROP TABLE IF EXISTS token;
@@ -172,7 +222,11 @@ CREATE TABLE token(
     uuid VARCHAR(200) NOT NULL,
     email VARCHAR(200) NOT NULL UNIQUE,
     date_created DATETIME,
-    PRIMARY KEY(uuid)
+    PRIMARY KEY(uuid),
+#	Auditing Columns
+    version INT,
+    creation_time DATE,
+    modification_time DATE
 );
 
 
@@ -187,30 +241,30 @@ USE backend;
 /*Already in DB*/
 INSERT INTO person_type VALUES (
     0,
-    'student');
+    'student',1,null,null);
 
 INSERT INTO person_type VALUES (
     1,
-    'alumni');
+    'alumni',1,null,null);
     
 INSERT INTO person_type VALUES (
     2,
-    'faculty');
+    'faculty',1,null,null);
     
 INSERT INTO job_type VALUES (
     1,
-    "full-time");
+    "full-time",1,null,null);
 
 INSERT INTO job_type VALUES (
     2,
-    "part-time");
+    "part-time",1,null,null);
 
 INSERT INTO social_service VALUES(
-    'LinkedIn', 'http://www.linkedin.com/');
+    'LinkedIn', 'http://www.linkedin.com/',1,null,null);
 INSERT INTO social_service VALUES(
-    'Twitter', 'http://www.twitter.com/');
+    'Twitter', 'http://www.twitter.com/',1,null,null);
 INSERT INTO social_service VALUES(
-    'Facebook', 'http://www.facebook.com/');
+    'Facebook', 'http://www.facebook.com/',1,null,null);
 
-INSERT INTO language VALUES('en', 'English');
+INSERT INTO language VALUES('en', 'English',1,null,null);
 
