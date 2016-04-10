@@ -23,7 +23,6 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 import org.spring2885.model.PersonType;
 import org.spring2885.server.db.model.DbPersonType;
-import org.spring2885.server.db.model.DbToken;
 import org.spring2885.server.db.service.person.PersonTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;

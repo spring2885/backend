@@ -20,7 +20,6 @@ import org.junit.Test;
 import org.mockito.Mockito;
 import org.spring2885.model.Language;
 import org.spring2885.server.db.model.DbLanguage;
-import org.spring2885.server.db.model.DbPersonType;
 import org.spring2885.server.db.service.LanguageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -38,7 +37,6 @@ public class LanguageApiTest {
 	@Autowired protected WebApplicationContext webappContext;
 	@Autowired private LanguageService languageService;
 	
-	private DbLanguage dbMy;
 	private Language myLang;
 	
 	public void set(){
@@ -46,7 +44,6 @@ public class LanguageApiTest {
     	mockMvc = webAppContextSetup(webappContext)
     			.apply(SecurityMockMvcConfigurers.springSecurity())
     			.build();
-		dbMy = createDbLang("EX1", "Language1");
         myLang = createLanguage("EX1", "Language1");
 	}
 	  static Language createLanguage(String code, String desc) {
@@ -59,21 +56,20 @@ public class LanguageApiTest {
 	@Ignore("Dan: Please fix and then remove this annotation")
 	@SuppressWarnings("unchecked")
 	@Test
-	  //@WithMockLang
-	    public void testLangauge() throws Exception {
-	    	// Setup the expectations.
-	    	when(languageService.findAll())
-	    		.thenReturn((Set<DbLanguage>) ImmutableList.of(
-	    			createDbLang("EX2",  "Language #1"),
-	    			createDbLang("EX2",  "Langauge #2")));
-	    	
-	    	mockMvc.perform(get("/api/v1/Language")
-	    			.accept(MediaType.APPLICATION_JSON))
-	    			.andExpect(status().isOk())
-	    			.andExpect(content().contentType(MediaType.APPLICATION_JSON))
-	    			.andExpect(jsonPath("$[0].title", Matchers.is("Language #1")))
-	    			.andExpect(jsonPath("$[1].title", Matchers.is("Language #2")));
-	    }
+    public void testLangauge() throws Exception {
+    	// Setup the expectations.
+    	when(languageService.findAll())
+    		.thenReturn((Set<DbLanguage>) ImmutableList.of(
+    			createDbLang("EX2",  "Language #1"),
+    			createDbLang("EX2",  "Langauge #2")));
+    	
+    	mockMvc.perform(get("/api/v1/Language")
+    			.accept(MediaType.APPLICATION_JSON))
+    			.andExpect(status().isOk())
+    			.andExpect(content().contentType(MediaType.APPLICATION_JSON))
+    			.andExpect(jsonPath("$[0].title", Matchers.is("Language #1")))
+    			.andExpect(jsonPath("$[1].title", Matchers.is("Language #2")));
+    }
 
 	static DbLanguage createDbLang(String code, String description) {
     	DbLanguage n = new DbLanguage();
@@ -81,6 +77,7 @@ public class LanguageApiTest {
     	n.setDescription(description);
     	return n;
     }
+
 	public void testLanguagesByCode() throws Exception {
     	DbLanguage l = new DbLanguage();
     	l.setDescription("EXL");
