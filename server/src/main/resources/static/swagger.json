@@ -1115,6 +1115,9 @@
         "lang" : {
           "type" : "string"
         },
+        "admin" : {
+          "type" : "boolean"
+        },
         "degree_major" : {
           "type" : "string"
         },
