@@ -91,6 +91,7 @@ public class AdminApi {
         
         logger.info(verdict.toString());
         if (!wrapper.isUserInRole("ROLE_ADMIN")) {
+            logger.info("/verdict: User {} is not an admin, returning forbidden", wrapper.getRemoteUser());
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
         
