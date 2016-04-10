@@ -13,20 +13,21 @@ import java.util.Objects;
 
 @ApiModel(description = "")
 @javax.annotation.Generated(value = "class io.swagger.codegen.languages.SpringMVCServerCodegen", date = "2016-04-10T17:46:16.365+02:00")
-public class JobType  {
+public class Verdict  {
   
-  private Long id = null;
-  private String name = null;
+  private String id = null;
+  private Boolean approved = null;
+  private String verdictNotes = null;
 
   
   /**
    **/
   @ApiModelProperty(value = "")
   @JsonProperty("id")
-  public Long getId() {
+  public String getId() {
     return id;
   }
-  public void setId(Long id) {
+  public void setId(String id) {
     this.id = id;
   }
 
@@ -34,12 +35,24 @@ public class JobType  {
   /**
    **/
   @ApiModelProperty(value = "")
-  @JsonProperty("name")
-  public String getName() {
-    return name;
+  @JsonProperty("approved")
+  public Boolean getApproved() {
+    return approved;
   }
-  public void setName(String name) {
-    this.name = name;
+  public void setApproved(Boolean approved) {
+    this.approved = approved;
+  }
+
+  
+  /**
+   **/
+  @ApiModelProperty(value = "")
+  @JsonProperty("verdict_notes")
+  public String getVerdictNotes() {
+    return verdictNotes;
+  }
+  public void setVerdictNotes(String verdictNotes) {
+    this.verdictNotes = verdictNotes;
   }
 
   
@@ -52,23 +65,25 @@ public class JobType  {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    JobType jobType = (JobType) o;
-    return Objects.equals(id, jobType.id) &&
-        Objects.equals(name, jobType.name);
+    Verdict verdict = (Verdict) o;
+    return Objects.equals(id, verdict.id) &&
+        Objects.equals(approved, verdict.approved) &&
+        Objects.equals(verdictNotes, verdict.verdictNotes);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, name);
+    return Objects.hash(id, approved, verdictNotes);
   }
 
   @Override
   public String toString()  {
     StringBuilder sb = new StringBuilder();
-    sb.append("class JobType {\n");
+    sb.append("class Verdict {\n");
     
     sb.append("  id: ").append(id).append("\n");
-    sb.append("  name: ").append(name).append("\n");
+    sb.append("  approved: ").append(approved).append("\n");
+    sb.append("  verdictNotes: ").append(verdictNotes).append("\n");
     sb.append("}\n");
     return sb.toString();
   }

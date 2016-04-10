@@ -13,16 +13,20 @@ import java.util.Objects;
 
 
 @ApiModel(description = "")
-@javax.annotation.Generated(value = "class io.swagger.codegen.languages.SpringMVCServerCodegen", date = "2016-04-10T11:17:48.867+02:00")
+@javax.annotation.Generated(value = "class io.swagger.codegen.languages.SpringMVCServerCodegen", date = "2016-04-10T17:46:16.365+02:00")
 public class Job  {
   
   private Long id = null;
   private String description = null;
   private String company = null;
+  private Long jobType = null;
   private String title = null;
+  private Long industry = null;
   private String location = null;
   private Date startDate = null;
   private Date endDate = null;
+  private Long postedByPersonId = null;
+  private Long hours = null;
 
   
   /**
@@ -64,12 +68,36 @@ public class Job  {
   /**
    **/
   @ApiModelProperty(value = "")
+  @JsonProperty("job_type")
+  public Long getJobType() {
+    return jobType;
+  }
+  public void setJobType(Long jobType) {
+    this.jobType = jobType;
+  }
+
+  
+  /**
+   **/
+  @ApiModelProperty(value = "")
   @JsonProperty("title")
   public String getTitle() {
     return title;
   }
   public void setTitle(String title) {
     this.title = title;
+  }
+
+  
+  /**
+   **/
+  @ApiModelProperty(value = "")
+  @JsonProperty("industry")
+  public Long getIndustry() {
+    return industry;
+  }
+  public void setIndustry(Long industry) {
+    this.industry = industry;
   }
 
   
@@ -109,6 +137,30 @@ public class Job  {
   }
 
   
+  /**
+   **/
+  @ApiModelProperty(value = "")
+  @JsonProperty("posted_by_person_id")
+  public Long getPostedByPersonId() {
+    return postedByPersonId;
+  }
+  public void setPostedByPersonId(Long postedByPersonId) {
+    this.postedByPersonId = postedByPersonId;
+  }
+
+  
+  /**
+   **/
+  @ApiModelProperty(value = "")
+  @JsonProperty("hours")
+  public Long getHours() {
+    return hours;
+  }
+  public void setHours(Long hours) {
+    this.hours = hours;
+  }
+
+  
 
   @Override
   public boolean equals(Object o) {
@@ -122,15 +174,19 @@ public class Job  {
     return Objects.equals(id, job.id) &&
         Objects.equals(description, job.description) &&
         Objects.equals(company, job.company) &&
+        Objects.equals(jobType, job.jobType) &&
         Objects.equals(title, job.title) &&
+        Objects.equals(industry, job.industry) &&
         Objects.equals(location, job.location) &&
         Objects.equals(startDate, job.startDate) &&
-        Objects.equals(endDate, job.endDate);
+        Objects.equals(endDate, job.endDate) &&
+        Objects.equals(postedByPersonId, job.postedByPersonId) &&
+        Objects.equals(hours, job.hours);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, description, company, title, location, startDate, endDate);
+    return Objects.hash(id, description, company, jobType, title, industry, location, startDate, endDate, postedByPersonId, hours);
   }
 
   @Override
@@ -141,10 +197,14 @@ public class Job  {
     sb.append("  id: ").append(id).append("\n");
     sb.append("  description: ").append(description).append("\n");
     sb.append("  company: ").append(company).append("\n");
+    sb.append("  jobType: ").append(jobType).append("\n");
     sb.append("  title: ").append(title).append("\n");
+    sb.append("  industry: ").append(industry).append("\n");
     sb.append("  location: ").append(location).append("\n");
     sb.append("  startDate: ").append(startDate).append("\n");
     sb.append("  endDate: ").append(endDate).append("\n");
+    sb.append("  postedByPersonId: ").append(postedByPersonId).append("\n");
+    sb.append("  hours: ").append(hours).append("\n");
     sb.append("}\n");
     return sb.toString();
   }

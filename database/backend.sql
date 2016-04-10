@@ -230,6 +230,33 @@ CREATE TABLE token(
     PRIMARY KEY(uuid)
 );
 
+DROP TABLE IF EXISTS approval_request;
+CREATE TABLE approval_request(
+    uuid VARCHAR(200) NOT NULL,
+    active TINYINT(1) DEFAULT 1,
+    approval_type VARCHAR(60) NOT NULL,
+    item_type VARCHAR(60) NOT NULL,
+    item_id INT NOT NULL,
+
+    # Creation info.
+    flagged_on DATETIME,
+    flagged_by INT,
+    flagged_notes VARCHAR(30000),
+
+    # Verdict info.    
+    approved TINYINT(1) DEFAULT 0,
+    verdict_on DATETIME,
+    verdict_by INT,
+    verdict_notes VARCHAR(30000),
+
+    # Auditing Columns
+    version INT,
+    creation_time DATETIME,
+    modification_time DATETIME,
+    PRIMARY KEY(uuid),
+    FOREIGN KEY(flagged_by) REFERENCES person(id),
+    FOREIGN KEY(verdict_by) REFERENCES person(id)
+);
 
 --
 --  Static data required for all instances.
