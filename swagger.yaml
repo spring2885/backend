@@ -822,10 +822,12 @@ definitions:
       company:
         type: string
       job_type:
+        type: integer
         format: int64
       title: 
         type: string
       industry:
+        type: integer
         format: int64
       location:
         type: string
@@ -836,8 +838,10 @@ definitions:
         type: string
         format: date
       posted_by_person_id:
+        type: integer
         format: int64
       hours:
+        type: integer
         format: int64
 
   Language:
@@ -930,6 +934,31 @@ definitions:
         type: string
       url:
         type: string 
+
+  ApprovalRequest:
+    type: object
+    properties:
+      id:
+        type: string
+      active:
+        type: boolean
+      approval_type:
+        type: string
+      item_type:
+        type: string
+      item_id:
+        type: integer
+        format: int64
+      reason:
+        type: string
+      notes:
+        type: string
+      on:
+        type: string
+        format: date
+      by:
+        type: object
+        $ref: '#/definitions/Person'
 
 tags:
   - name: User
