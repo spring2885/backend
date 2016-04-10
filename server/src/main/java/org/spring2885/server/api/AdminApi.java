@@ -126,6 +126,12 @@ public class AdminApi {
             }
         } else if (ApprovalTypes.ABUSE.equals(type)) {
             // TODO: Implement me.
+            if (verdict.getApproved().booleanValue()) {
+                // Set active=0 for the item.
+            } else {
+                // set abuse=0 for the item.
+                
+            }
             return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
         }
 
@@ -138,9 +144,13 @@ public class AdminApi {
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public ResponseEntity<List<ApprovalRequest>> list(
             @RequestParam(value = "state", required = false) String state,
-            @RequestParam(value = "type", required = false) String type
-            ) throws NotFoundException {
+            @RequestParam(value = "type", required = false) String type,
+            SecurityContextHolderAwareRequestWrapper wrapper) throws NotFoundException {
         logger.info("AdminApi list : state={}, type={}", state, type);
+        if (!wrapper.isUserInRole("ROLE_ADMIN")) {
+            logger.info("/verdict: User {} is not an admin, returning forbidden", wrapper.getRemoteUser());
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
         
         List<ApprovalRequest> out = FluentIterable
                 .from(approvalRequestService.findAll())
