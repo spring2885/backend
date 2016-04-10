@@ -31,7 +31,7 @@ public class DbApprovalRequest {
     private String itemType;
     private Long itemId;
     
-    private Timestamp flagedOn;
+    private Timestamp flaggedOn;
     @JoinColumn(name="flagged_by")
     @ManyToOne(fetch=FetchType.EAGER)
     private DbPerson flaggedBy;
@@ -96,12 +96,12 @@ public class DbApprovalRequest {
         this.itemId = itemId;
     }
 
-    public Timestamp getFlagedOn() {
-        return flagedOn;
+    public Timestamp getFlaggedOn() {
+        return flaggedOn;
     }
 
-    public void setFlagedOn(Timestamp flagedOn) {
-        this.flagedOn = flagedOn;
+    public void setFlagedOn(Timestamp flaggedOn) {
+        this.flaggedOn = flaggedOn;
     }
 
     public DbPerson getFlaggedBy() {
