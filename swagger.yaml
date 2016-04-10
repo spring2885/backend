@@ -745,7 +745,43 @@ paths:
           description: Deletes jobtype
         500:
           description: Error with deleting jobtype by id. 
-          
+
+  /api/v1/approvals/request/faculty:
+    post:
+      tags: ["Approvals"]
+      security:
+       - basicAuth: []
+      summary: Requests approval as faculty
+      description: Submits a request for an admin to approve this member as a faculty.
+      parameters:
+        - name : TeacherRequest
+          in: body
+          description: The faculty request.
+          schema:
+            $ref: '#/definitions/TeacherRequest'
+          required: true
+      responses:
+        200:
+          description: Submits request.
+  /api/v1/approvals/verdict/{id}:
+    post:
+      tags: ["Approvals"]
+      security:
+       - basicAuth: []
+      summary: Submits a verdict on an approval request.
+      description: Submits a verdict on a previously submitted approval request.
+      parameters:
+        - $ref: '#/parameters/id'
+        - name : Verdict
+          in: body
+          description: The verdict.
+          schema:
+            $ref: '#/definitions/Verdict'
+          required: true
+      responses:
+        200:
+          description: Submits verdict.
+
 definitions:
   SocialConnection:
     type: object
@@ -957,6 +993,8 @@ definitions:
     properties:
       id:
         type: string
+      approved:
+        type: boolean
       verdict_notes:
         type: string
 
@@ -982,6 +1020,8 @@ definitions:
       flagged_by:
         type: object
         $ref: '#/definitions/Person'
+      approved:
+        type: boolean
       verdict_notes:
         type: string
       verdict_on:
@@ -1008,3 +1048,5 @@ tags:
     description: SocialService API (Admin).
   - name: PersonType
     description: Person Type API (Admin).
+  - name: Approvals
+    description: Approvals API (Admin)

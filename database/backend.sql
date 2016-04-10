@@ -244,7 +244,7 @@ CREATE TABLE approval_request(
     flagged_notes VARCHAR(30000),
 
     # Verdict info.    
-    approval_type VARCHAR(60) NOT NULL,
+    approved TINYINT(1) DEFAULT 0,
     verdict_on DATETIME,
     verdict_by INT,
     verdict_notes VARCHAR(30000),
@@ -255,7 +255,7 @@ CREATE TABLE approval_request(
     modification_time DATETIME,
     PRIMARY KEY(uuid),
     FOREIGN KEY(flagged_by) REFERENCES person(id),
-    FOREIGN KEY(verdict_by) REFERENCES person(id),
+    FOREIGN KEY(verdict_by) REFERENCES person(id)
 );
 
 --
