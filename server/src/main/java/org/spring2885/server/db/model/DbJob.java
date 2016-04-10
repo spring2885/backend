@@ -35,6 +35,8 @@ public class DbJob {
 	private Integer jobType;
 	private Integer postedByPersonId;
 	private Integer hours;
+	private Date startDate;
+	private Date endDate;
 	
 	// Mark this as not insertable so the default database value will be used.
 		@Column(nullable = false, insertable=false, columnDefinition = "TINYINT", length = 1)
@@ -106,6 +108,22 @@ public class DbJob {
 	}
 	public void setHours(int hours) {
 		this.hours = hours;
+	}
+	
+	public Date getStartDate() {
+		return startDate;
+	}
+
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
+	}
+
+	public Date getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
 	}
 	
 	public Boolean isActive() {
@@ -189,6 +207,8 @@ public class DbJob {
 				.append(" }\n")
 				.toString();
 	}
+
+	
 
 	
 }
