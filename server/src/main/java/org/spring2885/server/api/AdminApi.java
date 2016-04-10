@@ -135,7 +135,7 @@ public class AdminApi {
         return new ResponseEntity<Void>(HttpStatus.OK);
     }   
     
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(value = "/list", method = RequestMethod.GET)
     public ResponseEntity<List<ApprovalRequest>> list(
             @RequestParam(value = "state", required = false) String state,
             @RequestParam(value = "type", required = false) String type
