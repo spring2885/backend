@@ -7,6 +7,7 @@ import java.util.UUID;
 import org.spring2885.model.ApprovalRequest;
 import org.spring2885.model.FacultyRequest;
 import org.spring2885.model.Verdict;
+import org.spring2885.server.db.service.ApprovalTypes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
@@ -26,7 +27,7 @@ public class ApprovalConverters {
             p.setApprovalType(db.getApprovalType());
             p.setFlaggedBy(personFromDbToJson.apply(db.getFlaggedBy()));
             p.setFlaggedNotes(db.getFlaggedNotes());
-            p.setFlaggedOn(db.getFlagedOn());
+            p.setFlaggedOn(db.getFlaggedOn());
             
             p.setId(db.getUuid());
             p.setItemId(db.getItemId());
@@ -51,10 +52,12 @@ public class ApprovalConverters {
             DbApprovalRequest db = new DbApprovalRequest();
             db.setUuid(uuid.toString());
             db.setActive(Boolean.TRUE);
-            db.setApprovalType("TEACHER");
+            db.setApprovalType(ApprovalTypes.FACULTY);
             db.setFlaggedBy(requestor);
             db.setFlagedOn(Timestamp.from(Instant.now()));
             db.setFlaggedNotes(t.getNotes());
+            db.setItemId(requestor.getId());
+            db.setItemType(ApprovalTypes.PERSON);
 
             return db;
         }

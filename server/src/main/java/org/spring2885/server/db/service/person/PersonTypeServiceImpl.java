@@ -21,7 +21,8 @@ import com.google.common.collect.Iterables;
 @Transactional(readOnly=true)
 public class PersonTypeServiceImpl implements PersonTypeService {
 	private final PersonTypeRepository repository;
-	private static final Long STUDENT_TYPE_ID = 1L;
+    private static final Long STUDENT_TYPE_ID = 1L;
+    private static final Long FACULTY_TYPE_ID = 3L;
 	
 	@Autowired
     public
@@ -44,7 +45,12 @@ public class PersonTypeServiceImpl implements PersonTypeService {
 		return repository.findOne(STUDENT_TYPE_ID);
 	}
 
-	@Override
+    @Override
+    public DbPersonType facultyType() {
+        return repository.findOne(FACULTY_TYPE_ID);
+    }
+
+    @Override
 	public DbPersonType findById(long id) {
 		return repository.findOne(id);
 	}

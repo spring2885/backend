@@ -103,7 +103,7 @@ public class DbJob implements Serializable {
 		this.jobType = jobType;
 	}
 	
-	public int getpostedbyPersonId() {
+	public Integer getpostedbyPersonId() {
 		return postedByPersonId;
 	}
 	public void setpostedbyPersonId(int postedbypersonId) {

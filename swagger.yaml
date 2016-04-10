@@ -763,7 +763,7 @@ paths:
       responses:
         200:
           description: Submits request.
-  /api/v1/approvals/verdict/{id}:
+  /api/v1/approvals/verdict:
     post:
       tags: ["Approvals"]
       security:
@@ -771,7 +771,6 @@ paths:
       summary: Submits a verdict on an approval request.
       description: Submits a verdict on a previously submitted approval request.
       parameters:
-        - $ref: '#/parameters/id'
         - name : Verdict
           in: body
           description: The verdict.

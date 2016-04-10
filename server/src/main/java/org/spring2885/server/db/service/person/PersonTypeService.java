@@ -23,9 +23,12 @@ public interface PersonTypeService {
      */
 	Iterable<DbPersonType> findAll(List<SearchCriteria> criterias);
 	
-	/** Gets the default person type (student). */
-	DbPersonType defaultType();
-	
+    /** Gets the default person type (student). */
+    DbPersonType defaultType();
+    
+    /** Gets the default person type (student). */
+    DbPersonType facultyType();
+    
 	/**
 	 * Returns a {@link DbPersonType} by the primary key or {@code null} if none exist.
 	 */

@@ -4,6 +4,7 @@ import static org.mockito.Mockito.mock;
 
 import org.spring2885.server.api.utils.RequestHelper;
 import org.spring2885.server.api.utils.RequestHelperImpl;
+import org.spring2885.server.db.model.ApprovalConverters;
 import org.spring2885.server.db.model.JobConverters;
 import org.spring2885.server.db.model.JobTypeConverters;
 import org.spring2885.server.db.model.LanguageConverters;
@@ -12,6 +13,7 @@ import org.spring2885.server.db.model.NewsConverters;
 import org.spring2885.server.db.model.PersonConverters;
 import org.spring2885.server.db.model.PersonTypeConverter;
 import org.spring2885.server.db.model.SocialServiceConverters;
+import org.spring2885.server.db.service.ApprovalRequestService;
 import org.spring2885.server.db.service.JobService;
 import org.spring2885.server.db.service.JobTypeService;
 import org.spring2885.server.db.service.LanguageService;
@@ -43,6 +45,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 })
 
 @Import({ 
+    ApprovalConverters.class,
     NewsConverters.class, 
     NewsCommentConverters.class, 
     JobConverters.class,
@@ -115,6 +118,11 @@ public class TestConfig {
     @Bean
     RequestHelper requestHelper() {
         return new RequestHelperImpl();
+    }
+    
+    @Bean
+    ApprovalRequestService approvalsRequestMock() {
+        return mock(ApprovalRequestService.class);
     }
 	
 	@Configuration
