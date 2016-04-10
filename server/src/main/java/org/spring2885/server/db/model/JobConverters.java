@@ -1,6 +1,9 @@
 package org.spring2885.server.db.model;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.spring2885.model.Job;
@@ -31,15 +34,14 @@ public final class JobConverters {
             Job j = new Job();
             j.setId(db.getId());
             j.setTitle(db.getTitle());
-            // j.setIndustry(db.getIndustry());
             j.setLocation(db.getLocation());
             j.setDescription(db.getDescription());
-            // j.setjobType(db.getjobType());
-            // j.setstartDate(db.getstartDate());
-            // j.setendDate(db.getendDate());
-            // j.setpostedbypersonId(db.getpostedbyPersonId());
-            // j.setHours(db.getHours());
-
+            j.setCompany(db.getCompany());
+            // TODO: add jobType
+            // TODO: add posted_by
+            // TODO: add hours
+            j.setStartDate(db.getStartDate());
+            j.setEndDate(db.getEndDate());
             return j;
         }
     }
@@ -68,22 +70,20 @@ public final class JobConverters {
 
             DbJob db = dbSupplier.get();
 
-            // Leave the ID null since we're updating an existing person.
             db.setTitle(p.getTitle());
-            // Integer jobType = p.getjobType();
-            // if (jobType != null) {
-            // db.setjobType(p.getjobType());
-            // } else {
-            // db.setjobType(0);
-            // }
             db.setIndustry(db.getIndustry());
             db.setLocation(db.getLocation());
             db.setDescription(db.getDescription());
-            db.setstartDate(db.getstartDate());
-            db.setendDate(db.getendDate());
+            db.setCompany(db.getCompany());
+            
 
             return db;
         }
+
+		public DbJob apply(DbJob dbJob, Job jobs) {
+			// TODO Auto-generated method stub
+			return null;
+		}
 
     }
 }

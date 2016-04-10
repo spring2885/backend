@@ -1146,6 +1146,9 @@
         "description" : {
           "type" : "string"
         },
+        "company" : {
+          "type" : "string"
+        },
         "title" : {
           "type" : "string"
         },

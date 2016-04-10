@@ -18,6 +18,7 @@ public class Job  {
   
   private Long id = null;
   private String description = null;
+  private String company = null;
   private String title = null;
   private String location = null;
   private Date startDate = null;
@@ -45,6 +46,18 @@ public class Job  {
   }
   public void setDescription(String description) {
     this.description = description;
+  }
+
+  
+  /**
+   **/
+  @ApiModelProperty(value = "")
+  @JsonProperty("company")
+  public String getCompany() {
+    return company;
+  }
+  public void setCompany(String company) {
+    this.company = company;
   }
 
   
@@ -108,6 +121,7 @@ public class Job  {
     Job job = (Job) o;
     return Objects.equals(id, job.id) &&
         Objects.equals(description, job.description) &&
+        Objects.equals(company, job.company) &&
         Objects.equals(title, job.title) &&
         Objects.equals(location, job.location) &&
         Objects.equals(startDate, job.startDate) &&
@@ -116,7 +130,7 @@ public class Job  {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, description, title, location, startDate, endDate);
+    return Objects.hash(id, description, company, title, location, startDate, endDate);
   }
 
   @Override
@@ -126,6 +140,7 @@ public class Job  {
     
     sb.append("  id: ").append(id).append("\n");
     sb.append("  description: ").append(description).append("\n");
+    sb.append("  company: ").append(company).append("\n");
     sb.append("  title: ").append(title).append("\n");
     sb.append("  location: ").append(location).append("\n");
     sb.append("  startDate: ").append(startDate).append("\n");
