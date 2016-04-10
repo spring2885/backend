@@ -71,12 +71,11 @@ public final class JobConverters {
             DbJob db = dbSupplier.get();
 
             db.setTitle(p.getTitle());
-            db.setIndustry(db.getIndustry());
-            db.setLocation(db.getLocation());
-            db.setDescription(db.getDescription());
-            db.setCompany(db.getCompany());
+            db.setDescription(p.getDescription());
+            //db.setIndustry
+            db.setLocation(p.getLocation());
+            db.setCompany(p.getCompany());
             
-
             return db;
         }
 

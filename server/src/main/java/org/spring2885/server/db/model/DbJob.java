@@ -1,18 +1,29 @@
 package org.spring2885.server.db.model;
 
+import java.io.Serializable;
 import java.sql.Date;
+import java.sql.Timestamp;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Version;
+
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table(name="job")
-public class DbJob {
-	@Id
+public class DbJob implements Serializable {
+    private static final long serialVersionUID = 1L;
+
+    @Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Long id;
 	
@@ -34,6 +45,16 @@ public class DbJob {
 	// Mark this as not insertable so the default database value will be used.
     @Column(nullable = false, insertable=false, columnDefinition = "TINYINT", length = 1)
 	private Boolean abuse;
+	
+    @Version
+    private Long version;
+
+	@CreatedDate
+	private java.util.Date creationTime;
+	
+	@LastModifiedDate
+    private java.util.Date modificationTime;
+    
 	
 	public Long getId() {
 		return id;
@@ -127,11 +148,24 @@ public class DbJob {
         this.abuse = abuse;
     }
    
+	public java.util.Date getCreationTime(){
+		return creationTime;
+	}
+	
+	public java.util.Date getModificationTime(){
+		return modificationTime;
+	}
+	
+	public Long getVersion(){
+		return version;
+	}
+	
+	
 	@Override
 	public int hashCode() {
 		return id.hashCode();
 	}
-
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -143,14 +177,15 @@ public class DbJob {
 		DbJob other = (DbJob) obj;
 		return id.equals(other.id);
 	}
-	
+
 	@Override
 	public String toString() {
-		return new StringBuilder("{ Job: ")
-				.append("{ Id: ").append(id)
-				.append(", title; ").append(title)
-				.append(" }\n")
-				.append(" }\n")
-				.toString();
+		return "DbJob [id=" + id + ", title=" + title + ", industry=" + industry + ", location=" + location
+				+ ", description=" + description + ", jobType=" + jobType + ", startDate=" + startDate + ", endDate="
+				+ endDate + ", postedByPersonId=" + postedByPersonId + ", hours=" + hours + ", creationTime="
+				+ creationTime + ", modificationTime=" + modificationTime + ", version=" + version + "]";
 	}
+
+
+	
 }

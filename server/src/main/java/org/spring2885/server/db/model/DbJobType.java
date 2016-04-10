@@ -13,14 +13,14 @@ public class DbJobType {
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Long id;
-	private String name;
+	private String description;
 	
 	public DbJobType() {
 	}
 	
 	public DbJobType(long id, String name) {
 		this.id = id;
-		this.name = name;
+		this.description = name;
 	}
 
 	public Long getId() {
@@ -32,10 +32,10 @@ public class DbJobType {
 	}
 	
 	public String getName() {
-		return name;
+		return description;
 	}
 	
 	public void setName(String name) {
-		this.name = name;
+		this.description = name;
 	}
 }
