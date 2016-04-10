@@ -1,7 +1,5 @@
 package org.spring2885.server.db.service;
 
-import java.util.Iterator;
-
 import org.spring2885.server.db.model.DbApprovalRequest;
 
 public interface ApprovalRequestService {
