@@ -37,7 +37,11 @@ public final class JobConverters {
             j.setLocation(db.getLocation());
             j.setDescription(db.getDescription());
             j.setCompany(db.getCompany());
-
+            // TODO: add jobType
+            // TODO: add posted_by
+            // TODO: add hours
+            j.setStartDate(db.getStartDate());
+            j.setEndDate(db.getEndDate());
             return j;
         }
     }

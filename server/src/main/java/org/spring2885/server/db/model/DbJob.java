@@ -1,30 +1,19 @@
 package org.spring2885.server.db.model;
 
 import java.sql.Date;
-import java.util.List;
-import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
-import com.google.common.collect.ImmutableSet;
 
 @Entity
 @Table(name="job")
 public class DbJob {
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	
 	private Long id;
 	
 	private String title;
@@ -39,15 +28,13 @@ public class DbJob {
 	private Date endDate;
 	
 	// Mark this as not insertable so the default database value will be used.
-		@Column(nullable = false, insertable=false, columnDefinition = "TINYINT", length = 1)
-		private Boolean active;
-		
-		// Mark this as not insertable so the default database value will be used.
-	    @Column(nullable = false, insertable=false, columnDefinition = "TINYINT", length = 1)
-		private Boolean abuse;
+	@Column(nullable = false, insertable=false, columnDefinition = "TINYINT", length = 1)
+	private Boolean active;
 	
-		
-		
+	// Mark this as not insertable so the default database value will be used.
+    @Column(nullable = false, insertable=false, columnDefinition = "TINYINT", length = 1)
+	private Boolean abuse;
+	
 	public Long getId() {
 		return id;
 	}
@@ -86,8 +73,6 @@ public class DbJob {
 	public void setCompany(String company) {
 		this.company = company;
 	}
-	
-	
 	
 	public int getjobType() {
 		return jobType;
@@ -141,7 +126,6 @@ public class DbJob {
     public void setAbuse(Boolean abuse) {
         this.abuse = abuse;
     }
-    
    
 	@Override
 	public int hashCode() {
@@ -157,45 +141,7 @@ public class DbJob {
 		if (getClass() != obj.getClass())
 			return false;
 		DbJob other = (DbJob) obj;
-		if (title == null) {
-			if (other.title != null)
-				return false;
-		} else if (!title.equals(other.title))
-			return false;
-		if (industry == null) {
-			if (other.industry != null)
-				return false;
-		} else if (!industry.equals(other.industry))
-			return false;
-		if (location == null) {
-			if (other.location != null)
-				return false;
-		} else if (!location.equals(other.location))
-			return false;
-		if (description == null) {
-			if (other.description != null)
-				return false;
-		} else if (!description.equals(other.description))
-			return false;
-		if (id != other.id)
-			return false;
-		if (hours == null) {
-			if (other.hours != null)
-				return false;
-		} else if (!hours.equals(other.hours))
-			return false;
-		if (jobType == null) {
-			if (other.jobType != null)
-				return false;
-		} else if (!jobType.equals(other.jobType))
-			return false;
-		if (postedByPersonId == null) {
-			if (other.postedByPersonId != null)
-				return false;
-		} else if (!postedByPersonId.equals(other.postedByPersonId))
-			return false;
-		
-		return true;
+		return id.equals(other.id);
 	}
 	
 	@Override
@@ -207,8 +153,4 @@ public class DbJob {
 				.append(" }\n")
 				.toString();
 	}
-
-	
-
-	
 }
