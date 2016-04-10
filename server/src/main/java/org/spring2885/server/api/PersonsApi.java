@@ -51,12 +51,16 @@ public class PersonsApi {
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ResponseEntity<Person> get(
             @PathVariable("id") int id) throws NotFoundException {
+        logger.info("Handling GET /profiles/{id}: {}", id);
         DbPerson o = personService.findById(id);
         if (o == null) {
             // When adding test testPersonsById_notFound, was getting a NullPointerException
             // here, so needed to add this.
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+        
+        logger.info(o.roles().toString());
+                
         return new ResponseEntity<>(personDbToJsonConverter.apply(o), HttpStatus.OK);
     }
 

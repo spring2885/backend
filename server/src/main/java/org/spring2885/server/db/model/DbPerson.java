@@ -47,7 +47,10 @@ public class DbPerson {
 	private Integer graduationYear;
 	private String degreeType;
 	private String facultyDepartment;
-	
+
+    @OneToMany(orphanRemoval = true, mappedBy="person")
+    private Set<DbRole> roles = new HashSet<>();
+
 	public Long getId() {
 		return id;
 	}
@@ -146,10 +149,10 @@ public class DbPerson {
 		this.password = password;
 	}
 
-	public Set<DbSocialConnection> socialConnections() {
-		return socialConnections;
-	}
-	
+    public Set<DbSocialConnection> socialConnections() {
+        return socialConnections;
+    }
+    
 	public String getDegreeMajor() {
 		return degreeMajor;
 	}
@@ -190,7 +193,14 @@ public class DbPerson {
 		this.facultyDepartment = facultyDepartment;
 	}
 
-	// Since we won't have this object outside without the ID, we're ok
+    public Set<DbRole> roles() {
+        if (roles.isEmpty()) {
+            roles.add(new DbRole(this, "USER"));
+        }
+        return roles;
+    }
+    
+    // Since we won't have this object outside without the ID, we're ok
 	// See https://developer.jboss.org/wiki/EqualsandHashCode
 	@Override
 	public int hashCode() {
