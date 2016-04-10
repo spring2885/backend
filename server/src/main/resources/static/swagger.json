@@ -1306,6 +1306,40 @@
         }
       }
     },
+    "TeacherRequest" : {
+      "type" : "object",
+      "properties" : {
+        "notes" : {
+          "type" : "string"
+        }
+      }
+    },
+    "AbuseRequest" : {
+      "type" : "object",
+      "properties" : {
+        "item_type" : {
+          "type" : "string"
+        },
+        "item_id" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "notes" : {
+          "type" : "string"
+        }
+      }
+    },
+    "Verdict" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "type" : "string"
+        },
+        "verdict_notes" : {
+          "type" : "string"
+        }
+      }
+    },
     "ApprovalRequest" : {
       "type" : "object",
       "properties" : {
@@ -1325,17 +1359,24 @@
           "type" : "integer",
           "format" : "int64"
         },
-        "reason" : {
+        "flagged_notes" : {
           "type" : "string"
         },
-        "notes" : {
-          "type" : "string"
-        },
-        "on" : {
+        "flagged_on" : {
           "type" : "string",
           "format" : "date"
         },
-        "by" : {
+        "flagged_by" : {
+          "$ref" : "#/definitions/Person"
+        },
+        "verdict_notes" : {
+          "type" : "string"
+        },
+        "verdict_on" : {
+          "type" : "string",
+          "format" : "date"
+        },
+        "verdict_by" : {
           "$ref" : "#/definitions/Person"
         }
       }

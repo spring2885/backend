@@ -14,7 +14,7 @@ import java.util.Objects;
 
 
 @ApiModel(description = "")
-@javax.annotation.Generated(value = "class io.swagger.codegen.languages.SpringMVCServerCodegen", date = "2016-04-10T16:03:39.070+02:00")
+@javax.annotation.Generated(value = "class io.swagger.codegen.languages.SpringMVCServerCodegen", date = "2016-04-10T16:24:22.862+02:00")
 public class ApprovalRequest  {
   
   private String id = null;
@@ -22,9 +22,12 @@ public class ApprovalRequest  {
   private String approvalType = null;
   private String itemType = null;
   private Long itemId = null;
-  private String notes = null;
-  private Date on = null;
-  private Person by = null;
+  private String flaggedNotes = null;
+  private Date flaggedOn = null;
+  private Person flaggedBy = null;
+  private String verdictNotes = null;
+  private Date verdictOn = null;
+  private Person verdictBy = null;
 
   
   /**
@@ -90,36 +93,72 @@ public class ApprovalRequest  {
   /**
    **/
   @ApiModelProperty(value = "")
-  @JsonProperty("notes")
-  public String getNotes() {
-    return notes;
+  @JsonProperty("flagged_notes")
+  public String getFlaggedNotes() {
+    return flaggedNotes;
   }
-  public void setNotes(String notes) {
-    this.notes = notes;
-  }
-
-  
-  /**
-   **/
-  @ApiModelProperty(value = "")
-  @JsonProperty("on")
-  public Date getOn() {
-    return on;
-  }
-  public void setOn(Date on) {
-    this.on = on;
+  public void setFlaggedNotes(String flaggedNotes) {
+    this.flaggedNotes = flaggedNotes;
   }
 
   
   /**
    **/
   @ApiModelProperty(value = "")
-  @JsonProperty("by")
-  public Person getBy() {
-    return by;
+  @JsonProperty("flagged_on")
+  public Date getFlaggedOn() {
+    return flaggedOn;
   }
-  public void setBy(Person by) {
-    this.by = by;
+  public void setFlaggedOn(Date flaggedOn) {
+    this.flaggedOn = flaggedOn;
+  }
+
+  
+  /**
+   **/
+  @ApiModelProperty(value = "")
+  @JsonProperty("flagged_by")
+  public Person getFlaggedBy() {
+    return flaggedBy;
+  }
+  public void setFlaggedBy(Person flaggedBy) {
+    this.flaggedBy = flaggedBy;
+  }
+
+  
+  /**
+   **/
+  @ApiModelProperty(value = "")
+  @JsonProperty("verdict_notes")
+  public String getVerdictNotes() {
+    return verdictNotes;
+  }
+  public void setVerdictNotes(String verdictNotes) {
+    this.verdictNotes = verdictNotes;
+  }
+
+  
+  /**
+   **/
+  @ApiModelProperty(value = "")
+  @JsonProperty("verdict_on")
+  public Date getVerdictOn() {
+    return verdictOn;
+  }
+  public void setVerdictOn(Date verdictOn) {
+    this.verdictOn = verdictOn;
+  }
+
+  
+  /**
+   **/
+  @ApiModelProperty(value = "")
+  @JsonProperty("verdict_by")
+  public Person getVerdictBy() {
+    return verdictBy;
+  }
+  public void setVerdictBy(Person verdictBy) {
+    this.verdictBy = verdictBy;
   }
 
   
@@ -138,14 +177,17 @@ public class ApprovalRequest  {
         Objects.equals(approvalType, approvalRequest.approvalType) &&
         Objects.equals(itemType, approvalRequest.itemType) &&
         Objects.equals(itemId, approvalRequest.itemId) &&
-        Objects.equals(notes, approvalRequest.notes) &&
-        Objects.equals(on, approvalRequest.on) &&
-        Objects.equals(by, approvalRequest.by);
+        Objects.equals(flaggedNotes, approvalRequest.flaggedNotes) &&
+        Objects.equals(flaggedOn, approvalRequest.flaggedOn) &&
+        Objects.equals(flaggedBy, approvalRequest.flaggedBy) &&
+        Objects.equals(verdictNotes, approvalRequest.verdictNotes) &&
+        Objects.equals(verdictOn, approvalRequest.verdictOn) &&
+        Objects.equals(verdictBy, approvalRequest.verdictBy);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, active, approvalType, itemType, itemId, notes, on, by);
+    return Objects.hash(id, active, approvalType, itemType, itemId, flaggedNotes, flaggedOn, flaggedBy, verdictNotes, verdictOn, verdictBy);
   }
 
   @Override
@@ -158,9 +200,12 @@ public class ApprovalRequest  {
     sb.append("  approvalType: ").append(approvalType).append("\n");
     sb.append("  itemType: ").append(itemType).append("\n");
     sb.append("  itemId: ").append(itemId).append("\n");
-    sb.append("  notes: ").append(notes).append("\n");
-    sb.append("  on: ").append(on).append("\n");
-    sb.append("  by: ").append(by).append("\n");
+    sb.append("  flaggedNotes: ").append(flaggedNotes).append("\n");
+    sb.append("  flaggedOn: ").append(flaggedOn).append("\n");
+    sb.append("  flaggedBy: ").append(flaggedBy).append("\n");
+    sb.append("  verdictNotes: ").append(verdictNotes).append("\n");
+    sb.append("  verdictOn: ").append(verdictOn).append("\n");
+    sb.append("  verdictBy: ").append(verdictBy).append("\n");
     sb.append("}\n");
     return sb.toString();
   }

@@ -241,7 +241,6 @@ CREATE TABLE approval_request(
     # Creation info.
     flagged_on DATETIME,
     flagged_by INT,
-    flagged_reason VARCHAR(200),
     flagged_notes VARCHAR(30000),
 
     # Verdict info.    
