@@ -2,6 +2,7 @@ package org.spring2885.server.db.model;
 
 import java.sql.Date;
 
+import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -12,6 +13,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+@Cacheable
 @Entity
 @Table(name="news_comment")
 public class DbNewsComment {

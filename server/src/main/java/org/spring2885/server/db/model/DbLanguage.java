@@ -1,9 +1,11 @@
 package org.spring2885.server.db.model;
 
+import javax.persistence.Cacheable;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+@Cacheable
 @Entity
 @Table(name="Language")
 public class DbLanguage {

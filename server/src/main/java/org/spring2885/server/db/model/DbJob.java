@@ -2,8 +2,8 @@ package org.spring2885.server.db.model;
 
 import java.io.Serializable;
 import java.sql.Date;
-import java.sql.Timestamp;
 
+import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -17,6 +17,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+@Cacheable
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Table(name="job")

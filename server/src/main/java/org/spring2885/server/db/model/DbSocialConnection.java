@@ -2,6 +2,7 @@ package org.spring2885.server.db.model;
 
 import java.util.Objects;
 
+import javax.persistence.Cacheable;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -11,6 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+@Cacheable
 @Entity
 @Table(name="social_connection")
 public class DbSocialConnection {
