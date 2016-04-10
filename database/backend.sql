@@ -202,14 +202,6 @@ INSERT INTO job_type VALUES (
 INSERT INTO job_type VALUES (
     2,
     "part-time");
-    
-INSERT INTO roles VALUES (
-    0,
-    'USER');
-    
-INSERT INTO roles VALUES (
-    1,
-    'ADMIN');
 
 INSERT INTO social_service VALUES(
     'LinkedIn', 'http://www.linkedin.com/');

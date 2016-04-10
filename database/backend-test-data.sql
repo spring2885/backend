@@ -566,6 +566,86 @@ INSERT INTO news_comment VALUES (
     5678,
     1,
     1);
+    
+/*News Visibility*/
+/* Dummy Templaye
+INSERT INTO news_visibility VALUES(
+    person_type,
+    news_id);*/
+    
+INSERT INTO news_visibility VALUES(
+    1,
+    999999);
+    
+INSERT INTO news_visibility VALUES(
+    1,
+    444444);
 
+INSERT INTO news_visibility VALUES(
+    0,
+    7878787);
+    
+INSERT INTO news_visibility VALUES(
+    1,
+    9832);
+    
+INSERT INTO news_visibility VALUES(
+    1,
+    37892);
+    
+/*Roles*/
+INSERT INTO roles VALUES (
+    1,
+    'USER');
+    
+INSERT INTO roles VALUES (
+    3,
+    'USER');
+    
+INSERT INTO roles VALUES (
+    1234,
+    'USER');
 
+INSERT INTO roles VALUES (
+    2,
+    'USER');
+    
+INSERT INTO roles VALUES (
+    2,
+    'ADMIN');
 
+INSERT INTO roles VALUES (
+    5678,
+    'USER');
+    
+INSERT INTO roles VALUES (
+    6789,
+    'USER');
+    
+INSERT INTO roles VALUES (
+    1945,
+    'USER');
+    
+INSERT INTO roles VALUES (
+    30, 
+    'USER');
+    
+INSERT INTO roles VALUES (
+    4,
+    'USER');
+
+INSERT INTO roles VALUES (
+    5,
+    'USER');
+    
+INSERT INTO roles VALUES (
+    6,
+    'USER');
+
+INSERT INTO roles VALUES (
+    7,
+    'USER');
+    
+INSERT INTO roles VALUES (
+    7,
+    'ADMIN');
