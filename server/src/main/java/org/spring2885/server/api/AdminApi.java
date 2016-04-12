@@ -37,7 +37,7 @@ import com.google.common.collect.FluentIterable;
 @RestController
 @RequestMapping(value = "/api/v1/approvals", produces = { APPLICATION_JSON_VALUE })
 public class AdminApi {
-    private static final Logger logger = LoggerFactory.getLogger(JobsApi.class);
+    private static final Logger logger = LoggerFactory.getLogger(AdminApi.class);
     
     @Autowired
     private ApprovalConverters.FacultyRequestToDbApproval facultyRequestToDbApproval;
