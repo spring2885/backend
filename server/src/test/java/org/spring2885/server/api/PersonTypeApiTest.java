@@ -262,9 +262,9 @@ public class PersonTypeApiTest {
     	makeMeFound();
     	
     	mockMvc.perform(post("/api/v1/persontype")
-                .contentType(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(new ObjectMapper().writeValueAsBytes(personType))
-                .accept(MediaType.APPLICATION_JSON))
+                .accept(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk());
     	
     	//Original
