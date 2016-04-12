@@ -32,6 +32,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
+
 import org.springframework.web.context.WebApplicationContext;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -257,14 +258,21 @@ public class PersonTypeApiTest {
     @Test
     @WithMockUser(username="me@example.com", roles = {"ADMIN"})
     public void testPersonTypePost() throws Exception {
-    	// set up expectations
+    
     	makeMeFound();
     	
     	mockMvc.perform(post("/api/v1/persontype")
-    			.contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsBytes(personType))
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    	
+    	//Original
+    	/*mockMvc.perform(post("/api/v1/persontype")
+    			.contentType(MediaType.APPLICATION_URL_ENCODED)
     			.param("id", "1")
-    			.param("name", "student"))
-    			.andExpect(status().isOk());
+    			.param("name", "student"))	
+    			.andExpect(status().isOk());*/
 
     	final ArgumentCaptor<DbPersonType> captor = ArgumentCaptor.forClass(DbPersonType.class);
 		verify(personTypeService).save(captor.capture());

@@ -94,18 +94,10 @@ public class PersonTypeApi {
     
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<Void> personTypePost(
-    		@RequestParam("id") Integer id,
-    		@RequestParam("name") String name
-    		) throws NotFoundException {
+    		@RequestBody PersonType pt) throws NotFoundException {
+    	DbPersonType updatedDbPersonType = personTypeJsonToDb.apply(new DbPersonType(), pt);
+    	personTypeService.save(updatedDbPersonType);
     	
-    	if (personTypeService.existsByName(name)) {
-    		throw new RuntimeException("name already exists: " + name);
-    	}
-    	
-    	DbPersonType personType = new DbPersonType();
-    	personType.setId(id);
-    	personType.setName(name);
-    	personTypeService.save(personType);
     	return new ResponseEntity<Void>(HttpStatus.OK);
     }
 }
