@@ -18,6 +18,8 @@ import javax.persistence.Table;
 @Entity
 @Table(name="person")
 public class DbPerson {
+    private static final String DEFAULT_IMAGE = "/src/assets/images/Profilepic.png";
+    
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Long id;
@@ -96,10 +98,19 @@ public class DbPerson {
 		this.resumeUrl = resumeURL;
 	}
 	public String getImageURL() {
+	    if (imageUrl == null) {
+	        // Return a default image if none exists.
+	        return DEFAULT_IMAGE;
+	    }
 		return imageUrl;
 	}
 	public void setImageURL(String imageURL) {
-		this.imageUrl = imageURL;
+	    if (DEFAULT_IMAGE.equals(imageURL)) {
+	        // Don't store the default image.
+	        this.imageUrl = null;
+	    } else {
+	        this.imageUrl = imageURL;
+	    }
 	}
 	public String getEmail() {
 		return email;
