@@ -240,7 +240,7 @@ paths:
       summary: Fetches all news.
       description: |
         Gets `News` objects.
-        Optional querry param of **size** determines
+        Optional query param of **size** determines
         size of return array
       parameters:
         - $ref: '#/parameters/size'
@@ -489,7 +489,7 @@ paths:
         Gets all SocailService entries.
       description: |
         Gets all SocailService entries.
-        Optional querry param of **size** determines
+        Optional query param of **size** determines
         size of return array
       parameters:
         - $ref: '#/parameters/size'
@@ -668,7 +668,7 @@ paths:
       summary: Gets all jobtype entries.
       description: |
         Gets all JobType entries.
-        Optional querry param of **size** determines
+        Optional query param of **size** determines
         size of return array
       parameters:
         - $ref: '#/parameters/size'
@@ -777,6 +777,27 @@ paths:
           schema:
             $ref: '#/definitions/Verdict'
           required: true
+      responses:
+        200:
+          description: Submits verdict.
+  /api/v1/approvals/list:
+    get:
+      tags: ["Approvals"]
+      security:
+       - basicAuth: []
+      summary: Lists approvals.
+      description: Lists all approval requests. Optionally filtered by state and type.
+      parameters:
+        - name: state
+          in: query
+          description: The state of the request. Either *open* or *closed*
+          required: false
+          type: string
+        - name: type
+          in: query
+          description: The type of the request. Either *FACULTY* or *ABUSE*
+          required: false
+          type: string
       responses:
         200:
           description: Submits verdict.

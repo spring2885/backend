@@ -40,6 +40,34 @@
   } ],
   "schemes" : [ "http", "https" ],
   "paths" : {
+    "/api/v1/approvals/list" : {
+      "get" : {
+        "tags" : [ "Approvals" ],
+        "summary" : "Lists approvals.",
+        "description" : "Lists all approval requests. Optionally filtered by state and type.",
+        "parameters" : [ {
+          "name" : "state",
+          "in" : "query",
+          "description" : "The state of the request. Either *open* or *closed*",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "type",
+          "in" : "query",
+          "description" : "The type of the request. Either *FACULTY* or *ABUSE*",
+          "required" : false,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Submits verdict."
+          }
+        },
+        "security" : [ {
+          "basicAuth" : [ ]
+        } ]
+      }
+    },
     "/api/v1/approvals/request/faculty" : {
       "post" : {
         "tags" : [ "Approvals" ],
@@ -222,7 +250,7 @@
       "get" : {
         "tags" : [ "JobType" ],
         "summary" : "Gets all jobtype entries.",
-        "description" : "Gets all JobType entries.\nOptional querry param of **size** determines\nsize of return array\n",
+        "description" : "Gets all JobType entries.\nOptional query param of **size** determines\nsize of return array\n",
         "parameters" : [ {
           "name" : "size",
           "in" : "query",
@@ -355,7 +383,7 @@
       "get" : {
         "tags" : [ "News" ],
         "summary" : "Fetches all news.",
-        "description" : "Gets `News` objects.\nOptional querry param of **size** determines\nsize of return array\n",
+        "description" : "Gets `News` objects.\nOptional query param of **size** determines\nsize of return array\n",
         "parameters" : [ {
           "name" : "size",
           "in" : "query",
@@ -869,7 +897,7 @@
       "get" : {
         "tags" : [ "SocialService" ],
         "summary" : "Gets all SocailService entries.\n",
-        "description" : "Gets all SocailService entries.\nOptional querry param of **size** determines\nsize of return array\n",
+        "description" : "Gets all SocailService entries.\nOptional query param of **size** determines\nsize of return array\n",
         "parameters" : [ {
           "name" : "size",
           "in" : "query",

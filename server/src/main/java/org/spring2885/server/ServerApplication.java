@@ -34,6 +34,8 @@ public class ServerApplication extends WebMvcConfigurerAdapter {
 	}
 
 	public static void main(String[] args) throws Exception {
+	    // Disable the obnoxious ehcache update check.
+	    System.setProperty("net.sf.ehcache.skipUpdateCheck", "true");
 		new SpringApplicationBuilder(ServerApplication.class).run(args);  // $COVERAGE-IGNORE$
 	}
 

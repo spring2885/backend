@@ -39,7 +39,7 @@ public class DbNews {
     @ManyToOne(fetch=FetchType.EAGER)
     private DbPerson person;
 	
-	private Long views;
+	private Long views = 0L;
 	
 	@ManyToMany
 	@JoinTable(name = "news_visibility",
