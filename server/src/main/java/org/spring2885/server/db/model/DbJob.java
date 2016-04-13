@@ -46,7 +46,9 @@ public class DbJob {
 	    @Column(nullable = false, insertable=false, columnDefinition = "TINYINT", length = 1)
 		private Boolean abuse;
 	
-		
+	    @JoinColumn(name="posted_by_person_id")
+	    @ManyToOne(fetch=FetchType.EAGER)
+	    private DbPerson person;
 		
 	public Long getId() {
 		return id;
