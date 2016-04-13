@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.google.common.collect.Iterables;
 
 @Component("jobTypeService")
-@Transactional(readOnly=true)
 public class JobTypeServiceImpl implements JobTypeService {
 	private final JobTypeRepository repository;
 	

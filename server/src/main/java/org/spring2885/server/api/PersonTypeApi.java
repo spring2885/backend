@@ -95,8 +95,8 @@ public class PersonTypeApi {
     }
     
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<Void> personTypePost(
-    		@RequestParam("type") PersonType type) throws NotFoundException {
+    public ResponseEntity<Void> post(
+    		@RequestBody PersonType type) throws NotFoundException {
     	
     	if (personTypeService.existsByName(type.getName())) {
     		throw new RuntimeException("name already exists: " + type.getName());

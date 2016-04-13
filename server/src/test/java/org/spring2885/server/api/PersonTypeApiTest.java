@@ -112,7 +112,7 @@ public class PersonTypeApiTest {
     public void testPersonTypeById() throws Exception {
     	// Setup the expectations.
     	DbPersonType p = new DbPersonType();
-    	p.setId(21);
+    	p.setId(21L);
     	p.setName("PersonType2");
     	when(personTypeService.findById(21)).thenReturn(p);
     	
