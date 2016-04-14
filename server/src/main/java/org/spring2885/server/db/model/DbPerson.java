@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -49,6 +50,8 @@ public class DbPerson {
 	private Integer graduationYear;
 	private String degreeType;
 	private String facultyDepartment;
+	@Column(nullable=false, insertable=false, columnDefinition="TINYINT", length = 1)
+	private Boolean active;
 
     @OneToMany(orphanRemoval = true, mappedBy="person")
     private Set<DbRole> roles = new HashSet<>();
@@ -209,6 +212,14 @@ public class DbPerson {
 
 	public void setFacultyDepartment(String facultyDepartment) {
 		this.facultyDepartment = facultyDepartment;
+	}
+	
+	public Boolean isActive() {
+		return active;
+	}
+	
+	public void setActive(Boolean active) {
+		this.active = active;
 	}
 
 	public void addRoleForTesting(String rolename) {
