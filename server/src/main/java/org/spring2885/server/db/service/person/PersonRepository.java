@@ -14,4 +14,6 @@ public interface PersonRepository extends
 	List<DbPerson> findByEmail(String email);
 	
 	List<DbPerson> findByGraduationYear(Integer year);
+	
+	Iterable<DbPerson> findAllByActive(boolean active);
 }
