@@ -30,6 +30,7 @@ public class DbApprovalRequest {
     private String approvalType;
     private String itemType;
     private Long itemId;
+    private String itemUrl;
     
     private Timestamp flaggedOn;
     @JoinColumn(name="flagged_by")
@@ -95,7 +96,15 @@ public class DbApprovalRequest {
     public void setItemId(Long itemId) {
         this.itemId = itemId;
     }
+    
+    public String getItemUrl() {
+        return itemUrl;
+    }
 
+    public void setItemUrl(String itemUrl) {
+        this.itemUrl = itemUrl;
+    }
+    
     public Timestamp getFlaggedOn() {
         return flaggedOn;
     }

@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.UUID;
 
+import org.spring2885.model.AbuseRequest;
 import org.spring2885.model.ApprovalRequest;
 import org.spring2885.model.FacultyRequest;
 import org.spring2885.model.Verdict;
@@ -32,7 +33,11 @@ public class ApprovalConverters {
             p.setId(db.getUuid());
             p.setItemId(db.getItemId());
             p.setItemType(db.getItemType());
-            p.setVerdictBy(personFromDbToJson.apply(db.getVerdictBy()));
+            p.setItemUrl(db.getItemUrl());
+            DbPerson verdictBy = db.getVerdictBy();
+            if (verdictBy != null) {
+                p.setVerdictBy(personFromDbToJson.apply(verdictBy));
+            }
             p.setVerdictNotes(db.getVerdictNotes());
             p.setVerdictOn(db.getVerdictOn());
 
@@ -68,6 +73,29 @@ public class ApprovalConverters {
         return new FacultyRequestToDbApproval();
     }
 
+    public class AbuseRequestToDbApproval {
+        public DbApprovalRequest create(AbuseRequest t, DbPerson requestor) {
+            UUID uuid = UUID.randomUUID();
+
+            DbApprovalRequest db = new DbApprovalRequest();
+            db.setUuid(uuid.toString());
+            db.setActive(Boolean.TRUE);
+            db.setApprovalType(ApprovalTypes.ABUSE);
+            db.setFlaggedBy(requestor);
+            db.setFlagedOn(Timestamp.from(Instant.now()));
+            db.setFlaggedNotes(t.getNotes());
+            db.setItemId(requestor.getId());
+            db.setItemUrl(t.getItemUrl());
+            db.setItemType(t.getItemType());
+
+            return db;
+        }
+    }
+    
+    @Bean
+    public AbuseRequestToDbApproval abuseRequestToDbApproval() {
+        return new AbuseRequestToDbApproval();
+    }
 
     public class VerdictToDbApproval {
         public DbApprovalRequest create(DbApprovalRequest db, Verdict v, DbPerson approver) {

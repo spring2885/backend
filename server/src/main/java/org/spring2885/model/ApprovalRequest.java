@@ -14,7 +14,7 @@ import java.util.Objects;
 
 
 @ApiModel(description = "")
-@javax.annotation.Generated(value = "class io.swagger.codegen.languages.SpringMVCServerCodegen", date = "2016-04-14T20:02:00.301-07:00")
+@javax.annotation.Generated(value = "class io.swagger.codegen.languages.SpringMVCServerCodegen", date = "2016-04-14T22:09:20.994-07:00")
 public class ApprovalRequest  {
   
   private String id = null;
@@ -22,6 +22,7 @@ public class ApprovalRequest  {
   private String approvalType = null;
   private String itemType = null;
   private Long itemId = null;
+  private String itemUrl = null;
   private String flaggedNotes = null;
   private Date flaggedOn = null;
   private Person flaggedBy = null;
@@ -88,6 +89,18 @@ public class ApprovalRequest  {
   }
   public void setItemId(Long itemId) {
     this.itemId = itemId;
+  }
+
+  
+  /**
+   **/
+  @ApiModelProperty(value = "")
+  @JsonProperty("item_url")
+  public String getItemUrl() {
+    return itemUrl;
+  }
+  public void setItemUrl(String itemUrl) {
+    this.itemUrl = itemUrl;
   }
 
   
@@ -190,6 +203,7 @@ public class ApprovalRequest  {
         Objects.equals(approvalType, approvalRequest.approvalType) &&
         Objects.equals(itemType, approvalRequest.itemType) &&
         Objects.equals(itemId, approvalRequest.itemId) &&
+        Objects.equals(itemUrl, approvalRequest.itemUrl) &&
         Objects.equals(flaggedNotes, approvalRequest.flaggedNotes) &&
         Objects.equals(flaggedOn, approvalRequest.flaggedOn) &&
         Objects.equals(flaggedBy, approvalRequest.flaggedBy) &&
@@ -201,7 +215,7 @@ public class ApprovalRequest  {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, active, approvalType, itemType, itemId, flaggedNotes, flaggedOn, flaggedBy, approved, verdictNotes, verdictOn, verdictBy);
+    return Objects.hash(id, active, approvalType, itemType, itemId, itemUrl, flaggedNotes, flaggedOn, flaggedBy, approved, verdictNotes, verdictOn, verdictBy);
   }
 
   @Override
@@ -214,6 +228,7 @@ public class ApprovalRequest  {
     sb.append("  approvalType: ").append(approvalType).append("\n");
     sb.append("  itemType: ").append(itemType).append("\n");
     sb.append("  itemId: ").append(itemId).append("\n");
+    sb.append("  itemUrl: ").append(itemUrl).append("\n");
     sb.append("  flaggedNotes: ").append(flaggedNotes).append("\n");
     sb.append("  flaggedOn: ").append(flaggedOn).append("\n");
     sb.append("  flaggedBy: ").append(flaggedBy).append("\n");
