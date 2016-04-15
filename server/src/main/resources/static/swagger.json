@@ -34,9 +34,88 @@
   }, {
     "name" : "PersonType",
     "description" : "Person Type API (Admin)."
+  }, {
+    "name" : "Approvals",
+    "description" : "Approvals API (Admin)"
   } ],
   "schemes" : [ "http", "https" ],
   "paths" : {
+    "/api/v1/approvals/list" : {
+      "get" : {
+        "tags" : [ "Approvals" ],
+        "summary" : "Lists approvals.",
+        "description" : "Lists all approval requests. Optionally filtered by state and type.",
+        "parameters" : [ {
+          "name" : "state",
+          "in" : "query",
+          "description" : "The state of the request. Either *open* or *closed*",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "type",
+          "in" : "query",
+          "description" : "The type of the request. Either *FACULTY* or *ABUSE*",
+          "required" : false,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Submits verdict."
+          }
+        },
+        "security" : [ {
+          "basicAuth" : [ ]
+        } ]
+      }
+    },
+    "/api/v1/approvals/request/faculty" : {
+      "post" : {
+        "tags" : [ "Approvals" ],
+        "summary" : "Requests approval as faculty",
+        "description" : "Submits a request for an admin to approve this member as a faculty.",
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "TeacherRequest",
+          "description" : "The faculty request.",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/TeacherRequest"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Submits request."
+          }
+        },
+        "security" : [ {
+          "basicAuth" : [ ]
+        } ]
+      }
+    },
+    "/api/v1/approvals/verdict" : {
+      "post" : {
+        "tags" : [ "Approvals" ],
+        "summary" : "Submits a verdict on an approval request.",
+        "description" : "Submits a verdict on a previously submitted approval request.",
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "Verdict",
+          "description" : "The verdict.",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/Verdict"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Submits verdict."
+          }
+        },
+        "security" : [ {
+          "basicAuth" : [ ]
+        } ]
+      }
+    },
     "/api/v1/jobs" : {
       "get" : {
         "tags" : [ "Jobs" ],
@@ -171,7 +250,7 @@
       "get" : {
         "tags" : [ "JobType" ],
         "summary" : "Gets all jobtype entries.",
-        "description" : "Gets all JobType entries.\nOptional querry param of **size** determines\nsize of return array\n",
+        "description" : "Gets all JobType entries.\nOptional query param of **size** determines\nsize of return array\n",
         "parameters" : [ {
           "name" : "size",
           "in" : "query",
@@ -304,7 +383,7 @@
       "get" : {
         "tags" : [ "News" ],
         "summary" : "Fetches all news.",
-        "description" : "Gets `News` objects.\nOptional querry param of **size** determines\nsize of return array\n",
+        "description" : "Gets `News` objects.\nOptional query param of **size** determines\nsize of return array\n",
         "parameters" : [ {
           "name" : "size",
           "in" : "query",
@@ -818,7 +897,7 @@
       "get" : {
         "tags" : [ "SocialService" ],
         "summary" : "Gets all SocailService entries.\n",
-        "description" : "Gets all SocailService entries.\nOptional querry param of **size** determines\nsize of return array\n",
+        "description" : "Gets all SocailService entries.\nOptional query param of **size** determines\nsize of return array\n",
         "parameters" : [ {
           "name" : "size",
           "in" : "query",
@@ -1149,8 +1228,16 @@
         "company" : {
           "type" : "string"
         },
+        "job_type" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
         "title" : {
           "type" : "string"
+        },
+        "industry" : {
+          "type" : "integer",
+          "format" : "int64"
         },
         "location" : {
           "type" : "string"
@@ -1163,8 +1250,18 @@
           "type" : "string",
           "format" : "date"
         },
+<<<<<<< HEAD
         "posted_by" : {
           "$ref" : "#/definitions/Person"
+=======
+        "posted_by_person_id" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "hours" : {
+          "type" : "integer",
+          "format" : "int64"
+>>>>>>> f504b05949f984b2705d3d50849e418ce51d939a
         }
       }
     },
@@ -1290,6 +1387,87 @@
         },
         "url" : {
           "type" : "string"
+        }
+      }
+    },
+    "FacultyRequest" : {
+      "type" : "object",
+      "properties" : {
+        "notes" : {
+          "type" : "string"
+        }
+      }
+    },
+    "AbuseRequest" : {
+      "type" : "object",
+      "properties" : {
+        "item_type" : {
+          "type" : "string"
+        },
+        "item_id" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "notes" : {
+          "type" : "string"
+        }
+      }
+    },
+    "Verdict" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "type" : "string"
+        },
+        "approved" : {
+          "type" : "boolean"
+        },
+        "verdict_notes" : {
+          "type" : "string"
+        }
+      }
+    },
+    "ApprovalRequest" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "type" : "string"
+        },
+        "active" : {
+          "type" : "boolean"
+        },
+        "approval_type" : {
+          "type" : "string"
+        },
+        "item_type" : {
+          "type" : "string"
+        },
+        "item_id" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "flagged_notes" : {
+          "type" : "string"
+        },
+        "flagged_on" : {
+          "type" : "string",
+          "format" : "date"
+        },
+        "flagged_by" : {
+          "$ref" : "#/definitions/Person"
+        },
+        "approved" : {
+          "type" : "boolean"
+        },
+        "verdict_notes" : {
+          "type" : "string"
+        },
+        "verdict_on" : {
+          "type" : "string",
+          "format" : "date"
+        },
+        "verdict_by" : {
+          "$ref" : "#/definitions/Person"
         }
       }
     }

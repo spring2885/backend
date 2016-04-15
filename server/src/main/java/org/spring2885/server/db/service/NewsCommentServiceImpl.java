@@ -1,6 +1,5 @@
 package org.spring2885.server.db.service;
 
-import org.spring2885.server.db.model.DbNews;
 import org.spring2885.server.db.model.DbNewsComment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

@@ -13,46 +13,46 @@ import java.util.Objects;
 
 @ApiModel(description = "")
 @javax.annotation.Generated(value = "class io.swagger.codegen.languages.SpringMVCServerCodegen", date = "2016-04-14T20:02:00.301-07:00")
-public class Reset  {
+public class AbuseRequest  {
   
-  private String email = null;
-  private String token = null;
-  private String newPassword = null;
+  private String itemType = null;
+  private Long itemId = null;
+  private String notes = null;
 
   
   /**
    **/
   @ApiModelProperty(value = "")
-  @JsonProperty("email")
-  public String getEmail() {
-    return email;
+  @JsonProperty("item_type")
+  public String getItemType() {
+    return itemType;
   }
-  public void setEmail(String email) {
-    this.email = email;
-  }
-
-  
-  /**
-   **/
-  @ApiModelProperty(value = "")
-  @JsonProperty("token")
-  public String getToken() {
-    return token;
-  }
-  public void setToken(String token) {
-    this.token = token;
+  public void setItemType(String itemType) {
+    this.itemType = itemType;
   }
 
   
   /**
    **/
   @ApiModelProperty(value = "")
-  @JsonProperty("new_password")
-  public String getNewPassword() {
-    return newPassword;
+  @JsonProperty("item_id")
+  public Long getItemId() {
+    return itemId;
   }
-  public void setNewPassword(String newPassword) {
-    this.newPassword = newPassword;
+  public void setItemId(Long itemId) {
+    this.itemId = itemId;
+  }
+
+  
+  /**
+   **/
+  @ApiModelProperty(value = "")
+  @JsonProperty("notes")
+  public String getNotes() {
+    return notes;
+  }
+  public void setNotes(String notes) {
+    this.notes = notes;
   }
 
   
@@ -65,25 +65,25 @@ public class Reset  {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    Reset reset = (Reset) o;
-    return Objects.equals(email, reset.email) &&
-        Objects.equals(token, reset.token) &&
-        Objects.equals(newPassword, reset.newPassword);
+    AbuseRequest abuseRequest = (AbuseRequest) o;
+    return Objects.equals(itemType, abuseRequest.itemType) &&
+        Objects.equals(itemId, abuseRequest.itemId) &&
+        Objects.equals(notes, abuseRequest.notes);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(email, token, newPassword);
+    return Objects.hash(itemType, itemId, notes);
   }
 
   @Override
   public String toString()  {
     StringBuilder sb = new StringBuilder();
-    sb.append("class Reset {\n");
+    sb.append("class AbuseRequest {\n");
     
-    sb.append("  email: ").append(email).append("\n");
-    sb.append("  token: ").append(token).append("\n");
-    sb.append("  newPassword: ").append(newPassword).append("\n");
+    sb.append("  itemType: ").append(itemType).append("\n");
+    sb.append("  itemId: ").append(itemId).append("\n");
+    sb.append("  notes: ").append(notes).append("\n");
     sb.append("}\n");
     return sb.toString();
   }

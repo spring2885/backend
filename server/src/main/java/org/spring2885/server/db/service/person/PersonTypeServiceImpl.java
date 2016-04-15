@@ -18,9 +18,11 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 
 @Component("personTypeService")
-@Transactional(readOnly=true)
+@Transactional
 public class PersonTypeServiceImpl implements PersonTypeService {
 	private final PersonTypeRepository repository;
+    private static final Long STUDENT_TYPE_ID = 1L;
+    private static final Long FACULTY_TYPE_ID = 3L;
 	
 	@Autowired
     public
@@ -40,10 +42,15 @@ public class PersonTypeServiceImpl implements PersonTypeService {
 
 	@Override
 	public DbPersonType defaultType() {
-		return repository.findOne(Long.valueOf(0));
+		return repository.findOne(STUDENT_TYPE_ID);
 	}
 
-	@Override
+    @Override
+    public DbPersonType facultyType() {
+        return repository.findOne(FACULTY_TYPE_ID);
+    }
+
+    @Override
 	public DbPersonType findById(long id) {
 		return repository.findOne(id);
 	}

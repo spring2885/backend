@@ -13,33 +13,20 @@ import java.util.Objects;
 
 @ApiModel(description = "")
 @javax.annotation.Generated(value = "class io.swagger.codegen.languages.SpringMVCServerCodegen", date = "2016-04-14T20:02:00.301-07:00")
-public class Language  {
+public class FacultyRequest  {
   
-  private String code = null;
-  private String description = null;
+  private String notes = null;
 
   
   /**
    **/
   @ApiModelProperty(value = "")
-  @JsonProperty("code")
-  public String getCode() {
-    return code;
+  @JsonProperty("notes")
+  public String getNotes() {
+    return notes;
   }
-  public void setCode(String code) {
-    this.code = code;
-  }
-
-  
-  /**
-   **/
-  @ApiModelProperty(value = "")
-  @JsonProperty("description")
-  public String getDescription() {
-    return description;
-  }
-  public void setDescription(String description) {
-    this.description = description;
+  public void setNotes(String notes) {
+    this.notes = notes;
   }
 
   
@@ -52,23 +39,21 @@ public class Language  {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    Language language = (Language) o;
-    return Objects.equals(code, language.code) &&
-        Objects.equals(description, language.description);
+    FacultyRequest facultyRequest = (FacultyRequest) o;
+    return Objects.equals(notes, facultyRequest.notes);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description);
+    return Objects.hash(notes);
   }
 
   @Override
   public String toString()  {
     StringBuilder sb = new StringBuilder();
-    sb.append("class Language {\n");
+    sb.append("class FacultyRequest {\n");
     
-    sb.append("  code: ").append(code).append("\n");
-    sb.append("  description: ").append(description).append("\n");
+    sb.append("  notes: ").append(notes).append("\n");
     sb.append("}\n");
     return sb.toString();
   }

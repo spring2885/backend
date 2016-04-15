@@ -41,7 +41,7 @@ INSERT INTO person VALUES (
     'instructor',
     'TechRocks',
     '1994-06-26',
-    0,
+    1,
     'en',
     '2016-02-19',
     'password',
@@ -50,7 +50,8 @@ INSERT INTO person VALUES (
     2016,
     'BS',
     null,
-    1);
+    1,
+    1, NOW(), NOW());
     
 /*Alumni*/
 INSERT INTO person VALUES (
@@ -66,7 +67,7 @@ INSERT INTO person VALUES (
     'Aurora Software Engineer',
     'Aurora',
     '2016-02-19',
-    1,
+    2,
     'en',
     '2016-02-19',
     'passwordCruz',
@@ -75,8 +76,9 @@ INSERT INTO person VALUES (
     2014,
     'BS',
     null,
-    1);
-    
+    1,
+    1, NOW(), NOW());
+
 INSERT INTO person VALUES (
     1234,
     'Bruce Wayne',
@@ -90,7 +92,7 @@ INSERT INTO person VALUES (
     'Playboy',
     'Wayne Enterprises',
     '2016-02-19',
-    1,
+    2,
     'en',
     '2016-02-19',
     'passwordBatman',
@@ -99,7 +101,8 @@ INSERT INTO person VALUES (
     1960,
     'PhD',
     null,
-    1);
+    1,
+    1, NOW(), NOW());
 
 /*Faculty*/
 INSERT INTO person VALUES (
@@ -115,7 +118,7 @@ INSERT INTO person VALUES (
     'Professor, Advisor',
     'Notre Dame De Namur',
     '2016-02-19',
-    2,
+    3,
     'en',
     '2016-02-19',
     'passwordJY',
@@ -124,8 +127,9 @@ INSERT INTO person VALUES (
     null,
     null,
     'Computer and Information Science',
-    1);
-    
+    1,
+    1, NOW(), NOW());
+
 /*person - other examples*/
 INSERT INTO person VALUES (
     5678,
@@ -136,21 +140,22 @@ INSERT INTO person VALUES (
     'resume url',
     'http://www.wired.com/images_blogs/underwire/images/2009/01/14/st2khan.gif',
     'khan@reliant.net',
-    null,
+    NULL,
     'Evil Genius',
     'Genesis',
-    null,
-    1,
+    NULL,
+    2,
     'en',
     '2016-02-19',
     'password',
-    null,
-    null,
-    null,
-    null,
-    null,
-    0);
-    
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    0,
+    1, NOW(), NOW());
+
 INSERT INTO person VALUES (
     6789,
     'Lando Calrissian',
@@ -160,20 +165,21 @@ INSERT INTO person VALUES (
     'resume url',
     'http://media.comicbook.com/wp-content/uploads/2012/11/lando-calrissian.jpg',
     'lando@heyubaby.net',
-    null,
+    NULL,
     'General',
     'Rebel Alliance',
-    null,
-    1,
+    NULL,
+    2,
     'en',
     '2016-02-19',
     'password',
-    null,
-    null,
-    null,
-    null,
-    null,
-    0);
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    0,
+    1, NOW(), NOW());
 
 INSERT INTO person VALUES (
     1945,
@@ -181,47 +187,49 @@ INSERT INTO person VALUES (
     4,
     'Captain America',
     'Avengers Assemble!',
-    null,
+    NULL,
     'http://vignette3.wikia.nocookie.net/marvel-cinematic/images/3/32/Steve_Rogers_2.jpg/revision/latest?cb=20131025030358',
-    null,
-    null,
+    NULL,
+    NULL,
     'Captain',
     'The Avengers',
-    null,
-    0,
+    NULL,
+    1,
     'en',
     '2016-02-19',
     'password',
-    null,
-    null,
-    null,
-    null,
-    null,
-    1);
-    
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    1,
+    1, NOW(), NOW());
+
 INSERT INTO person VALUES (
     30,
     'Stephen Curry',
     5,
     'Babyface Assassin/Chef Curry',
     'Shimmy',
-    null,
-    null,
+    NULL,
+    NULL,
     'warriors30@gsw.org',
-    null,
+    NULL,
     'Basketball Player',
     'Golden State Warriors',
-    null,
-    0,
+    NULL,
+    1,
     'en',
     '2016-02-19',
     'password',
-    null,
-    null,
-    null,
-    null,
-    null,
-    1);
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    1,
+    1, NOW(), NOW());
 
 
 /*person - student*/
@@ -232,13 +240,13 @@ INSERT INTO person VALUES (
     'student',
     'I am a student',
     'student resume',
-    'student image',
+    NULL,
     'student@ndnu.com',
     '6500000000',
     'Student',
     'NDNU',
     '2016-4-6',
-    2,
+    1,
     'en',
     '2016-4-6',
     'Student',
@@ -247,7 +255,8 @@ INSERT INTO person VALUES (
     null,
     null,
     null,
-    1);
+    1,
+    1, NOW(), NOW());
 
 /*person - teacher*/
 INSERT INTO person VALUES (
@@ -257,13 +266,13 @@ INSERT INTO person VALUES (
     'teacher',
     'I am a teacher',
     'teacher resume',
-    'teacher image',
+    NULL,
     'teacher@ndnu.com',
     '6500000002',
     'Teacher',
     'NDNU',
     '2016-4-6',
-    2,
+    3,
     'en',
     '2016-4-6',
     'teacher',
@@ -272,7 +281,8 @@ INSERT INTO person VALUES (
     null,
     null,
     null,
-    1);
+    1,
+    1, NOW(), NOW());
 
 /*person - alumni*/
 INSERT INTO person VALUES (
@@ -282,13 +292,13 @@ INSERT INTO person VALUES (
     'alumni',
     'I am a alumni',
     'alumni resume',
-    'alumni image',
+    NULL,
     'alumni@ndnu.com',
     '6500000001',
     'Alumni',
     'NDNU',
     '2016-4-6',
-    1,
+    2,
     'en',
     '2016-4-6',
     'alumni',
@@ -297,7 +307,8 @@ INSERT INTO person VALUES (
     null,
     null,
     null,
-    1);
+    1,
+    1, NOW(), NOW());
 
 /*person - admin*/
 INSERT INTO person VALUES (
@@ -307,7 +318,7 @@ INSERT INTO person VALUES (
     'admin',
     'I am an admin',
     'admin resume',
-    'admin image',
+    NULL,
     'admin@ndnu.com',
     '6500000003',
     'Admin',
@@ -322,7 +333,8 @@ INSERT INTO person VALUES (
     null,
     null,
     null,
-    1);
+    1,
+    1, NOW(), NOW());
 
 /*News*/
 INSERT INTO news VALUES (
@@ -334,8 +346,9 @@ INSERT INTO news VALUES (
     2,
     1,
     1,
-    0);
-    
+    0,
+    1, NOW(), NOW());
+
 /*News Comment*/
 INSERT INTO news_comment VALUES(
     1,
@@ -344,8 +357,9 @@ INSERT INTO news_comment VALUES(
     '2016-04-01',
     1,
     1,
-    0);
-    
+    0,
+    1, NOW(), NOW());
+
 INSERT INTO news_comment VALUES(
     2,
     1,
@@ -353,30 +367,25 @@ INSERT INTO news_comment VALUES(
     '2016-04-01',
     3,
     1,
-    0);
-
-/*News Visibility Scope*/
-INSERT INTO news_visibility VALUES (
-    0, 
-    1);
-
-INSERT INTO news_visibility VALUES (
-    1,
-    1);
+    0,
+    1, NOW(), NOW());
 
 /*Industry*/
 INSERT INTO industry VALUES (
     1,
-    'Tech Industry');
-    
+    'Tech Industry',
+    1, NOW(), NOW());
+
 INSERT INTO industry VALUES (
     2,
-    'Vigilante');
-    
+    'Vigilante',
+    1, NOW(), NOW());
+
 INSERT INTO industry VALUES (
     3,
-    'Other');
-    
+    'Other',
+    1, NOW(), NOW());
+
 /*Job*/
 /* Dummy template for jobs
 
@@ -399,12 +408,15 @@ INSERT INTO job VALUES (
     1,
     'Redwood City',
     'This position is for an IT Intern. Problem? Tell them to restart their computer',
+    'Turn',
     2,
     '2016-04-01',
     '2017-04-01',
     2,
     20,
-    1);
+    1, 0,
+    1, NOW(), NOW());
+
     
 INSERT INTO job VALUES (
     2,
@@ -412,25 +424,29 @@ INSERT INTO job VALUES (
     1,
     'Batcave',
     'You will be Batmans sidekick. You will help beat the bad guys.',
+    'Cartoon Network',
     1,
     '2016-04-01',
     '2017-04-01',
     4,
     40,
-    1);
-    
+    1, 0,
+    1, NOW(), NOW());
+
 INSERT INTO job VALUES (
     66334,
     'Hate the Empire? Click here.',
     3,
     'Endor Moon',
     'We hate the Empire too, but we also are doing something about it. We are looking for all types of people to come join the fight. Dont worry you dont have to be a jedi to help.',
+    'Rebel Alliance',
     2,
     '2016-04-05',
     '2017-04-05',
     6789,
     null,
-    1);
+    1, 0,
+    1, NOW(), NOW());
 
 INSERT INTO job VALUES (
     7734,
@@ -438,12 +454,14 @@ INSERT INTO job VALUES (
     3,
     'Mutara Nebula',
     'Do you like to travel to far off places? Have adventure and work with driven smart, loyal people? Then this is the position for you. You must be a fast learner and willing to die.',
+    'Glactic Empire',
     2,
     '2016-04-07',
     '2017-04-07',
     5678,
     40,
-    1);
+    1, 0,
+    1, NOW(), NOW());
     
 INSERT INTO job VALUES (
     888222,
@@ -451,12 +469,14 @@ INSERT INTO job VALUES (
     3,
     'Mutara Nebula',
     'We are looking for qualified people with a background in science and ideally planatery formation.  Must be able to take orders and be comfortable around a startship.',
+    'Galactic Empire',
     2,
     '2016-04-07',
     '2017-04-07',
     5678,
     40,
-    1);
+    1, 0,
+    1, NOW(), NOW());    
     
 /*News Feed*/
 /* Dummy Template for News
@@ -481,8 +501,9 @@ INSERT INTO news VALUES (
     1234,
     1,
     1,
-    1);
-    
+    0,
+    1, NOW(), NOW());
+
 INSERT INTO news VALUES (
     444444,
     'Who is this Batman',
@@ -492,7 +513,8 @@ INSERT INTO news VALUES (
     1234,
     1,
     1,
-    1);
+    0,
+    1, NOW(), NOW());
     
 INSERT INTO news VALUES (
     7878787,
@@ -503,7 +525,8 @@ INSERT INTO news VALUES (
     1945,
     1,
     1,
-    1);
+    0,
+    1, NOW(), NOW());
     
 INSERT INTO news VALUES (
     9832,
@@ -514,7 +537,8 @@ INSERT INTO news VALUES (
     6789,
     0,
     1,
-    1);
+    0,
+    1, NOW(), NOW());
     
 INSERT INTO news VALUES (
     37892,
@@ -526,7 +550,8 @@ INSERT INTO news VALUES (
     6789,
     0,
     1,
-    1);
+    0,
+    1, NOW(), NOW());
 
 /* News Comment*/
 /* Dummy Template for News Comment
@@ -547,7 +572,8 @@ INSERT INTO news_comment VALUES (
     '2016-02-18',
     5678,
     1,
-    1);
+    0,
+    1, NOW(), NOW());
     
 INSERT INTO news_comment VALUES (
     01010102,
@@ -556,7 +582,8 @@ INSERT INTO news_comment VALUES (
     '2016-02-13',
     5678,
     1,
-    1);
+    0,
+    1, NOW(), NOW());
 
 INSERT INTO news_comment VALUES (
     01010103,
@@ -565,7 +592,8 @@ INSERT INTO news_comment VALUES (
     '2016-02-13',
     5678,
     1,
-    1);
+    0,
+    1, NOW(), NOW());
     
 /*News Visibility*/
 /* Dummy Templaye
@@ -573,25 +601,40 @@ INSERT INTO news_visibility VALUES(
     person_type,
     news_id);*/
     
-INSERT INTO news_visibility VALUES(
+INSERT INTO news_visibility VALUES (
+    1, 
     1,
-    999999);
-    
-INSERT INTO news_visibility VALUES(
+    1, NOW(), NOW());
+
+INSERT INTO news_visibility VALUES (
+    2,
     1,
-    444444);
+    1, NOW(), NOW());
 
 INSERT INTO news_visibility VALUES(
-    0,
-    7878787);
-    
+    1,
+    999999,
+    1, NOW(), NOW());
+
+INSERT INTO news_visibility VALUES(
+    2,
+    444444,
+    1, NOW(), NOW());
+
 INSERT INTO news_visibility VALUES(
     1,
-    9832);
+    7878787,
+    1, NOW(), NOW());
     
 INSERT INTO news_visibility VALUES(
-    1,
-    37892);
+    2,
+    9832,
+    1, NOW(), NOW());
+    
+INSERT INTO news_visibility VALUES(
+    2,
+    37892,
+    1, NOW(), NOW());
     
 /*Roles*/
 INSERT INTO roles VALUES (

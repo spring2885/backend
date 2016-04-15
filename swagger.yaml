@@ -240,7 +240,7 @@ paths:
       summary: Fetches all news.
       description: |
         Gets `News` objects.
-        Optional querry param of **size** determines
+        Optional query param of **size** determines
         size of return array
       parameters:
         - $ref: '#/parameters/size'
@@ -489,7 +489,7 @@ paths:
         Gets all SocailService entries.
       description: |
         Gets all SocailService entries.
-        Optional querry param of **size** determines
+        Optional query param of **size** determines
         size of return array
       parameters:
         - $ref: '#/parameters/size'
@@ -668,7 +668,7 @@ paths:
       summary: Gets all jobtype entries.
       description: |
         Gets all JobType entries.
-        Optional querry param of **size** determines
+        Optional query param of **size** determines
         size of return array
       parameters:
         - $ref: '#/parameters/size'
@@ -745,7 +745,63 @@ paths:
           description: Deletes jobtype
         500:
           description: Error with deleting jobtype by id. 
-          
+
+  /api/v1/approvals/request/faculty:
+    post:
+      tags: ["Approvals"]
+      security:
+       - basicAuth: []
+      summary: Requests approval as faculty
+      description: Submits a request for an admin to approve this member as a faculty.
+      parameters:
+        - name : TeacherRequest
+          in: body
+          description: The faculty request.
+          schema:
+            $ref: '#/definitions/TeacherRequest'
+          required: true
+      responses:
+        200:
+          description: Submits request.
+  /api/v1/approvals/verdict:
+    post:
+      tags: ["Approvals"]
+      security:
+       - basicAuth: []
+      summary: Submits a verdict on an approval request.
+      description: Submits a verdict on a previously submitted approval request.
+      parameters:
+        - name : Verdict
+          in: body
+          description: The verdict.
+          schema:
+            $ref: '#/definitions/Verdict'
+          required: true
+      responses:
+        200:
+          description: Submits verdict.
+  /api/v1/approvals/list:
+    get:
+      tags: ["Approvals"]
+      security:
+       - basicAuth: []
+      summary: Lists approvals.
+      description: Lists all approval requests. Optionally filtered by state and type.
+      parameters:
+        - name: state
+          in: query
+          description: The state of the request. Either *open* or *closed*
+          required: false
+          type: string
+        - name: type
+          in: query
+          description: The type of the request. Either *FACULTY* or *ABUSE*
+          required: false
+          type: string
+      responses:
+        200:
+          description: Submits verdict.
+
 definitions:
   SocialConnection:
     type: object
@@ -822,10 +878,12 @@ definitions:
       company:
         type: string
       job_type:
+        type: integer
         format: int64
       title: 
         type: string
       industry:
+        type: integer
         format: int64
       location:
         type: string
@@ -836,8 +894,10 @@ definitions:
         type: string
         format: date
       posted_by_person_id:
+        type: integer
         format: int64
       hours:
+        type: integer
         format: int64
       posted_by:
         type: object
@@ -934,6 +994,66 @@ definitions:
       url:
         type: string 
 
+  FacultyRequest:
+    type: object
+    properties:
+      notes:
+        type: string
+
+  AbuseRequest:
+    type: object
+    properties:
+      item_type:
+        type: string
+      item_id:
+        type: integer
+        format: int64
+      notes:
+        type: string
+
+  Verdict:
+    type: object
+    properties:
+      id:
+        type: string
+      approved:
+        type: boolean
+      verdict_notes:
+        type: string
+
+  ApprovalRequest:
+    type: object
+    properties:
+      id:
+        type: string
+      active:
+        type: boolean
+      approval_type:
+        type: string
+      item_type:
+        type: string
+      item_id:
+        type: integer
+        format: int64
+      flagged_notes:
+        type: string
+      flagged_on:
+        type: string
+        format: date
+      flagged_by:
+        type: object
+        $ref: '#/definitions/Person'
+      approved:
+        type: boolean
+      verdict_notes:
+        type: string
+      verdict_on:
+        type: string
+        format: date
+      verdict_by:
+        type: object
+        $ref: '#/definitions/Person'
+
 tags:
   - name: User
     description: User API (internal)
@@ -951,3 +1071,5 @@ tags:
     description: SocialService API (Admin).
   - name: PersonType
     description: Person Type API (Admin).
+  - name: Approvals
+    description: Approvals API (Admin)

@@ -20,20 +20,6 @@ public class SocialServiceServiceImpl implements SocialServiceService {
 		this.repository = repository;
 	}
 
-	/*@Override
-    public Iterable<DbSocialService> findAll(String q) {
-        // TODO(rob): Push this filter into the DB.
-        return Iterables.filter(findAll(), new Predicate<DbSocialService>() {
-            @Override
-            public boolean apply(DbSocialService p) {
-                if (p.getName() != null && p.getName().contains(q)) {
-                    return true;
-                }
-                return false;
-            }
-        });
-    }*/
-
 	@Override
 	public DbSocialService findById(String q)
 	{

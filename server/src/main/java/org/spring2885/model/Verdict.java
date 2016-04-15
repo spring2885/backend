@@ -13,10 +13,11 @@ import java.util.Objects;
 
 @ApiModel(description = "")
 @javax.annotation.Generated(value = "class io.swagger.codegen.languages.SpringMVCServerCodegen", date = "2016-04-14T20:02:00.301-07:00")
-public class SocialService  {
+public class Verdict  {
   
   private String id = null;
-  private String url = null;
+  private Boolean approved = null;
+  private String verdictNotes = null;
 
   
   /**
@@ -34,12 +35,24 @@ public class SocialService  {
   /**
    **/
   @ApiModelProperty(value = "")
-  @JsonProperty("url")
-  public String getUrl() {
-    return url;
+  @JsonProperty("approved")
+  public Boolean getApproved() {
+    return approved;
   }
-  public void setUrl(String url) {
-    this.url = url;
+  public void setApproved(Boolean approved) {
+    this.approved = approved;
+  }
+
+  
+  /**
+   **/
+  @ApiModelProperty(value = "")
+  @JsonProperty("verdict_notes")
+  public String getVerdictNotes() {
+    return verdictNotes;
+  }
+  public void setVerdictNotes(String verdictNotes) {
+    this.verdictNotes = verdictNotes;
   }
 
   
@@ -52,23 +65,25 @@ public class SocialService  {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    SocialService socialService = (SocialService) o;
-    return Objects.equals(id, socialService.id) &&
-        Objects.equals(url, socialService.url);
+    Verdict verdict = (Verdict) o;
+    return Objects.equals(id, verdict.id) &&
+        Objects.equals(approved, verdict.approved) &&
+        Objects.equals(verdictNotes, verdict.verdictNotes);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, url);
+    return Objects.hash(id, approved, verdictNotes);
   }
 
   @Override
   public String toString()  {
     StringBuilder sb = new StringBuilder();
-    sb.append("class SocialService {\n");
+    sb.append("class Verdict {\n");
     
     sb.append("  id: ").append(id).append("\n");
-    sb.append("  url: ").append(url).append("\n");
+    sb.append("  approved: ").append(approved).append("\n");
+    sb.append("  verdictNotes: ").append(verdictNotes).append("\n");
     sb.append("}\n");
     return sb.toString();
   }

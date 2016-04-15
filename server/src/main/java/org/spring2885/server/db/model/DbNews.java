@@ -4,6 +4,7 @@ import java.sql.Date;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -19,6 +20,7 @@ import javax.persistence.Table;
 
 import com.google.common.collect.ImmutableSet;
 
+@Cacheable
 @Entity
 @Table(name="news")
 public class DbNews {
@@ -37,7 +39,7 @@ public class DbNews {
     @ManyToOne(fetch=FetchType.EAGER)
     private DbPerson person;
 	
-	private Long views;
+	private Long views = 0L;
 	
 	@ManyToMany
 	@JoinTable(name = "news_visibility",

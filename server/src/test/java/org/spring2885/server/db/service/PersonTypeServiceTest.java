@@ -47,9 +47,9 @@ public class PersonTypeServiceTest {
 
     @Test
     public void defaultType() {
-        DbPersonType student = new DbPersonType(0, "student");
+        DbPersonType student = new DbPersonType(1, "student");
         
-        when(repository.findOne(0L)).thenReturn(student);
+        when(repository.findOne(1L)).thenReturn(student);
         assertEquals(student, service.defaultType());
     }
 

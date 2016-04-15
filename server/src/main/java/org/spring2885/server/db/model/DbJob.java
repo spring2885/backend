@@ -1,21 +1,33 @@
 package org.spring2885.server.db.model;
 
+import java.io.Serializable;
 import java.sql.Date;
 
+import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Version;
 
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+@Cacheable
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table(name="job")
-public class DbJob {
-	@Id
+public class DbJob implements Serializable {
+    private static final long serialVersionUID = 1L;
+
+    @Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Long id;
 
@@ -41,6 +53,16 @@ public class DbJob {
 	@ManyToOne(fetch=FetchType.EAGER)
 	private DbPerson person;
 
+    @Version
+    private Long version;
+
+	@CreatedDate
+	private java.util.Date creationTime;
+	
+	@LastModifiedDate
+    private java.util.Date modificationTime;
+    
+	
 	public Long getId() {
 		return id;
 	}
@@ -86,7 +108,6 @@ public class DbJob {
 	public void setjobType(int jobType) {
 		this.jobType = jobType;
 	}
-
 	public int getHours() {
 		return hours;
 	}
@@ -126,11 +147,32 @@ public class DbJob {
         this.abuse = abuse;
     }
    
+	public java.util.Date getCreationTime(){
+		return creationTime;
+	}
+	
+	public java.util.Date getModificationTime(){
+		return modificationTime;
+	}
+	
+	public DbPerson getPostedBy() {
+	    return person;
+	}
+	
+	public void setPostedBy(DbPerson person) {
+	    this.person = person;
+	}
+	
+	public Long getVersion(){
+		return version;
+	}
+	
+	
 	@Override
 	public int hashCode() {
 		return id.hashCode();
 	}
-
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -145,11 +187,12 @@ public class DbJob {
 
 	@Override
 	public String toString() {
-		return new StringBuilder("{ Job: ")
-				.append("{ Id: ").append(id)
-				.append(", title; ").append(title)
-				.append(" }\n")
-				.append(" }\n")
-				.toString();
+		return "DbJob [id=" + id + ", title=" + title + ", industry=" + industry + ", location=" + location
+				+ ", description=" + description + ", jobType=" + jobType + ", startDate=" + startDate + ", endDate="
+				+ endDate + ", hours=" + hours + ", creationTime="
+				+ creationTime + ", modificationTime=" + modificationTime + ", version=" + version + "]";
 	}
+
+
+	
 }

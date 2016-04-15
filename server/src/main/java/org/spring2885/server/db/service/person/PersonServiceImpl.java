@@ -106,5 +106,9 @@ public class PersonServiceImpl implements PersonService {
         }
         return repository.findAll(specs);
     }
+    
+    public Iterable<DbPerson> findAllByActive(boolean active) {
+    	return repository.findAllByActive(active);
+    }
 
 }
