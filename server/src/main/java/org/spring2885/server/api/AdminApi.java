@@ -43,6 +43,9 @@ public class AdminApi {
     private ApprovalConverters.FacultyRequestToDbApproval facultyRequestToDbApproval;
     
     @Autowired
+    private ApprovalConverters.AbuseRequestToDbApproval abuseRequestToDbApproval;
+    
+    @Autowired
     private ApprovalConverters.ApprovalFromDbToJson approvalFromDbToJson;
     
     @Autowired
@@ -77,10 +80,15 @@ public class AdminApi {
 
     @RequestMapping(value = "/request/abuse", method = RequestMethod.POST)
     public ResponseEntity<Void> abuse(
-            @RequestBody AbuseRequest request,
+            @RequestBody AbuseRequest a,
             SecurityContextHolderAwareRequestWrapper wrapper) throws NotFoundException {
+        logger.info(a.toString());
+        DbPerson loggedInUser = requestHelper.loggedInUser(wrapper);
         
-        logger.info(request.toString());
+        DbApprovalRequest db = abuseRequestToDbApproval.create(a, loggedInUser);
+        approvalRequestService.save(db);
+        logger.info("Saved request: {}", db.getUuid());
+        
         return new ResponseEntity<Void>(HttpStatus.OK);
     }    
 

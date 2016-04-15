@@ -237,6 +237,7 @@ CREATE TABLE approval_request(
     approval_type VARCHAR(60) NOT NULL,
     item_type VARCHAR(60) NOT NULL,
     item_id INT NOT NULL,
+    item_url VARCHAR(255),
 
     # Creation info.
     flagged_on DATETIME,
