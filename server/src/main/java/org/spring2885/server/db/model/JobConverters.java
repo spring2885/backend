@@ -1,9 +1,6 @@
 package org.spring2885.server.db.model;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.spring2885.model.Job;
@@ -19,7 +16,9 @@ import com.google.common.base.Suppliers;
 @Component
 public final class JobConverters {
 
-    @Autowired
+	 
+	
+	@Autowired
     private JobTypeService jobTypeService;
 
     @Bean

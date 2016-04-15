@@ -43,7 +43,7 @@ public class JobServiceTest {
     public void testFindAll() {
     	DbJob p = new DbJob();
     	//when(repository.findAll()).thenReturn(Collections.singleton(p));
-    	when(repository.findAllByActive(anyBoolean())).thenReturn(Collections.singleton(p));
+    	when(repository.findAllByActiveAndAbuse(anyBoolean(),anyBoolean())).thenReturn(Collections.singleton(p));
 
     	List<DbJob> persons = Lists.newArrayList(service.findAll());
     	assertEquals(1, persons.size());
@@ -53,7 +53,7 @@ public class JobServiceTest {
     @Test
     public void testFindAll_none() {
     	//when(repository.findAll()).thenReturn(Collections.emptyList());
-    	when(repository.findAllByActive(anyBoolean())).thenReturn(Collections.emptyList());
+    	when(repository.findAllByActiveAndAbuse(anyBoolean(),anyBoolean())).thenReturn(Collections.emptyList());
 
     	List<DbJob> persons = Lists.newArrayList(service.findAll());
     	assertEquals(0, persons.size());

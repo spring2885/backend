@@ -1162,6 +1162,9 @@
         "end_date" : {
           "type" : "string",
           "format" : "date"
+        },
+        "posted_by" : {
+          "$ref" : "#/definitions/Person"
         }
       }
     },

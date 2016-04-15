@@ -104,6 +104,8 @@ public class JobServiceImpl implements JobService {
         return repository.findAll(specs);
     }
 
-	
+    public Iterable<DbJob> findAllByActiveandAbuse(boolean active,boolean abuse) {
+    	     	return repository.findAllByActiveAndAbuse(active,abuse);
+    	     }
 
 }
