@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.util.Date;
+import org.spring2885.model.Person;
 
 import io.swagger.annotations.*;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -13,7 +14,7 @@ import java.util.Objects;
 
 
 @ApiModel(description = "")
-@javax.annotation.Generated(value = "class io.swagger.codegen.languages.SpringMVCServerCodegen", date = "2016-04-10T17:46:16.365+02:00")
+@javax.annotation.Generated(value = "class io.swagger.codegen.languages.SpringMVCServerCodegen", date = "2016-04-14T20:02:00.301-07:00")
 public class Job  {
   
   private Long id = null;
@@ -27,6 +28,7 @@ public class Job  {
   private Date endDate = null;
   private Long postedByPersonId = null;
   private Long hours = null;
+  private Person postedBy = null;
 
   
   /**
@@ -161,6 +163,18 @@ public class Job  {
   }
 
   
+  /**
+   **/
+  @ApiModelProperty(value = "")
+  @JsonProperty("posted_by")
+  public Person getPostedBy() {
+    return postedBy;
+  }
+  public void setPostedBy(Person postedBy) {
+    this.postedBy = postedBy;
+  }
+
+  
 
   @Override
   public boolean equals(Object o) {
@@ -181,12 +195,13 @@ public class Job  {
         Objects.equals(startDate, job.startDate) &&
         Objects.equals(endDate, job.endDate) &&
         Objects.equals(postedByPersonId, job.postedByPersonId) &&
-        Objects.equals(hours, job.hours);
+        Objects.equals(hours, job.hours) &&
+        Objects.equals(postedBy, job.postedBy);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, description, company, jobType, title, industry, location, startDate, endDate, postedByPersonId, hours);
+    return Objects.hash(id, description, company, jobType, title, industry, location, startDate, endDate, postedByPersonId, hours, postedBy);
   }
 
   @Override
@@ -205,6 +220,7 @@ public class Job  {
     sb.append("  endDate: ").append(endDate).append("\n");
     sb.append("  postedByPersonId: ").append(postedByPersonId).append("\n");
     sb.append("  hours: ").append(hours).append("\n");
+    sb.append("  postedBy: ").append(postedBy).append("\n");
     sb.append("}\n");
     return sb.toString();
   }

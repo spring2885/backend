@@ -136,7 +136,7 @@ public class JobsApi {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 
-        if (!requestHelper.checkAdminRequestIfNeeded(db.getpostedbyPersonId(), request)) {
+        if (!requestHelper.checkAdminRequestIfNeeded(db.getPostedBy().getId(), request)) {
             logger.info("PUT /jobs/{}: Forbidden: (not admin and not yours) ", id);
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }

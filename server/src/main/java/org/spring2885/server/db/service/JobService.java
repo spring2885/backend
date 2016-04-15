@@ -11,6 +11,14 @@ public interface JobService {
 	 */
 	DbJob findById(long id);
 	
+	
+	/**
+	 * Returns all {@code DbJob} that are 'active and 'abuse]
+	 */
+	Iterable<DbJob> findAllByActiveandAbuse(boolean active,boolean abuse);
+	
+	
+	
 	/**
 	 * Returns all {@code DbJob} instances.
 	 */
@@ -25,6 +33,7 @@ public interface JobService {
     /**
      * Returns all {@code DbJob} instances with search string {code q}.
      */
+      
      
 	Iterable<DbJob> findAll(List<SearchCriteria> criterias);
 	

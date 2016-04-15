@@ -16,7 +16,9 @@ import com.google.common.base.Suppliers;
 @Component
 public final class JobConverters {
 
-    @Autowired
+	 
+	
+	@Autowired
     private JobTypeService jobTypeService;
 
     @Bean

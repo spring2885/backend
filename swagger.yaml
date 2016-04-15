@@ -899,6 +899,9 @@ definitions:
       hours:
         type: integer
         format: int64
+      posted_by:
+        type: object
+        $ref: '#/definitions/Person'
 
   Language:
     type: object

@@ -6,10 +6,13 @@ import java.sql.Date;
 import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
@@ -27,26 +30,29 @@ public class DbJob implements Serializable {
     @Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Long id;
-	
+
 	private String title;
 	private Integer industry;
 	private String location;
 	private String description;
 	private String company;
 	private Integer jobType;
-	private Integer postedByPersonId;
 	private Integer hours;
 	private Date startDate;
 	private Date endDate;
-	
+
 	// Mark this as not insertable so the default database value will be used.
 	@Column(nullable = false, insertable=false, columnDefinition = "TINYINT", length = 1)
 	private Boolean active;
 	
 	// Mark this as not insertable so the default database value will be used.
-    @Column(nullable = false, insertable=false, columnDefinition = "TINYINT", length = 1)
+	@Column(nullable = false, insertable=false, columnDefinition = "TINYINT", length = 1)
 	private Boolean abuse;
-	
+
+	@JoinColumn(name="posted_by_person_id")
+	@ManyToOne(fetch=FetchType.EAGER)
+	private DbPerson person;
+
     @Version
     private Long version;
 
@@ -60,7 +66,7 @@ public class DbJob implements Serializable {
 	public Long getId() {
 		return id;
 	}
-	
+
 	public void setId(Long id) {
 		this.id = id;
 	}
@@ -88,35 +94,27 @@ public class DbJob implements Serializable {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	
+
 	public String getCompany() {
 		return company;
 	}
 	public void setCompany(String company) {
 		this.company = company;
 	}
-	
+
 	public int getjobType() {
 		return jobType;
 	}
 	public void setjobType(int jobType) {
 		this.jobType = jobType;
 	}
-	
-	public Integer getpostedbyPersonId() {
-		return postedByPersonId;
-	}
-	public void setpostedbyPersonId(int postedbypersonId) {
-		this.postedByPersonId = postedbypersonId;
-	}
-	
 	public int getHours() {
 		return hours;
 	}
 	public void setHours(int hours) {
 		this.hours = hours;
 	}
-	
+
 	public Date getStartDate() {
 		return startDate;
 	}
@@ -132,7 +130,7 @@ public class DbJob implements Serializable {
 	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
 	}
-	
+
 	public Boolean isActive() {
         return active;
     }
@@ -155,6 +153,14 @@ public class DbJob implements Serializable {
 	
 	public java.util.Date getModificationTime(){
 		return modificationTime;
+	}
+	
+	public DbPerson getPostedBy() {
+	    return person;
+	}
+	
+	public void setPostedBy(DbPerson person) {
+	    this.person = person;
 	}
 	
 	public Long getVersion(){
@@ -183,7 +189,7 @@ public class DbJob implements Serializable {
 	public String toString() {
 		return "DbJob [id=" + id + ", title=" + title + ", industry=" + industry + ", location=" + location
 				+ ", description=" + description + ", jobType=" + jobType + ", startDate=" + startDate + ", endDate="
-				+ endDate + ", postedByPersonId=" + postedByPersonId + ", hours=" + hours + ", creationTime="
+				+ endDate + ", hours=" + hours + ", creationTime="
 				+ creationTime + ", modificationTime=" + modificationTime + ", version=" + version + "]";
 	}
 
