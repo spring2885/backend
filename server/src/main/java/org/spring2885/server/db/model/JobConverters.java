@@ -8,6 +8,8 @@ import java.util.stream.Collectors;
 
 import org.spring2885.model.Job;
 import org.spring2885.server.db.service.JobTypeService;
+import org.spring2885.server.db.service.person.PersonService;
+import org.spring2885.server.db.service.person.PersonTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
@@ -19,7 +21,9 @@ import com.google.common.base.Suppliers;
 @Component
 public final class JobConverters {
 
-    @Autowired
+	 
+	
+	@Autowired
     private JobTypeService jobTypeService;
 
     @Bean
@@ -37,6 +41,9 @@ public final class JobConverters {
             j.setLocation(db.getLocation());
             j.setDescription(db.getDescription());
             j.setCompany(db.getCompany());
+            
+ 
+            
 
             return j;
         }
