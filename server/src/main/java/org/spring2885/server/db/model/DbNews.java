@@ -7,6 +7,7 @@ import java.util.Set;
 import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -17,11 +18,19 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Version;
 
 import com.google.common.collect.ImmutableSet;
 
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 @Cacheable
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table(name="news")
 public class DbNews {
 	@Id
@@ -40,6 +49,21 @@ public class DbNews {
     private DbPerson person;
 	
 	private Long views = 0L;
+	
+	@Version
+	private Long version;
+	
+	@CreatedDate
+	private java.util.Date creationTime;
+	
+	@LastModifiedDate
+	private java.util.Date modificationTime;
+	
+	@CreatedBy
+	private String createdBy;
+	
+	@LastModifiedBy
+	private String modifiedBy;
 	
 	@ManyToMany
 	@JoinTable(name = "news_visibility",
@@ -142,6 +166,26 @@ public class DbNews {
     public void setVisibleToPersonType(DbPersonType visibleToPersonType) {
         this.visibleToPersonTypes = ImmutableSet.of(visibleToPersonType);
     }
+    
+    public java.util.Date getCreationTime(){
+		return creationTime;
+	}
+	
+	public java.util.Date getModificationTime(){
+		return modificationTime;
+	}
+	
+	public Long getVersion(){
+		return version;
+	}
+	
+	public String getCreatedBy() {
+		return createdBy;
+	}
+	
+	public String getLastModifiedBy(){
+		return modifiedBy;
+	}
 
     // Since we won't have this object outside without the ID, we're ok
  	// See https://developer.jboss.org/wiki/EqualsandHashCode
@@ -163,12 +207,13 @@ public class DbNews {
  	}
 
     @Override
-    public String toString() {
-        return "DbNews [id=" + id + ", title=" + title + ", description=" + description + ", posted=" + posted
-                + ", expired=" + expired + ", personId=" + person + ", views=" + views
-                + " visibleTo=" + visibleToPersonTypes
-                + "]";
-    }
+	public String toString() {
+		return "DbNews [id=" + id + ", title=" + title + ", description=" + description + ", posted=" + posted
+				+ ", expired=" + expired + ", person=" + person + ", views=" + views + ", version=" + version
+				+ ", creationTime=" + creationTime + ", modificationTime=" + modificationTime + ", createdBy="
+				+ createdBy + ", modifiedBy=" + modifiedBy + ", visibleToPersonTypes=" + visibleToPersonTypes
+				+ ", active=" + active + ", abuse=" + abuse + ", comments=" + comments + "]";
+	}
 
     public List<DbNewsComment> getComments() {
         return comments;

@@ -16,7 +16,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
+import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -36,8 +38,8 @@ public class DbJob implements Serializable {
 	private String location;
 	private String description;
 	private String company;
-	private Integer jobType;
-	private Integer hours;
+	private Long jobType;
+	private Long hours;
 	private Date startDate;
 	private Date endDate;
 
@@ -61,7 +63,20 @@ public class DbJob implements Serializable {
 	
 	@LastModifiedDate
     private java.util.Date modificationTime;
+	
+	@CreatedBy
+	private String createdBy;
+	
+	@LastModifiedBy
+	private String modifiedBy;
     
+	public DbPerson getPerson() {
+        return person;
+    }
+
+    public void setPostedbypersonId(DbPerson personId) {
+        this.person = personId;
+    }
 	
 	public Long getId() {
 		return id;
@@ -102,32 +117,32 @@ public class DbJob implements Serializable {
 		this.company = company;
 	}
 
-	public int getjobType() {
+	public Long getjobType() {
 		return jobType;
 	}
-	public void setjobType(int jobType) {
+	public void setjobType(long jobType) {
 		this.jobType = jobType;
 	}
-	public int getHours() {
+	public Long getHours() {
 		return hours;
 	}
-	public void setHours(int hours) {
+	public void setHours(long hours) {
 		this.hours = hours;
 	}
 
-	public Date getStartDate() {
+	public Date getstartDate() {
 		return startDate;
 	}
 
-	public void setStartDate(Date startDate) {
+	public void setstartDate(Date startDate) {
 		this.startDate = startDate;
 	}
 
-	public Date getEndDate() {
+	public Date getendDate() {
 		return endDate;
 	}
 
-	public void setEndDate(Date endDate) {
+	public void setendDate(Date endDate) {
 		this.endDate = endDate;
 	}
 
@@ -167,6 +182,14 @@ public class DbJob implements Serializable {
 		return version;
 	}
 	
+	public String getCreatedBy() {
+		return createdBy;
+	}
+	
+	public String getLastModifiedBy(){
+		return modifiedBy;
+	}
+	
 	
 	@Override
 	public int hashCode() {
@@ -188,10 +211,13 @@ public class DbJob implements Serializable {
 	@Override
 	public String toString() {
 		return "DbJob [id=" + id + ", title=" + title + ", industry=" + industry + ", location=" + location
-				+ ", description=" + description + ", jobType=" + jobType + ", startDate=" + startDate + ", endDate="
-				+ endDate + ", hours=" + hours + ", creationTime="
-				+ creationTime + ", modificationTime=" + modificationTime + ", version=" + version + "]";
+				+ ", description=" + description + ", company=" + company + ", jobType=" + jobType + ", hours=" + hours
+				+ ", startDate=" + startDate + ", endDate=" + endDate + ", active=" + active + ", abuse=" + abuse
+				+ ", person=" + person + ", version=" + version + ", creationTime=" + creationTime
+				+ ", modificationTime=" + modificationTime + ", createdBy=" + createdBy + ", modifiedBy=" + modifiedBy
+				+ "]";
 	}
+
 
 
 	
