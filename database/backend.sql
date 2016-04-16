@@ -264,13 +264,13 @@ CREATE TABLE approval_request(
     # Creation info.
     flagged_on DATETIME,
     flagged_by INT,
-    flagged_notes VARCHAR(30000),
+    flagged_notes TEXT(30000),
 
     # Verdict info.    
     approved TINYINT(1) DEFAULT 0,
     verdict_on DATETIME,
     verdict_by INT,
-    verdict_notes VARCHAR(30000),
+    verdict_notes TEXT(30000),
 
     # Auditing Columns
     version INT,
