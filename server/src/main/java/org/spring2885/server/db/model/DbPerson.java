@@ -6,6 +6,7 @@ import java.util.Set;
 
 import javax.persistence.Cacheable;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.FetchType;
@@ -60,6 +61,7 @@ public class DbPerson {
 	private Integer graduationYear;
 	private String degreeType;
 	private String facultyDepartment;
+<<<<<<< HEAD
 	
     @Version
 	private Long version;
@@ -76,6 +78,10 @@ public class DbPerson {
 	@LastModifiedBy
 	private String modifiedBy;
 	
+=======
+	@Column(nullable=false, insertable=false, columnDefinition="TINYINT", length = 1)
+	private Boolean active;
+>>>>>>> 02d79fbbf890992f69cf8147f3bd8ac5abafd54a
 
     @OneToMany(orphanRemoval = true, mappedBy="person")
     private Set<DbRole> roles = new HashSet<>();
@@ -238,6 +244,7 @@ public class DbPerson {
 		this.facultyDepartment = facultyDepartment;
 	}
 	
+<<<<<<< HEAD
 	public java.util.Date getCreationTime(){
 		return creationTime;
 	}
@@ -258,6 +265,15 @@ public class DbPerson {
 		return modifiedBy;
 	}
 	
+=======
+	public Boolean isActive() {
+		return active;
+	}
+	
+	public void setActive(Boolean active) {
+		this.active = active;
+	}
+>>>>>>> 02d79fbbf890992f69cf8147f3bd8ac5abafd54a
 
 	public void addRoleForTesting(String rolename) {
 	    roles.add(new DbRole(this, rolename));

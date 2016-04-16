@@ -746,6 +746,23 @@ paths:
         500:
           description: Error with deleting jobtype by id. 
 
+  /api/v1/approvals/request/abuse:
+    post:
+      tags: ["Approvals"]
+      security:
+       - basicAuth: []
+      summary: Flags an item as abuse.
+      description: Submits a request to flag an item as abuse.
+      parameters:
+        - name : AbuseRequest
+          in: body
+          description: The faculty request.
+          schema:
+            $ref: '#/definitions/AbuseRequest'
+          required: true
+      responses:
+        200:
+          description: Submits abuse request.
   /api/v1/approvals/request/faculty:
     post:
       tags: ["Approvals"]
@@ -754,15 +771,15 @@ paths:
       summary: Requests approval as faculty
       description: Submits a request for an admin to approve this member as a faculty.
       parameters:
-        - name : TeacherRequest
+        - name : FacultyRequest
           in: body
           description: The faculty request.
           schema:
-            $ref: '#/definitions/TeacherRequest'
+            $ref: '#/definitions/FacultyRequest'
           required: true
       responses:
         200:
-          description: Submits request.
+          description: Submits faculty request.
   /api/v1/approvals/verdict:
     post:
       tags: ["Approvals"]
@@ -899,6 +916,9 @@ definitions:
       hours:
         type: integer
         format: int64
+      posted_by:
+        type: object
+        $ref: '#/definitions/Person'
 
   Language:
     type: object
@@ -1005,6 +1025,8 @@ definitions:
       item_id:
         type: integer
         format: int64
+      item_url:
+        type: string
       notes:
         type: string
 
@@ -1032,6 +1054,8 @@ definitions:
       item_id:
         type: integer
         format: int64
+      item_url:
+        type: string
       flagged_notes:
         type: string
       flagged_on:

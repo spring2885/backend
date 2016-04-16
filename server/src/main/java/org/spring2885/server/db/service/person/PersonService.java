@@ -47,4 +47,9 @@ public interface PersonService {
 
 	/** Saves (Inserts) the {@code person} into the database. */
 	DbPerson save(DbPerson person);
+	
+	/**
+	 * Returns all {@code DbPersons} that are 'active]
+	 */
+	Iterable<DbPerson> findAllByActive(boolean active);
 }

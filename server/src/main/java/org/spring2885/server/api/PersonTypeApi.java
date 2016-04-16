@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import aj.org.objectweb.asm.Type;
+
 @RestController
 @RequestMapping(value = "/api/v1/persontype", produces = { APPLICATION_JSON_VALUE })
 public class PersonTypeApi {
@@ -93,19 +95,16 @@ public class PersonTypeApi {
     }
     
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<Void> personTypePost(
-    		@RequestParam("id") Integer id,
-    		@RequestParam("name") String name
-    		) throws NotFoundException {
+    public ResponseEntity<Void> post(
+    		@RequestBody PersonType type) throws NotFoundException {
     	
-    	if (personTypeService.existsByName(name)) {
-    		throw new RuntimeException("name already exists: " + name);
+    	if (personTypeService.existsByName(type.getName())) {
+    		throw new RuntimeException("name already exists: " + type.getName());
     	}
     	
-    	DbPersonType personType = new DbPersonType();
-    	personType.setId(id);
-    	personType.setName(name);
-    	personTypeService.save(personType);
+    	DbPersonType updatedDbPersonType = personTypeJsonToDb.apply(new DbPersonType(), type);
+    	personTypeService.save(updatedDbPersonType);
+    	
     	return new ResponseEntity<Void>(HttpStatus.OK);
     }
 }

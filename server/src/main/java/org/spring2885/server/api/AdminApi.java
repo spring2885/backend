@@ -14,9 +14,13 @@ import org.spring2885.server.api.exceptions.NotFoundException;
 import org.spring2885.server.api.utils.RequestHelper;
 import org.spring2885.server.db.model.ApprovalConverters;
 import org.spring2885.server.db.model.DbApprovalRequest;
+import org.spring2885.server.db.model.DbJob;
+import org.spring2885.server.db.model.DbNews;
 import org.spring2885.server.db.model.DbPerson;
 import org.spring2885.server.db.service.ApprovalRequestService;
 import org.spring2885.server.db.service.ApprovalTypes;
+import org.spring2885.server.db.service.JobService;
+import org.spring2885.server.db.service.NewsService;
 import org.spring2885.server.db.service.person.PersonService;
 import org.spring2885.server.db.service.person.PersonTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +47,9 @@ public class AdminApi {
     private ApprovalConverters.FacultyRequestToDbApproval facultyRequestToDbApproval;
     
     @Autowired
+    private ApprovalConverters.AbuseRequestToDbApproval abuseRequestToDbApproval;
+    
+    @Autowired
     private ApprovalConverters.ApprovalFromDbToJson approvalFromDbToJson;
     
     @Autowired
@@ -53,6 +60,12 @@ public class AdminApi {
     
     @Autowired
     private PersonService personService;
+
+    @Autowired
+    private NewsService newsService;
+
+    @Autowired
+    private JobService jobsService;
 
     @Autowired
     private PersonTypeService personTypeService;
@@ -77,10 +90,15 @@ public class AdminApi {
 
     @RequestMapping(value = "/request/abuse", method = RequestMethod.POST)
     public ResponseEntity<Void> abuse(
-            @RequestBody AbuseRequest request,
+            @RequestBody AbuseRequest a,
             SecurityContextHolderAwareRequestWrapper wrapper) throws NotFoundException {
+        logger.info(a.toString());
+        DbPerson loggedInUser = requestHelper.loggedInUser(wrapper);
         
-        logger.info(request.toString());
+        DbApprovalRequest db = abuseRequestToDbApproval.create(a, loggedInUser);
+        approvalRequestService.save(db);
+        logger.info("Saved request: {}", db.getUuid());
+        
         return new ResponseEntity<Void>(HttpStatus.OK);
     }    
 
@@ -125,12 +143,22 @@ public class AdminApi {
                 // TODO: Maybe email them to let them know?
             }
         } else if (ApprovalTypes.ABUSE.equals(type)) {
-            // TODO: Implement me.
             if (verdict.getApproved().booleanValue()) {
-                // Set active=0 for the item.
-            } else {
-                // set abuse=0 for the item.
-                
+                String itemType = updated.getItemType();
+                Long id = updated.getItemId();
+                if ("NEWS".equals(itemType)) {
+                    DbNews news = newsService.findById(id);
+                    if (news != null) {
+                        news.setAbuse(Boolean.TRUE);
+                        newsService.save(news);
+                    }
+                } else if ("JOBS".equals(itemType)) {
+                    DbJob job = jobsService.findById(id);
+                    if (job != null) {
+                        job.setAbuse(Boolean.TRUE);
+                        jobsService.save(job);
+                    }
+                }
             }
             return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
         }

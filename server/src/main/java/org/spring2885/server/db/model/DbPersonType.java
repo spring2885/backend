@@ -35,7 +35,7 @@ public class DbPersonType {
 		return id;
 	}
 	
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 	

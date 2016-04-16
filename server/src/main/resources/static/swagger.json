@@ -68,6 +68,30 @@
         } ]
       }
     },
+    "/api/v1/approvals/request/abuse" : {
+      "post" : {
+        "tags" : [ "Approvals" ],
+        "summary" : "Flags an item as abuse.",
+        "description" : "Submits a request to flag an item as abuse.",
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "AbuseRequest",
+          "description" : "The faculty request.",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/AbuseRequest"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Submits abuse request."
+          }
+        },
+        "security" : [ {
+          "basicAuth" : [ ]
+        } ]
+      }
+    },
     "/api/v1/approvals/request/faculty" : {
       "post" : {
         "tags" : [ "Approvals" ],
@@ -75,16 +99,16 @@
         "description" : "Submits a request for an admin to approve this member as a faculty.",
         "parameters" : [ {
           "in" : "body",
-          "name" : "TeacherRequest",
+          "name" : "FacultyRequest",
           "description" : "The faculty request.",
           "required" : true,
           "schema" : {
-            "$ref" : "#/definitions/TeacherRequest"
+            "$ref" : "#/definitions/FacultyRequest"
           }
         } ],
         "responses" : {
           "200" : {
-            "description" : "Submits request."
+            "description" : "Submits faculty request."
           }
         },
         "security" : [ {
@@ -1257,6 +1281,9 @@
         "hours" : {
           "type" : "integer",
           "format" : "int64"
+        },
+        "posted_by" : {
+          "$ref" : "#/definitions/Person"
         }
       }
     },
@@ -1403,6 +1430,9 @@
           "type" : "integer",
           "format" : "int64"
         },
+        "item_url" : {
+          "type" : "string"
+        },
         "notes" : {
           "type" : "string"
         }
@@ -1440,6 +1470,9 @@
         "item_id" : {
           "type" : "integer",
           "format" : "int64"
+        },
+        "item_url" : {
+          "type" : "string"
         },
         "flagged_notes" : {
           "type" : "string"

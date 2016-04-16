@@ -1,7 +1,8 @@
 package org.spring2885.server.api;
-
+import static com.google.common.base.Preconditions.checkState;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
+import java.sql.Date;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -10,6 +11,7 @@ import org.spring2885.model.Job;
 import org.spring2885.server.api.exceptions.NotFoundException;
 import org.spring2885.server.api.utils.RequestHelper;
 import org.spring2885.server.db.model.DbJob;
+import org.spring2885.server.db.model.DbPerson;
 import org.spring2885.server.db.model.JobConverters;
 import org.spring2885.server.db.service.JobService;
 import org.spring2885.server.db.service.search.SearchCriteria;
@@ -60,18 +62,34 @@ public class JobsApi {
 		return new ResponseEntity<>(dbToJsonConverter.apply(o), HttpStatus.OK);
 	}
 
+	
+	
+	
 	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<Void> jobsPost(
-			
-			@RequestBody Job job
-			
-			) throws NotFoundException {
-		
-		DbJob updatedDbJob = jsonToDbConverter.apply(job);
-		jobService.save(updatedDbJob);
+	public ResponseEntity<Void> post(
+			@RequestBody Job jobs,
+			SecurityContextHolderAwareRequestWrapper request) throws NotFoundException {
+
+	    // Look up the currently logged in user
+        DbPerson me = requestHelper.loggedInUser(request);
+        checkState(me != null);
+
+	    // Create our DbJob version
+	    DbJob db = jsonToDbConverter.apply(new DbJob(), jobs);
+        // Since we are doing a post, set defaults.
+	    db.setId(null);
+	    db.setPostedBy(me);
+	    
+	    
+		jobService.save(db);
 		
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
+	
+	
+	
+	
+	
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<String> delete(
@@ -136,13 +154,12 @@ public class JobsApi {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 
-        if (!requestHelper.checkAdminRequestIfNeeded(db.getpostedbyPersonId(), request)) {
+        if (!requestHelper.checkAdminRequestIfNeeded(db.getPostedBy().getId(), request)) {
             logger.info("PUT /jobs/{}: Forbidden: (not admin and not yours) ", id);
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
 
-		jsonToDbConverter.withDbJob(db);
-		DbJob updatedDbJob = jsonToDbConverter.apply(job);
+		DbJob updatedDbJob = jsonToDbConverter.apply(db, job);
 		jobService.save(updatedDbJob);
 		
 		return new ResponseEntity<>(HttpStatus.OK);
