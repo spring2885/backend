@@ -57,7 +57,7 @@ public class JobServiceTest {
     	//when(repository.findAll()).thenReturn(Collections.emptyList());
     	when(repository.findAllByActiveAndAbuse(anyBoolean(), anyBoolean())).thenReturn(Collections.emptyList());
 
-    	List<DbJob> persons = Lists.newArrayList(service.findAll());
+    	List<DbJob> persons = Lists.newArrayList(service,findAll());
     	assertEquals(0, persons.size());
     
     }
