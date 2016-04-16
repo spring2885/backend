@@ -484,16 +484,23 @@ paths:
        retrieves a langauge based on a langauge code passed.
       responses:
         200:
-          description: Sucessful Response
+          description: Sucessful response
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Language'
         404:
           description: HttpStatus.NOT_FOUND
+          schema:
+            type: array
+            items:
+                $ref: '#/definitions/Language'
     post:
       tags: ["Langauge"]
       summary: adds a langauge
       description: |
         Adds a langauge based on a langauge code passed.
       responses:
-      #
         200:
           description: Sucessful response
           schema:
