@@ -491,15 +491,13 @@ paths:
               $ref: '#/definitions/Language'
         404:
           description: HttpStatus.NOT_FOUND
-          schema:
-            type: array
-            items:
-                $ref: '#/definitions/Language'
     post:
       tags: ["Langauge"]
       summary: adds a langauge
       description: |
         Adds a langauge based on a langauge code passed.
+      parameters:
+        - $ref: '#/parameters/size'
       responses:
         200:
           description: Sucessful response
@@ -509,10 +507,6 @@ paths:
               $ref: '#/definitions/Language'
         404:
           description: HttpStatus.NOT_FOUND
-          schema:
-            type: array
-            items:
-                $ref: '#/definitions/Language'
           
   /api/v1/socialservice:
     get:
@@ -526,7 +520,12 @@ paths:
         Optional query param of **size** determines
         size of return array
       parameters:
-        - $ref: '#/parameters/size'
+        - name : Language
+          in: body
+          description: The Language you want to add
+          schema:
+            $ref: '#/definitions/Language'
+          required: true
       responses:
         200:
           description: Successful response
