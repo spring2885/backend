@@ -291,7 +291,7 @@ paths:
       security:
        - basicAuth: []
       summary: Deletes a news entry.
-      summary: |
+      description: |
         Deletes a single news entry.
       parameters:
         - $ref: '#/parameters/id'
@@ -305,7 +305,7 @@ paths:
       security:
        - basicAuth: []
       summary: Updates a news entry.
-      summary: |
+      description: |
         Updates a news entry.
       parameters:
         - $ref: '#/parameters/id'
@@ -315,7 +315,6 @@ paths:
           required: true
           schema:
             $ref: '#/definitions/News'
-          required: true
       responses:
         200:
           description: Updates News
@@ -361,7 +360,7 @@ paths:
       security:
        - basicAuth: []
       summary: Deletes a news comment.
-      summary: |
+      description: |
         Deletes a news comment by id.
       parameters:
         - $ref: '#/parameters/id'
@@ -385,7 +384,6 @@ paths:
           required: true
           schema:
             $ref: '#/definitions/NewsComment'
-          required: true
       responses:
         200:
           description: Updates the News Coment
@@ -459,7 +457,6 @@ paths:
           required: true
           schema:
             $ref: '#/definitions/Job'
-          required: true
       responses:
         200:
           description: Updates the Job
@@ -538,7 +535,7 @@ paths:
       security:
        - basicAuth: []
       summary: Deletes a social service entry.
-      summary: |
+      description: |
         The SocialService to delete
       parameters:
         - $ref: '#/parameters/id'
@@ -552,7 +549,7 @@ paths:
       security:
        - basicAuth: []
       summary: Updates a social service entry.
-      summary: |
+      description: |
         The SocialService to update
       parameters:
         - $ref: '#/parameters/id'
@@ -562,7 +559,6 @@ paths:
           required: true
           schema:
             $ref: '#/definitions/SocialService'
-          required: true
       responses:
         200:
           description: Deletes SocialService
@@ -739,7 +735,6 @@ paths:
           required: true
           schema:
             $ref: '#/definitions/JobType'
-          required: true
       responses:
         200:
           description: Deletes jobtype
