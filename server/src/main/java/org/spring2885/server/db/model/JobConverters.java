@@ -10,8 +10,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 import com.google.common.base.Function;
-import com.google.common.base.Supplier;
-import com.google.common.base.Suppliers;
 
 @Component
 public final class JobConverters {
@@ -50,24 +48,14 @@ public final class JobConverters {
         return new JsonToDbConverter();
     }
 
-    public class JsonToDbConverter implements Function<Job, DbJob> {
-
-        private Supplier<DbJob> dbSupplier = Suppliers.ofInstance(new DbJob());
+    public class JsonToDbConverter {
 
         public JsonToDbConverter() {
         }
 
-        public void withDbJob(DbJob db) {
-            this.dbSupplier = Suppliers.ofInstance(db);
-        }
-
-        @Override
-        public DbJob apply(Job p) {
-
+		public DbJob apply(DbJob db, Job p) {
             Map<String, DbJobType> jobTypes = jobTypeService.findAll().stream()
                     .collect(Collectors.toMap(DbJobType::getName, (s) -> s));
-
-            DbJob db = dbSupplier.get();
 
             db.setTitle(p.getTitle());
             db.setDescription(p.getDescription());
@@ -76,11 +64,6 @@ public final class JobConverters {
             db.setCompany(p.getCompany());
             
             return db;
-        }
-
-		public DbJob apply(DbJob dbJob, Job jobs) {
-			// TODO Auto-generated method stub
-			return null;
 		}
 
     }

@@ -24,6 +24,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.spring2885.model.Job;
 import org.spring2885.server.db.model.DbJob;
+import org.spring2885.server.db.model.DbPerson;
 import org.spring2885.server.db.service.JobService;
 import org.spring2885.server.db.service.JobTypeService;
 import org.spring2885.server.db.service.LanguageService;
@@ -55,7 +56,7 @@ public class JobsApiTest {
     private DbJob dbMe;
     private Job me;
     
-
+   
     
     @After
     public void after() {
@@ -79,6 +80,9 @@ public class JobsApiTest {
     	DbJob p = new DbJob();
     	p.setId(id);
     	p.setTitle(title);
+    	DbPerson dp=new DbPerson(1,"me","test");
+    	
+    	p.setPostedBy(dp);
     	//p.setLanguage(new DbLanguage("eo", "Esperanto"));
     	
     	return p;
@@ -216,8 +220,7 @@ public class JobsApiTest {
     public void testPut_canNotFindMe() throws Exception {
     	// Setup the expectations.
     	when(jobService.findById(4)).thenReturn(dbMe);
-    	when(jobService.findByTitle("me@example.com"))
-    	.thenReturn(null);
+    	
     	
     	mockMvc.perform(put("/api/v1/jobs/4")
     			.contentType(MediaType.APPLICATION_JSON)

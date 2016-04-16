@@ -42,8 +42,6 @@ public class JobConverterTest {
         DbJobType t2 = new DbJobType(1, "engineer");
         when(jobTypeService.findAll()).thenReturn(ImmutableSet.of(t1, t2));
         when(jobTypeService.defaultType()).thenReturn(t1);
-        
-        jsonToDb.withDbJob(new DbJob());
     }
     
 	@Test
@@ -57,6 +55,6 @@ public class JobConverterTest {
 	public void testFromJsonToDb(){
 		
 		Job p = new Job();
-		DbJob dbp = jsonToDb.apply(p);
+		DbJob dbp = jsonToDb.apply(new DbJob(), p);
 	}
 }
