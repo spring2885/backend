@@ -5,6 +5,7 @@ import java.sql.Date;
 import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -12,9 +13,17 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Version;
+
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Cacheable
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table(name="news_comment")
 public class DbNewsComment {
     @Id
@@ -39,6 +48,21 @@ public class DbNewsComment {
     // Mark this as not insertable so the default database value will be used.
     @Column(nullable = false, insertable=false, columnDefinition = "TINYINT", length = 1)
     private Boolean abuse;
+    
+    @Version
+	private Long version;
+
+	@CreatedDate
+	private java.util.Date creationTime;
+		
+	@LastModifiedDate
+	private java.util.Date modificationTime;
+	
+	@CreatedBy
+	private String createdBy;
+	
+	@LastModifiedBy
+	private String modifiedBy;
 
     public Long getId() {
         return id;
@@ -95,5 +119,25 @@ public class DbNewsComment {
     public void setAbuse(Boolean abuse) {
         this.abuse = abuse;
     }
+    
+    public java.util.Date getCreationTime(){
+		return creationTime;
+	}
+	
+	public java.util.Date getModificationTime(){
+		return modificationTime;
+	}
+	
+	public Long getVersion(){
+		return version;
+	}
+	
+	public String getCreatedBy() {
+		return createdBy;
+	}
+	
+	public String getLastModifiedBy(){
+		return modifiedBy;
+	}
     
 }

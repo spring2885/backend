@@ -4,6 +4,7 @@ import java.util.Objects;
 
 import javax.persistence.Cacheable;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -11,9 +12,17 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Version;
+
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Cacheable
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table(name="social_connection")
 public class DbSocialConnection {
 	@Id
@@ -29,6 +38,21 @@ public class DbSocialConnection {
 	private DbSocialService socialService;
 	
 	private String url;
+	
+	@Version
+	private Long version;
+
+	@CreatedDate
+	private java.util.Date creationTime;
+		
+	@LastModifiedDate
+	private java.util.Date modificationTime;
+	
+	@CreatedBy
+	private String createdBy;
+	
+	@LastModifiedBy
+	private String modifiedBy;
 
 	
 	public DbPerson getPerson() {
@@ -53,6 +77,26 @@ public class DbSocialConnection {
 
 	public void setUrl(String url) {
 		this.url = url;
+	}
+	
+    public java.util.Date getCreationTime(){
+		return creationTime;
+	}
+	
+	public java.util.Date getModificationTime(){
+		return modificationTime;
+	}
+	
+	public Long getVersion(){
+		return version;
+	}
+	
+	public String getCreatedBy() {
+		return createdBy;
+	}
+	
+	public String getLastModifiedBy(){
+		return modifiedBy;
 	}
 	
 	@Override

@@ -13,6 +13,7 @@ CREATE TABLE person_type
     version INT,
     creation_time DATETIME,
     modification_time DATETIME,
+
     
     PRIMARY KEY (id)
 );
@@ -27,7 +28,9 @@ CREATE TABLE language
 #Auditing Columns
     version INT,
     creation_time DATETIME,
-    modification_time DATETIME
+    modification_time DATETIME,
+	created_by VARCHAR(100),
+    modified_by VARCHAR(100)
     
 );
 
@@ -67,6 +70,8 @@ CREATE TABLE person
     version INT,
     creation_time DATETIME,
     modification_time DATETIME,
+	created_by VARCHAR(100),
+    modified_by VARCHAR(100),
     PRIMARY KEY (id),
     FOREIGN KEY (type) REFERENCES person_type(id),
     FOREIGN KEY (lang) REFERENCES language(code),
@@ -82,6 +87,9 @@ CREATE TABLE job_type
     version INT,
     creation_time DATETIME,
     modification_time DATETIME,
+	created_by VARCHAR(100),
+    modified_by VARCHAR(100),
+    
     PRIMARY KEY(id)
 );
 
@@ -118,7 +126,11 @@ CREATE TABLE job
     version INT,
     creation_time DATETIME,
     modification_time DATETIME,
+	created_by VARCHAR(100),
+    modified_by VARCHAR(100),
+    
     PRIMARY KEY(id),
+    
     FOREIGN KEY(industry) REFERENCES industry(id),
     FOREIGN KEY(job_type) REFERENCES job_type(id),
     FOREIGN KEY(posted_by_person_id) REFERENCES person(id)
@@ -141,6 +153,8 @@ CREATE TABLE news
     version INT,
     creation_time DATETIME,
     modification_time DATETIME,
+	created_by VARCHAR(100),
+    modified_by VARCHAR(100),
 
     PRIMARY KEY(id),
     FOREIGN KEY(person_id) REFERENCES person(id)
@@ -155,6 +169,9 @@ CREATE TABLE news_visibility
     version INT,
     creation_time DATETIME,
     modification_time DATETIME,
+	created_by VARCHAR(100),
+    modified_by VARCHAR(100),
+    
     PRIMARY KEY(person_type, news),
     FOREIGN KEY(person_type) REFERENCES person_type(id),
     FOREIGN KEY(news) REFERENCES news(id)
@@ -175,6 +192,8 @@ CREATE TABLE news_comment
     version INT,
     creation_time DATETIME,
     modification_time DATETIME,
+	created_by VARCHAR(100),
+    modified_by VARCHAR(100),
 
     PRIMARY KEY(id),
     FOREIGN KEY(news_id) REFERENCES news(id),
@@ -205,6 +224,9 @@ CREATE TABLE social_connection
     version INT,
     creation_time DATETIME,
     modification_time DATETIME,
+	created_by VARCHAR(100),
+    modified_by VARCHAR(100),
+    
     PRIMARY KEY(id),
     FOREIGN KEY(person_id) REFERENCES person(id),
     FOREIGN KEY(social_service_id) REFERENCES social_service(id)
@@ -270,30 +292,30 @@ USE backend;
 /*Already in DB*/
 INSERT INTO person_type VALUES (
     1,
-    'student',1,null,null);
+    'student',1,2016/04/08,2016/04/08);
 
 INSERT INTO person_type VALUES (
     2,
-    'alumni',1,null,null);
+    'alumni',1,2016/04/08,2016/04/08);
     
 INSERT INTO person_type VALUES (
     3,
-    'faculty',1,null,null);
+    'faculty',1, 2016/04/08,2016/04/08,'ad','ad');
     
 INSERT INTO job_type VALUES (
     1,
-    "full-time",1,null,null);
+    "full-time",1,2016/04/08,2016/04/08,'ad','ad');
 
 INSERT INTO job_type VALUES (
     2,
-    "part-time",1,null,null);
+    "part-time",1,2016/04/08,2016/04/08,'ad','ad');
 
 INSERT INTO social_service VALUES(
-    'LinkedIn', 'http://www.linkedin.com/',1,null,null);
+    'LinkedIn', 'http://www.linkedin.com/',12016/04/08,2016/04/08);
 INSERT INTO social_service VALUES(
-    'Twitter', 'http://www.twitter.com/',1,null,null);
+    'Twitter', 'http://www.twitter.com/',1,2016/04/08,2016/04/08);
 INSERT INTO social_service VALUES(
-    'Facebook', 'http://www.facebook.com/',1,null,null);
+    'Facebook', 'http://www.facebook.com/',1,2016/04/08,2016/04/08);
 
-INSERT INTO language VALUES('en', 'English',1,null,null);
+INSERT INTO language VALUES('en', 'English',1,2016/04/08,2016/04/08);
 
