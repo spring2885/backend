@@ -476,7 +476,28 @@ paths:
         500:
           description: Error deleting the profile "ID".
 
-  
+  /api/v1/Language:
+    get:
+      tags: ["Langauge"]
+      summary: gets a Langauge
+      description: |
+       retrieves a langauge based on a langauge code passed.
+      responses:
+        200:
+          description: Sucessful Response
+        404:
+          description: HttpStatus.NOT_FOUND
+    post:
+      tags: ["Langauge"]
+      summary: adds a langauge
+      description: |
+        Adds a langauge based on a langauge code passed.
+      responses:
+        200:
+          description: Sucessful Response
+        404:
+          description: HttpStatus.NOT_FOUND
+          
   /api/v1/socialservice:
     get:
       tags: ["SocialService"]
