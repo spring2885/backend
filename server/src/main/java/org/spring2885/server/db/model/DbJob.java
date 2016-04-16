@@ -204,18 +204,13 @@ public class DbJob implements Serializable {
 	@Override
 	public String toString() {
 		return "DbJob [id=" + id + ", title=" + title + ", industry=" + industry + ", location=" + location
-<<<<<<< HEAD
-				+ ", description=" + description + ", company=" + company + ", jobType=" + jobType
-				+ ", postedByPersonId=" + postedByPersonId + ", hours=" + hours + ", startDate=" + startDate
-				+ ", endDate=" + endDate + ", active=" + active + ", abuse=" + abuse + ", version=" + version
-				+ ", creationTime=" + creationTime + ", modificationTime=" + modificationTime + ", createdBy="
-				+ createdBy + ", modifiedBy=" + modifiedBy + "]";
-=======
-				+ ", description=" + description + ", jobType=" + jobType + ", startDate=" + startDate + ", endDate="
-				+ endDate + ", hours=" + hours + ", creationTime="
-				+ creationTime + ", modificationTime=" + modificationTime + ", version=" + version + "]";
->>>>>>> 02d79fbbf890992f69cf8147f3bd8ac5abafd54a
+				+ ", description=" + description + ", company=" + company + ", jobType=" + jobType + ", hours=" + hours
+				+ ", startDate=" + startDate + ", endDate=" + endDate + ", active=" + active + ", abuse=" + abuse
+				+ ", person=" + person + ", version=" + version + ", creationTime=" + creationTime
+				+ ", modificationTime=" + modificationTime + ", createdBy=" + createdBy + ", modifiedBy=" + modifiedBy
+				+ "]";
 	}
+
 
 
 	
