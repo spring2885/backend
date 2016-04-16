@@ -4,6 +4,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.spring2885.model.Job;
+import org.spring2885.model.Person;
 import org.spring2885.server.db.service.JobTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -14,8 +15,6 @@ import com.google.common.base.Function;
 @Component
 public final class JobConverters {
 
-	 
-	
 	@Autowired
     private JobTypeService jobTypeService;
 
@@ -34,11 +33,11 @@ public final class JobConverters {
             j.setLocation(db.getLocation());
             j.setDescription(db.getDescription());
             j.setCompany(db.getCompany());
-            // TODO: add jobType
-            // TODO: add posted_by
-            // TODO: add hours
-            j.setStartDate(db.getStartDate());
-            j.setEndDate(db.getEndDate());
+            j.setJobType(db.getjobType());
+            j.setHours(db.getHours());
+            j.setStartDate(db.getstartDate());
+            j.setEndDate(db.getendDate());
+            
             return j;
         }
     }
@@ -56,12 +55,16 @@ public final class JobConverters {
 		public DbJob apply(DbJob db, Job p) {
             Map<String, DbJobType> jobTypes = jobTypeService.findAll().stream()
                     .collect(Collectors.toMap(DbJobType::getName, (s) -> s));
-
+            db.setId(p.getId());
             db.setTitle(p.getTitle());
-            db.setDescription(p.getDescription());
-            //db.setIndustry
             db.setLocation(p.getLocation());
+            db.setDescription(p.getDescription());
             db.setCompany(p.getCompany());
+            db.setjobType(p.getJobType());
+            db.setHours(p.getHours());
+            db.setstartDate(ConverterUtils.asSqlDate(p.getStartDate()));
+            db.setendDate(ConverterUtils.asSqlDate(p.getEndDate()));
+            
             
             return db;
 		}
