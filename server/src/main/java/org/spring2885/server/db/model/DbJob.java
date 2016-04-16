@@ -13,7 +13,9 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
+import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -55,6 +57,12 @@ public class DbJob implements Serializable {
 	
 	@LastModifiedDate
     private java.util.Date modificationTime;
+	
+	@CreatedBy
+	private String createdBy;
+	
+	@LastModifiedBy
+	private String modifiedBy;
     
 	
 	public Long getId() {
@@ -161,6 +169,14 @@ public class DbJob implements Serializable {
 		return version;
 	}
 	
+	public String getCreatedBy() {
+		return createdBy;
+	}
+	
+	public String getLastModifiedBy(){
+		return modifiedBy;
+	}
+	
 	
 	@Override
 	public int hashCode() {
@@ -182,9 +198,11 @@ public class DbJob implements Serializable {
 	@Override
 	public String toString() {
 		return "DbJob [id=" + id + ", title=" + title + ", industry=" + industry + ", location=" + location
-				+ ", description=" + description + ", jobType=" + jobType + ", startDate=" + startDate + ", endDate="
-				+ endDate + ", postedByPersonId=" + postedByPersonId + ", hours=" + hours + ", creationTime="
-				+ creationTime + ", modificationTime=" + modificationTime + ", version=" + version + "]";
+				+ ", description=" + description + ", company=" + company + ", jobType=" + jobType
+				+ ", postedByPersonId=" + postedByPersonId + ", hours=" + hours + ", startDate=" + startDate
+				+ ", endDate=" + endDate + ", active=" + active + ", abuse=" + abuse + ", version=" + version
+				+ ", creationTime=" + creationTime + ", modificationTime=" + modificationTime + ", createdBy="
+				+ createdBy + ", modifiedBy=" + modifiedBy + "]";
 	}
 
 

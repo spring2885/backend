@@ -4,8 +4,10 @@ import java.sql.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.Cacheable;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -14,8 +16,17 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Version;
 
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+@Cacheable
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table(name="person")
 public class DbPerson {
     private static final String DEFAULT_IMAGE = "/src/assets/images/Profilepic.png";
@@ -49,6 +60,22 @@ public class DbPerson {
 	private Integer graduationYear;
 	private String degreeType;
 	private String facultyDepartment;
+	
+    @Version
+	private Long version;
+
+	@CreatedDate
+	private java.util.Date creationTime;
+		
+	@LastModifiedDate
+	private java.util.Date modificationTime;
+	
+	@CreatedBy
+	private String createdBy;
+	
+	@LastModifiedBy
+	private String modifiedBy;
+	
 
     @OneToMany(orphanRemoval = true, mappedBy="person")
     private Set<DbRole> roles = new HashSet<>();
@@ -210,6 +237,27 @@ public class DbPerson {
 	public void setFacultyDepartment(String facultyDepartment) {
 		this.facultyDepartment = facultyDepartment;
 	}
+	
+	public java.util.Date getCreationTime(){
+		return creationTime;
+	}
+	
+	public java.util.Date getModificationTime(){
+		return modificationTime;
+	}
+	
+	public Long getVersion(){
+		return version;
+	}
+	
+	public String getCreatedBy() {
+		return createdBy;
+	}
+	
+	public String getLastModifiedBy(){
+		return modifiedBy;
+	}
+	
 
 	public void addRoleForTesting(String rolename) {
 	    roles.add(new DbRole(this, rolename));
