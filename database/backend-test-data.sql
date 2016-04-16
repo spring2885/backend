@@ -51,7 +51,8 @@ INSERT INTO person VALUES (
     'BS',
     null,
     1,
-    1, NOW(), NOW());
+    1, NOW(), NOW(),
+    NULL, NULL);
     
 /*Alumni*/
 INSERT INTO person VALUES (
@@ -77,7 +78,7 @@ INSERT INTO person VALUES (
     'BS',
     null,
     1,
-    1, NOW(), NOW());
+    1, NOW(), NOW(), NULL, NULL);
 
 INSERT INTO person VALUES (
     1234,
@@ -102,7 +103,7 @@ INSERT INTO person VALUES (
     'PhD',
     null,
     1,
-    1, NOW(), NOW());
+    1, NOW(), NOW(), NULL, NULL);
 
 /*Faculty*/
 INSERT INTO person VALUES (
@@ -128,7 +129,7 @@ INSERT INTO person VALUES (
     null,
     'Computer and Information Science',
     1,
-    1, NOW(), NOW());
+    1, NOW(), NOW(), NULL, NULL);
 
 /*person - other examples*/
 INSERT INTO person VALUES (
@@ -154,7 +155,7 @@ INSERT INTO person VALUES (
     NULL,
     NULL,
     0,
-    1, NOW(), NOW());
+    1, NOW(), NOW(), NULL, NULL);
 
 INSERT INTO person VALUES (
     6789,
@@ -179,7 +180,7 @@ INSERT INTO person VALUES (
     NULL,
     NULL,
     0,
-    1, NOW(), NOW());
+    1, NOW(), NOW(), NULL, NULL);
 
 INSERT INTO person VALUES (
     1945,
@@ -204,7 +205,7 @@ INSERT INTO person VALUES (
     NULL,
     NULL,
     1,
-    1, NOW(), NOW());
+    1, NOW(), NOW(), NULL, NULL);
 
 INSERT INTO person VALUES (
     30,
@@ -229,7 +230,7 @@ INSERT INTO person VALUES (
     NULL,
     NULL,
     1,
-    1, NOW(), NOW());
+    1, NOW(), NOW(), NULL, NULL);
 
 
 /*person - student*/
@@ -256,7 +257,7 @@ INSERT INTO person VALUES (
     null,
     null,
     1,
-    1, NOW(), NOW());
+    1, NOW(), NOW(), NULL, NULL);
 
 /*person - teacher*/
 INSERT INTO person VALUES (
@@ -282,7 +283,7 @@ INSERT INTO person VALUES (
     null,
     null,
     1,
-    1, NOW(), NOW());
+    1, NOW(), NOW(), NULL, NULL);
 
 /*person - alumni*/
 INSERT INTO person VALUES (
@@ -308,7 +309,7 @@ INSERT INTO person VALUES (
     null,
     null,
     1,
-    1, NOW(), NOW());
+    1, NOW(), NOW(), NULL, NULL);
 
 /*person - admin*/
 INSERT INTO person VALUES (
@@ -334,7 +335,7 @@ INSERT INTO person VALUES (
     null,
     null,
     1,
-    1, NOW(), NOW());
+    1, NOW(), NOW(), NULL, NULL);
 
 /*News*/
 INSERT INTO news VALUES (
@@ -347,7 +348,7 @@ INSERT INTO news VALUES (
     1,
     1,
     0,
-    1, NOW(), NOW());
+    1, NOW(), NOW(), NULL, NULL);
 
 /*News Comment*/
 INSERT INTO news_comment VALUES(
@@ -358,7 +359,7 @@ INSERT INTO news_comment VALUES(
     1,
     1,
     0,
-    1, NOW(), NOW());
+    1, NOW(), NOW(), NULL, NULL);
 
 INSERT INTO news_comment VALUES(
     2,
@@ -368,7 +369,7 @@ INSERT INTO news_comment VALUES(
     3,
     1,
     0,
-    1, NOW(), NOW());
+    1, NOW(), NOW(), NULL, NULL);
 
 /*Industry*/
 INSERT INTO industry VALUES (
@@ -415,7 +416,7 @@ INSERT INTO job VALUES (
     2,
     20,
     1, 0,
-    1, NOW(), NOW());
+    1, NOW(), NOW(), NULL, NULL);
 
     
 INSERT INTO job VALUES (
@@ -431,7 +432,7 @@ INSERT INTO job VALUES (
     4,
     40,
     1, 0,
-    1, NOW(), NOW());
+    1, NOW(), NOW(), NULL, NULL);
 
 INSERT INTO job VALUES (
     66334,
@@ -446,7 +447,7 @@ INSERT INTO job VALUES (
     6789,
     null,
     1, 0,
-    1, NOW(), NOW());
+    1, NOW(), NOW(), NULL, NULL);
 
 INSERT INTO job VALUES (
     7734,
@@ -461,7 +462,7 @@ INSERT INTO job VALUES (
     5678,
     40,
     1, 0,
-    1, NOW(), NOW());
+    1, NOW(), NOW(), NULL, NULL);
     
 INSERT INTO job VALUES (
     888222,
@@ -476,7 +477,7 @@ INSERT INTO job VALUES (
     5678,
     40,
     1, 0,
-    1, NOW(), NOW());    
+    1, NOW(), NOW(), NULL, NULL);    
     
 /*News Feed*/
 /* Dummy Template for News
@@ -502,7 +503,7 @@ INSERT INTO news VALUES (
     1,
     1,
     0,
-    1, NOW(), NOW());
+    1, NOW(), NOW(), NULL, NULL);
 
 INSERT INTO news VALUES (
     444444,
@@ -514,7 +515,7 @@ INSERT INTO news VALUES (
     1,
     1,
     0,
-    1, NOW(), NOW());
+    1, NOW(), NOW(), NULL, NULL);
     
 INSERT INTO news VALUES (
     7878787,
@@ -526,7 +527,7 @@ INSERT INTO news VALUES (
     1,
     1,
     0,
-    1, NOW(), NOW());
+    1, NOW(), NOW(), NULL, NULL);
     
 INSERT INTO news VALUES (
     9832,
@@ -538,7 +539,7 @@ INSERT INTO news VALUES (
     0,
     1,
     0,
-    1, NOW(), NOW());
+    1, NOW(), NOW(), NULL, NULL);
     
 INSERT INTO news VALUES (
     37892,
@@ -551,7 +552,7 @@ INSERT INTO news VALUES (
     0,
     1,
     0,
-    1, NOW(), NOW());
+    1, NOW(), NOW(), NULL, NULL);
 
 /* News Comment*/
 /* Dummy Template for News Comment
@@ -573,7 +574,7 @@ INSERT INTO news_comment VALUES (
     5678,
     1,
     0,
-    1, NOW(), NOW());
+    1, NOW(), NOW(), NULL, NULL);
     
 INSERT INTO news_comment VALUES (
     01010102,
@@ -583,7 +584,7 @@ INSERT INTO news_comment VALUES (
     5678,
     1,
     0,
-    1, NOW(), NOW());
+    1, NOW(), NOW(), NULL, NULL);
 
 INSERT INTO news_comment VALUES (
     01010103,
@@ -593,7 +594,7 @@ INSERT INTO news_comment VALUES (
     5678,
     1,
     0,
-    1, NOW(), NOW());
+    1, NOW(), NOW(), NULL, NULL);
     
 /*News Visibility*/
 /* Dummy Templaye
@@ -604,37 +605,37 @@ INSERT INTO news_visibility VALUES(
 INSERT INTO news_visibility VALUES (
     1, 
     1,
-    1, NOW(), NOW());
+    1, NOW(), NOW(), NULL, NULL);
 
 INSERT INTO news_visibility VALUES (
     2,
     1,
-    1, NOW(), NOW());
+    1, NOW(), NOW(), NULL, NULL);
 
 INSERT INTO news_visibility VALUES(
     1,
     999999,
-    1, NOW(), NOW());
+    1, NOW(), NOW(), NULL, NULL);
 
 INSERT INTO news_visibility VALUES(
     2,
     444444,
-    1, NOW(), NOW());
+    1, NOW(), NOW(), NULL, NULL);
 
 INSERT INTO news_visibility VALUES(
     1,
     7878787,
-    1, NOW(), NOW());
+    1, NOW(), NOW(), NULL, NULL);
     
 INSERT INTO news_visibility VALUES(
     2,
     9832,
-    1, NOW(), NOW());
+    1, NOW(), NOW(), NULL, NULL);
     
 INSERT INTO news_visibility VALUES(
     2,
     37892,
-    1, NOW(), NOW());
+    1, NOW(), NOW(), NULL, NULL);
     
 /*Roles*/
 INSERT INTO roles VALUES (

@@ -292,30 +292,30 @@ USE backend;
 /*Already in DB*/
 INSERT INTO person_type VALUES (
     1,
-    'student',1,2016/04/08,2016/04/08);
+    'student',1,now(), now());
 
 INSERT INTO person_type VALUES (
     2,
-    'alumni',1,2016/04/08,2016/04/08);
+    'alumni',1,now(), now());
     
 INSERT INTO person_type VALUES (
     3,
-    'faculty',1, 2016/04/08,2016/04/08,'ad','ad');
+    'faculty',1, now(), now());
     
 INSERT INTO job_type VALUES (
     1,
-    "full-time",1,2016/04/08,2016/04/08,'ad','ad');
+    "full-time",1,now(), now(), NULL, NULL);
 
 INSERT INTO job_type VALUES (
     2,
-    "part-time",1,2016/04/08,2016/04/08,'ad','ad');
+    "part-time",1,now(), now(), NULL, NULL);
 
 INSERT INTO social_service VALUES(
-    'LinkedIn', 'http://www.linkedin.com/',12016/04/08,2016/04/08);
+    'LinkedIn', 'http://www.linkedin.com/',1,now(), now());
 INSERT INTO social_service VALUES(
-    'Twitter', 'http://www.twitter.com/',1,2016/04/08,2016/04/08);
+    'Twitter', 'http://www.twitter.com/',1,now(), now());
 INSERT INTO social_service VALUES(
-    'Facebook', 'http://www.facebook.com/',1,2016/04/08,2016/04/08);
+    'Facebook', 'http://www.facebook.com/',1,now(), now());
 
-INSERT INTO language VALUES('en', 'English',1,2016/04/08,2016/04/08);
+INSERT INTO language VALUES('en', 'English',1,now(), now(), NULL, NULL);
 
