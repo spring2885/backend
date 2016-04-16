@@ -16,19 +16,19 @@ import com.google.common.base.Function;
 
 @Component
 public final class PersonConverters {
-    @Autowired
-    private SocialServiceService socialServiceService;
-    @Autowired
-    private PersonTypeService personTypeService;
-    @Autowired
-    private LanguageService languageService;
+	@Autowired
+	private SocialServiceService socialServiceService;
+	@Autowired
+	private PersonTypeService personTypeService;
+	@Autowired
+	private LanguageService languageService;
 
-    @Bean
-    public FromDbToJson personFromDbToJson() {
-        return new FromDbToJson();
-    }
+	@Bean
+	public FromDbToJson personFromDbToJson() {
+		return new FromDbToJson();
+	}
 
-    public static class FromDbToJson implements Function<DbPerson, Person> {
+	public static class FromDbToJson implements Function<DbPerson, Person> {
 
 		@Override
 		public Person apply(DbPerson db) {
@@ -57,7 +57,7 @@ public final class PersonConverters {
 			}
 			DbLanguage lang = db.getLanguage();
 			if (lang != null) {
-	            p.setLang(lang.getCode());
+				p.setLang(lang.getCode());
 			}
 			p.setLastLoginDate(db.getLastLogon());
 
@@ -69,32 +69,32 @@ public final class PersonConverters {
 				p.getSocialConnections().add(social);
 			}
 
-            p.setFacultyDepartment(db.getFacultyDepartment());
-            p.setAdmin(db.isAdmin());
+			p.setFacultyDepartment(db.getFacultyDepartment());
+			p.setAdmin(db.isAdmin());
 			return p;
 		}
 	}
 
-    @Bean
-    public JsonToDbConverter personJsonToDb() {
-        return new JsonToDbConverter();
-    }
-    
+	@Bean
+	public JsonToDbConverter personJsonToDb() {
+		return new JsonToDbConverter();
+	}
+
 	public class JsonToDbConverter {
 
 		JsonToDbConverter() {
 		}
 
 		public DbPerson apply(DbPerson db, Person p) {
-	        Map<String, DbSocialService> socialServices = 
-	                socialServiceService.findAll().stream()
-                    .collect(Collectors.toMap(DbSocialService::getName, (s) -> s));
-	        Map<String, DbPersonType> personTypes = 
-	                personTypeService.findAll().stream()
-                    .collect(Collectors.toMap(DbPersonType::getName, (s) -> s));
-	        Map<String, DbLanguage> languages = 
-	                languageService.findAll().stream()
-                    .collect(Collectors.toMap(DbLanguage::getCode, (s) -> s));
+			Map<String, DbSocialService> socialServices = 
+					socialServiceService.findAll().stream()
+					.collect(Collectors.toMap(DbSocialService::getName, (s) -> s));
+			Map<String, DbPersonType> personTypes = 
+					personTypeService.findAll().stream()
+					.collect(Collectors.toMap(DbPersonType::getName, (s) -> s));
+			Map<String, DbLanguage> languages = 
+					languageService.findAll().stream()
+					.collect(Collectors.toMap(DbLanguage::getCode, (s) -> s));
 
 			// Leave the ID null since we're updating an existing person.
 			db.setName(p.getName());
@@ -112,13 +112,13 @@ public final class PersonConverters {
 			if (personType != null && personTypes.containsKey(personType)) {
 				db.setType(personTypes.get(personType));
 			} else {
-			    db.setType(personTypeService.defaultType());
+				db.setType(personTypeService.defaultType());
 			}
 			String languageCode = p.getLang();
 			if (languageCode != null && languages.containsKey(languageCode)) {
-			    db.setLanguage(languages.get(languageCode));
+				db.setLanguage(languages.get(languageCode));
 			} else {
-			    db.setLanguage(languageService.defaultLanguage());
+				db.setLanguage(languageService.defaultLanguage());
 			}
 			db.setLastLogon(ConverterUtils.asSqlDate(p.getLastLoginDate()));
 
@@ -143,7 +143,7 @@ public final class PersonConverters {
 			db.setDegreeType(p.getDegreeType());
 			// faculty fields
 			db.setFacultyDepartment(p.getFacultyDepartment());
-			
+
 			// N.B. We never set the admin attribute back on
 			// the database object from the JSON object so that
 			// someone can not make themselves an admin.

@@ -36,8 +36,8 @@ public class DbJob implements Serializable {
 	private String location;
 	private String description;
 	private String company;
-	private Integer jobType;
-	private Integer hours;
+	private Long jobType;
+	private Long hours;
 	private Date startDate;
 	private Date endDate;
 
@@ -62,6 +62,13 @@ public class DbJob implements Serializable {
 	@LastModifiedDate
     private java.util.Date modificationTime;
     
+	public DbPerson getPerson() {
+        return person;
+    }
+
+    public void setPostedbypersonId(DbPerson personId) {
+        this.person = personId;
+    }
 	
 	public Long getId() {
 		return id;
@@ -102,32 +109,32 @@ public class DbJob implements Serializable {
 		this.company = company;
 	}
 
-	public int getjobType() {
+	public Long getjobType() {
 		return jobType;
 	}
-	public void setjobType(int jobType) {
+	public void setjobType(long jobType) {
 		this.jobType = jobType;
 	}
-	public int getHours() {
+	public Long getHours() {
 		return hours;
 	}
-	public void setHours(int hours) {
+	public void setHours(long hours) {
 		this.hours = hours;
 	}
 
-	public Date getStartDate() {
+	public Date getstartDate() {
 		return startDate;
 	}
 
-	public void setStartDate(Date startDate) {
+	public void setstartDate(Date startDate) {
 		this.startDate = startDate;
 	}
 
-	public Date getEndDate() {
+	public Date getendDate() {
 		return endDate;
 	}
 
-	public void setEndDate(Date endDate) {
+	public void setendDate(Date endDate) {
 		this.endDate = endDate;
 	}
 

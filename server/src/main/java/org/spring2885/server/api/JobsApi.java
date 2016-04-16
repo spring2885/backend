@@ -11,6 +11,7 @@ import org.spring2885.model.Job;
 import org.spring2885.server.api.exceptions.NotFoundException;
 import org.spring2885.server.api.utils.RequestHelper;
 import org.spring2885.server.db.model.DbJob;
+import org.spring2885.server.db.model.DbNews;
 import org.spring2885.server.db.model.DbPerson;
 import org.spring2885.server.db.model.JobConverters;
 import org.spring2885.server.db.service.JobService;
@@ -85,9 +86,7 @@ public class JobsApi {
 		
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
-	
-	
-	
+
 	
 	
 	
@@ -97,18 +96,19 @@ public class JobsApi {
 			SecurityContextHolderAwareRequestWrapper request)
 			throws NotFoundException {
 		
-		if (!requestHelper.checkAdminRequestIfNeeded(id, request)) {
-			String error = 
-					"Only admin's can change others... Read this: "
-					+ "God, grant me the serenity to accept the things I cannot change,"
-					+ "Courage to change the things I can,"
-					+ "And wisdom to know the difference.";
-			return new ResponseEntity<>(error, HttpStatus.FORBIDDEN);
-		}
+        DbJob db = jobService.findById(id);
+        if (db == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        if (!requestHelper.checkAdminRequestIfNeeded(db.getPerson().getId(), request)) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
 
 		jobService.delete(id);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
+
 
 	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<List<Job>> list(
