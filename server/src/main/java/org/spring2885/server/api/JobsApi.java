@@ -159,8 +159,7 @@ public class JobsApi {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
 
-		jsonToDbConverter.withDbJob(db);
-		DbJob updatedDbJob = jsonToDbConverter.apply(job);
+		DbJob updatedDbJob = jsonToDbConverter.apply(db, job);
 		jobService.save(updatedDbJob);
 		
 		return new ResponseEntity<>(HttpStatus.OK);
