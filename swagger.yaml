@@ -493,10 +493,19 @@ paths:
       description: |
         Adds a langauge based on a langauge code passed.
       responses:
+      #
         200:
-          description: Sucessful Response
+          description: Sucessful response
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Language'
         404:
           description: HttpStatus.NOT_FOUND
+          schema:
+            type: array
+            items:
+                $ref: '#/definitions/Language'
           
   /api/v1/socialservice:
     get:
@@ -517,7 +526,7 @@ paths:
           schema:
             type: array
             items:
-              $ref: '#/definitions/News'
+              $ref: '#/definitions/SocialService'
     post:
       tags: ["SocialService"]
       security:
