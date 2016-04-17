@@ -123,8 +123,6 @@ paths:
       responses:
         200:
           description: request for new password sent.
-          schema:
-            $ref: '#/definitions/Reset'
         500:
           description: error requesting for a password
   /auth/reset:
@@ -153,8 +151,6 @@ paths:
       responses:
         200:
           description: Successful resetting of the password.
-          schema:
-            $ref: '#/definitions/Reset'
         500:
           description: error setting new password
           
@@ -996,15 +992,6 @@ definitions:
       posted_by:
         type: object
         $ref: '#/definitions/Person'
-  Reset:
-    type: object
-    properties:
-      email:
-        type: string
-      token:
-        type: string
-      new_password:
-        type: string
 
   PersonType:
     type: object
