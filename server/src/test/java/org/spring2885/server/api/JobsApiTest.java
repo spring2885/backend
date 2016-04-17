@@ -199,23 +199,23 @@ public class JobsApiTest {
     	// the results that were setup by PersonService.
     }
 
-    @Ignore("TODO: Jen please fix.")
+    
     @Test
-    @WithMockUser(username="Title1",roles={"USER","ADMIN"})
+    @WithMockUser(username="Title",roles={"USER","ADMIN"})
     public void testDeleteJobsById() throws Exception {
     	// Setup the expectations.
+        when(jobService.findById(4)).thenReturn(dbMe);
     	when(jobService.delete(4)).thenReturn(true);
-    	//my mock is goiing to do thiss
+
     	mockMvc.perform(delete("/api/v1/jobs/4")
     			.accept(MediaType.APPLICATION_JSON))
     			.andExpect(status().isOk());
-    	
-    	// Ensure PersonService#delete method was called since the result of our
+    	// Ensure JobService#delete method was called since the result of our
     	// method is the same no matter what.
     	verify(jobService).delete(4);
     }
     
-    
+     
     @Test
     @WithMockUser(username="me@example.com",roles={"USER"})
     public void testPut_canNotFindMe() throws Exception {
