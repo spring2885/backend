@@ -1243,18 +1243,11 @@
         "email" : {
           "type" : "string"
         },
-        "phone" : {
-          "type" : "string"
-        },
         "occupation" : {
           "type" : "string"
         },
         "company_name" : {
           "type" : "string"
-        },
-        "birthdate" : {
-          "type" : "string",
-          "format" : "date"
         },
         "variety" : {
           "type" : "string"

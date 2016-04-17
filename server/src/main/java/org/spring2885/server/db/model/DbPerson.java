@@ -42,10 +42,8 @@ public class DbPerson {
 	private String resumeUrl;
 	private String imageUrl;
 	private String email;
-	private String phone;
 	private String occupation;
 	private String companyName;
-	private Date birthdate;
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="type")
 	private DbPersonType type;
@@ -150,12 +148,6 @@ public class DbPerson {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	public String getPhone() {
-		return phone;
-	}
-	public void setPhone(String phone) {
-		this.phone = phone;
-	}
 	public String getOccupation() {
 		return occupation;
 	}
@@ -167,12 +159,6 @@ public class DbPerson {
 	}
 	public void setCompanyName(String companyName) {
 		this.companyName = companyName;
-	}
-	public Date getBirthdate() {
-		return birthdate;
-	}
-	public void setBirthdate(Date birthdate) {
-		this.birthdate = birthdate;
 	}
 	public DbPersonType getType() {
 		return type;

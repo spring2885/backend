@@ -875,15 +875,10 @@ definitions:
         type: string
       email: 
         type: string
-      phone:
-        type: string
       occupation:
         type: string
       company_name:
         type: string
-      birthdate:
-        type: string
-        format: date
       variety:
         type: string #as in alum, faculty, student
       last_login_date:

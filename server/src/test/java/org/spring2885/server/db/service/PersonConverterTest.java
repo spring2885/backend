@@ -51,7 +51,6 @@ public class PersonConverterTest {
 		DbPerson dbp = new DbPerson();
 		dbp.setAboutMe("aboutme");
 		Date bday = new Date(System.currentTimeMillis());
-		dbp.setBirthdate(bday);
 		dbp.setCompanyName("company");
 		dbp.setDegreeMajor("CS");
 		dbp.setDegreeMinor("math");
@@ -65,7 +64,6 @@ public class PersonConverterTest {
 		dbp.setLastLogon(bday);
 		dbp.setName("Someone");
 		dbp.setOccupation("Bum");
-		dbp.setPhone("555-1212");
 		dbp.setResumeURL("linkedin.com/kewldude");
 		dbp.setStudentId(12345);
 		dbp.setTitle("Master of time and space");
@@ -74,7 +72,6 @@ public class PersonConverterTest {
 		Person p = personFromDbToJson.apply(dbp);
 		
 		assertEquals(dbp.getAboutMe(), p.getAboutMe());
-		assertEquals(bday.toString(), p.getBirthdate().toString());
 		assertEquals(dbp.getCompanyName(), p.getCompanyName());
 		assertEquals(dbp.getDegreeMajor(), p.getDegreeMajor());
 		assertEquals(dbp.getDegreeMinor(), p.getDegreeMinor());
@@ -87,7 +84,6 @@ public class PersonConverterTest {
 		assertEquals(dbp.getLastLogon().toString(), p.getLastLoginDate().toString());
 		assertEquals(dbp.getName(), p.getName());
 		assertEquals(dbp.getOccupation(), p.getOccupation());
-		assertEquals(dbp.getPhone(), p.getPhone());
 		assertEquals(dbp.getResumeURL(), p.getResumeUrl());
 		assertEquals(dbp.getStudentId(), p.getStudentId());
 		assertEquals(dbp.getTitle(), p.getTitle());
@@ -100,7 +96,6 @@ public class PersonConverterTest {
 
         Person p = new Person();
         p.setAboutMe("aboutMe");
-        p.setBirthdate(bday);
         p.setCompanyName("company");
         p.setDegreeMajor("CS");
         p.setDegreeMinor("math");
@@ -114,7 +109,6 @@ public class PersonConverterTest {
         p.setLastLoginDate(bday);
         p.setName("Someone");
         p.setOccupation("Bum");
-        p.setPhone("555-1212");
         p.setResumeUrl("linkedin.com/kewldude");
         p.setStudentId(12345);
         p.setTitle("Master of time and space");
@@ -123,7 +117,6 @@ public class PersonConverterTest {
 		DbPerson dbp = personJsonToDb.apply(new DbPerson(), p);
 		
         assertEquals(dbp.getAboutMe(), p.getAboutMe());
-        assertEquals(bday.toString(), p.getBirthdate().toString());
         assertEquals(dbp.getCompanyName(), p.getCompanyName());
         assertEquals(dbp.getDegreeMajor(), p.getDegreeMajor());
         assertEquals(dbp.getDegreeMinor(), p.getDegreeMinor());
@@ -136,7 +129,6 @@ public class PersonConverterTest {
         assertEquals(dbp.getLastLogon().toString(), p.getLastLoginDate().toString());
         assertEquals(dbp.getName(), p.getName());
         assertEquals(dbp.getOccupation(), p.getOccupation());
-        assertEquals(dbp.getPhone(), p.getPhone());
         assertEquals(dbp.getResumeURL(), p.getResumeUrl());
         assertEquals(dbp.getStudentId(), p.getStudentId());
         assertEquals(dbp.getTitle(), p.getTitle());

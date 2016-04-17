@@ -44,10 +44,8 @@ public final class PersonConverters {
 			p.setResumeUrl(db.getResumeURL());
 			p.setImageUrl(db.getImageURL());
 			p.setEmail(db.getEmail());
-			p.setPhone(db.getPhone());
 			p.setOccupation(db.getOccupation());
 			p.setCompanyName(db.getCompanyName());
-			p.setBirthdate(db.getBirthdate());
 			p.setGraduationYear(db.getGraduationYear());
 			DbPersonType personType = db.getType();
 			if (personType != null) {
@@ -104,10 +102,8 @@ public final class PersonConverters {
 			db.setResumeURL(p.getResumeUrl());
 			db.setImageURL(p.getImageUrl());
 			db.setEmail(p.getEmail());
-			db.setPhone(p.getPhone());
 			db.setOccupation(p.getOccupation());
 			db.setCompanyName(p.getCompanyName());
-			db.setBirthdate(ConverterUtils.asSqlDate(p.getBirthdate()));
 			String personType = p.getVariety();
 			if (personType != null && personTypes.containsKey(personType)) {
 				db.setType(personTypes.get(personType));
