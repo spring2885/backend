@@ -10,8 +10,8 @@ public interface JobRepository extends CrudRepository<DbJob, Long>, JpaSpecifica
 
     List<DbJob> findByTitle(String title);
 
-    List<DbJob> findByDescription(String description);
+	List<DbJob> findByDescription(String description);
     
     Iterable<DbJob> findAllByActiveAndAbuse(boolean active,boolean abuse);
     
-}
+}		
