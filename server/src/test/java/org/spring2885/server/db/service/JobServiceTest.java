@@ -57,7 +57,7 @@ public class JobServiceTest {
     	//when(repository.findAll()).thenReturn(Collections.emptyList());
     	when(repository.findAllByActiveAndAbuse(anyBoolean(), anyBoolean())).thenReturn(Collections.emptyList());
 
-    	List<DbJob> persons = Lists.newArrayList(service.findAll(criterias));
+    	//List<DbJob> persons = Lists.newArrayList(service.findAll(criterias));
     	
     
     }
