@@ -21,6 +21,7 @@ import org.spring2885.server.db.model.DbLanguage;
 import org.spring2885.server.db.model.DbNews;
 import org.spring2885.server.db.model.DbPerson;
 import org.spring2885.server.db.model.JobConverters;
+import org.spring2885.server.db.model.JobConverters.JobsFromDbToJson;
 import org.spring2885.server.db.model.PersonConverters;
 import org.spring2885.server.db.service.person.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +40,7 @@ public class JobConverterTest {
     @Autowired JobTypeService jobTypeService;
     @Autowired LanguageService languageService;
     @Autowired private JobConverters.JsonToDbConverter jsonToDb;
-    @Autowired private JobConverters.FromDbToJson dbToJson;
+    @Autowired private JobsFromDbToJson dbToJson;
     @Autowired
     PersonService personService;
     @Autowired

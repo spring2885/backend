@@ -1,4 +1,5 @@
 package org.spring2885.server.api;
+
 import static com.google.common.base.Preconditions.checkState;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
@@ -11,7 +12,6 @@ import org.spring2885.model.Job;
 import org.spring2885.server.api.exceptions.NotFoundException;
 import org.spring2885.server.api.utils.RequestHelper;
 import org.spring2885.server.db.model.DbJob;
-import org.spring2885.server.db.model.DbNews;
 import org.spring2885.server.db.model.DbPerson;
 import org.spring2885.server.db.model.JobConverters;
 import org.spring2885.server.db.service.JobService;
@@ -34,37 +34,119 @@ import com.google.common.collect.FluentIterable;
 @RestController
 @RequestMapping(value = "/api/v1/jobs", produces = { APPLICATION_JSON_VALUE })
 public class JobsApi {
-	private static final Logger logger = LoggerFactory.getLogger(JobsApi.class);
+	private static final Logger logger = LoggerFactory.getLogger(NewsApi.class);
 	
-	@Autowired
-	private JobService jobService;
-	
-	@Autowired
-	private JobConverters.JsonToDbConverter jsonToDbConverter;
-
     @Autowired
-    private JobConverters.FromDbToJson dbToJsonConverter;
+    private JobService jobsService;
+    
+    @Autowired
+    private JobConverters.JsonToDbConverter jobsJsonToDb;
+    
+    @Autowired
+    private JobConverters.JobsFromDbToJson dbToJsonConverter;
     
     @Autowired
     private SearchParser searchParser;
-
+    
     @Autowired
     private RequestHelper requestHelper;
-
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    
+	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public ResponseEntity<Job> get(
 			@PathVariable("id") int id) throws NotFoundException {
-		DbJob o = jobService.findById(id);
+		DbJob o = jobsService.findById(id);
 		if (o == null) {
-			// When adding test testJobsById_notFound, was getting a NullPointerException
+			// When adding test testPersonsById_notFound, was getting a NullPointerException
 			// here, so needed to add this.
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity<>(dbToJsonConverter.apply(o), HttpStatus.OK);
+
 	}
 
+	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+	public ResponseEntity<String> delete(
+			@PathVariable("id") Integer id,
+			SecurityContextHolderAwareRequestWrapper request)
+			throws NotFoundException {
+		
+        DbJob db = jobsService.findById(id);
+        if (db == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        if (!requestHelper.checkAdminRequestIfNeeded(db.getPerson().getId(), request)) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+
+		jobsService.delete(id);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+
+	@RequestMapping(method = RequestMethod.GET)
+	public ResponseEntity<List<Job>> list(
+			@RequestParam(value = "aq", required = false) String aq,
+            @RequestParam(value = "q", required = false) String q,
+            @RequestParam(value = "admin", required = false, defaultValue="false") boolean adminRequest,
+	        @RequestParam(value = "size", required = false) Integer size,
+	        SecurityContextHolderAwareRequestWrapper request)
+			throws NotFoundException {
+		logger.info("JobsApi GET: q={}, aq={}, size={}", q, aq, size);
+		
+		if (adminRequest && !requestHelper.isAdminRequest(request)) {
+	        return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+		}
+		
+		DbPerson me = requestHelper.loggedInUser(request);
+		
+	    Iterable<DbJob> all;
+	    if (!Strings.isNullOrEmpty(q)) {
+	        all = jobsService.findAll(me, adminRequest, q);
+	    } else if (!Strings.isNullOrEmpty(aq)) {
+	        List<SearchCriteria> criterias = searchParser.parse(aq);
+            all = jobsService.findAll(me, adminRequest, criterias);
+	    } else {
+	        all = jobsService.findAll(me, adminRequest);
+	    }
+		
+	    for (DbJob n : all) {
+	        logger.info("news={}", n.toString());
+	    }
+	    
+		FluentIterable<Job> iterable = FluentIterable.from(all)
+				.transform(dbToJsonConverter);
+		// Support size parameter, but only if it's set (and not 0)
+		if (size != null && size.intValue() > 0) {
+		    iterable.limit(size);
+		}
+		return new ResponseEntity<>(iterable.toList(), HttpStatus.OK);
+	}
 	
-	
+	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+	public ResponseEntity<Void> put(
+			@PathVariable("id") Integer id,
+			@RequestBody Job jobs,
+			SecurityContextHolderAwareRequestWrapper request) throws NotFoundException {
+		
+		if (id.longValue() != jobs.getId().longValue()) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+
+        DbJob db = jobsService.findById(id);
+        if (db == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        if (!requestHelper.checkAdminRequestIfNeeded(db.getPerson().getId(), request)) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+		
+		DbJob updatedDbNews = jobsJsonToDb.apply(db, jobs);
+		
+		jobsService.save(updatedDbNews);
+		
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
 	
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<Void> post(
@@ -75,94 +157,16 @@ public class JobsApi {
         DbPerson me = requestHelper.loggedInUser(request);
         checkState(me != null);
 
-	    // Create our DbJob version
-	    DbJob db = jsonToDbConverter.apply(new DbJob(), jobs);
+	    // Create our DbNews version
+	    DbJob db = jobsJsonToDb.apply(new DbJob(), jobs);
         // Since we are doing a post, set defaults.
 	    db.setId(null);
 	    db.setPostedBy(me);
 	    
 	    
-		jobService.save(db);
+		jobsService.save(db);
 		
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 
-	
-	
-	
-	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-	public ResponseEntity<String> delete(
-			@PathVariable("id") Integer id,
-			SecurityContextHolderAwareRequestWrapper request)
-			throws NotFoundException {
-		
-        DbJob db = jobService.findById(id);
-        if (db == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
-        if (!requestHelper.checkAdminRequestIfNeeded(db.getPerson().getId(), request)) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-        }
-
-		jobService.delete(id);
-		return new ResponseEntity<>(HttpStatus.OK);
-	}
-
-
-	@RequestMapping(method = RequestMethod.GET)
-	public ResponseEntity<List<Job>> list(
-	        @RequestParam(value = "aq", required = false) String aq,
-            @RequestParam(value = "q", required = false) String q,
-	        @RequestParam(value = "size", required = false) Integer size
-	        ) throws NotFoundException {
-	    logger.info("JobsApi GET: q={}, aq={}, size={}", q, aq, size);
-	    Iterable<DbJob> all;
-	    if (!Strings.isNullOrEmpty(q)) {
-	        all = jobService.findAll(q);
-	    } else if (!Strings.isNullOrEmpty(aq)) {
-	        List<SearchCriteria> criterias = searchParser.parse(aq);
-            all = jobService.findAll(criterias);
-	    } else {
-	        all = jobService.findAll();
-	    }
-		
-		FluentIterable<Job> iterable = FluentIterable.from(all)
-				.transform(dbToJsonConverter);
-		// Support size parameter, but only if it's set (and not 0)
-		if (size != null && size.intValue() > 0) {
-		    iterable.limit(size);
-		}
-		return new ResponseEntity<>(iterable.toList(), HttpStatus.OK);
-	}
-
-	
-	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-	public ResponseEntity<Void> put(
-			@PathVariable("id") Integer id,
-			@RequestBody Job job,
-			SecurityContextHolderAwareRequestWrapper request) throws NotFoundException {
-	    
-	    logger.info("PUT /jobs/{}", id);
-		
-		if (id.intValue() != job.getId().intValue()) {
-            logger.info("PUT /jobs/{}: Id doesn't match ", id);
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		}
-		DbJob db = jobService.findById(id);
-		if (db == null) {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
-
-        if (!requestHelper.checkAdminRequestIfNeeded(db.getPostedBy().getId(), request)) {
-            logger.info("PUT /jobs/{}: Forbidden: (not admin and not yours) ", id);
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-        }
-
-		DbJob updatedDbJob = jsonToDbConverter.apply(db, job);
-		jobService.save(updatedDbJob);
-		
-		return new ResponseEntity<>(HttpStatus.OK);
-	}
-	
 }
