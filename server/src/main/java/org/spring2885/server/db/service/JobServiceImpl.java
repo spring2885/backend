@@ -2,8 +2,11 @@ package org.spring2885.server.db.service;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.spring2885.server.db.model.DbJob;
+import org.spring2885.server.db.model.DbPerson;
+import org.spring2885.server.db.model.DbPersonType;
 import org.spring2885.server.db.service.search.SearchCriteria;
 import org.spring2885.server.db.service.search.SearchCriteriaSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +24,7 @@ public class JobServiceImpl implements JobService {
 	private final JobRepository repository;
 	
 	@Autowired
-	public JobServiceImpl(JobRepository repository) {
+	JobServiceImpl(JobRepository repository) {
 		this.repository = repository;
 	}
 	
@@ -29,72 +32,40 @@ public class JobServiceImpl implements JobService {
 	public DbJob findById(long id) {
 		return repository.findOne(id);
 	}
-
+	
+    @Override
+    public Iterable<DbJob> findAll(DbPerson me, boolean all) {
+        if (all) {
+            return repository.findAll();
+        }
+        return repository.findAllByActiveAndAbuse(true, false);
+                
+    }
+    
 	@Override
-	public Iterable<DbJob> findAll() {
-		return repository.findAll();
+    public Iterable<DbJob> findAll(DbPerson me, boolean all, String q) {
+	    return repository.findAll(me, all,q);
+    }
+	
+	@Override
+	public boolean delete(long id) {
+		DbJob n = findById(id);
+		if(n != null) {
+			repository.delete(id);
+			return true;
+		}
+		return false;
 	}
 	
 	@Override
-    public Iterable<DbJob> findAll(String q) {
-        // TODO(rob): Push this filter into the DB.
-        return Iterables.filter(findAll(), new Predicate<DbJob>() {
-            @Override
-            public boolean apply(DbJob p) {
-                if (p.getTitle() != null && p.getTitle().contains(q)) {
-                    return true;
-                }
-                if (p.getDescription() != null && p.getDescription().contains(q)) {
-                    return true;
-                }
-                if (p.getLocation() != null && p.getLocation().contains(q)) {
-                    return true;
-                }
-                return false;
-            }
-        });
-    }
-    
-     @Override
-    public DbJob findByTitle(String title) {
-        List<DbJob> candidates = repository.findByTitle(title);
-        // Since the email column has a unique constraint on it, there can
-        // only be 0 or 1 DbPerson's returned.
-        if (candidates.isEmpty()) {
-            return null;
-        }
-        return Iterables.getOnlyElement(candidates);
-    }
-
-    @Override
-    public boolean delete(long id) {
-        DbJob p = findById(id);
-        if (p != null) {
-            repository.delete(id);
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public boolean existsByTitle(String title) {
-        return findByTitle(title) != null;
-    }
-
-    @Override
-    public DbJob save(DbJob job) {
-        return repository.save(job);
-    }
-
-    @Override
-    public List<DbJob> findByDescription(String description) {
-        return repository.findByDescription(description);
-    }
-
-    @Override
-    public Iterable<DbJob> findAll(List<SearchCriteria> criterias) {
+	public DbJob save(DbJob jobs) {
+		return repository.save(jobs);
+	}
+	
+	@Override
+    public Iterable<DbJob> findAll(DbPerson me, boolean all, List<SearchCriteria> criterias) {
         if (criterias.isEmpty()) {
-            return findAll();
+            return findAll(me, all);
         }
         Iterator<SearchCriteria> iter = criterias.iterator();
         Specification<DbJob> specs = new SearchCriteriaSpecification<>(iter.next());
@@ -102,10 +73,21 @@ public class JobServiceImpl implements JobService {
             specs = Specifications.where(specs).and(new SearchCriteriaSpecification<>(iter.next()));
         }
         return repository.findAll(specs);
+                
     }
-
-    public Iterable<DbJob> findAllByActiveandAbuse(boolean active,boolean abuse) {
-    	     	return repository.findAllByActiveAndAbuse(active,abuse);
-    	     }
-
+	    
+       
+	
+	static class SearchFilter implements Predicate<DbJob> {
+	    private final String q;
+	    public SearchFilter(String q) { this.q = q; }
+	    
+        @Override
+        public boolean apply(DbJob p) {
+            if (p.getTitle() != null && p.getTitle().contains(q)) {
+                return true;
+            }
+            return false;
+        }
+	}
 }

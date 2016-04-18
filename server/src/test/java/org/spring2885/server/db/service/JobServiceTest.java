@@ -36,7 +36,7 @@ public class JobServiceTest {
         service = new JobServiceImpl(repository);
 
     	// return empty list by default
-    	when(repository.findByTitle(anyString())).thenReturn(Collections.emptyList());
+    	when(repository.existsByTitle(anyString())).thenReturn(Collections.emptyList());
     }
     
     @Ignore("TODO: Jen please fix.")
