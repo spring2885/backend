@@ -3,7 +3,6 @@ package org.spring2885.server.api;
 import static com.google.common.base.Preconditions.checkState;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-import java.sql.Date;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -34,10 +33,10 @@ import com.google.common.collect.FluentIterable;
 @RestController
 @RequestMapping(value = "/api/v1/jobs", produces = { APPLICATION_JSON_VALUE })
 public class JobsApi {
-	private static final Logger logger = LoggerFactory.getLogger(NewsApi.class);
+	private static final Logger logger = LoggerFactory.getLogger(JobsApi.class);
 	
     @Autowired
-    private JobService jobsService;
+    private JobService jobService;
     
     @Autowired
     private JobConverters.JsonToDbConverter jobsJsonToDb;
@@ -54,7 +53,7 @@ public class JobsApi {
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public ResponseEntity<Job> get(
 			@PathVariable("id") int id) throws NotFoundException {
-		DbJob o = jobsService.findById(id);
+		DbJob o = jobService.findById(id);
 		if (o == null) {
 			// When adding test testPersonsById_notFound, was getting a NullPointerException
 			// here, so needed to add this.
@@ -70,7 +69,7 @@ public class JobsApi {
 			SecurityContextHolderAwareRequestWrapper request)
 			throws NotFoundException {
 		
-        DbJob db = jobsService.findById(id);
+        DbJob db = jobService.findById(id);
         if (db == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -79,7 +78,7 @@ public class JobsApi {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
 
-		jobsService.delete(id);
+		jobService.delete(id);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
@@ -101,12 +100,12 @@ public class JobsApi {
 		
 	    Iterable<DbJob> all;
 	    if (!Strings.isNullOrEmpty(q)) {
-	        all = jobsService.findAll(me, adminRequest, q);
+	        all = jobService.findAll(me, adminRequest, q);
 	    } else if (!Strings.isNullOrEmpty(aq)) {
 	        List<SearchCriteria> criterias = searchParser.parse(aq);
-            all = jobsService.findAll(me, adminRequest, criterias);
+            all = jobService.findAll(me, adminRequest, criterias);
 	    } else {
-	        all = jobsService.findAll(me, adminRequest);
+	        all = jobService.findAll(me, adminRequest);
 	    }
 		
 	    for (DbJob n : all) {
@@ -132,7 +131,7 @@ public class JobsApi {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 
-        DbJob db = jobsService.findById(id);
+        DbJob db = jobService.findById(id);
         if (db == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -143,7 +142,7 @@ public class JobsApi {
 		
 		DbJob updatedDbNews = jobsJsonToDb.apply(db, jobs);
 		
-		jobsService.save(updatedDbNews);
+		jobService.save(updatedDbNews);
 		
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
@@ -164,7 +163,7 @@ public class JobsApi {
 	    db.setPostedBy(me);
 	    
 	    
-		jobsService.save(db);
+		jobService.save(db);
 		
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}

@@ -51,7 +51,7 @@ public class JobsApiTest {
     protected MockMvc mockMvc;
     
     @Autowired protected WebApplicationContext webappContext;
-    @Autowired private JobService jobsService;
+    @Autowired private JobService jobService;
     @Autowired private PersonService personService;
   
     private DbPerson me;
@@ -60,7 +60,7 @@ public class JobsApiTest {
     
     @Before
     public void setup() {
-        reset(jobsService);
+        reset(jobService);
         reset(personService);
         mockMvc = webAppContextSetup(webappContext)
         		.apply(SecurityMockMvcConfigurers.springSecurity())
@@ -101,7 +101,7 @@ public class JobsApiTest {
     @WithMockUser
     public void testJobs() throws Exception {
     	// Setup the expectations.
-    	when(jobsService.findAll(any(DbPerson.class), eq(false)))
+    	when(jobService.findAll(any(DbPerson.class), eq(false)))
     		.thenReturn(ImmutableList.of(
     			createDbJob(5,  "Title"),
     			createDbJob(5,  "Title2")));
@@ -118,7 +118,7 @@ public class JobsApiTest {
     @WithMockUser
     public void testJobs_q() throws Exception {
         // Setup the expectations.
-        when(jobsService.findAll(any(DbPerson.class), eq(false), eq("title2")))
+        when(jobService.findAll(any(DbPerson.class), eq(false), eq("title2")))
             .thenReturn(ImmutableList.of(
                 createDbJob(5,  "title2")));
         
@@ -134,7 +134,7 @@ public class JobsApiTest {
     public void testJobs_aq() throws Exception {
         // Setup the expectations.
         SearchCriteria expected = new SearchCriteria("title", SearchOperator.EQ, "title2*");
-        when(jobsService.findAll(any(DbPerson.class), eq(false), eq(Collections.singletonList(expected))))
+        when(jobService.findAll(any(DbPerson.class), eq(false), eq(Collections.singletonList(expected))))
             .thenReturn(ImmutableList.of(
                 createDbJob(5,  "title2")));
         
@@ -155,7 +155,7 @@ public class JobsApiTest {
     	DbJob p = new DbJob();
     	p.setTitle("ThisTitle");
     	p.setPostedbypersonId(me);
-    	when(jobsService.findById(21)).thenReturn(p);
+    	when(jobService.findById(21)).thenReturn(p);
     	
     	mockMvc.perform(get("/api/v1/jobs/21")
     			.accept(MediaType.APPLICATION_JSON))
@@ -174,7 +174,7 @@ public class JobsApiTest {
     @WithMockUser
     public void testJobsById_notFound() throws Exception {
     	// Setup the expectations.
-    	when(jobsService.findById(21)).thenReturn(null);
+    	when(jobService.findById(21)).thenReturn(null);
     	
     	mockMvc.perform(get("/api/v1/jobs/21")
     			.accept(MediaType.APPLICATION_JSON))
@@ -188,22 +188,22 @@ public class JobsApiTest {
     @WithMockUser(username="Title",roles={"USER","ADMIN"})
     public void testDeleteJobsById() throws Exception {
     	// Setup the expectations.
-        when(jobsService.findById(4)).thenReturn(dbJobs);
-    	when(jobsService.delete(4)).thenReturn(true);
+        when(jobService.findById(4)).thenReturn(dbJobs);
+    	when(jobService.delete(4)).thenReturn(true);
 
     	mockMvc.perform(delete("/api/v1/jobs/4")
     			.accept(MediaType.APPLICATION_JSON))
     			.andExpect(status().isOk());
     	// Ensure PersonService#delete method was called since the result of our
     	// method is the same no matter what.
-    	verify(jobsService).delete(4);
+    	verify(jobService).delete(4);
     }
     
     @Test
     @WithMockUser(username="Title",roles={"USER"})
     public void testPut() throws Exception {
         // Setup the expectations.
-        when(jobsService.findById(4)).thenReturn(dbJobs);
+        when(jobService.findById(4)).thenReturn(dbJobs);
         
         mockMvc.perform(put("/api/v1/jobs/4")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -211,14 +211,14 @@ public class JobsApiTest {
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden());
         
-        verify(jobsService, never()).save(Mockito.any(DbJob.class));
+        verify(jobService, never()).save(Mockito.any(DbJob.class));
     }
 
     @Test
     @WithMockUser(username="other@",roles={"USER"})
     public void testPut_canNotFindMe() throws Exception {
     	// Setup the expectations.
-        when(jobsService.findById(4)).thenReturn(dbJobs);
+        when(jobService.findById(4)).thenReturn(dbJobs);
     	
     	mockMvc.perform(put("/api/v1/jobs/4")
     			.contentType(MediaType.APPLICATION_JSON)
@@ -226,7 +226,7 @@ public class JobsApiTest {
     			.accept(MediaType.APPLICATION_JSON))
     			.andExpect(status().isForbidden());
     	
-    	verify(jobsService, never()).save(Mockito.any(DbJob.class));
+    	verify(jobService, never()).save(Mockito.any(DbJob.class));
     }
    
 }

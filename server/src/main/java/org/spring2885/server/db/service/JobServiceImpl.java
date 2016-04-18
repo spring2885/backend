@@ -2,11 +2,9 @@ package org.spring2885.server.db.service;
 
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import org.spring2885.server.db.model.DbJob;
 import org.spring2885.server.db.model.DbPerson;
-import org.spring2885.server.db.model.DbPersonType;
 import org.spring2885.server.db.service.search.SearchCriteria;
 import org.spring2885.server.db.service.search.SearchCriteriaSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +42,7 @@ public class JobServiceImpl implements JobService {
     
 	@Override
     public Iterable<DbJob> findAll(DbPerson me, boolean all, String q) {
-	    return repository.findAll(me, all,q);
+        return Iterables.filter(findAll(me, all), new SearchFilter(q));
     }
 	
 	@Override
@@ -73,11 +71,8 @@ public class JobServiceImpl implements JobService {
             specs = Specifications.where(specs).and(new SearchCriteriaSpecification<>(iter.next()));
         }
         return repository.findAll(specs);
-                
     }
 	    
-       
-	
 	static class SearchFilter implements Predicate<DbJob> {
 	    private final String q;
 	    public SearchFilter(String q) { this.q = q; }
@@ -87,6 +82,7 @@ public class JobServiceImpl implements JobService {
             if (p.getTitle() != null && p.getTitle().contains(q)) {
                 return true;
             }
+            // TODO(jen): Finish this.
             return false;
         }
 	}

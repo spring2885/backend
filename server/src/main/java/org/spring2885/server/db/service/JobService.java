@@ -39,9 +39,4 @@ public interface JobService {
 	 * Saves (Inserts) the {@code news} into the database.
 	 */
 	DbJob save(DbJob jobs);
-
-	/** Returns {@code true} if a user exists for this email address. */
-	boolean existsByTitle(String title);
-
-	
 }
