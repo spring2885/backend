@@ -19,7 +19,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
-import org.spring2885.model.Reset;
 import org.spring2885.server.db.model.DbPerson;
 import org.spring2885.server.db.model.DbToken;
 import org.spring2885.server.db.service.TokenService;
@@ -74,14 +73,6 @@ public class PasswordApiTest {
 		createdToken1.setUuid(uuid.toString());
 		createdToken1.setDateCreated(new java.sql.Date(System.currentTimeMillis()));
 		return createdToken1;
-	}
-	
-	static Reset createReset(String email, UUID token, String newPassword){
-		Reset createdReset1 = new Reset();
-		createdReset1.setEmail(email);
-		createdReset1.setToken(token.toString());
-		createdReset1.setNewPassword(newPassword);
-		return createdReset1;
 	}
 	
 	void makeMeFound(){
