@@ -80,9 +80,6 @@ public final class PersonConverters {
 
 	public class JsonToDbConverter {
 
-		JsonToDbConverter() {
-		}
-
 		public DbPerson apply(DbPerson db, Person p) {
 			Map<String, DbSocialService> socialServices = 
 					socialServiceService.findAll().stream()
@@ -106,7 +103,15 @@ public final class PersonConverters {
 			db.setCompanyName(p.getCompanyName());
 			String personType = p.getVariety();
 			if (personType != null && personTypes.containsKey(personType)) {
-				db.setType(personTypes.get(personType));
+			    // We have a persontype.  let's make sure we're not making a faculty.
+			    DbPersonType newPersonType = personTypes.get(personType);
+			    DbPersonType faculty = personTypeService.facultyType();
+			    if (!faculty.equals(db.getType()) && faculty.equals(newPersonType)) {
+			        // We don't do that. reset to default.
+	                db.setType(personTypeService.defaultType());
+			    } else {
+	                db.setType(newPersonType);
+			    }
 			} else {
 				db.setType(personTypeService.defaultType());
 			}
