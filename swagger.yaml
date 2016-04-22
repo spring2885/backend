@@ -927,9 +927,6 @@ definitions:
       end_date:
         type: string
         format: date
-      posted_by_person_id:
-        type: integer
-        format: int64
       hours:
         type: integer
         format: int64

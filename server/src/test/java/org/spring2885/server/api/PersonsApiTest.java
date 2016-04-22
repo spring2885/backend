@@ -1,5 +1,6 @@
 package org.spring2885.server.api;
 
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.reset;
@@ -21,6 +22,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 import org.spring2885.model.Person;
 import org.spring2885.server.db.model.DbLanguage;
@@ -56,6 +58,8 @@ public class PersonsApiTest {
     @Autowired PersonTypeService personTypeService;
     @Autowired LanguageService languageService;
     
+    private DbPersonType defaultPersonType;
+    private DbPersonType faculty;
     private DbPerson dbMe;
     private Person me;
     private DbPerson otherDbPerson;
@@ -72,15 +76,18 @@ public class PersonsApiTest {
         		.apply(SecurityMockMvcConfigurers.springSecurity())
         		.dispatchOptions(true)
         		.build();
+        // Our tests assume a single default person type of student.
+        defaultPersonType = new DbPersonType(0, "student");
+        when(personTypeService.defaultType()).thenReturn(defaultPersonType);
+        
+        faculty = new DbPersonType(2,  "faculty");
+        when(personTypeService.facultyType()).thenReturn(faculty);
+        when(personTypeService.findAll()).thenReturn(ImmutableSet.of(defaultPersonType, faculty));
+
         dbMe = createDbPerson(4, "me@example.com", "aboutMe");
         me = createPerson(4, "me@example.com", "aboutMe");
         otherPerson = createPerson(21, "other@example.com", "user 21");
         otherDbPerson = createDbPerson(21, "other@example.com", "user 21");
-        
-        // Our tests assume a single default person type of student.
-        DbPersonType defaultPersonType = new DbPersonType(0, "student");
-        when(personTypeService.defaultType()).thenReturn(defaultPersonType);
-        when(personTypeService.findAll()).thenReturn(Collections.singleton(defaultPersonType));
         
         DbLanguage enLanguage = new DbLanguage("en", "English");
         DbLanguage defaultLanguage = new DbLanguage("eo", "Esperanto");
@@ -88,16 +95,17 @@ public class PersonsApiTest {
         when(languageService.findAll()).thenReturn(ImmutableSet.of(enLanguage, defaultLanguage));
     }
     
-    static DbPerson createDbPerson(long id, String email, String aboutMe) {
+    private DbPerson createDbPerson(long id, String email, String aboutMe) {
     	DbPerson p = new DbPerson();
     	p.setId(id);
     	p.setEmail(email);
     	p.setAboutMe(aboutMe);
     	p.setLanguage(new DbLanguage("eo", "Esperanto"));
+    	p.setType(defaultPersonType);
     	return p;
     }
     
-    static Person createPerson(long id, String email, String aboutMe) {
+    private Person createPerson(long id, String email, String aboutMe) {
     	Person p = new Person();
     	p.setId(id);
     	p.setEmail(email);
@@ -258,6 +266,28 @@ public class PersonsApiTest {
     			.andExpect(status().isOk());
     	
     	verify(personService).save(Mockito.any(DbPerson.class));
+    }
+    
+    @Test
+    @WithMockUser(username="me@example.com",roles={"USER"})
+    public void testPut_canNotMakeFaculty() throws Exception {
+        // Setup the expectations.
+        makeMeFound();
+        
+        me.setVariety("faculty");
+        
+        mockMvc.perform(put("/api/v1/profiles/4")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsBytes(me))
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+
+        ArgumentCaptor<DbPerson> personCaptor = ArgumentCaptor.forClass(DbPerson.class);        
+        verify(personService).save(personCaptor.capture());
+        
+        DbPerson actual = personCaptor.getValue();
+        assertEquals(defaultPersonType.getId(), actual.getType().getId());
+        System.out.println(personCaptor.getValue());
     }
     
     @Test

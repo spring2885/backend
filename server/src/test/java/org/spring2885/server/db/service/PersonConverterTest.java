@@ -44,6 +44,7 @@ public class PersonConverterTest {
         DbPersonType t2 = new DbPersonType(1, "faculty");
         when(personTypeService.findAll()).thenReturn(ImmutableSet.of(t1, t2));
         when(personTypeService.defaultType()).thenReturn(t1);
+        when(personTypeService.facultyType()).thenReturn(t2);
     }
 	
 	@Test
