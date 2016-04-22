@@ -49,14 +49,19 @@ public final class JobConverters {
 			if (!Strings.isNullOrEmpty(p.getDescription())) {
 			    db.setDescription(p.getDescription());
 			}
+			
+			db.setTitle(p.getTitle());
+			db.setCompany(p.getCompany());
+			db.setLocation(p.getLocation());
+			db.setjobType(p.getJobType());
+		
 			Person postedBy = p.getPostedBy();
 			if (postedBy != null 
 			    && !Strings.isNullOrEmpty(postedBy.getEmail()) 
 			    && db.getPerson() == null) {
 			    DbPerson dbPostedBy = personService.findByEmail(postedBy.getEmail());
-			    db.setPostedBy(dbPostedBy);
+			    db.setPostedBy(dbPostedBy);    
 			}
-			// TODO(jen): Finish setting these.
 			return db;
 		}
 	}
