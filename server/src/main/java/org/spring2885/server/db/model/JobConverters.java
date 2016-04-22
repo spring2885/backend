@@ -1,9 +1,10 @@
 package org.spring2885.server.db.model;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.spring2885.model.Job;
 import org.spring2885.model.Person;
 import org.spring2885.server.db.service.person.PersonService;
-import org.spring2885.server.db.service.person.PersonTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
@@ -13,10 +14,9 @@ import com.google.common.base.Strings;
 
 @Component
 public final class JobConverters {
+    private static final Logger logger = LoggerFactory.getLogger(JobConverters.class);
     @Autowired
     private PersonService personService;
-    @Autowired
-    private PersonTypeService personTypeService;
     @Autowired
     private PersonConverters.FromDbToJson personFromDbToJson;
    
@@ -35,6 +35,12 @@ public final class JobConverters {
             j.setHours(db.getHours());
             j.setStartDate(db.getstartDate());
             j.setEndDate(db.getendDate());
+            DbPerson dbPerson = db.getPerson();
+            if (dbPerson != null) {
+                j.setPostedBy(personFromDbToJson.apply(dbPerson));
+            } else {
+                logger.info("job {} had a null posted_by", db.getId());
+            }
             
             return j;
 		}

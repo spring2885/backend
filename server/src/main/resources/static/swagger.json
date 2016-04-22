@@ -1117,10 +1117,7 @@
         } ],
         "responses" : {
           "200" : {
-            "description" : "request for new password sent.",
-            "schema" : {
-              "$ref" : "#/definitions/Reset"
-            }
+            "description" : "request for new password sent."
           },
           "500" : {
             "description" : "error requesting for a password"
@@ -1154,10 +1151,7 @@
         } ],
         "responses" : {
           "200" : {
-            "description" : "Successful resetting of the password.",
-            "schema" : {
-              "$ref" : "#/definitions/Reset"
-            }
+            "description" : "Successful resetting of the password."
           },
           "500" : {
             "description" : "error setting new password"
@@ -1321,10 +1315,6 @@
           "type" : "string",
           "format" : "date"
         },
-        "posted_by_person_id" : {
-          "type" : "integer",
-          "format" : "int64"
-        },
         "hours" : {
           "type" : "integer",
           "format" : "int64"
@@ -1407,20 +1397,6 @@
         },
         "posted_by" : {
           "$ref" : "#/definitions/Person"
-        }
-      }
-    },
-    "Reset" : {
-      "type" : "object",
-      "properties" : {
-        "email" : {
-          "type" : "string"
-        },
-        "token" : {
-          "type" : "string"
-        },
-        "new_password" : {
-          "type" : "string"
         }
       }
     },
