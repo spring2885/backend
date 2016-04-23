@@ -201,6 +201,18 @@
           "required" : false,
           "type" : "integer",
           "format" : "int64"
+        }, {
+          "name" : "q",
+          "in" : "query",
+          "description" : "## Basic query string.\n### Format:\n  ```?q=search terms```\n\n### Example:\n  ```?q=Oracle```\n",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "aq",
+          "in" : "query",
+          "description" : "## Advanced query string.\n### Format:\n  ```?aq=(attribute OP term),...```\n\n### Example:\n  ```?aq=graduation_year>2000,occupation:manager```\n\n### Available OPs:\n  * ':' for equality\n  * '!' for not\n  * '>' greater than\n  * '<' less than\n",
+          "required" : false,
+          "type" : "string"
         } ],
         "responses" : {
           "200" : {
