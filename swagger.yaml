@@ -496,7 +496,7 @@ paths:
           schema:
             type: array
             items:
-              $ref: '#/definitions/News'
+              $ref: '#/definitions/SocialService'
     post:
       tags: ["SocialService"]
       security:
