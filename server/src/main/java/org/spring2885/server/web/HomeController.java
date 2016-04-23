@@ -8,11 +8,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-public class StaticController {
+public class HomeController {
     @Value("${app.name}")
     private String appName;
     
-    @RequestMapping("/home")
+    @RequestMapping( value = { "/home", "/" })
     public String home(Map<String, Object> model) {
 		model.put("message",
 			"This server is only for service APIs.\n"

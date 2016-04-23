@@ -37,6 +37,7 @@ public class MailerImpl implements Mailer {
     public void send(String email, String templateName, String title, 
             Map<String, String> data) throws IOException, URISyntaxException {
         
+        logger.info("Sending mail to: {}, template: {}", email, templateName);
         String text = new String(Files.readAllBytes(Paths.get(getClass().getResource(templateName).toURI())));
         Template tmpl = Mustache.compiler().compile(text); 
         String body = tmpl.execute(data);

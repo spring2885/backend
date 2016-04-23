@@ -8,7 +8,6 @@ import org.spring2885.server.db.model.DbJobType;
 import org.spring2885.server.db.service.search.SearchCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.collect.Iterables;
 

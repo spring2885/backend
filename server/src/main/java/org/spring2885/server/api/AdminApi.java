@@ -77,7 +77,7 @@ public class AdminApi {
     public ResponseEntity<Void> faculty(
             @RequestBody FacultyRequest f,
             SecurityContextHolderAwareRequestWrapper wrapper) throws NotFoundException {
-        logger.info(f.toString());
+        logger.info("/request/faculty: {}", f.toString());
         
         DbPerson loggedInUser = requestHelper.loggedInUser(wrapper);
         
@@ -92,7 +92,7 @@ public class AdminApi {
     public ResponseEntity<Void> abuse(
             @RequestBody AbuseRequest a,
             SecurityContextHolderAwareRequestWrapper wrapper) throws NotFoundException {
-        logger.info(a.toString());
+        logger.info("/request/abuse: {}", a.toString());
         DbPerson loggedInUser = requestHelper.loggedInUser(wrapper);
         
         DbApprovalRequest db = abuseRequestToDbApproval.create(a, loggedInUser);
@@ -107,7 +107,7 @@ public class AdminApi {
             @RequestBody Verdict verdict,
             SecurityContextHolderAwareRequestWrapper wrapper) throws NotFoundException {
         
-        logger.info(verdict.toString());
+        logger.info("/verdict: {}", verdict.toString());
         if (!wrapper.isUserInRole("ROLE_ADMIN")) {
             logger.info("/verdict: User {} is not an admin, returning forbidden", wrapper.getRemoteUser());
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
@@ -174,7 +174,7 @@ public class AdminApi {
             @RequestParam(value = "state", required = false) String state,
             @RequestParam(value = "type", required = false) String type,
             SecurityContextHolderAwareRequestWrapper wrapper) throws NotFoundException {
-        logger.info("AdminApi list : state={}, type={}", state, type);
+        logger.info("/abuse/list: state={}, type={}", state, type);
         if (!wrapper.isUserInRole("ROLE_ADMIN")) {
             logger.info("/verdict: User {} is not an admin, returning forbidden", wrapper.getRemoteUser());
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);

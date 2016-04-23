@@ -29,9 +29,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "/auth", produces = { APPLICATION_JSON_VALUE })
-public class PasswordApi {
+public class AuthApi {
 
-	private static final Logger logger = LoggerFactory.getLogger(PasswordApi.class);
+	private static final Logger logger = LoggerFactory.getLogger(AuthApi.class);
 
 	@Autowired
 	TokenService tokenService;
@@ -50,6 +50,7 @@ public class PasswordApi {
 
 	@RequestMapping(value = "/forgot", method = RequestMethod.POST)
 	public ResponseEntity<Void> forgot(@RequestParam("email") String email) throws NotFoundException {
+	    logger.info("/auth/forgot: {}", email);
 
 		DbPerson p = personService.findByEmail(email);
 
@@ -87,8 +88,11 @@ public class PasswordApi {
 	}
 
 	@RequestMapping(value = "/reset", method = RequestMethod.POST)
-	public ResponseEntity<Void> reset(@RequestParam("email") String email, @RequestParam("token") String tokenString,
+	public ResponseEntity<Void> reset(
+	        @RequestParam("email") String email,
+	        @RequestParam("token") String tokenString,
 			@RequestParam("newPassword") String newPassword) throws Exception {
+        logger.info("/auth/reset: {}, token: {}", email, tokenString);
 
 		if (!tokenService.existsByEmail(email)) {
 			logger.info("token does not exist for email: {}", email);
@@ -128,7 +132,6 @@ public class PasswordApi {
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 
-	// TODO: this is never visited either
 	private DbToken findToken(Iterable<DbToken> tokens, String uuid) {
 		for (DbToken t : tokens) {
 			if (uuid.equals(t.getUuid())) {
