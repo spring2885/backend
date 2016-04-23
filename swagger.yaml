@@ -398,6 +398,8 @@ paths:
         size of returned array
       parameters:
         - $ref: '#/parameters/size'
+        - $ref: '#/parameters/q'
+        - $ref: '#/parameters/aq'
       responses:
         200:
           description: Successful response
