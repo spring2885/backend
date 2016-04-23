@@ -476,7 +476,7 @@ paths:
 
   /api/v1/Language:
     get:
-      tags: ["Langauge"]
+      tags: ["Language"]
       summary: gets a Langauge
       description: |
        retrieves a langauge based on a langauge code passed.
@@ -489,6 +489,23 @@ paths:
               $ref: '#/definitions/Language'
         404:
           description: HttpStatus.NOT_FOUND
+    put:
+      tags: ["Langauge"]
+      summary: adds a langauge
+      description: |
+        Adds a langauge based on a langauge code passed.
+      parameters:
+        - $ref: '#/parameters/size'
+      responses:
+        200:
+          description: Sucessful response
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Language'
+        404:
+          description: HttpStatus.NOT_FOUND
+          
     post:
       tags: ["Langauge"]
       summary: adds a langauge
