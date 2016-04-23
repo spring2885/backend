@@ -57,7 +57,7 @@ public class LanguageApi {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	@RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<Void> newsPost(@RequestBody Language lang) throws NotFoundException {
+    public ResponseEntity<Void> post(@RequestBody Language lang) throws NotFoundException {
 		
         DbLanguage updatedDbLanguage = languageJsonToDb.apply(new DbLanguage(), lang);
         languageService.save(updatedDbLanguage);
