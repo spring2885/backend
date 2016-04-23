@@ -15,7 +15,7 @@ import java.util.Objects;
 
 
 @ApiModel(description = "")
-@javax.annotation.Generated(value = "class io.swagger.codegen.languages.SpringMVCServerCodegen", date = "2016-04-14T22:09:20.994-07:00")
+@javax.annotation.Generated(value = "class io.swagger.codegen.languages.SpringMVCServerCodegen", date = "2016-04-17T11:30:38.030-07:00")
 public class Person  {
   
   private Long id = null;
@@ -26,10 +26,8 @@ public class Person  {
   private String resumeUrl = null;
   private String imageUrl = null;
   private String email = null;
-  private String phone = null;
   private String occupation = null;
   private String companyName = null;
-  private Date birthdate = null;
   private String variety = null;
   private Date lastLoginDate = null;
   private List<SocialConnection> socialConnections = new ArrayList<SocialConnection>();
@@ -141,18 +139,6 @@ public class Person  {
   /**
    **/
   @ApiModelProperty(value = "")
-  @JsonProperty("phone")
-  public String getPhone() {
-    return phone;
-  }
-  public void setPhone(String phone) {
-    this.phone = phone;
-  }
-
-  
-  /**
-   **/
-  @ApiModelProperty(value = "")
   @JsonProperty("occupation")
   public String getOccupation() {
     return occupation;
@@ -171,18 +157,6 @@ public class Person  {
   }
   public void setCompanyName(String companyName) {
     this.companyName = companyName;
-  }
-
-  
-  /**
-   **/
-  @ApiModelProperty(value = "")
-  @JsonProperty("birthdate")
-  public Date getBirthdate() {
-    return birthdate;
-  }
-  public void setBirthdate(Date birthdate) {
-    this.birthdate = birthdate;
   }
 
   
@@ -324,10 +298,8 @@ public class Person  {
         Objects.equals(resumeUrl, person.resumeUrl) &&
         Objects.equals(imageUrl, person.imageUrl) &&
         Objects.equals(email, person.email) &&
-        Objects.equals(phone, person.phone) &&
         Objects.equals(occupation, person.occupation) &&
         Objects.equals(companyName, person.companyName) &&
-        Objects.equals(birthdate, person.birthdate) &&
         Objects.equals(variety, person.variety) &&
         Objects.equals(lastLoginDate, person.lastLoginDate) &&
         Objects.equals(socialConnections, person.socialConnections) &&
@@ -342,7 +314,7 @@ public class Person  {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, name, studentId, title, aboutMe, resumeUrl, imageUrl, email, phone, occupation, companyName, birthdate, variety, lastLoginDate, socialConnections, lang, admin, degreeMajor, degreeMinor, graduationYear, degreeType, facultyDepartment);
+    return Objects.hash(id, name, studentId, title, aboutMe, resumeUrl, imageUrl, email, occupation, companyName, variety, lastLoginDate, socialConnections, lang, admin, degreeMajor, degreeMinor, graduationYear, degreeType, facultyDepartment);
   }
 
   @Override
@@ -358,10 +330,8 @@ public class Person  {
     sb.append("  resumeUrl: ").append(resumeUrl).append("\n");
     sb.append("  imageUrl: ").append(imageUrl).append("\n");
     sb.append("  email: ").append(email).append("\n");
-    sb.append("  phone: ").append(phone).append("\n");
     sb.append("  occupation: ").append(occupation).append("\n");
     sb.append("  companyName: ").append(companyName).append("\n");
-    sb.append("  birthdate: ").append(birthdate).append("\n");
     sb.append("  variety: ").append(variety).append("\n");
     sb.append("  lastLoginDate: ").append(lastLoginDate).append("\n");
     sb.append("  socialConnections: ").append(socialConnections).append("\n");

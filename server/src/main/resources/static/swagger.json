@@ -40,6 +40,55 @@
   } ],
   "schemes" : [ "http", "https" ],
   "paths" : {
+    "/api/v1/Language" : {
+      "get" : {
+        "tags" : [ "Langauge" ],
+        "summary" : "gets a Langauge",
+        "description" : "retrieves a langauge based on a langauge code passed.\n",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "Sucessful response",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/Language"
+              }
+            }
+          },
+          "404" : {
+            "description" : "HttpStatus.NOT_FOUND"
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "Langauge" ],
+        "summary" : "adds a langauge",
+        "description" : "Adds a langauge based on a langauge code passed.\n",
+        "parameters" : [ {
+          "name" : "size",
+          "in" : "query",
+          "description" : "Maximum number of items to fetch.\nIf unset then all items are fetched.\n",
+          "required" : false,
+          "type" : "integer",
+          "format" : "int64"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Sucessful response",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/Language"
+              }
+            }
+          },
+          "404" : {
+            "description" : "HttpStatus.NOT_FOUND"
+          }
+        }
+      }
+    },
     "/api/v1/approvals/list" : {
       "get" : {
         "tags" : [ "Approvals" ],
@@ -499,7 +548,8 @@
       },
       "put" : {
         "tags" : [ "News" ],
-        "summary" : "Updates a news entry.\n",
+        "summary" : "Updates a news entry.",
+        "description" : "Updates a news entry.\n",
         "parameters" : [ {
           "name" : "id",
           "in" : "path",
@@ -530,7 +580,8 @@
       },
       "delete" : {
         "tags" : [ "News" ],
-        "summary" : "Deletes a single news entry.\n",
+        "summary" : "Deletes a news entry.",
+        "description" : "Deletes a single news entry.\n",
         "parameters" : [ {
           "name" : "id",
           "in" : "path",
@@ -635,7 +686,8 @@
       },
       "delete" : {
         "tags" : [ "News" ],
-        "summary" : "Deletes a news comment by id.\n",
+        "summary" : "Deletes a news comment.",
+        "description" : "Deletes a news comment by id.\n",
         "parameters" : [ {
           "name" : "id",
           "in" : "path",
@@ -936,7 +988,7 @@
             "schema" : {
               "type" : "array",
               "items" : {
-                "$ref" : "#/definitions/News"
+                "$ref" : "#/definitions/SocialService"
               }
             }
           }
@@ -995,7 +1047,8 @@
       },
       "put" : {
         "tags" : [ "SocialService" ],
-        "summary" : "The SocialService to update\n",
+        "summary" : "Updates a social service entry.",
+        "description" : "The SocialService to update\n",
         "parameters" : [ {
           "name" : "id",
           "in" : "path",
@@ -1026,7 +1079,8 @@
       },
       "delete" : {
         "tags" : [ "SocialService" ],
-        "summary" : "The SocialService to delete\n",
+        "summary" : "Deletes a social service entry.",
+        "description" : "The SocialService to delete\n",
         "parameters" : [ {
           "name" : "id",
           "in" : "path",
@@ -1063,10 +1117,7 @@
         } ],
         "responses" : {
           "200" : {
-            "description" : "request for new password sent.",
-            "schema" : {
-              "$ref" : "#/definitions/Reset"
-            }
+            "description" : "request for new password sent."
           },
           "500" : {
             "description" : "error requesting for a password"
@@ -1100,10 +1151,7 @@
         } ],
         "responses" : {
           "200" : {
-            "description" : "Successful resetting of the password.",
-            "schema" : {
-              "$ref" : "#/definitions/Reset"
-            }
+            "description" : "Successful resetting of the password."
           },
           "500" : {
             "description" : "error setting new password"
@@ -1189,18 +1237,11 @@
         "email" : {
           "type" : "string"
         },
-        "phone" : {
-          "type" : "string"
-        },
         "occupation" : {
           "type" : "string"
         },
         "company_name" : {
           "type" : "string"
-        },
-        "birthdate" : {
-          "type" : "string",
-          "format" : "date"
         },
         "variety" : {
           "type" : "string"
@@ -1273,10 +1314,6 @@
         "end_date" : {
           "type" : "string",
           "format" : "date"
-        },
-        "posted_by_person_id" : {
-          "type" : "integer",
-          "format" : "int64"
         },
         "hours" : {
           "type" : "integer",
@@ -1360,20 +1397,6 @@
         },
         "posted_by" : {
           "$ref" : "#/definitions/Person"
-        }
-      }
-    },
-    "Reset" : {
-      "type" : "object",
-      "properties" : {
-        "email" : {
-          "type" : "string"
-        },
-        "token" : {
-          "type" : "string"
-        },
-        "new_password" : {
-          "type" : "string"
         }
       }
     },

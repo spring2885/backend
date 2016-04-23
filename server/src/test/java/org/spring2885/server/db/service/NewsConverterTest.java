@@ -46,7 +46,6 @@ public class NewsConverterTest {
 
         dbp.setId(100L);
         dbp.setAboutMe("aboutme");
-        dbp.setBirthdate(bday);
         dbp.setCompanyName("company");
         dbp.setDegreeMajor("CS");
         dbp.setDegreeMinor("math");
@@ -59,7 +58,6 @@ public class NewsConverterTest {
         dbp.setLastLogon(bday);
         dbp.setName("Someone");
         dbp.setOccupation("Bum");
-        dbp.setPhone("555-1212");
         dbp.setResumeURL("linkedin.com/kewldude");
         dbp.setStudentId(12345);
         dbp.setTitle("Master of time and space");

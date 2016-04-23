@@ -1,19 +1,29 @@
 package org.spring2885.server.db.service;
 
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.when;
 
+import java.sql.Date;
 import java.util.Collections;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.spring2885.model.Job;
+import org.spring2885.model.News;
 import org.spring2885.server.api.TestConfig;
 import org.spring2885.server.db.model.DbJob;
 import org.spring2885.server.db.model.DbJobType;
 import org.spring2885.server.db.model.DbLanguage;
+import org.spring2885.server.db.model.DbNews;
+import org.spring2885.server.db.model.DbPerson;
 import org.spring2885.server.db.model.JobConverters;
+import org.spring2885.server.db.model.JobConverters.JobsFromDbToJson;
+import org.spring2885.server.db.model.PersonConverters;
+import org.spring2885.server.db.service.person.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -30,7 +40,13 @@ public class JobConverterTest {
     @Autowired JobTypeService jobTypeService;
     @Autowired LanguageService languageService;
     @Autowired private JobConverters.JsonToDbConverter jsonToDb;
-    @Autowired private JobConverters.FromDbToJson dbToJson;
+    @Autowired private JobsFromDbToJson dbToJson;
+    @Autowired
+    PersonService personService;
+    @Autowired
+    private PersonConverters.FromDbToJson personFromDbToJson;
+    
+    private DbPerson dbp = new DbPerson();
     
     @Before
     public void before() {
@@ -46,15 +62,9 @@ public class JobConverterTest {
     
 	@Test
 	public void testFromDbToJson(){
-		
+	
 		DbJob dbp = new DbJob();
 		Job p = dbToJson.apply(dbp);
 	}
 	
-	@Test
-	public void testFromJsonToDb(){
-		
-		Job p = new Job();
-		DbJob dbp = jsonToDb.apply(new DbJob(), p);
-	}
 }

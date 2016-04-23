@@ -44,10 +44,8 @@ public final class PersonConverters {
 			p.setResumeUrl(db.getResumeURL());
 			p.setImageUrl(db.getImageURL());
 			p.setEmail(db.getEmail());
-			p.setPhone(db.getPhone());
 			p.setOccupation(db.getOccupation());
 			p.setCompanyName(db.getCompanyName());
-			p.setBirthdate(db.getBirthdate());
 			p.setGraduationYear(db.getGraduationYear());
 			DbPersonType personType = db.getType();
 			if (personType != null) {
@@ -82,9 +80,6 @@ public final class PersonConverters {
 
 	public class JsonToDbConverter {
 
-		JsonToDbConverter() {
-		}
-
 		public DbPerson apply(DbPerson db, Person p) {
 			Map<String, DbSocialService> socialServices = 
 					socialServiceService.findAll().stream()
@@ -104,13 +99,19 @@ public final class PersonConverters {
 			db.setResumeURL(p.getResumeUrl());
 			db.setImageURL(p.getImageUrl());
 			db.setEmail(p.getEmail());
-			db.setPhone(p.getPhone());
 			db.setOccupation(p.getOccupation());
 			db.setCompanyName(p.getCompanyName());
-			db.setBirthdate(ConverterUtils.asSqlDate(p.getBirthdate()));
 			String personType = p.getVariety();
 			if (personType != null && personTypes.containsKey(personType)) {
-				db.setType(personTypes.get(personType));
+			    // We have a persontype.  let's make sure we're not making a faculty.
+			    DbPersonType newPersonType = personTypes.get(personType);
+			    DbPersonType faculty = personTypeService.facultyType();
+			    if (!faculty.equals(db.getType()) && faculty.equals(newPersonType)) {
+			        // We don't do that. reset to default.
+	                db.setType(personTypeService.defaultType());
+			    } else {
+	                db.setType(newPersonType);
+			    }
 			} else {
 				db.setType(personTypeService.defaultType());
 			}

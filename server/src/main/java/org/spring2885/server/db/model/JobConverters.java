@@ -1,33 +1,31 @@
 package org.spring2885.server.db.model;
 
-import java.util.Map;
-import java.util.stream.Collectors;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.spring2885.model.Job;
 import org.spring2885.model.Person;
-import org.spring2885.server.db.service.JobTypeService;
+import org.spring2885.server.db.service.person.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 import com.google.common.base.Function;
+import com.google.common.base.Strings;
 
 @Component
 public final class JobConverters {
+    private static final Logger logger = LoggerFactory.getLogger(JobConverters.class);
+    @Autowired
+    private PersonService personService;
+    @Autowired
+    private PersonConverters.FromDbToJson personFromDbToJson;
+   
 
-	@Autowired
-    private JobTypeService jobTypeService;
-
-    @Bean
-    public FromDbToJson fromDbToJson() {
-        return new FromDbToJson();
-    }
-
-    public static class FromDbToJson implements Function<DbJob, Job> {
-
-        @Override
-        public Job apply(DbJob db) {
-            Job j = new Job();
+    public class JobsFromDbToJson implements Function<DbJob, Job> {
+		
+		@Override
+		public Job apply(DbJob db) {
+			Job j = new Job();
             j.setId(db.getId());
             j.setTitle(db.getTitle());
             j.setLocation(db.getLocation());
@@ -37,37 +35,53 @@ public final class JobConverters {
             j.setHours(db.getHours());
             j.setStartDate(db.getstartDate());
             j.setEndDate(db.getendDate());
+            DbPerson dbPerson = db.getPerson();
+            if (dbPerson != null) {
+                j.setPostedBy(personFromDbToJson.apply(dbPerson));
+            } else {
+                logger.info("job {} had a null posted_by", db.getId());
+            }
             
             return j;
-        }
-    }
-
-    @Bean
-    public JsonToDbConverter jsonToDbConverter() {
-        return new JsonToDbConverter();
-    }
-
-    public class JsonToDbConverter {
-
-        public JsonToDbConverter() {
-        }
-
-		public DbJob apply(DbJob db, Job p) {
-            Map<String, DbJobType> jobTypes = jobTypeService.findAll().stream()
-                    .collect(Collectors.toMap(DbJobType::getName, (s) -> s));
-            db.setId(p.getId());
-            db.setTitle(p.getTitle());
-            db.setLocation(p.getLocation());
-            db.setDescription(p.getDescription());
-            db.setCompany(p.getCompany());
-            db.setjobType(p.getJobType());
-            db.setHours(p.getHours());
-            db.setstartDate(ConverterUtils.asSqlDate(p.getStartDate()));
-            db.setendDate(ConverterUtils.asSqlDate(p.getEndDate()));
-            
-            
-            return db;
 		}
-
-    }
+	}
+	
+    public class JsonToDbConverter {
+		public DbJob apply(DbJob db, Job p) {
+			db.setId(p.getId());
+			if (!Strings.isNullOrEmpty(p.getTitle())) {
+	            db.setTitle(p.getTitle());
+			}
+			if (!Strings.isNullOrEmpty(p.getDescription())) {
+			    db.setDescription(p.getDescription());
+			}
+			
+			db.setTitle(p.getTitle());
+			db.setCompany(p.getCompany());
+			db.setLocation(p.getLocation());
+			db.setjobType(p.getJobType());
+		
+			Person postedBy = p.getPostedBy();
+			if (postedBy != null 
+			    && !Strings.isNullOrEmpty(postedBy.getEmail()) 
+			    && db.getPerson() == null) {
+			    DbPerson dbPostedBy = personService.findByEmail(postedBy.getEmail());
+			    db.setPostedBy(dbPostedBy);    
+			}
+			return db;
+		}
+	}
+		
+	@Bean
+	public JobsFromDbToJson jobsFromDbToJson() {
+		return new JobsFromDbToJson();
+	}
+	
+	@Bean
+	public JsonToDbConverter jobsFromJsonToDb() {
+		return new JsonToDbConverter();
+	}
+	
+	private JobConverters() {
+	}
 }

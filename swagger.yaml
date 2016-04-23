@@ -123,8 +123,6 @@ paths:
       responses:
         200:
           description: request for new password sent.
-          schema:
-            $ref: '#/definitions/Reset'
         500:
           description: error requesting for a password
   /auth/reset:
@@ -153,8 +151,6 @@ paths:
       responses:
         200:
           description: Successful resetting of the password.
-          schema:
-            $ref: '#/definitions/Reset'
         500:
           description: error setting new password
           
@@ -476,7 +472,38 @@ paths:
         500:
           description: Error deleting the profile "ID".
 
-  
+  /api/v1/Language:
+    get:
+      tags: ["Langauge"]
+      summary: gets a Langauge
+      description: |
+       retrieves a langauge based on a langauge code passed.
+      responses:
+        200:
+          description: Sucessful response
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Language'
+        404:
+          description: HttpStatus.NOT_FOUND
+    post:
+      tags: ["Langauge"]
+      summary: adds a langauge
+      description: |
+        Adds a langauge based on a langauge code passed.
+      parameters:
+        - $ref: '#/parameters/size'
+      responses:
+        200:
+          description: Sucessful response
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Language'
+        404:
+          description: HttpStatus.NOT_FOUND
+          
   /api/v1/socialservice:
     get:
       tags: ["SocialService"]
@@ -489,7 +516,7 @@ paths:
         Optional query param of **size** determines
         size of return array
       parameters:
-        - $ref: '#/parameters/size'
+         - $ref: '#/parameters/size'
       responses:
         200:
           description: Successful response
@@ -844,15 +871,10 @@ definitions:
         type: string
       email: 
         type: string
-      phone:
-        type: string
       occupation:
         type: string
       company_name:
         type: string
-      birthdate:
-        type: string
-        format: date
       variety:
         type: string #as in alum, faculty, student
       last_login_date:
@@ -905,9 +927,6 @@ definitions:
       end_date:
         type: string
         format: date
-      posted_by_person_id:
-        type: integer
-        format: int64
       hours:
         type: integer
         format: int64
@@ -970,15 +989,6 @@ definitions:
       posted_by:
         type: object
         $ref: '#/definitions/Person'
-  Reset:
-    type: object
-    properties:
-      email:
-        type: string
-      token:
-        type: string
-      new_password:
-        type: string
 
   PersonType:
     type: object

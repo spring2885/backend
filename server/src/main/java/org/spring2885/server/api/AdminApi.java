@@ -65,7 +65,7 @@ public class AdminApi {
     private NewsService newsService;
 
     @Autowired
-    private JobService jobsService;
+    private JobService jobService;
 
     @Autowired
     private PersonTypeService personTypeService;
@@ -153,10 +153,10 @@ public class AdminApi {
                         newsService.save(news);
                     }
                 } else if ("JOBS".equals(itemType)) {
-                    DbJob job = jobsService.findById(id);
+                    DbJob job = jobService.findById(id);
                     if (job != null) {
                         job.setAbuse(Boolean.TRUE);
-                        jobsService.save(job);
+                        jobService.save(job);
                     }
                 }
             }
