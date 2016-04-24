@@ -1,6 +1,7 @@
 package org.spring2885.server.db.model;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -50,7 +51,7 @@ public class DbPerson {
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="lang")
     private DbLanguage lang;
-	private Date lastLogon;
+	private Timestamp lastLogon;
 	private String password;
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy="person")
 	private Set<DbSocialConnection> socialConnections = new HashSet<>();
@@ -166,7 +167,7 @@ public class DbPerson {
 	public void setType(DbPersonType type) {
 		this.type = type;
 	}
-	public Date getLastLogon() {
+	public Timestamp getLastLogon() {
 		return lastLogon;
 	}
 	public DbLanguage getLanguage() {
@@ -175,7 +176,7 @@ public class DbPerson {
 	public void setLanguage(DbLanguage lang) {
 	    this.lang = lang;
 	}
-	public void setLastLogon(Date lastLogon) {
+	public void setLastLogon(Timestamp lastLogon) {
 		this.lastLogon = lastLogon;
 	}
 	public String getPassword() {

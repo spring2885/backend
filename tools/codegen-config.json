@@ -1,4 +1,5 @@
 {
   "modelPackage": "org.spring2885.model",
-  "sourceFolder": "../server/src/main/java"
+  "sourceFolder": "../server/src/main/java",
+  "dateLibrary": "joda"
 }

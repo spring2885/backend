@@ -1,10 +1,9 @@
 package org.spring2885.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import java.util.Date;
+import org.joda.time.DateTime;
 import org.spring2885.model.Person;
 
 import io.swagger.annotations.*;
@@ -14,7 +13,7 @@ import java.util.Objects;
 
 
 @ApiModel(description = "")
-@javax.annotation.Generated(value = "class io.swagger.codegen.languages.SpringMVCServerCodegen", date = "2016-04-23T18:54:32.535-07:00")
+@javax.annotation.Generated(value = "class io.swagger.codegen.languages.SpringMVCServerCodegen", date = "2016-04-24T07:21:08.830-07:00")
 public class Job  {
   
   private Long id = null;
@@ -24,8 +23,8 @@ public class Job  {
   private String title = null;
   private Long industry = null;
   private String location = null;
-  private Date startDate = null;
-  private Date endDate = null;
+  private DateTime startDate = null;
+  private DateTime endDate = null;
   private Long hours = null;
   private Person postedBy = null;
 
@@ -118,10 +117,10 @@ public class Job  {
    **/
   @ApiModelProperty(value = "")
   @JsonProperty("start_date")
-  public Date getStartDate() {
+  public DateTime getStartDate() {
     return startDate;
   }
-  public void setStartDate(Date startDate) {
+  public void setStartDate(DateTime startDate) {
     this.startDate = startDate;
   }
 
@@ -130,10 +129,10 @@ public class Job  {
    **/
   @ApiModelProperty(value = "")
   @JsonProperty("end_date")
-  public Date getEndDate() {
+  public DateTime getEndDate() {
     return endDate;
   }
-  public void setEndDate(Date endDate) {
+  public void setEndDate(DateTime endDate) {
     this.endDate = endDate;
   }
 

@@ -57,7 +57,7 @@ public final class PersonConverters {
 			if (lang != null) {
 				p.setLang(lang.getCode());
 			}
-			p.setLastLoginDate(db.getLastLogon());
+			p.setLastLoginDate(ConverterUtils.asModelDate(db.getLastLogon()));
 
 			// Add social networks.
 			for (DbSocialConnection dbSocial : db.socialConnections()) {
@@ -121,7 +121,7 @@ public final class PersonConverters {
 			} else {
 				db.setLanguage(languageService.defaultLanguage());
 			}
-			db.setLastLogon(ConverterUtils.asSqlDate(p.getLastLoginDate()));
+			db.setLastLogon(ConverterUtils.asTimestamp(p.getLastLoginDate()));
 
 			// Add all social connections
 			for (SocialConnection social : p.getSocialConnections()) {

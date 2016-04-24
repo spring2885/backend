@@ -1,11 +1,11 @@
 package org.spring2885.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import java.util.*;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
+import org.joda.time.DateTime;
 import org.spring2885.model.SocialConnection;
 
 import io.swagger.annotations.*;
@@ -15,7 +15,7 @@ import java.util.Objects;
 
 
 @ApiModel(description = "")
-@javax.annotation.Generated(value = "class io.swagger.codegen.languages.SpringMVCServerCodegen", date = "2016-04-23T18:54:32.535-07:00")
+@javax.annotation.Generated(value = "class io.swagger.codegen.languages.SpringMVCServerCodegen", date = "2016-04-24T07:21:08.830-07:00")
 public class Person  {
   
   private Long id = null;
@@ -29,7 +29,7 @@ public class Person  {
   private String occupation = null;
   private String companyName = null;
   private String variety = null;
-  private Date lastLoginDate = null;
+  private DateTime lastLoginDate = null;
   private List<SocialConnection> socialConnections = new ArrayList<SocialConnection>();
   private String lang = null;
   private Boolean admin = null;
@@ -176,10 +176,10 @@ public class Person  {
    **/
   @ApiModelProperty(value = "")
   @JsonProperty("last_login_date")
-  public Date getLastLoginDate() {
+  public DateTime getLastLoginDate() {
     return lastLoginDate;
   }
-  public void setLastLoginDate(Date lastLoginDate) {
+  public void setLastLoginDate(DateTime lastLoginDate) {
     this.lastLoginDate = lastLoginDate;
   }
 

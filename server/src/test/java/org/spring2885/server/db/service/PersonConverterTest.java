@@ -11,6 +11,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.spring2885.model.Person;
 import org.spring2885.server.api.TestConfig;
+import org.spring2885.server.db.model.ConverterUtils;
 import org.spring2885.server.db.model.DbLanguage;
 import org.spring2885.server.db.model.DbPerson;
 import org.spring2885.server.db.model.DbPersonType;
@@ -62,7 +63,7 @@ public class PersonConverterTest {
 		dbp.setId(100L);
 		dbp.setImageURL("http://me.com/me");
 		dbp.setLanguage(new DbLanguage("es", "Spanish"));
-		dbp.setLastLogon(bday);
+		dbp.setLastLogon(ConverterUtils.asTimestamp(bday));
 		dbp.setName("Someone");
 		dbp.setOccupation("Bum");
 		dbp.setResumeURL("linkedin.com/kewldude");
@@ -82,7 +83,7 @@ public class PersonConverterTest {
 		assertEquals(dbp.getGraduationYear(), p.getGraduationYear());
 		assertEquals(dbp.getImageURL(), p.getImageUrl());
 		assertEquals(dbp.getLanguage().getCode(), p.getLang());
-		assertEquals(dbp.getLastLogon().toString(), p.getLastLoginDate().toString());
+		assertEquals(ConverterUtils.asModelDate(dbp.getLastLogon()).toString(), p.getLastLoginDate().toString());
 		assertEquals(dbp.getName(), p.getName());
 		assertEquals(dbp.getOccupation(), p.getOccupation());
 		assertEquals(dbp.getResumeURL(), p.getResumeUrl());
@@ -107,7 +108,7 @@ public class PersonConverterTest {
         p.setId(100L);
         p.setImageUrl(("http://me.com/me"));
         p.setLang("es");
-        p.setLastLoginDate(bday);
+        p.setLastLoginDate(ConverterUtils.asModelDate(bday));
         p.setName("Someone");
         p.setOccupation("Bum");
         p.setResumeUrl("linkedin.com/kewldude");
@@ -127,7 +128,9 @@ public class PersonConverterTest {
         assertEquals(dbp.getGraduationYear(), p.getGraduationYear());
         assertEquals(dbp.getImageURL(), p.getImageUrl());
         assertEquals(dbp.getLanguage().getCode(), p.getLang());
-        assertEquals(dbp.getLastLogon().toString(), p.getLastLoginDate().toString());
+        
+        String dbDate = ConverterUtils.asModelDate(dbp.getLastLogon()).toString();
+        assertEquals(dbDate, p.getLastLoginDate().toString());
         assertEquals(dbp.getName(), p.getName());
         assertEquals(dbp.getOccupation(), p.getOccupation());
         assertEquals(dbp.getResumeURL(), p.getResumeUrl());

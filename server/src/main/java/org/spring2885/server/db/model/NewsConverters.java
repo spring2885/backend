@@ -37,10 +37,10 @@ public final class NewsConverters {
 			News n = new News();
 			n.setId(db.getId());
 			n.setDescription(db.getDescription());
-			n.setExpired(db.getExpired());
+			n.setExpired(ConverterUtils.asModelDate(db.getExpired()));
 			DbPerson person = db.getPerson();
 			n.setPostedBy(personFromDbToJson.apply(person));
-			n.setPosted(db.getPosted());
+			n.setPosted(ConverterUtils.asModelDate(db.getPosted()));
 
 			n.setTitle(db.getTitle());
 			n.setViews(db.getViews());

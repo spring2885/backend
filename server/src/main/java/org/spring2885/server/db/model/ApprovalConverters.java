@@ -28,7 +28,7 @@ public class ApprovalConverters {
             p.setApprovalType(db.getApprovalType());
             p.setFlaggedBy(personFromDbToJson.apply(db.getFlaggedBy()));
             p.setFlaggedNotes(db.getFlaggedNotes());
-            p.setFlaggedOn(db.getFlaggedOn());
+            p.setFlaggedOn(ConverterUtils.asModelDate(db.getFlaggedOn()));
             
             p.setId(db.getUuid());
             p.setItemId(db.getItemId());
@@ -39,7 +39,7 @@ public class ApprovalConverters {
                 p.setVerdictBy(personFromDbToJson.apply(verdictBy));
             }
             p.setVerdictNotes(db.getVerdictNotes());
-            p.setVerdictOn(db.getVerdictOn());
+            p.setVerdictOn(ConverterUtils.asModelDate(db.getVerdictOn()));
 
             return p;
         }    
