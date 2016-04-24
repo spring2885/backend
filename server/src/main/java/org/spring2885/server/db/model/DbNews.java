@@ -1,6 +1,7 @@
 package org.spring2885.server.db.model;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Set;
 
@@ -41,8 +42,8 @@ public class DbNews {
 	private String description;
 	
 	@Column(nullable=false, updatable=false)
-	private Date posted;
-	private Date expired;
+	private Timestamp posted;
+	private Timestamp expired;
 
     @JoinColumn(name="person_id")
     @ManyToOne(fetch=FetchType.EAGER)
@@ -107,19 +108,19 @@ public class DbNews {
         this.description = description;
     }
 
-    public Date getPosted() {
+    public Timestamp getPosted() {
         return posted;
     }
 
-    public void setPosted(Date posted) {
+    public void setPosted(Timestamp posted) {
         this.posted = posted;
     }
 
-    public Date getExpired() {
+    public Timestamp getExpired() {
         return expired;
     }
 
-    public void setExpired(Date expired) {
+    public void setExpired(Timestamp expired) {
         this.expired = expired;
     }
 

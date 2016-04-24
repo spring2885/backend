@@ -78,7 +78,7 @@ public final class NewsConverters {
 			if (!Strings.isNullOrEmpty(p.getDescription())) {
 			    db.setDescription(p.getDescription());
 			}
-			db.setExpired(ConverterUtils.asSqlDate(p.getExpired()));
+			db.setExpired(ConverterUtils.asTimestamp(p.getExpired()));
 			Person postedBy = p.getPostedBy();
 			if (postedBy != null 
 			    && !Strings.isNullOrEmpty(postedBy.getEmail()) 
@@ -86,7 +86,7 @@ public final class NewsConverters {
 			    // Only update the person if it hadn't been set already.
 			    db.setPersonId(personService.findByEmail(postedBy.getEmail()));
 			}
-			db.setPosted(ConverterUtils.asSqlDate(p.getPosted()));
+			db.setPosted(ConverterUtils.asTimestamp(p.getPosted()));
             db.setViews(p.getViews());
 
             List<String> visibleToNames = p.getVisibleTo();

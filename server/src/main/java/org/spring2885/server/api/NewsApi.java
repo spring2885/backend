@@ -4,6 +4,8 @@ import static com.google.common.base.Preconditions.checkState;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import java.sql.Date;
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -162,7 +164,8 @@ public class NewsApi {
         // Since we are doing a post, set defaults.
 	    db.setId(null);
 	    db.setPersonId(me);
-	    db.setPosted(new Date(System.currentTimeMillis()));
+	    Timestamp now = Timestamp.from(Instant.now());
+	    db.setPosted(now);
 	    
 	    if (db.getVisibleToPersonTypes().isEmpty()) {
 	        // If it's not visible to anyone, make it visible to

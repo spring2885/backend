@@ -6,6 +6,8 @@ import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.eq;
 
 import java.sql.Date;
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.Collections;
 
 import org.junit.Before;
@@ -69,14 +71,14 @@ public class NewsConverterTest {
     }
     
 	@Test
-	public void testFromDbToJson(){
-	    Date date = new Date(System.currentTimeMillis());
+	public void testFromDbToJson() {
+	    Timestamp now = Timestamp.from(Instant.now());
 		DbNews d = new DbNews();
         d.setId(4L);
 		d.setActive(true);
 		d.setDescription("description");
-        d.setExpired(date);
-        d.setPosted(date);
+        d.setExpired(now);
+        d.setPosted(now);
 		d.setPersonId(dbp);
 		d.setTitle("This is a title");
 		d.setViews(200L);
