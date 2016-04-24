@@ -56,8 +56,7 @@ public class JobsApi {
         logger.info("GET /api/v1/jobs/{}", id);
 		DbJob o = jobService.findById(id);
 		if (o == null) {
-			// When adding test testPersonsById_notFound, was getting a NullPointerException
-			// here, so needed to add this.
+	        logger.info("GET /api/v1/jobs/{} NOT FOUND", id);
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity<>(dbToJsonConverter.apply(o), HttpStatus.OK);
@@ -114,7 +113,7 @@ public class JobsApi {
 	    }
 		
 	    for (DbJob n : all) {
-	        logger.trace("news={}", n.toString());
+	        logger.trace("jobs={}", n.toString());
 	    }
 	    
 		FluentIterable<Job> iterable = FluentIterable.from(all)

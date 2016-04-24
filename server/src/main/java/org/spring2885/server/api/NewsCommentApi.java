@@ -97,7 +97,7 @@ public class NewsCommentApi {
         
         DbNewsComment db = newsCommentService.findById(id);
         if (db == null) {
-            logger.info("GET /api/v1/news_comment/{} NOT FOUND", id);
+            logger.info("DELETE /api/v1/news_comment/{} NOT FOUND", id);
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 

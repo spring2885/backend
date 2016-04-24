@@ -3,8 +3,6 @@ package org.spring2885.server.api;
 import static com.google.common.base.Preconditions.checkState;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-import java.sql.Timestamp;
-import java.time.Instant;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -115,7 +113,7 @@ public class NewsApi {
 	    }
 		
 	    for (DbNews n : all) {
-	        logger.info("news={}", n.toString());
+	        logger.trace("news={}", n.toString());
 	    }
 	    
 		FluentIterable<News> iterable = FluentIterable.from(all)

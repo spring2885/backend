@@ -66,5 +66,4 @@ public class NewUserApi {
 		System.err.printf("User %s added with hashed pw; '%s'\n", email, hashedPassword);
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
-	
 }

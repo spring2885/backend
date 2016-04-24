@@ -92,31 +92,31 @@ public class AuthApi {
 	        @RequestParam("email") String email,
 	        @RequestParam("token") String tokenString,
 			@RequestParam("newPassword") String newPassword) throws Exception {
-        logger.info("/auth/reset: {}, token: {}", email, tokenString);
+        logger.info("/auth/reset: email: {}, token: {}", email, tokenString);
 
 		if (!tokenService.existsByEmail(email)) {
-			logger.info("token does not exist for email: {}", email);
+	        logger.info("/auth/reset: NOT FOUND email: {}, token: {}", email, tokenString);
 			return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
 		}
+
+        DbPerson person = personService.findByEmail(email);
+        if (person == null) {
+            logger.info("/auth/reset: PERSON NOT FOUND email: {}, token: {}", email, tokenString);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
 
 		List<DbToken> tokens = tokenService.findByEmail(email);
 		DbToken savedToken = findToken(tokens, tokenString);
 		if (savedToken == null) {
-			logger.info("token not found: " + tokenString);
+            logger.info("/auth/reset: TOKEN NOT FOUND email: {}, token: {}", email, tokenString);
 			return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
-		}
-
-		DbPerson person = personService.findByEmail(email);
-		if (person == null) {
-			logger.info("Person not found for email address: " + email);
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 
 		// At this point we looked up the saved token from the database and
 		// found one.
 		if (!savedToken.getEmail().equals(email)) {
 			// Our saved token was for someone else.
-			logger.info("token does not match email address: " + tokenString);
+            logger.info("/auth/reset: TOKEN MISMATCS email: {}, token: {}", email, tokenString);
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 
