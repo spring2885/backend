@@ -2,6 +2,8 @@ package org.spring2885.server.api;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.spring2885.server.api.exceptions.NotFoundException;
 import org.spring2885.server.db.model.DbPerson;
 import org.spring2885.server.db.service.person.PersonService;
@@ -23,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 @RequestMapping(value = "/newuser", produces = { APPLICATION_JSON_VALUE })
 public class NewUserApi {
+    private static final Logger logger = LoggerFactory.getLogger(NewUserApi.class);
 
 	@Autowired private PasswordEncoder passwordEncoder;
 	@Autowired PersonService personService;
@@ -49,6 +52,7 @@ public class NewUserApi {
 			@RequestParam("password") String password
 			) throws NotFoundException {
 		
+        logger.info("POST /newuser {}", email);
 		if (personService.existsByEmail(email)) {
 			throw new RuntimeException("email already exists: " + email);
 		}

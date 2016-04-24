@@ -53,6 +53,7 @@ public class JobsApi {
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public ResponseEntity<Job> get(
 			@PathVariable("id") int id) throws NotFoundException {
+        logger.info("GET /api/v1/jobs/{}", id);
 		DbJob o = jobService.findById(id);
 		if (o == null) {
 			// When adding test testPersonsById_notFound, was getting a NullPointerException
@@ -69,6 +70,7 @@ public class JobsApi {
 			SecurityContextHolderAwareRequestWrapper request)
 			throws NotFoundException {
 		
+        logger.info("DELETE /api/v1/jobs/{}", id);
         DbJob db = jobService.findById(id);
         if (db == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -90,7 +92,7 @@ public class JobsApi {
 	        @RequestParam(value = "size", required = false) Integer size,
 	        SecurityContextHolderAwareRequestWrapper request)
 			throws NotFoundException {
-		logger.info("JobsApi GET: q={}, aq={}, size={}", q, aq, size);
+        logger.info("GET /api/v1/jobs: q={}, aq={}, size={}", q, aq, size);
 		
 		if (adminRequest && !requestHelper.isAdminRequest(request)) {
 	        return new ResponseEntity<>(HttpStatus.FORBIDDEN);
@@ -127,6 +129,8 @@ public class JobsApi {
 			@RequestBody Job jobs,
 			SecurityContextHolderAwareRequestWrapper request) throws NotFoundException {
 		
+        logger.info("PUT /api/v1/jobs/{}", id);
+        
 		if (id.longValue() != jobs.getId().longValue()) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
@@ -152,6 +156,7 @@ public class JobsApi {
 			@RequestBody Job jobs,
 			SecurityContextHolderAwareRequestWrapper request) throws NotFoundException {
 
+        logger.info("POST /api/v1/jobs: {}", jobs);
 	    // Look up the currently logged in user
         DbPerson me = requestHelper.loggedInUser(request);
         checkState(me != null);

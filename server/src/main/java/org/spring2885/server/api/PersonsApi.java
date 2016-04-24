@@ -51,7 +51,7 @@ public class PersonsApi {
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ResponseEntity<Person> get(
             @PathVariable("id") int id) throws NotFoundException {
-        logger.info("Handling GET /profiles/{id}: {}", id);
+        logger.info(" GET /api/v1/profiles/{}", id);
         DbPerson o = personService.findById(id);
         if (o == null) {
             // When adding test testPersonsById_notFound, was getting a NullPointerException
@@ -68,6 +68,7 @@ public class PersonsApi {
 			SecurityContextHolderAwareRequestWrapper request)
 			throws NotFoundException {
 		
+        logger.info("DELETE /api/v1/profiles/{}", id);
 		if (!requestHelper.checkAdminRequestIfNeeded(id, request)) {
 			return new ResponseEntity<>("Only admin's can change others... ", HttpStatus.FORBIDDEN);
 		}
@@ -82,7 +83,7 @@ public class PersonsApi {
             @RequestParam(value = "q", required = false) String q,
 	        @RequestParam(value = "size", required = false) Integer size
 	        ) throws NotFoundException {
-	    logger.info("PersonsApi GET: q={}, aq={}, size={}", q, aq, size);
+        logger.info("GET /api/v1/profiles: q={}, aq={}, size={}", q, aq, size);
 	    Iterable<DbPerson> all;
 	    if (!Strings.isNullOrEmpty(q)) {
 	        all = personService.findAll(q);
@@ -108,6 +109,8 @@ public class PersonsApi {
 			@RequestBody Person person,
 			SecurityContextHolderAwareRequestWrapper request) throws NotFoundException {
 		
+        logger.info("PUT /api/v1/profiles/{}", id);
+        
 		if (!requestHelper.checkAdminRequestIfNeeded(id, request)) {
 			return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 		}
