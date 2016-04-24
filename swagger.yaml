@@ -898,7 +898,7 @@ definitions:
         type: string #as in alum, faculty, student
       last_login_date:
         type: string
-        format: date
+        format: date-time
       social_connections:
         type: array
         items:
@@ -942,10 +942,10 @@ definitions:
         type: string
       start_date:
         type: string
-        format: date
+        format: date-time
       end_date:
         type: string
-        format: date
+        format: date-time
       hours:
         type: integer
         format: int64
@@ -972,10 +972,10 @@ definitions:
         type: string
       posted:
         type: string
-        format: date
+        format: date-time
       expired:
         type: string
-        format: date
+        format: date-time
       posted_by:
         type: object
         $ref: '#/definitions/Person'
@@ -1004,7 +1004,7 @@ definitions:
         type: string
       posted:
         type: string
-        format: date
+        format: date-time
       posted_by:
         type: object
         $ref: '#/definitions/Person'
@@ -1084,7 +1084,7 @@ definitions:
         type: string
       flagged_on:
         type: string
-        format: date
+        format: date-time
       flagged_by:
         type: object
         $ref: '#/definitions/Person'
@@ -1094,7 +1094,7 @@ definitions:
         type: string
       verdict_on:
         type: string
-        format: date
+        format: date-time
       verdict_by:
         type: object
         $ref: '#/definitions/Person'
