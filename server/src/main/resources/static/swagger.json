@@ -43,82 +43,6 @@
   } ],
   "schemes" : [ "http", "https" ],
   "paths" : {
-    "/api/v1/Language" : {
-      "get" : {
-        "tags" : [ "Language" ],
-        "summary" : "gets a Language",
-        "description" : "retrieves a langauge based on a langauge code passed.\n",
-        "parameters" : [ ],
-        "responses" : {
-          "200" : {
-            "description" : "Sucessful response",
-            "schema" : {
-              "type" : "array",
-              "items" : {
-                "$ref" : "#/definitions/Language"
-              }
-            }
-          },
-          "404" : {
-            "description" : "HttpStatus.NOT_FOUND"
-          }
-        }
-      },
-      "post" : {
-        "tags" : [ "Language" ],
-        "summary" : "adds a langauge",
-        "description" : "Adds a langauge based on a langauge code passed.\n",
-        "parameters" : [ {
-          "name" : "size",
-          "in" : "query",
-          "description" : "Maximum number of items to fetch.\nIf unset then all items are fetched.\n",
-          "required" : false,
-          "type" : "integer",
-          "format" : "int64"
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "Sucessful response",
-            "schema" : {
-              "type" : "array",
-              "items" : {
-                "$ref" : "#/definitions/Language"
-              }
-            }
-          },
-          "404" : {
-            "description" : "HttpStatus.NOT_FOUND"
-          }
-        }
-      },
-      "put" : {
-        "tags" : [ "Language" ],
-        "summary" : "adds a langauge",
-        "description" : "Adds a langauge based on a langauge code passed.\n",
-        "parameters" : [ {
-          "name" : "size",
-          "in" : "query",
-          "description" : "Maximum number of items to fetch.\nIf unset then all items are fetched.\n",
-          "required" : false,
-          "type" : "integer",
-          "format" : "int64"
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "Sucessful response",
-            "schema" : {
-              "type" : "array",
-              "items" : {
-                "$ref" : "#/definitions/Language"
-              }
-            }
-          },
-          "404" : {
-            "description" : "HttpStatus.NOT_FOUND"
-          }
-        }
-      }
-    },
     "/api/v1/approvals/list" : {
       "get" : {
         "tags" : [ "Approvals" ],
@@ -492,6 +416,66 @@
         "security" : [ {
           "basicAuth" : [ ]
         } ]
+      }
+    },
+    "/api/v1/language" : {
+      "get" : {
+        "tags" : [ "Language" ],
+        "summary" : "gets a Language",
+        "description" : "retrieves a langauge based on a langauge code passed.\n",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "Sucessful response"
+          },
+          "404" : {
+            "description" : "HttpStatus.NOT_FOUND"
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "Language" ],
+        "summary" : "adds a langauge",
+        "description" : "Adds a langauge based on a langauge code passed.\n",
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "language",
+          "description" : "The Language you want to update",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/Language"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Sucessful response"
+          },
+          "404" : {
+            "description" : "HttpStatus.NOT_FOUND"
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "Language" ],
+        "summary" : "adds a langauge",
+        "description" : "Adds a langauge based on a langauge code passed.\n",
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "language",
+          "description" : "The Language you want to update",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/Language"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Sucessful response"
+          },
+          "404" : {
+            "description" : "HttpStatus.NOT_FOUND"
+          }
+        }
       }
     },
     "/api/v1/news" : {
