@@ -1118,3 +1118,5 @@ tags:
     description: Person Type API (Admin).
   - name: Approvals
     description: Approvals API (Admin)
+  - name: Language
+    description: Language API (Admin)

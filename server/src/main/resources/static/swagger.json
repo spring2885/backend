@@ -37,6 +37,9 @@
   }, {
     "name" : "Approvals",
     "description" : "Approvals API (Admin)"
+  }, {
+    "name" : "Language",
+    "description" : "Language API (Admin)"
   } ],
   "schemes" : [ "http", "https" ],
   "paths" : {
