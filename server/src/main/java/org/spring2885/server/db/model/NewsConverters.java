@@ -71,7 +71,7 @@ public final class NewsConverters {
 		}
 		
 		public DbNews apply(DbNews db, News p) {
-			db.setId(p.getId());
+		    db.setId(p.getId());
 			if (!Strings.isNullOrEmpty(p.getTitle())) {
 	            db.setTitle(p.getTitle());
 			}
