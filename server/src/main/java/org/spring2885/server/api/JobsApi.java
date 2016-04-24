@@ -73,10 +73,12 @@ public class JobsApi {
         logger.info("DELETE /api/v1/jobs/{}", id);
         DbJob db = jobService.findById(id);
         if (db == null) {
+            logger.info("DELETE /api/v1/jobs/{} NOT FOUND", id);
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         if (!requestHelper.checkAdminRequestIfNeeded(db.getPerson().getId(), request)) {
+            logger.info("DELETE /api/v1/jobs/{} FORBIDDEN", id);
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
 
@@ -95,6 +97,7 @@ public class JobsApi {
         logger.info("GET /api/v1/jobs: q={}, aq={}, size={}", q, aq, size);
 		
 		if (adminRequest && !requestHelper.isAdminRequest(request)) {
+	        logger.info("GET /api/v1/jobs: FORBIDDEN");
 	        return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 		}
 		
@@ -132,15 +135,18 @@ public class JobsApi {
         logger.info("PUT /api/v1/jobs/{}", id);
         
 		if (id.longValue() != jobs.getId().longValue()) {
+	        logger.info("PUT /api/v1/jobs/{} BAD REQUEST {} != {} ", id, id, jobs.getId());
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 
         DbJob db = jobService.findById(id);
         if (db == null) {
+            logger.info("PUT /api/v1/jobs/{} NOT FOUND", id);
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         if (!requestHelper.checkAdminRequestIfNeeded(db.getPerson().getId(), request)) {
+            logger.info("PUT /api/v1/jobs/{} FORBIDDEN", id);
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
 		
@@ -166,8 +172,7 @@ public class JobsApi {
         // Since we are doing a post, set defaults.
 	    db.setId(null);
 	    db.setPostedBy(me);
-	    
-	    
+
 		jobService.save(db);
 		
 		return new ResponseEntity<Void>(HttpStatus.OK);

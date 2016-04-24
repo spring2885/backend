@@ -58,8 +58,7 @@ public class NewsApi {
         logger.info("GET /api/v1/news/{}", id);
 		DbNews o = newsService.findById(id);
 		if (o == null) {
-			// When adding test testPersonsById_notFound, was getting a NullPointerException
-			// here, so needed to add this.
+	        logger.info("GET /api/v1/news/{} NOT FOUND", id);
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity<>(dbToJsonConverter.apply(o), HttpStatus.OK);
@@ -75,10 +74,12 @@ public class NewsApi {
 
         DbNews db = newsService.findById(id);
         if (db == null) {
+            logger.info("DELETE /api/v1/news/{} NOT FOUND", id);
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         if (!requestHelper.checkAdminRequestIfNeeded(db.getPerson().getId(), request)) {
+            logger.info("DELETE /api/v1/news/{} FORBIDDEN", id);
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
 
@@ -97,6 +98,7 @@ public class NewsApi {
 		logger.info("GET /api/v1/news/ q={}, aq={}, size={}", q, aq, size);
 		
 		if (adminRequest && !requestHelper.isAdminRequest(request)) {
+	        logger.info("GET /api/v1/news/ ADMIN REQUEST FORBIDDEN");
 	        return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 		}
 		
@@ -133,15 +135,18 @@ public class NewsApi {
         logger.info("PUT /api/v1/news/{}", id);
 		
 		if (id.longValue() != news.getId().longValue()) {
+	        logger.info("PUT /api/v1/news/{} BAD REQUEST", id);
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 
         DbNews db = newsService.findById(id);
         if (db == null) {
+            logger.info("PUT /api/v1/news/{} NOT FOUND", id);
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         if (!requestHelper.checkAdminRequestIfNeeded(db.getPerson().getId(), request)) {
+            logger.info("PUT /api/v1/news/{} FORBIDDEN", id);
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
 		
@@ -168,8 +173,6 @@ public class NewsApi {
         // Since we are doing a post, set defaults.
 	    db.setId(null);
 	    db.setPersonId(me);
-	    Timestamp now = Timestamp.from(Instant.now());
-	    db.setPosted(now);
 	    
 	    if (db.getVisibleToPersonTypes().isEmpty()) {
 	        // If it's not visible to anyone, make it visible to

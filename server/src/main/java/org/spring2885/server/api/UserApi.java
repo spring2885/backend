@@ -31,6 +31,7 @@ public class UserApi {
 
         DbPerson me = personService.findByEmail(email);
         if (me == null) {
+            logger.info("GET /user: {} NOT FOUND", email);
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         
