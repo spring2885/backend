@@ -477,7 +477,7 @@ paths:
   /api/v1/Language:
     get:
       tags: ["Language"]
-      summary: gets a Langauge
+      summary: gets a Language
       description: |
        retrieves a langauge based on a langauge code passed.
       responses:
@@ -490,7 +490,7 @@ paths:
         404:
           description: HttpStatus.NOT_FOUND
     put:
-      tags: ["Langauge"]
+      tags: ["Language"]
       summary: adds a langauge
       description: |
         Adds a langauge based on a langauge code passed.
@@ -507,7 +507,7 @@ paths:
           description: HttpStatus.NOT_FOUND
           
     post:
-      tags: ["Langauge"]
+      tags: ["Language"]
       summary: adds a langauge
       description: |
         Adds a langauge based on a langauge code passed.

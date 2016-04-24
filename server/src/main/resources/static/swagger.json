@@ -43,7 +43,7 @@
     "/api/v1/Language" : {
       "get" : {
         "tags" : [ "Language" ],
-        "summary" : "gets a Langauge",
+        "summary" : "gets a Language",
         "description" : "retrieves a langauge based on a langauge code passed.\n",
         "parameters" : [ ],
         "responses" : {
@@ -62,7 +62,7 @@
         }
       },
       "post" : {
-        "tags" : [ "Langauge" ],
+        "tags" : [ "Language" ],
         "summary" : "adds a langauge",
         "description" : "Adds a langauge based on a langauge code passed.\n",
         "parameters" : [ {
@@ -89,7 +89,7 @@
         }
       },
       "put" : {
-        "tags" : [ "Langauge" ],
+        "tags" : [ "Language" ],
         "summary" : "adds a langauge",
         "description" : "Adds a langauge based on a langauge code passed.\n",
         "parameters" : [ {
