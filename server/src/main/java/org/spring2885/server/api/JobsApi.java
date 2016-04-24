@@ -114,7 +114,7 @@ public class JobsApi {
 	    }
 		
 	    for (DbJob n : all) {
-	        logger.info("news={}", n.toString());
+	        logger.trace("news={}", n.toString());
 	    }
 	    
 		FluentIterable<Job> iterable = FluentIterable.from(all)
@@ -151,7 +151,6 @@ public class JobsApi {
         }
 		
 		DbJob updatedDbNews = jobsJsonToDb.apply(db, jobs);
-		
 		jobService.save(updatedDbNews);
 		
 		return new ResponseEntity<>(HttpStatus.OK);
@@ -177,5 +176,4 @@ public class JobsApi {
 		
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
-
 }
