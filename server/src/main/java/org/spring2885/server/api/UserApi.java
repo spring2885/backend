@@ -26,11 +26,12 @@ public class UserApi {
 
     @RequestMapping("/user")
     public ResponseEntity<User> user(Principal principal) {
-        logger.info("Handling /user with: {}", principal.toString());
         String email = principal.getName();
+        logger.info("GET /user: {}", email);
 
         DbPerson me = personService.findByEmail(email);
         if (me == null) {
+            logger.info("GET /user: {} NOT FOUND", email);
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         

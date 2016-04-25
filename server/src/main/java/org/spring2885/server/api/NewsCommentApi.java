@@ -50,6 +50,7 @@ public class NewsCommentApi {
     public ResponseEntity<Void> post(
             @RequestBody NewsComment news_comment,
             SecurityContextHolderAwareRequestWrapper request) throws NotFoundException {
+        logger.info("POST /api/v1/news_comment: {}", news_comment);
 
         // Look up the currently logged in user
         DbPerson me = requestHelper.loggedInUser(request);
@@ -58,7 +59,7 @@ public class NewsCommentApi {
         Long newsId = news_comment.getNewsId();
         DbNews news = newsService.findById(newsId);
         if (news == null) {
-            logger.info("Unable to find news ID: {}", newsId);
+            logger.info("POST /api/v1/news_comment: News ID: {} NOT FOUND", newsId);
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
@@ -78,8 +79,10 @@ public class NewsCommentApi {
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ResponseEntity<NewsComment> get(
             @PathVariable("id") int id) throws NotFoundException {
+        logger.info("GET /api/v1/news_comment/{}", id);
         DbNewsComment o = newsCommentService.findById(id);
         if (o == null) {
+            logger.info("GET /api/v1/news_comment/{} NOT FOUND", id);
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(newsCommentFromDbToJson.apply(o), HttpStatus.OK);
@@ -90,13 +93,16 @@ public class NewsCommentApi {
             @PathVariable("id") Integer id,
             SecurityContextHolderAwareRequestWrapper request)
             throws NotFoundException {
+        logger.info("DELETE /api/v1/news_comment/{}", id);
         
         DbNewsComment db = newsCommentService.findById(id);
         if (db == null) {
+            logger.info("DELETE /api/v1/news_comment/{} NOT FOUND", id);
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         if (!requestHelper.checkAdminRequestIfNeeded(db.getPerson().getId(), request)) {
+            logger.info("GET /api/v1/news_comment/{} FORBIDDEN", id);
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
 
@@ -110,6 +116,7 @@ public class NewsCommentApi {
             @RequestBody NewsComment news,
             SecurityContextHolderAwareRequestWrapper request) throws NotFoundException {
         
+        logger.info("PUT /api/v1/news_comment/{}: {}", id, news);
         if (id.longValue() != news.getId().longValue()) {
             logger.info("news comment ID {} didn't match JSON content ID {}", id, news.getId());
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -117,13 +124,14 @@ public class NewsCommentApi {
 
         DbNewsComment db = newsCommentService.findById(id);
         if (db == null) {
-            logger.info("Unable to fiud news comment id: {}", id);
+            logger.info("PUT /api/v1/news_comment/{}: NOT FOUND", id);
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         if (!requestHelper.checkAdminRequestIfNeeded(db.getPerson().getId(), request)) {
             logger.info("person id: {} unable to access article authored by {}", 
                     request.getUserPrincipal().getName(), db.getPerson().getId());
+            logger.info("PUT /api/v1/news_comment/{}: FORBIDDEN", id);
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
         

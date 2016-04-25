@@ -1,7 +1,6 @@
 # Spring2885 Backend API.
 swagger: '2.0'
 
-# This is your document metadata
 info:
   version: "0.0.1"
   title: NDNU Community Access API
@@ -10,7 +9,6 @@ info:
     name: Spring2885 Backend Development Team
     email: team@spring-2885.org
     url: https://github.com/spring2885/backend
-  
 
 schemes:
   - http
@@ -154,9 +152,7 @@ paths:
         500:
           description: error setting new password
           
-  # This is the /profiles endpoint
   /api/v1/profiles:
-    # This is a HTTP operation
     get:
       tags: ["Profiles"]
       security:
@@ -171,7 +167,6 @@ paths:
         - $ref: '#/parameters/q'
         - $ref: '#/parameters/aq'
       responses:
-        # Response code
         200:
           description: Successful response
           # A schema describing your response object.
@@ -192,11 +187,8 @@ paths:
       parameters:
         - $ref: '#/parameters/id'
       responses:
-        # Response code
         200:
           description: Successful response
-          # A schema describing your response object.
-          # Use JSON Schema format
           schema:
             $ref: '#/definitions/Person'
     put:
@@ -474,52 +466,50 @@ paths:
         500:
           description: Error deleting the profile "ID".
 
-  /api/v1/Language:
+  /api/v1/language:
     get:
       tags: ["Language"]
-      summary: gets a Langauge
+      summary: gets a Language
       description: |
        retrieves a langauge based on a langauge code passed.
       responses:
         200:
           description: Sucessful response
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/Language'
         404:
           description: HttpStatus.NOT_FOUND
     put:
-      tags: ["Langauge"]
+      tags: ["Language"]
       summary: adds a langauge
       description: |
         Adds a langauge based on a langauge code passed.
       parameters:
-        - $ref: '#/parameters/size'
+        - name: language
+          in: body
+          description: The Language you want to update
+          required: true
+          schema:
+            $ref: '#/definitions/Language'
       responses:
         200:
           description: Sucessful response
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/Language'
         404:
           description: HttpStatus.NOT_FOUND
           
     post:
-      tags: ["Langauge"]
+      tags: ["Language"]
       summary: adds a langauge
       description: |
         Adds a langauge based on a langauge code passed.
       parameters:
-        - $ref: '#/parameters/size'
+        - name: language
+          in: body
+          description: The Language you want to update
+          required: true
+          schema:
+            $ref: '#/definitions/Language'
       responses:
         200:
           description: Sucessful response
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/Language'
         404:
           description: HttpStatus.NOT_FOUND
           
@@ -1118,3 +1108,5 @@ tags:
     description: Person Type API (Admin).
   - name: Approvals
     description: Approvals API (Admin)
+  - name: Language
+    description: Language API (Admin)
