@@ -25,7 +25,7 @@ public class NewsCommentConverters {
             NewsComment n = new NewsComment();
             n.setId(db.getId());
             n.setNewsId(db.getNews().getId());
-            n.setPosted(db.getCommentTimestamp());
+            n.setPosted(ConverterUtils.asModelDate(db.getCommentTimestamp()));
             n.setText(db.getCommentText());
 
             DbPerson person = db.getPerson();

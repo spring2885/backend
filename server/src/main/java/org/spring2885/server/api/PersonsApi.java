@@ -51,11 +51,10 @@ public class PersonsApi {
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ResponseEntity<Person> get(
             @PathVariable("id") int id) throws NotFoundException {
-        logger.info("Handling GET /profiles/{id}: {}", id);
+        logger.info(" GET /api/v1/profiles/{}", id);
         DbPerson o = personService.findById(id);
         if (o == null) {
-            // When adding test testPersonsById_notFound, was getting a NullPointerException
-            // here, so needed to add this.
+            logger.info(" GET /api/v1/profiles/{} NOT FOUND", id);
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         
@@ -68,7 +67,9 @@ public class PersonsApi {
 			SecurityContextHolderAwareRequestWrapper request)
 			throws NotFoundException {
 		
+        logger.info("DELETE /api/v1/profiles/{}", id);
 		if (!requestHelper.checkAdminRequestIfNeeded(id, request)) {
+	        logger.info("DELETE /api/v1/profiles/{} FORBIDDEN", id);
 			return new ResponseEntity<>("Only admin's can change others... ", HttpStatus.FORBIDDEN);
 		}
 
@@ -82,7 +83,7 @@ public class PersonsApi {
             @RequestParam(value = "q", required = false) String q,
 	        @RequestParam(value = "size", required = false) Integer size
 	        ) throws NotFoundException {
-	    logger.info("PersonsApi GET: q={}, aq={}, size={}", q, aq, size);
+        logger.info("GET /api/v1/profiles: q={}, aq={}, size={}", q, aq, size);
 	    Iterable<DbPerson> all;
 	    if (!Strings.isNullOrEmpty(q)) {
 	        all = personService.findAll(q);
@@ -104,19 +105,24 @@ public class PersonsApi {
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<Void> put(
-			@PathVariable("id") Integer id,
+			@PathVariable("id") Long id,
 			@RequestBody Person person,
 			SecurityContextHolderAwareRequestWrapper request) throws NotFoundException {
 		
+        logger.info("PUT /api/v1/profiles/{}", id);
+        
 		if (!requestHelper.checkAdminRequestIfNeeded(id, request)) {
+	        logger.info("PUT /api/v1/profiles/{} FORBIDDEN", id);
 			return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 		}
 
-		if (id.intValue() != person.getId().intValue()) {
+		if (id.longValue() != person.getId().longValue()) {
+	        logger.info("PUT /api/v1/profiles/{} BAD REQUEST {} != {}", id, id, person.getId());
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 		DbPerson db = personService.findById(id);
 		if (db == null) {
+            logger.info("PUT /api/v1/profiles/{} NOT FOUND", id);
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		DbPerson updatedDbPerson = personJsonToDb.apply(db, person);

@@ -1,10 +1,9 @@
 package org.spring2885.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import java.util.Date;
+import org.joda.time.DateTime;
 import org.spring2885.model.Person;
 
 import io.swagger.annotations.*;
@@ -14,13 +13,13 @@ import java.util.Objects;
 
 
 @ApiModel(description = "")
-@javax.annotation.Generated(value = "class io.swagger.codegen.languages.SpringMVCServerCodegen", date = "2016-04-14T22:09:20.994-07:00")
+@javax.annotation.Generated(value = "class io.swagger.codegen.languages.SpringMVCServerCodegen", date = "2016-04-24T07:21:08.830-07:00")
 public class NewsComment  {
   
   private Long id = null;
   private Long newsId = null;
   private String text = null;
-  private Date posted = null;
+  private DateTime posted = null;
   private Person postedBy = null;
 
   
@@ -64,10 +63,10 @@ public class NewsComment  {
    **/
   @ApiModelProperty(value = "")
   @JsonProperty("posted")
-  public Date getPosted() {
+  public DateTime getPosted() {
     return posted;
   }
-  public void setPosted(Date posted) {
+  public void setPosted(DateTime posted) {
     this.posted = posted;
   }
 

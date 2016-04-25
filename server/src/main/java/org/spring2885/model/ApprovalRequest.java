@@ -1,10 +1,9 @@
 package org.spring2885.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import java.util.Date;
+import org.joda.time.DateTime;
 import org.spring2885.model.Person;
 
 import io.swagger.annotations.*;
@@ -14,7 +13,7 @@ import java.util.Objects;
 
 
 @ApiModel(description = "")
-@javax.annotation.Generated(value = "class io.swagger.codegen.languages.SpringMVCServerCodegen", date = "2016-04-14T22:09:20.994-07:00")
+@javax.annotation.Generated(value = "class io.swagger.codegen.languages.SpringMVCServerCodegen", date = "2016-04-24T07:21:08.830-07:00")
 public class ApprovalRequest  {
   
   private String id = null;
@@ -24,11 +23,11 @@ public class ApprovalRequest  {
   private Long itemId = null;
   private String itemUrl = null;
   private String flaggedNotes = null;
-  private Date flaggedOn = null;
+  private DateTime flaggedOn = null;
   private Person flaggedBy = null;
   private Boolean approved = null;
   private String verdictNotes = null;
-  private Date verdictOn = null;
+  private DateTime verdictOn = null;
   private Person verdictBy = null;
 
   
@@ -120,10 +119,10 @@ public class ApprovalRequest  {
    **/
   @ApiModelProperty(value = "")
   @JsonProperty("flagged_on")
-  public Date getFlaggedOn() {
+  public DateTime getFlaggedOn() {
     return flaggedOn;
   }
-  public void setFlaggedOn(Date flaggedOn) {
+  public void setFlaggedOn(DateTime flaggedOn) {
     this.flaggedOn = flaggedOn;
   }
 
@@ -168,10 +167,10 @@ public class ApprovalRequest  {
    **/
   @ApiModelProperty(value = "")
   @JsonProperty("verdict_on")
-  public Date getVerdictOn() {
+  public DateTime getVerdictOn() {
     return verdictOn;
   }
-  public void setVerdictOn(Date verdictOn) {
+  public void setVerdictOn(DateTime verdictOn) {
     this.verdictOn = verdictOn;
   }
 

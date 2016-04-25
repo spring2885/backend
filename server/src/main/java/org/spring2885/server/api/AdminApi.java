@@ -77,7 +77,7 @@ public class AdminApi {
     public ResponseEntity<Void> faculty(
             @RequestBody FacultyRequest f,
             SecurityContextHolderAwareRequestWrapper wrapper) throws NotFoundException {
-        logger.info(f.toString());
+        logger.info("/api/v1/approvals/request/faculty: {}", f.toString());
         
         DbPerson loggedInUser = requestHelper.loggedInUser(wrapper);
         
@@ -92,7 +92,7 @@ public class AdminApi {
     public ResponseEntity<Void> abuse(
             @RequestBody AbuseRequest a,
             SecurityContextHolderAwareRequestWrapper wrapper) throws NotFoundException {
-        logger.info(a.toString());
+        logger.info("/api/v1/approvals/request/abuse: {}", a.toString());
         DbPerson loggedInUser = requestHelper.loggedInUser(wrapper);
         
         DbApprovalRequest db = abuseRequestToDbApproval.create(a, loggedInUser);
@@ -107,7 +107,7 @@ public class AdminApi {
             @RequestBody Verdict verdict,
             SecurityContextHolderAwareRequestWrapper wrapper) throws NotFoundException {
         
-        logger.info(verdict.toString());
+        logger.info("/api/v1/approvals/verdict: {}", verdict.toString());
         if (!wrapper.isUserInRole("ROLE_ADMIN")) {
             logger.info("/verdict: User {} is not an admin, returning forbidden", wrapper.getRemoteUser());
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
@@ -116,12 +116,12 @@ public class AdminApi {
         DbApprovalRequest request = approvalRequestService.findById(verdict.getId());
         String type = request.getApprovalType();
         if (!ApprovalTypes.isValidType(type)) {
-            logger.warn("/verdict type '{}' not valid.", type);
+            logger.warn("/api/v1/approvals/verdict type '{}' not valid.", type);
             return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
         }
         
         if (!request.getActive().booleanValue()) {
-            logger.warn("/verdict attempted to commit verdict on inactive request id: {}", 
+            logger.warn("/api/v1/approvals/verdict attempted to commit verdict on inactive request id: {}", 
                     verdict.getId());
             return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
         }
@@ -174,9 +174,9 @@ public class AdminApi {
             @RequestParam(value = "state", required = false) String state,
             @RequestParam(value = "type", required = false) String type,
             SecurityContextHolderAwareRequestWrapper wrapper) throws NotFoundException {
-        logger.info("AdminApi list : state={}, type={}", state, type);
+        logger.info("/api/v1/approvals/abuse/list: state={}, type={}", state, type);
         if (!wrapper.isUserInRole("ROLE_ADMIN")) {
-            logger.info("/verdict: User {} is not an admin, returning forbidden", wrapper.getRemoteUser());
+            logger.info("/api/v1/approvals/abuse/list: User {} is not an admin, returning forbidden", wrapper.getRemoteUser());
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
         

@@ -6,6 +6,8 @@ import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.eq;
 
 import java.sql.Date;
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.Collections;
 
 import org.junit.Before;
@@ -13,6 +15,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.spring2885.model.News;
 import org.spring2885.server.api.TestConfig;
+import org.spring2885.server.db.model.ConverterUtils;
 import org.spring2885.server.db.model.DbLanguage;
 import org.spring2885.server.db.model.DbNews;
 import org.spring2885.server.db.model.DbPerson;
@@ -55,7 +58,7 @@ public class NewsConverterTest {
         dbp.setGraduationYear(2000);
         dbp.setImageURL("http://me.com/me");
         dbp.setLanguage(new DbLanguage("es", "Spanish"));
-        dbp.setLastLogon(bday);
+        dbp.setLastLogon(ConverterUtils.asTimestamp(bday));
         dbp.setName("Someone");
         dbp.setOccupation("Bum");
         dbp.setResumeURL("linkedin.com/kewldude");
@@ -69,23 +72,23 @@ public class NewsConverterTest {
     }
     
 	@Test
-	public void testFromDbToJson(){
-	    Date date = new Date(System.currentTimeMillis());
+	public void testFromDbToJson() {
+	    Timestamp now = Timestamp.from(Instant.now());
 		DbNews d = new DbNews();
         d.setId(4L);
 		d.setActive(true);
 		d.setDescription("description");
-        d.setExpired(date);
-        d.setPosted(date);
+        d.setExpired(now);
+        d.setPosted(now);
 		d.setPersonId(dbp);
 		d.setTitle("This is a title");
 		d.setViews(200L);
 
 		News p = newsFromDbToJson.apply(d);
 		assertEquals(d.getDescription(), p.getDescription());
-		assertEquals(d.getExpired().toString(), p.getExpired().toString());
+		assertEquals(ConverterUtils.asModelDate(d.getExpired()).toString(), p.getExpired().toString());
 		assertEquals(d.getPerson().getEmail(), p.getPostedBy().getEmail());
-		assertEquals(d.getPosted().toString(), p.getPosted().toString());
+		assertEquals(ConverterUtils.asModelDate(d.getPosted()).toString(), p.getPosted().toString());
 		assertEquals(d.getTitle(), p.getTitle());
 		assertEquals(d.getViews(), p.getViews());
 	}
@@ -97,8 +100,8 @@ public class NewsConverterTest {
         Date date = new Date(System.currentTimeMillis());
 		News p = new News();
         p.setDescription("description");
-        p.setExpired(date);
-        p.setPosted(date);
+        p.setExpired(ConverterUtils.asModelDate(date));
+        p.setPosted(ConverterUtils.asModelDate(date));
         p.setId(4L);
         p.setPostedBy(personFromDbToJson.apply(dbp));
         p.setTitle("This is a title");
@@ -107,9 +110,9 @@ public class NewsConverterTest {
 		DbNews d = newsFromJsonToDb.apply(new DbNews(), p);
 		
         assertEquals(d.getDescription(), p.getDescription());
-        assertEquals(d.getExpired().toString(), p.getExpired().toString());
+        assertEquals(ConverterUtils.asModelDate(d.getExpired()).toString(), p.getExpired().toString());
         assertEquals(d.getPerson().getEmail(), p.getPostedBy().getEmail());
-        assertEquals(d.getPosted().toString(), p.getPosted().toString());
+        assertEquals(ConverterUtils.asModelDate(d.getPosted()).toString(), p.getPosted().toString());
         assertEquals(d.getTitle(), p.getTitle());
         assertEquals(d.getViews(), p.getViews());
 	}

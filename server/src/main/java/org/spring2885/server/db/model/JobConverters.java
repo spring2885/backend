@@ -33,8 +33,8 @@ public final class JobConverters {
             j.setCompany(db.getCompany());
             j.setJobType(db.getjobType());
             j.setHours(db.getHours());
-            j.setStartDate(db.getstartDate());
-            j.setEndDate(db.getendDate());
+            j.setStartDate(ConverterUtils.asModelDate(db.getstartDate()));
+            j.setEndDate(ConverterUtils.asModelDate(db.getendDate()));
             DbPerson dbPerson = db.getPerson();
             if (dbPerson != null) {
                 j.setPostedBy(personFromDbToJson.apply(dbPerson));

@@ -4,7 +4,6 @@ import java.security.Principal;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.spring2885.model.Person;
 import org.spring2885.model.User;
 import org.spring2885.server.db.model.DbPerson;
 import org.spring2885.server.db.model.PersonConverters;
@@ -16,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class UserController {
-    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+public class UserApi {
+    private static final Logger logger = LoggerFactory.getLogger(UserApi.class);
 
     @Autowired
     private PersonService personService;
@@ -27,11 +26,12 @@ public class UserController {
 
     @RequestMapping("/user")
     public ResponseEntity<User> user(Principal principal) {
-        logger.info("Handling /user with: {}", principal.toString());
         String email = principal.getName();
+        logger.info("GET /user: {}", email);
 
         DbPerson me = personService.findByEmail(email);
         if (me == null) {
+            logger.info("GET /user: {} NOT FOUND", email);
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         

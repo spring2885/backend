@@ -50,7 +50,7 @@ import com.google.common.collect.ImmutableSet;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = { TestConfig.class })
 @WebAppConfiguration
-public class PersonsApiTest {
+public class AuthApiTest {
     protected MockMvc mockMvc;
     
     @Autowired protected WebApplicationContext webappContext;

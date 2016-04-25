@@ -37,10 +37,10 @@ public final class NewsConverters {
 			News n = new News();
 			n.setId(db.getId());
 			n.setDescription(db.getDescription());
-			n.setExpired(db.getExpired());
+			n.setExpired(ConverterUtils.asModelDate(db.getExpired()));
 			DbPerson person = db.getPerson();
 			n.setPostedBy(personFromDbToJson.apply(person));
-			n.setPosted(db.getPosted());
+			n.setPosted(ConverterUtils.asModelDate(db.getPosted()));
 
 			n.setTitle(db.getTitle());
 			n.setViews(db.getViews());
@@ -71,14 +71,14 @@ public final class NewsConverters {
 		}
 		
 		public DbNews apply(DbNews db, News p) {
-			db.setId(p.getId());
+		    db.setId(p.getId());
 			if (!Strings.isNullOrEmpty(p.getTitle())) {
 	            db.setTitle(p.getTitle());
 			}
 			if (!Strings.isNullOrEmpty(p.getDescription())) {
 			    db.setDescription(p.getDescription());
 			}
-			db.setExpired(ConverterUtils.asSqlDate(p.getExpired()));
+			db.setExpired(ConverterUtils.asTimestamp(p.getExpired()));
 			Person postedBy = p.getPostedBy();
 			if (postedBy != null 
 			    && !Strings.isNullOrEmpty(postedBy.getEmail()) 
@@ -86,7 +86,7 @@ public final class NewsConverters {
 			    // Only update the person if it hadn't been set already.
 			    db.setPersonId(personService.findByEmail(postedBy.getEmail()));
 			}
-			db.setPosted(ConverterUtils.asSqlDate(p.getPosted()));
+			db.setPosted(ConverterUtils.asTimestamp(p.getPosted()));
             db.setViews(p.getViews());
 
             List<String> visibleToNames = p.getVisibleTo();

@@ -3,7 +3,6 @@ package org.spring2885.server.api;
 import static com.google.common.base.Preconditions.checkState;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-import java.sql.Date;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -54,10 +53,10 @@ public class NewsApi {
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public ResponseEntity<News> get(
 			@PathVariable("id") int id) throws NotFoundException {
+        logger.info("GET /api/v1/news/{}", id);
 		DbNews o = newsService.findById(id);
 		if (o == null) {
-			// When adding test testPersonsById_notFound, was getting a NullPointerException
-			// here, so needed to add this.
+	        logger.info("GET /api/v1/news/{} NOT FOUND", id);
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity<>(dbToJsonConverter.apply(o), HttpStatus.OK);
@@ -69,13 +68,16 @@ public class NewsApi {
 			@PathVariable("id") Integer id,
 			SecurityContextHolderAwareRequestWrapper request)
 			throws NotFoundException {
-		
+        logger.info("DELETE /api/v1/news/{}", id);
+
         DbNews db = newsService.findById(id);
         if (db == null) {
+            logger.info("DELETE /api/v1/news/{} NOT FOUND", id);
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         if (!requestHelper.checkAdminRequestIfNeeded(db.getPerson().getId(), request)) {
+            logger.info("DELETE /api/v1/news/{} FORBIDDEN", id);
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
 
@@ -91,9 +93,10 @@ public class NewsApi {
 	        @RequestParam(value = "size", required = false) Integer size,
 	        SecurityContextHolderAwareRequestWrapper request)
 			throws NotFoundException {
-		logger.info("NewsApi GET: q={}, aq={}, size={}", q, aq, size);
+		logger.info("GET /api/v1/news/ q={}, aq={}, size={}", q, aq, size);
 		
 		if (adminRequest && !requestHelper.isAdminRequest(request)) {
+	        logger.info("GET /api/v1/news/ ADMIN REQUEST FORBIDDEN");
 	        return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 		}
 		
@@ -110,7 +113,7 @@ public class NewsApi {
 	    }
 		
 	    for (DbNews n : all) {
-	        logger.info("news={}", n.toString());
+	        logger.trace("news={}", n.toString());
 	    }
 	    
 		FluentIterable<News> iterable = FluentIterable.from(all)
@@ -127,17 +130,21 @@ public class NewsApi {
 			@PathVariable("id") Integer id,
 			@RequestBody News news,
 			SecurityContextHolderAwareRequestWrapper request) throws NotFoundException {
+        logger.info("PUT /api/v1/news/{}", id);
 		
 		if (id.longValue() != news.getId().longValue()) {
+	        logger.info("PUT /api/v1/news/{} BAD REQUEST", id);
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 
         DbNews db = newsService.findById(id);
         if (db == null) {
+            logger.info("PUT /api/v1/news/{} NOT FOUND", id);
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         if (!requestHelper.checkAdminRequestIfNeeded(db.getPerson().getId(), request)) {
+            logger.info("PUT /api/v1/news/{} FORBIDDEN", id);
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
 		
@@ -153,6 +160,8 @@ public class NewsApi {
 			@RequestBody News news,
 			SecurityContextHolderAwareRequestWrapper request) throws NotFoundException {
 
+        logger.info("POST /api/v1/news '{}'", news);
+        
 	    // Look up the currently logged in user
         DbPerson me = requestHelper.loggedInUser(request);
         checkState(me != null);
@@ -162,7 +171,6 @@ public class NewsApi {
         // Since we are doing a post, set defaults.
 	    db.setId(null);
 	    db.setPersonId(me);
-	    db.setPosted(new Date(System.currentTimeMillis()));
 	    
 	    if (db.getVisibleToPersonTypes().isEmpty()) {
 	        // If it's not visible to anyone, make it visible to

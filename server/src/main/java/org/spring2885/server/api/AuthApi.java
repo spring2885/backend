@@ -29,9 +29,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "/auth", produces = { APPLICATION_JSON_VALUE })
-public class PasswordApi {
+public class AuthApi {
 
-	private static final Logger logger = LoggerFactory.getLogger(PasswordApi.class);
+	private static final Logger logger = LoggerFactory.getLogger(AuthApi.class);
 
 	@Autowired
 	TokenService tokenService;
@@ -50,6 +50,7 @@ public class PasswordApi {
 
 	@RequestMapping(value = "/forgot", method = RequestMethod.POST)
 	public ResponseEntity<Void> forgot(@RequestParam("email") String email) throws NotFoundException {
+	    logger.info("/auth/forgot: {}", email);
 
 		DbPerson p = personService.findByEmail(email);
 
@@ -87,32 +88,35 @@ public class PasswordApi {
 	}
 
 	@RequestMapping(value = "/reset", method = RequestMethod.POST)
-	public ResponseEntity<Void> reset(@RequestParam("email") String email, @RequestParam("token") String tokenString,
+	public ResponseEntity<Void> reset(
+	        @RequestParam("email") String email,
+	        @RequestParam("token") String tokenString,
 			@RequestParam("newPassword") String newPassword) throws Exception {
+        logger.info("/auth/reset: email: {}, token: {}", email, tokenString);
 
 		if (!tokenService.existsByEmail(email)) {
-			logger.info("token does not exist for email: {}", email);
+	        logger.info("/auth/reset: NOT FOUND email: {}, token: {}", email, tokenString);
 			return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
 		}
+
+        DbPerson person = personService.findByEmail(email);
+        if (person == null) {
+            logger.info("/auth/reset: PERSON NOT FOUND email: {}, token: {}", email, tokenString);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
 
 		List<DbToken> tokens = tokenService.findByEmail(email);
 		DbToken savedToken = findToken(tokens, tokenString);
 		if (savedToken == null) {
-			logger.info("token not found: " + tokenString);
+            logger.info("/auth/reset: TOKEN NOT FOUND email: {}, token: {}", email, tokenString);
 			return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
-		}
-
-		DbPerson person = personService.findByEmail(email);
-		if (person == null) {
-			logger.info("Person not found for email address: " + email);
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 
 		// At this point we looked up the saved token from the database and
 		// found one.
 		if (!savedToken.getEmail().equals(email)) {
 			// Our saved token was for someone else.
-			logger.info("token does not match email address: " + tokenString);
+            logger.info("/auth/reset: TOKEN MISMATCS email: {}, token: {}", email, tokenString);
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 
@@ -128,7 +132,6 @@ public class PasswordApi {
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 
-	// TODO: this is never visited either
 	private DbToken findToken(Iterable<DbToken> tokens, String uuid) {
 		for (DbToken t : tokens) {
 			if (uuid.equals(t.getUuid())) {

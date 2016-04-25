@@ -2,6 +2,8 @@ package org.spring2885.server.api;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.spring2885.model.PersonType;
 import org.spring2885.server.api.exceptions.NotFoundException;
 import org.spring2885.server.db.model.DbPersonType;
@@ -20,7 +22,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(value = "/api/v1/persontype", produces = { APPLICATION_JSON_VALUE })
 public class PersonTypeApi {
-	@Autowired
+
+    private static final Logger logger = LoggerFactory.getLogger(PersonTypeApi.class);
+
+    @Autowired
 	private PersonTypeService personTypeService;
 
     @Autowired
@@ -32,24 +37,28 @@ public class PersonTypeApi {
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<Iterable<DbPersonType>> list(
             ) throws NotFoundException {
+        logger.info("GET /api/v1/persontype");
     	Iterable<DbPersonType> o = personTypeService.findAll();
         
         if (o == null) {
+            // TODO(rob): This seems broken
             // When adding test testPersonsById_notFound, was getting a NullPointerException
             // here, so needed to add this.
+            logger.info("GET /api/v1/persontype. WTF");
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(o, HttpStatus.OK);
     }
     
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public ResponseEntity<PersonType> get(
-            @PathVariable("id") int id) throws NotFoundException {
-    	DbPersonType o = personTypeService.findById(id);
-    	if (o != null) {
-    	  return new ResponseEntity<>(personTypeFromDbToJson.apply(o), HttpStatus.OK);
-    	}
-    	return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    public ResponseEntity<PersonType> get(@PathVariable("id") int id) throws NotFoundException {
+        logger.info("GET /api/v1/persontype/{}", id);
+        DbPersonType o = personTypeService.findById(id);
+        if (o == null) {
+            logger.info("GET /api/v1/persontype/{} NOT FOUND", id);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(personTypeFromDbToJson.apply(o), HttpStatus.OK);
     }
     
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
@@ -57,8 +66,10 @@ public class PersonTypeApi {
 			@PathVariable("id") Integer id,
 			SecurityContextHolderAwareRequestWrapper request)
 			throws NotFoundException {
+        logger.info("DELETE /api/v1/persontype/{}", id);
 
     	if (!request.isUserInRole("ROLE_ADMIN")) {
+            logger.info("DELETE /api/v1/persontype/{} FORBIDDEN", id);
     		return new ResponseEntity<>(HttpStatus.FORBIDDEN);
     	}
 		personTypeService.delete(id);
@@ -74,15 +85,19 @@ public class PersonTypeApi {
     		SecurityContextHolderAwareRequestWrapper request,
     		@RequestBody PersonType personType) throws NotFoundException{
     	
+        logger.info("PUT /api/v1/persontype/{} : {}", id, personType);
     	if (!request.isUserInRole("ROLE_ADMIN")) {
+            logger.info("PUT /api/v1/persontype/{} FORBIDDEN", id);
     		return new ResponseEntity<>(HttpStatus.FORBIDDEN);
     	}
     	if (id.intValue() != personType.getId().intValue()) {
+            logger.info("PUT /api/v1/persontype/{} BAD REQUEST", id);
     		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     	}
     	
     	DbPersonType db = personTypeService.findById(id);
     	if (db == null){
+            logger.info("PUT /api/v1/persontype/{} NOT FOUND", id);
     		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     	}
     	DbPersonType updatedDbPersonType = personTypeJsonToDb.apply(db, personType);
@@ -94,8 +109,10 @@ public class PersonTypeApi {
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<Void> post(
     		@RequestBody PersonType type) throws NotFoundException {
+        logger.info("POST /api/v1/persontype");
     	
     	if (personTypeService.existsByName(type.getName())) {
+            logger.info("POST /api/v1/persontype");
     		throw new RuntimeException("name already exists: " + type.getName());
     	}
     	
