@@ -117,10 +117,10 @@ public class DbJob implements Serializable {
 		this.company = company;
 	}
 
-	public Long getjobType() {
+	public Long getJobType() {
 		return jobType;
 	}
-	public void setjobType(long jobType) {
+	public void setJobType(Long jobType) {
 		this.jobType = jobType;
 	}
 	public Long getHours() {

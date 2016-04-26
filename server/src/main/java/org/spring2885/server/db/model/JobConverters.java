@@ -31,7 +31,7 @@ public final class JobConverters {
             j.setLocation(db.getLocation());
             j.setDescription(db.getDescription());
             j.setCompany(db.getCompany());
-            j.setJobType(db.getjobType());
+            j.setJobType(db.getJobType());
             j.setHours(db.getHours());
             j.setStartDate(db.getstartDate());
             j.setEndDate(db.getendDate());
@@ -59,7 +59,7 @@ public final class JobConverters {
 			db.setTitle(p.getTitle());
 			db.setCompany(p.getCompany());
 			db.setLocation(p.getLocation());
-			db.setjobType(p.getJobType());
+			db.setJobType(p.getJobType());
 		
 			Person postedBy = p.getPostedBy();
 			if (postedBy != null 
