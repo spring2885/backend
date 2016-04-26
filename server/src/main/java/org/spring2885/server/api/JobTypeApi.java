@@ -34,7 +34,7 @@ public class JobTypeApi {
      
     @Autowired
     private JobTypeConverters.JsonToDbConverter jobTypeJsonToDb;
-	 
+	
     @Autowired
     private RequestHelper requestHelper;
 

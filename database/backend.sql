@@ -309,11 +309,46 @@ INSERT INTO job_type VALUES (
     "part-time",1,now(), now(), NULL, NULL);
 
 INSERT INTO social_service VALUES(
+    'Angellist', 'https://angel.co/',1,now(), now());
+INSERT INTO social_service VALUES(
+    'Bitbucket', 'https://bitbucket.org/',1,now(), now());
+INSERT INTO social_service VALUES(
+    'Facebook', 'http://www.facebook.com/',1,now(), now());
+INSERT INTO social_service VALUES(
+    'Flickr', 'https://www.flickr.com/',1,now(), now());
+INSERT INTO social_service VALUES(
+    'Foursquare', 'https://foursquare.com/',1,now(), now());
+INSERT INTO social_service VALUES(
+    'github', 'https://github.com/',1,now(), now());
+INSERT INTO social_service VALUES(
+    'Googleplus', 'https://plus.google.com/',1,now(), now());
+INSERT INTO social_service VALUES(
+    'Instagram', 'https://www.instagram.com/',1,now(), now());
+INSERT INTO social_service VALUES(
     'LinkedIn', 'http://www.linkedin.com/',1,now(), now());
+INSERT INTO social_service VALUES(
+    'Medium', 'https://medium.com/',1,now(), now());
+INSERT INTO social_service VALUES(
+    'Pinterest', 'https://www.pinterest.com/',1,now(), now());
+INSERT INTO social_service VALUES(
+    'Quora', 'https://www.quora.com/',1,now(), now());
+INSERT INTO social_service VALUES(
+    'Scribd', 'https://www.scribd.com/',1,now(), now());
+INSERT INTO social_service VALUES(
+    'Slideshare', 'http://www.slideshare.net/',1,now(), now());
+INSERT INTO social_service VALUES(
+    'Spotify', 'https://www.spotify.com/us/',1,now(), now());
+INSERT INTO social_service VALUES(
+    'Tumblr', 'https://www.tumblr.com/',1,now(), now());
+INSERT INTO social_service VALUES(
+    'Twitch', 'https://www.twitch.tv/',1,now(), now());
 INSERT INTO social_service VALUES(
     'Twitter', 'http://www.twitter.com/',1,now(), now());
 INSERT INTO social_service VALUES(
-    'Facebook', 'http://www.facebook.com/',1,now(), now());
+    'Yelp', 'http://www.yelp.com/',1,now(), now());
+INSERT INTO social_service VALUES(
+    'Youtube', 'https://www.youtube.com/',1,now(), now());
+
 
 INSERT INTO language VALUES('en', 'English',1,now(), now(), NULL, NULL);
 
