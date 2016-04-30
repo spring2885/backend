@@ -1,6 +1,7 @@
 package org.spring2885.server.api;
 
 import static org.mockito.Matchers.anyLong;
+import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.reset;
@@ -179,6 +180,7 @@ public class NewsCommentApiTest {
         // Setup the expectations.
         when(newsCommentService.findById(4)).thenReturn(db);
         when(newsService.findById(news.getId())).thenReturn(news);
+        when(newsCommentService.save(any(DbNewsComment.class))).thenReturn(db);
         
         comment.setId(null);
         mockMvc.perform(post("/api/v1/news_comment")
