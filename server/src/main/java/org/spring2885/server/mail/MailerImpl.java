@@ -1,7 +1,9 @@
 package org.spring2885.server.mail;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Map;
@@ -9,6 +11,7 @@ import java.util.Map;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
+import org.apache.tomcat.util.http.fileupload.util.Streams;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +41,9 @@ public class MailerImpl implements Mailer {
             Map<String, String> data) throws IOException, URISyntaxException {
         
         logger.info("Sending mail to: {}, template: {}", email, templateName);
-        String text = new String(Files.readAllBytes(Paths.get(getClass().getResource(templateName).toURI())));
+        String path = "/org/spring2885/server/mail/" + templateName;
+        URL u = getClass().getResource(path);
+        String text = Streams.asString(u.openStream());
         Template tmpl = Mustache.compiler().compile(text); 
         String body = tmpl.execute(data);
         
