@@ -160,7 +160,6 @@ public class AdminApi {
                     }
                 }
             }
-            return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
         }
 
         // Save the updated approval request.
