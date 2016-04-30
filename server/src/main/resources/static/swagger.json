@@ -539,7 +539,10 @@
         } ],
         "responses" : {
           "200" : {
-            "description" : "Makes a new News"
+            "description" : "Successfully created a new news entry",
+            "schema" : {
+              "$ref" : "#/definitions/News"
+            }
           }
         },
         "security" : [ {
@@ -645,7 +648,10 @@
         } ],
         "responses" : {
           "200" : {
-            "description" : "Makes a new NewsComment"
+            "description" : "Successfully created a news comment.",
+            "schema" : {
+              "$ref" : "#/definitions/NewsComment"
+            }
           }
         },
         "security" : [ {

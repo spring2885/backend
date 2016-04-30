@@ -47,7 +47,7 @@ public class NewsCommentApi {
     private RequestHelper requestHelper;
     
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<Void> post(
+    public ResponseEntity<NewsComment> post(
             @RequestBody NewsComment news_comment,
             SecurityContextHolderAwareRequestWrapper request) throws NotFoundException {
         logger.info("POST /api/v1/news_comment: {}", news_comment);
@@ -71,9 +71,10 @@ public class NewsCommentApi {
         db.setCommentTimestamp(new Date(System.currentTimeMillis()));
         db.setNews(news);
 
-        newsCommentService.save(db);
+        DbNewsComment dbUpdated = newsCommentService.save(db);
+        NewsComment updated = newsCommentFromDbToJson.apply(dbUpdated);
 
-        return new ResponseEntity<Void>(HttpStatus.OK);
+        return new ResponseEntity<NewsComment>(updated, HttpStatus.OK);
     }
     
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)

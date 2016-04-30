@@ -258,7 +258,10 @@ paths:
           required: true
       responses:
         200:
-          description: Makes a new News 
+          description: Successfully created a new news entry
+          schema:
+            $ref: '#/definitions/News'
+
   /api/v1/news/{id}:
     get:
       tags: ["News"]
@@ -326,7 +329,9 @@ paths:
           required: true
       responses:
         200:
-          description: Makes a new NewsComment 
+          description: Successfully created a news comment.
+          schema:
+            $ref: '#/definitions/NewsComment'
 
   /api/v1/news_comment/{id}:
     get:

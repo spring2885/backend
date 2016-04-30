@@ -13,6 +13,7 @@ import org.spring2885.server.api.utils.RequestHelper;
 import org.spring2885.server.db.model.DbNews;
 import org.spring2885.server.db.model.DbPerson;
 import org.spring2885.server.db.model.NewsConverters;
+import org.spring2885.server.db.model.NewsConverters.NewsFromDbToJson;
 import org.spring2885.server.db.service.NewsService;
 import org.spring2885.server.db.service.search.SearchCriteria;
 import org.spring2885.server.db.service.search.SearchParser;
@@ -156,7 +157,7 @@ public class NewsApi {
 	}
 	
 	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<Void> post(
+	public ResponseEntity<News> post(
 			@RequestBody News news,
 			SecurityContextHolderAwareRequestWrapper request) throws NotFoundException {
 
@@ -178,9 +179,10 @@ public class NewsApi {
 	        db.setVisibleToPersonType(me.getType());
 	    }
 	    
-		newsService.save(db);
+		DbNews newDbNews = newsService.save(db);
+		News newNews = dbToJsonConverter.apply(newDbNews);
 		
-		return new ResponseEntity<Void>(HttpStatus.OK);
+		return new ResponseEntity<News>(newNews, HttpStatus.OK);
 	}
 
 }
