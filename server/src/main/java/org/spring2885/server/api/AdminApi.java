@@ -165,6 +165,8 @@ public class AdminApi {
         // Save the updated approval request.
         updated.setActive(Boolean.FALSE);
         approvalRequestService.save(updated);
+
+        logger.info("/api/v1/approvals/verdict: APPROVED {}", verdict.toString());
         return new ResponseEntity<Void>(HttpStatus.OK);
     }   
     
