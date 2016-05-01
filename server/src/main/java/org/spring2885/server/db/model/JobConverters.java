@@ -32,6 +32,7 @@ public final class JobConverters {
             j.setDescription(db.getDescription());
             j.setCompany(db.getCompany());
             j.setJobType(db.getJobType());
+            j.setIndustry(db.getIndustry());
             j.setHours(db.getHours());
             j.setStartDate(ConverterUtils.asModelDate(db.getStartDate()));
             j.setEndDate(ConverterUtils.asModelDate(db.getEndDate()));
@@ -59,7 +60,9 @@ public final class JobConverters {
 			db.setTitle(p.getTitle());
 			db.setCompany(p.getCompany());
 			db.setLocation(p.getLocation());
+			db.setDescription(p.getDescription());
 			db.setJobType(p.getJobType());
+			db.setIndustry(p.getIndustry());
 			db.setHours(p.getHours());
             db.setStartDate(ConverterUtils.asSqlDate(p.getStartDate()));
             db.setEndDate(ConverterUtils.asSqlDate(p.getEndDate()));
