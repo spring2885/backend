@@ -126,23 +126,23 @@ public class DbJob implements Serializable {
 	public Long getHours() {
 		return hours;
 	}
-	public void setHours(long hours) {
+	public void setHours(Long hours) {
 		this.hours = hours;
 	}
 
-	public Date getstartDate() {
+	public Date getStartDate() {
 		return startDate;
 	}
 
-	public void setstartDate(Date startDate) {
+	public void setStartDate(Date startDate) {
 		this.startDate = startDate;
 	}
 
-	public Date getendDate() {
+	public Date getEndDate() {
 		return endDate;
 	}
 
-	public void setendDate(Date endDate) {
+	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
 	}
 
