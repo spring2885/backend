@@ -34,7 +34,7 @@ public class DbJob implements Serializable {
 	private Long id;
 
 	private String title;
-	private Integer industry;
+	private Long industry;
 	private String location;
 	private String description;
 	private String company;
@@ -91,10 +91,10 @@ public class DbJob implements Serializable {
 	public void setTitle(String title) {
 		this.title = title;
 	}
-	public Integer getIndustry() {
+	public Long getIndustry() {
 		return industry;
 	}
-	public void setIndustry(Integer industry) {
+	public void setIndustry(Long industry) {
 		this.industry = industry;
 	}
 	public String getLocation() {
