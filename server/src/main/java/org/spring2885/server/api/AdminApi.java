@@ -152,11 +152,18 @@ public class AdminApi {
                         news.setAbuse(Boolean.TRUE);
                         newsService.save(news);
                     }
-                } else if ("JOBS".equals(itemType)) {
+                } else if ("JOB".equals(itemType)) {
                     DbJob job = jobService.findById(id);
                     if (job != null) {
                         job.setAbuse(Boolean.TRUE);
                         jobService.save(job);
+                    }
+                } else if ("PROFILE".equals(itemType)) {
+                    DbPerson person = personService.findById(id);
+                    if (person != null) {
+                        // TODO(rob): Really should have an Abuse column.
+                        person.setActive(Boolean.FALSE);
+                        personService.save(person);
                     }
                 }
             }

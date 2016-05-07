@@ -1,6 +1,5 @@
 package org.spring2885.server.db.model;
 
-import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.Set;
