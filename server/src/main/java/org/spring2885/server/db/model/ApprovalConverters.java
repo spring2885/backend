@@ -84,7 +84,7 @@ public class ApprovalConverters {
             db.setFlaggedBy(requestor);
             db.setFlagedOn(Timestamp.from(Instant.now()));
             db.setFlaggedNotes(t.getNotes());
-            db.setItemId(requestor.getId());
+            db.setItemId(t.getItemId());
             db.setItemUrl(t.getItemUrl());
             db.setItemType(t.getItemType());
 

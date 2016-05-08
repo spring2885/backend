@@ -146,17 +146,23 @@ public class AdminApi {
             if (verdict.getApproved().booleanValue()) {
                 String itemType = updated.getItemType();
                 Long id = updated.getItemId();
-                if ("NEWS".equals(itemType)) {
+                if ("NEWSPOST".equals(itemType)) {
                     DbNews news = newsService.findById(id);
                     if (news != null) {
                         news.setAbuse(Boolean.TRUE);
                         newsService.save(news);
+                        logger.info("Marking {}/{} as abusive", itemType, id);
+                    } else {
+                        logger.warn("Unknown {} item: {}", itemType, id);
                     }
                 } else if ("JOB".equals(itemType)) {
                     DbJob job = jobService.findById(id);
                     if (job != null) {
                         job.setAbuse(Boolean.TRUE);
                         jobService.save(job);
+                        logger.info("Marking {}/{} as abusive", itemType, id);
+                    } else {
+                        logger.warn("Unknown {} item: {}", itemType, id);
                     }
                 } else if ("PROFILE".equals(itemType)) {
                     DbPerson person = personService.findById(id);
@@ -164,7 +170,12 @@ public class AdminApi {
                         // TODO(rob): Really should have an Abuse column.
                         person.setActive(Boolean.FALSE);
                         personService.save(person);
+                        logger.info("Marking {}/{} as abusive", itemType, id);
+                    } else {
+                        logger.warn("Unknown {} item: {}", itemType, id);
                     }
+                } else {
+                    logger.warn("Unknown itemType '{}' for verdict: {}", itemType, verdict.getId());
                 }
             }
         }

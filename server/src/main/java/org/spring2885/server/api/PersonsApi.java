@@ -91,7 +91,7 @@ public class PersonsApi {
 	        List<SearchCriteria> criterias = searchParser.parse(aq);
             all = personService.findAll(criterias);
 	    } else {
-	        all = personService.findAll();
+	        all = personService.findAllByActive(true);
 	    }
 		
 		FluentIterable<Person> iterable = FluentIterable.from(all)
