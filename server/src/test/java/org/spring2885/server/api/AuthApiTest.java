@@ -1,6 +1,7 @@
 package org.spring2885.server.api;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Matchers.anyBoolean;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.reset;
@@ -98,6 +99,7 @@ public class AuthApiTest {
     private DbPerson createDbPerson(long id, String email, String aboutMe) {
     	DbPerson p = new DbPerson();
     	p.setId(id);
+    	p.setActive(Boolean.TRUE);
     	p.setEmail(email);
     	p.setAboutMe(aboutMe);
     	p.setLanguage(new DbLanguage("eo", "Esperanto"));
@@ -125,7 +127,7 @@ public class AuthApiTest {
     @WithMockUser
     public void testPersons() throws Exception {
     	// Setup the expectations.
-    	when(personService.findAll())
+    	when(personService.findAllByActive(anyBoolean()))
     		.thenReturn(ImmutableList.of(
     			createDbPerson(5,  "me@example.com", ""),
     			createDbPerson(5,  "me2@example.com", "")));
