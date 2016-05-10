@@ -76,7 +76,7 @@ public class AuthApi {
 		data.put("from_name", fromName);
 
 		try {
-			mailer.send(email, "forgot.txt", "Forgot Password.", data);
+			mailer.send(email, "forgot", "Forgot Password.", data);
 		} catch (IOException | URISyntaxException e) {
 			// If we can't send the email there is no reason to give the UUID
 			// out.

@@ -1,19 +1,16 @@
 package org.spring2885.server.mail;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Map;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
-import org.apache.tomcat.util.http.fileupload.util.Streams;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.spring2885.server.db.model.DbTemplate;
+import org.spring2885.server.db.service.TemplateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -29,9 +26,13 @@ public class MailerImpl implements Mailer {
     
     private JavaMailSender sender;
     
+    private TemplateService templateService;
+    
+    
     @Autowired
-    public MailerImpl(JavaMailSender javaMailSender) {
+    public MailerImpl(JavaMailSender javaMailSender, TemplateService templateService) {
         this.sender = javaMailSender;
+        this.templateService = templateService;
     }
     
     @Value("${app.mail.from}")
@@ -41,11 +42,18 @@ public class MailerImpl implements Mailer {
             Map<String, String> data) throws IOException, URISyntaxException {
         
         logger.info("Sending mail to: {}, template: {}", email, templateName);
-        String path = "/org/spring2885/server/mail/" + templateName;
-        URL u = getClass().getResource(path);
-        String text = Streams.asString(u.openStream());
-        Template tmpl = Mustache.compiler().compile(text); 
+        DbTemplate db = templateService.findById(templateName);
+        if (db == null) {
+            logger.error("Unable to find template named: {}", templateName);
+            // TODO: Should raise an error;
+            return;
+        }
+        
+        String templateBody = db.getBody();
+        Template tmpl = Mustache.compiler().compile(templateBody); 
         String body = tmpl.execute(data);
+        
+        logger.info("Sending tempate {}, body: {}", templateName, body);
         
         MimeMessage mail = sender.createMimeMessage();
         try {

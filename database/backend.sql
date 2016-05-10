@@ -279,6 +279,11 @@ CREATE TABLE approval_request(
     FOREIGN KEY(verdict_by) REFERENCES person(id)
 );
 
+CREATE TABLE templates(
+    id VARCHAR(64) NOT NULL PRIMARY KEY, 
+    body TEXT
+);
+
 --
 --  Static data required for all instances.
 -- 
@@ -352,3 +357,15 @@ INSERT INTO social_service VALUES(
 
 INSERT INTO language VALUES('en', 'English',1,now(), now(), NULL, NULL);
 
+INSERT INTO templates VALUES('forgot', 
+'You recently requested to reset your {{ app_name }} password. 
+To complete this process, please click the following link, 
+or copy and paste it into your browser:
+{{ reset_url }} 
+
+If you did not initiate this request, please disregard. 
+
+This is an automatically generated message. PLEASE DO NOT REPLY TO THIS E-MAIL. 
+
+Thank you, 
+{{ from_name }}');
