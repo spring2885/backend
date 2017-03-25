@@ -355,12 +355,15 @@ INSERT INTO social_service VALUES(
     'Youtube', 'https://www.youtube.com/',1,now(), now());
 
 
+INSERT INTO language VALUES('ar', 'Arabic',1,now(), now(), NULL, NULL);
 INSERT INTO language VALUES('en', 'English',1,now(), now(), NULL, NULL);
+INSERT INTO language VALUES('es', 'Spanish',1,now(), now(), NULL, NULL);
+INSERT INTO language VALUES('fr', 'French',1,now(), now(), NULL, NULL);
+INSERT INTO language VALUES('zh', 'Chinese',1,now(), now(), NULL, NULL);
 
 INSERT INTO templates VALUES('forgot', 
 'You recently requested to reset your {{ app_name }} password. 
-To complete this process, please click the following link, 
-or copy and paste it into your browser:
+To complete this process, please click the following link:
 {{ reset_url }} 
 
 If you did not initiate this request, please disregard. 
