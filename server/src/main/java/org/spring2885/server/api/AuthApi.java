@@ -116,7 +116,7 @@ public class AuthApi {
 		// found one.
 		if (!savedToken.getEmail().equals(email)) {
 			// Our saved token was for someone else.
-            logger.info("/auth/reset: TOKEN MISMATCS email: {}, token: {}", email, tokenString);
+            logger.info("/auth/reset: TOKEN MISMATCH email: {}, token: {}", email, tokenString);
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 
