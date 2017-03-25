@@ -1,6 +1,5 @@
 You recently requested to reset your {{ app_name }} password. 
-To complete this process, please click the following link, 
-or copy and paste it into your browser:
+To complete this process, please click the following link:
 {{ reset_url }} 
 
 If you did not initiate this request, please disregard. 
