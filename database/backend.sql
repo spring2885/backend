@@ -9,35 +9,30 @@ CREATE TABLE person_type
 (
     id INT AUTO_INCREMENT,
     name VARCHAR(100),
-#Auditing Columns
+    #Auditing Columns
     version INT,
     creation_time DATETIME,
     modification_time DATETIME,
-
-    
     PRIMARY KEY (id)
 );
 
 DROP TABLE IF EXISTS language;
 CREATE TABLE language
 (
-	# IANA RFC 3066 language tags (ka ISO-639 + ISO-3166)
-	code VARCHAR(20) NOT NULL,
-	description VARCHAR(80) NOT NULL,
-	PRIMARY KEY(code),
-#Auditing Columns
+    #IANA RFC 3066 language tags (ka ISO-639 + ISO-3166)
+    code VARCHAR(20) NOT NULL,
+    description VARCHAR(80) NOT NULL,
+    PRIMARY KEY(code),
+    #Auditing Columns
     version INT,
     creation_time DATETIME,
     modification_time DATETIME,
-	created_by VARCHAR(100),
+    created_by VARCHAR(100),
     modified_by VARCHAR(100)
-    
 );
 
-#
 # person is a union of the base person plus
 # student, alumni, faculty
-#
 DROP TABLE IF EXISTS person;
 CREATE TABLE person
 (
@@ -55,20 +50,20 @@ CREATE TABLE person
     lang VARCHAR(20),
     last_logon DATETIME,
     password VARCHAR(255),
-# student only fields
+    #student only fields
     degree_major VARCHAR(200),
     degree_minor VARCHAR(200),
-# student/alumni shared fields
+    #student/alumni shared fields
     graduation_year INT,
     degree_type VARCHAR(200),
-# faculty field
+    #faculty field
     faculty_department VARCHAR(200),
     active TINYINT(1) DEFAULT 1,
-#	Auditing Columns
+    #Auditing Columns
     version INT,
     creation_time DATETIME,
     modification_time DATETIME,
-	created_by VARCHAR(100),
+    created_by VARCHAR(100),
     modified_by VARCHAR(100),
     PRIMARY KEY (id),
     FOREIGN KEY (type) REFERENCES person_type(id),
@@ -81,13 +76,12 @@ CREATE TABLE job_type
 (
     id INT NOT NULL AUTO_INCREMENT,
     description VARCHAR(200),
-#	Auditing Columns
+    #Auditing Columns
     version INT,
     creation_time DATETIME,
     modification_time DATETIME,
-	created_by VARCHAR(100),
+    created_by VARCHAR(100),
     modified_by VARCHAR(100),
-    
     PRIMARY KEY(id)
 );
 
@@ -96,13 +90,12 @@ CREATE TABLE industry
 (
     id INT NOT NULL AUTO_INCREMENT,
     name VARCHAR(200),
-#	Auditing Columns
+    #Auditing Columns
     version INT,
     creation_time DATETIME,
     modification_time DATETIME,
     PRIMARY KEY(id)
 );
-
 
 DROP TABLE IF EXISTS job;
 CREATE TABLE job
@@ -120,20 +113,17 @@ CREATE TABLE job
     hours INT,
     active TINYINT(1) DEFAULT 1,
     abuse TINYINT(1) DEFAULT 0,
-#   Auditing Columns
+    #Auditing Columns
     version INT,
     creation_time DATETIME,
     modification_time DATETIME,
-	created_by VARCHAR(100),
+    created_by VARCHAR(100),
     modified_by VARCHAR(100),
-    
     PRIMARY KEY(id),
-    
     FOREIGN KEY(industry) REFERENCES industry(id),
     FOREIGN KEY(job_type) REFERENCES job_type(id),
     FOREIGN KEY(posted_by_person_id) REFERENCES person(id)
 );
-
 
 DROP TABLE IF EXISTS news;
 CREATE TABLE news
@@ -147,13 +137,12 @@ CREATE TABLE news
     views INT,
     active TINYINT(1) DEFAULT 1,
     abuse TINYINT(1) DEFAULT 0,
-#   Auditing Columns
+    #Auditing Columns
     version INT,
     creation_time DATETIME,
     modification_time DATETIME,
-	created_by VARCHAR(100),
+    created_by VARCHAR(100),
     modified_by VARCHAR(100),
-
     PRIMARY KEY(id),
     FOREIGN KEY(person_id) REFERENCES person(id)
 );
@@ -163,13 +152,12 @@ CREATE TABLE news_visibility
 (
     person_type INT,
     news INT,
-#   Auditing Columns
+    #Auditing Columns
     version INT,
     creation_time DATETIME,
     modification_time DATETIME,
-	created_by VARCHAR(100),
+    created_by VARCHAR(100),
     modified_by VARCHAR(100),
-    
     PRIMARY KEY(person_type, news),
     FOREIGN KEY(person_type) REFERENCES person_type(id),
     FOREIGN KEY(news) REFERENCES news(id)
@@ -186,13 +174,12 @@ CREATE TABLE news_comment
     person_id INT,
     active TINYINT(1) DEFAULT 1,
     abuse TINYINT(1) DEFAULT 0,
-#   Auditing Columns
+    #Auditing Columns
     version INT,
     creation_time DATETIME,
     modification_time DATETIME,
-	created_by VARCHAR(100),
+    created_by VARCHAR(100),
     modified_by VARCHAR(100),
-
     PRIMARY KEY(id),
     FOREIGN KEY(news_id) REFERENCES news(id),
     FOREIGN KEY(person_id) REFERENCES person(id)
@@ -203,11 +190,10 @@ CREATE TABLE social_service
 (
     id VARCHAR(60) NOT NULL,
     url VARCHAR(200),
-#	Auditing Columns
+    #Auditing Columns
     version INT,
     creation_time DATETIME,
     modification_time DATETIME,
-
     PRIMARY KEY(id)
 );
 
@@ -218,31 +204,32 @@ CREATE TABLE social_connection
     person_id INT,
     social_service_id VARCHAR(60),
     url VARCHAR(200),
-#   Auditing Columns
+    #Auditing Columns
     version INT,
     creation_time DATETIME,
     modification_time DATETIME,
-	created_by VARCHAR(100),
+    created_by VARCHAR(100),
     modified_by VARCHAR(100),
-    
     PRIMARY KEY(id),
     FOREIGN KEY(person_id) REFERENCES person(id),
     FOREIGN KEY(social_service_id) REFERENCES social_service(id)
 );
 
 DROP TABLE IF EXISTS roles;
-CREATE TABLE roles(
-    id INT NOT NULL, 
+CREATE TABLE roles
+(
+    id INT NOT NULL,
     rolename VARCHAR(60),
     PRIMARY KEY(id, rolename)
 );
 
 DROP TABLE IF EXISTS token;
-CREATE TABLE token(
+CREATE TABLE token
+(
     uuid VARCHAR(200) NOT NULL,
     email VARCHAR(200) NOT NULL UNIQUE,
     date_created DATETIME,
-#	Auditing Columns
+#   Auditing Columns
     version INT,
     creation_time DATETIME,
     modification_time DATETIME,
@@ -251,25 +238,23 @@ CREATE TABLE token(
 );
 
 DROP TABLE IF EXISTS approval_request;
-CREATE TABLE approval_request(
+CREATE TABLE approval_request
+(
     uuid VARCHAR(200) NOT NULL,
     active TINYINT(1) DEFAULT 1,
     approval_type VARCHAR(60) NOT NULL,
     item_type VARCHAR(60) NOT NULL,
     item_id INT NOT NULL,
     item_url VARCHAR(255),
-
     # Creation info.
     flagged_on DATETIME,
     flagged_by INT,
     flagged_notes TEXT(30000),
-
-    # Verdict info.    
+    # Verdict info.
     approved TINYINT(1) DEFAULT 0,
     verdict_on DATETIME,
     verdict_by INT,
     verdict_notes TEXT(30000),
-
     # Auditing Columns
     version INT,
     creation_time DATETIME,
@@ -279,7 +264,8 @@ CREATE TABLE approval_request(
     FOREIGN KEY(verdict_by) REFERENCES person(id)
 );
 
-CREATE TABLE templates(
+CREATE TABLE templates
+(
     id VARCHAR(64) NOT NULL PRIMARY KEY, 
     body TEXT
 );
@@ -289,71 +275,72 @@ CREATE TABLE templates(
 -- 
 # Script to create data needed by the system
 # (social connections, types, etc)
-
 USE backend;
 
 /*Already in DB*/
 INSERT INTO person_type VALUES (
     1,
-    'student',1,now(), now());
+    'student',
+    1,now(),
+    now()
+);
 
 INSERT INTO person_type VALUES (
     2,
-    'alumni',1,now(), now());
-    
+    'alumni',
+    1,
+    now(),
+    now()
+);
+
 INSERT INTO person_type VALUES (
     3,
-    'faculty',1, now(), now());
-    
+    'faculty',
+    1,
+    now(),
+    now()
+);
+
 INSERT INTO job_type VALUES (
     1,
-    "full-time",1,now(), now(), NULL, NULL);
+    "full-time",
+    1,
+    now(),
+    now(),
+    NULL,
+    NULL
+);
 
 INSERT INTO job_type VALUES (
     2,
-    "part-time",1,now(), now(), NULL, NULL);
+    "part-time",
+    1,
+    now(),
+    now(),
+    NULL,
+    NULL
+);
 
-INSERT INTO social_service VALUES(
-    'Angellist', 'https://angel.co/',1,now(), now());
-INSERT INTO social_service VALUES(
-    'Bitbucket', 'https://bitbucket.org/',1,now(), now());
-INSERT INTO social_service VALUES(
-    'Facebook', 'http://www.facebook.com/',1,now(), now());
-INSERT INTO social_service VALUES(
-    'Flickr', 'https://www.flickr.com/',1,now(), now());
-INSERT INTO social_service VALUES(
-    'Foursquare', 'https://foursquare.com/',1,now(), now());
-INSERT INTO social_service VALUES(
-    'github', 'https://github.com/',1,now(), now());
-INSERT INTO social_service VALUES(
-    'Googleplus', 'https://plus.google.com/',1,now(), now());
-INSERT INTO social_service VALUES(
-    'Instagram', 'https://www.instagram.com/',1,now(), now());
-INSERT INTO social_service VALUES(
-    'LinkedIn', 'http://www.linkedin.com/',1,now(), now());
-INSERT INTO social_service VALUES(
-    'Medium', 'https://medium.com/',1,now(), now());
-INSERT INTO social_service VALUES(
-    'Pinterest', 'https://www.pinterest.com/',1,now(), now());
-INSERT INTO social_service VALUES(
-    'Quora', 'https://www.quora.com/',1,now(), now());
-INSERT INTO social_service VALUES(
-    'Scribd', 'https://www.scribd.com/',1,now(), now());
-INSERT INTO social_service VALUES(
-    'Slideshare', 'http://www.slideshare.net/',1,now(), now());
-INSERT INTO social_service VALUES(
-    'Spotify', 'https://www.spotify.com/us/',1,now(), now());
-INSERT INTO social_service VALUES(
-    'Tumblr', 'https://www.tumblr.com/',1,now(), now());
-INSERT INTO social_service VALUES(
-    'Twitch', 'https://www.twitch.tv/',1,now(), now());
-INSERT INTO social_service VALUES(
-    'Twitter', 'http://www.twitter.com/',1,now(), now());
-INSERT INTO social_service VALUES(
-    'Yelp', 'http://www.yelp.com/',1,now(), now());
-INSERT INTO social_service VALUES(
-    'Youtube', 'https://www.youtube.com/',1,now(), now());
-
+INSERT INTO social_service VALUES('Angellist', 'https://angel.co/',1,now(), now());
+INSERT INTO social_service VALUES('Bitbucket', 'https://bitbucket.org/',1,now(), now());
+INSERT INTO social_service VALUES('Facebook', 'http://www.facebook.com/',1,now(), now());
+INSERT INTO social_service VALUES('Flickr', 'https://www.flickr.com/',1,now(), now());
+INSERT INTO social_service VALUES('Foursquare', 'https://foursquare.com/',1,now(), now());
+INSERT INTO social_service VALUES('github', 'https://github.com/',1,now(), now());
+INSERT INTO social_service VALUES('Googleplus', 'https://plus.google.com/',1,now(), now());
+INSERT INTO social_service VALUES('Instagram', 'https://www.instagram.com/',1,now(), now());
+INSERT INTO social_service VALUES('LinkedIn', 'http://www.linkedin.com/',1,now(), now());
+INSERT INTO social_service VALUES('Medium', 'https://medium.com/',1,now(), now());
+INSERT INTO social_service VALUES('Pinterest', 'https://www.pinterest.com/',1,now(), now());
+INSERT INTO social_service VALUES('Quora', 'https://www.quora.com/',1,now(), now());
+INSERT INTO social_service VALUES('Scribd', 'https://www.scribd.com/',1,now(), now());
+INSERT INTO social_service VALUES('Slideshare', 'http://www.slideshare.net/',1,now(), now());
+INSERT INTO social_service VALUES('Spotify', 'https://www.spotify.com/us/',1,now(), now());
+INSERT INTO social_service VALUES('Tumblr', 'https://www.tumblr.com/',1,now(), now());
+INSERT INTO social_service VALUES('Twitch', 'https://www.twitch.tv/',1,now(), now());
+INSERT INTO social_service VALUES('Twitter', 'http://www.twitter.com/',1,now(), now());
+INSERT INTO social_service VALUES('Yelp', 'http://www.yelp.com/',1,now(), now());
+INSERT INTO social_service VALUES('Youtube', 'https://www.youtube.com/',1,now(), now());
 
 INSERT INTO language VALUES('ar', 'Arabic',1,now(), now(), NULL, NULL);
 INSERT INTO language VALUES('en', 'English',1,now(), now(), NULL, NULL);
@@ -371,4 +358,5 @@ If you did not initiate this request, please disregard.
 This is an automatically generated message. PLEASE DO NOT REPLY TO THIS E-MAIL. 
 
 Thank you, 
-{{ from_name }}');
+{{ from_name }}'
+);
