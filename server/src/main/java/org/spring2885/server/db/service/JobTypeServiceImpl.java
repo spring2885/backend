@@ -1,12 +1,16 @@
 package org.spring2885.server.db.service;
 
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
 import org.spring2885.server.db.model.DbJobType;
 import org.spring2885.server.db.service.search.SearchCriteria;
+import org.spring2885.server.db.service.search.SearchCriteriaSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.stereotype.Component;
 
 import com.google.common.collect.Iterables;
@@ -64,20 +68,25 @@ public class JobTypeServiceImpl implements JobTypeService {
 
 	@Override
 	public Iterable<DbJobType> findAll(List<SearchCriteria> criterias) {
-		// TODO Auto-generated method stub
-		return null;
+		if (criterias.isEmpty()) {
+			return findAll();
+		}	
+		Iterator<SearchCriteria> iter = criterias.iterator();
+		Specification<DbJobType> specs = new SearchCriteriaSpecification<>(iter.next());
+		while(iter.hasNext()) {
+			specs = Specifications.where(specs).and(new SearchCriteriaSpecification<>(iter.next()));
+		}
+		return repository.findAll(specs);
+	}
+	@Override
+	public boolean existsByName(String name) {
+		return findByName(name) != null;
 	}
 
 	@Override
 	public DbJobType findByName(String name) {
 		// TODO Auto-generated method stub
 		return null;
-	}
-
-	@Override
-	public boolean existsByName(String name) {
-		// TODO Auto-generated method stub
-		return false;
 	}
 	
 	

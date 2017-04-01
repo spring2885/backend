@@ -72,7 +72,7 @@ public class DbJob implements Serializable {
     
 	public DbPerson getPerson() {
         return person;
-    }
+    } 
 
     public void setPostedbypersonId(DbPerson personId) {
         this.person = personId;

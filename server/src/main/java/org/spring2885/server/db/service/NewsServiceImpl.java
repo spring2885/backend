@@ -89,6 +89,11 @@ public class NewsServiceImpl implements NewsService {
             if (newsPersonTypes == null) {
                 // TODO(rob): Should we fail open and let it through if it's missing
                 // from the visibility table?
+            	
+            	// Considering the visibility table requires a primary key for news and person_type,
+            	// it should never be missing from the visibility table.
+            	// Therefore, we should keep it false 
+            	// Until we make a way that non-users can post to the news feed, we should keep this false
                 return false;
             }
             if (visibleType == null) {

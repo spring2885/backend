@@ -20,6 +20,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 public class DbLanguage {
     @Id
     private String code;
+    
     private String description;
     
     @Version
@@ -78,5 +79,13 @@ public class DbLanguage {
 	public String getLastModifiedBy(){
 		return modifiedBy;
 	}
+	
+	@Override
+	public String toString() {
+		return "DbLanguage [code=" + code + ", description=" + description + ", version=" + version + ", creationTime="
+				+ creationTime + ", modificationTime=" + modificationTime + ", createdBy=" + createdBy + ", modifiedBy="
+				+ modifiedBy + "]";
+	}
+	
     
 }
