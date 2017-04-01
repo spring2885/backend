@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 
 import com.google.common.collect.Iterables;
 
+
 @Component("jobTypeService")
 public class JobTypeServiceImpl implements JobTypeService {
 	private final JobTypeRepository repository;
