@@ -53,7 +53,7 @@ public class LanguageConverters {
 	}
 	
 	@Bean
-	public JsonToDbConverter LanguageJsonToDb() {
+	public JsonToDbConverter languageJsonToDb() {
 		return new JsonToDbConverter();
 	}
 	

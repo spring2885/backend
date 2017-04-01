@@ -16,7 +16,7 @@ public class LanguageServiceImpl implements LanguageService {
     private final LanguageRepository repository;
     
     @Autowired
-    public LanguageServiceImpl(LanguageRepository repository) {
+    LanguageServiceImpl(LanguageRepository repository) {
         this.repository = repository;
     }
 
