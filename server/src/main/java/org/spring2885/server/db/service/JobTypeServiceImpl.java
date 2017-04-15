@@ -62,12 +62,6 @@ public class JobTypeServiceImpl implements JobTypeService {
     }
 
 	@Override
-	public Iterable<DbJobType> findAll(String q) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public Iterable<DbJobType> findAll(List<SearchCriteria> criterias) {
 		if (criterias.isEmpty()) {
 			return findAll();
@@ -78,16 +72,6 @@ public class JobTypeServiceImpl implements JobTypeService {
 			specs = Specifications.where(specs).and(new SearchCriteriaSpecification<>(iter.next()));
 		}
 		return repository.findAll(specs);
-	}
-	@Override
-	public boolean existsByName(String name) {
-		return findByName(name) != null;
-	}
-
-	@Override
-	public DbJobType findByName(String name) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 	
 	

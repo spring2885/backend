@@ -12,11 +12,6 @@ public interface JobTypeService {
 	 * Returns all {@link DbJobType} instances.
 	 */
 	Set<DbJobType> findAll();
-	 
-    /**
-     * Returns all {@code DbJobType} instances with search string {code q}.
-     */
-	Iterable<DbJobType> findAll(String q);
     
     /**
      * Returns all {@code DbJobType} instances with search string {code q}.
@@ -30,12 +25,6 @@ public interface JobTypeService {
 	 * Returns a {@link DbJobType} by the primary key or {@code null} if none exist.
 	 */
 	DbJobType findById(long id);
-	
-	/**
-	 * Returns all {@code DbJobType} instances with name address of {@code name}
-	 * or an empty {@link Iterator} if none exist.
-	 */
-	DbJobType findByName(String name);
    
 	/**
 	 * Deletes a jobType by primary key.
@@ -46,10 +35,6 @@ public interface JobTypeService {
 
 	/** Saves (Inserts) the {@code person} into the database. */
 	DbJobType save(DbJobType jobType);
-	
-	/**
-	 * Returns {@code true} if personType exists for this name.
-	 */
-	boolean existsByName(String name);
+
 	
 }
