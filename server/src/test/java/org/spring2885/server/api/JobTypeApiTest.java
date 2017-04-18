@@ -78,8 +78,7 @@ protected MockMvc mockMvc;
     
     void makeMeFound(){
     	when(jobTypeService.findById(1)).thenReturn(dbJobType);
-    	when(jobTypeService.findById(21)).thenReturn(otherDbJobType);
-    	when(jobTypeService.findByName("JobType1"))
+    	when(jobTypeService.findById(21)).thenReturn(otherDbJobType)
     		.thenReturn(dbJobType);
     }
     
@@ -108,7 +107,7 @@ protected MockMvc mockMvc;
     public void testJobTypeById() throws Exception {
     	// Setup the expectations.
     	DbJobType p = new DbJobType();
-    	//p.setId(21);
+    	p.setId((long) 1);
     	p.setName("ThisTitle");
     	when(jobTypeService.findById(21)).thenReturn(p);
     	verifyNoMoreInteractions(jobTypeService);
@@ -117,9 +116,8 @@ protected MockMvc mockMvc;
     			.accept(MediaType.APPLICATION_JSON))
     			.andExpect(status().isOk())
     			.andExpect(content().contentType(MediaType.APPLICATION_JSON))
-    			.andExpect(jsonPath("$.name", Matchers.is("ThisTitle")));
-    	//TODO:
-    	//Status expected:<200> but was:<404>
+    			.andExpect(jsonPath("$.name", Matchers.is("ThisTitle")))
+    			.andExpect(jsonPath("$.id", Matchers.is(1)));
     	
     	// N.B: We don't have to verify anything here since we're asserting
     	// the results that were setup by PersonService.
@@ -185,8 +183,6 @@ protected MockMvc mockMvc;
     			.content(new ObjectMapper().writeValueAsBytes(jobType))
     			.accept(MediaType.APPLICATION_JSON))
     			.andExpect(status().isForbidden());
-    	//TODO:
-    	//Status expected:<403> but was:<400>
     	
     	verify(jobTypeService, never()).save(Mockito.any(DbJobType.class));
     }
@@ -195,8 +191,7 @@ protected MockMvc mockMvc;
     @WithMockUser(username="Title",roles={"USER"})
     public void testPut_canNotFindMe() throws Exception {
     	// Setup the expectations.
-    	when(jobTypeService.findById(4)).thenReturn(dbJobType);
-    	when(jobTypeService.findByName("Title"))
+    	when(jobTypeService.findById(4)).thenReturn(dbJobType)
     		.thenReturn(null);
     	
     	mockMvc.perform(put("/api/v1/jobtype/4")
@@ -204,8 +199,6 @@ protected MockMvc mockMvc;
     			.content(new ObjectMapper().writeValueAsBytes(dbJobType))
     			.accept(MediaType.APPLICATION_JSON))
     			.andExpect(status().isForbidden());
-    	//TODO:
-    	//Status expected:<403> but was:<400>
     
     	verify(jobTypeService, never()).save(Mockito.any(DbJobType.class));
     }
@@ -221,9 +214,7 @@ protected MockMvc mockMvc;
     			.content(new ObjectMapper().writeValueAsBytes(otherDbJobType))
     			.accept(MediaType.APPLICATION_JSON))
     			.andExpect(status().isForbidden());
-    	//TODO:
-    	//Status expected:<403> but was:<200>
-    	
+    
     	verify(jobTypeService, never()).save(Mockito.any(DbJobType.class));
     }
     
